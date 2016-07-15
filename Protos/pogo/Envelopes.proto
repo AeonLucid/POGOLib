@@ -1,0 +1,84 @@
+syntax = "proto3";
+package POGOLib.Pokemon.Proto;
+
+import public "Enums/Envelopes/Direction.proto";
+import public "Enums/Envelopes/RequestType.proto";
+
+message Envelopes {
+  message Unknown6 {
+    int32 unknown1 = 1;
+    Unknown2 unknown2 = 2;
+
+    message Unknown2 {
+      bytes unknown1 = 1;
+    }
+  }
+
+  message Thing {
+    bytes start = 1;
+    uint64 timestamp = 2;
+    bytes end = 3;
+  }
+
+  message RequestEnvelope {
+    POGOLib.Pokemon.Proto.Enums.Envelopes.Direction direction = 1;
+    // Missing field 2.
+    uint64 request_id = 3;
+    repeated Request requests = 4;
+    // Missing field 5.
+    Unknown6 unknown6 = 6;
+    double latitude = 7;
+    double longitude = 8;
+    double altitude = 9;
+    AuthInfo auth = 10;
+    Thing thing = 11;
+    int64 unknown12 = 12;
+
+    message Request {
+      POGOLib.Pokemon.Proto.Enums.Envelopes.RequestType request_type = 1;
+      Unknown3 message = 2;
+    }
+
+    message Unknown3 {
+      string unknown4 = 1;
+    }
+
+    message AuthInfo {
+      string provider = 1;
+      JWT token = 2;
+
+      message JWT {
+        string contents = 1;
+        int32 unknown2  = 2;
+      }
+    }
+  }
+
+  message ResponseEnvelope {
+    POGOLib.Pokemon.Proto.Enums.Envelopes.Direction direction = 1;
+    uint64 response_id = 2;
+    string api_url = 3;
+    // Missing field 4.
+    // Missing field 5.
+    Unknown6 unknown6 = 6;
+    double lat = 7;
+    double long = 8;
+    double altitude = 9;
+    // Missing field 10.
+    Thing thing = 11;
+    int32 unknown12 = 12;
+    // Missing a lot??
+    repeated Payload payloads = 100;
+
+    message Unknown7 {
+      bytes unknown71 = 1;
+      int64 unknown72 = 2;
+      bytes unknown73 = 3;
+    }
+
+    message Payload {
+      bool success = 1;
+      bytes data = 2;
+    }
+  }
+}

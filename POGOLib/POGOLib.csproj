@@ -60,14 +60,30 @@
     <Compile Include="Net\Data\Login\LoginData.cs" />
     <Compile Include="Net\RPCClient.cs" />
     <Compile Include="Pokemon\LoginProvider.cs" />
-    <Compile Include="Pokemon\Proto\Pokemon.cs" />
+    <Compile Include="Pokemon\Proto\Data.cs" />
+    <Compile Include="Pokemon\Proto\Enums\Base.cs" />
+    <Compile Include="Pokemon\Proto\Enums\Envelopes\Direction.cs" />
+    <Compile Include="Pokemon\Proto\Enums\Envelopes\RequestType.cs" />
+    <Compile Include="Pokemon\Proto\Enums\Gender.cs" />
+    <Compile Include="Pokemon\Proto\Enums\HoloBadgeType.cs" />
+    <Compile Include="Pokemon\Proto\Enums\Pokemon.cs" />
+    <Compile Include="Pokemon\Proto\Enums\TeamColor.cs" />
+    <Compile Include="Pokemon\Proto\Envelopes.cs" />
+    <Compile Include="Pokemon\Proto\LocalPlayer.cs" />
+    <Compile Include="Pokemon\Proto\Player\AvatarDetails.cs" />
+    <Compile Include="Pokemon\Proto\Player\ContactSettings.cs" />
+    <Compile Include="Pokemon\Proto\Player\Currency.cs" />
+    <Compile Include="Pokemon\Proto\Player\DailyBonus.cs" />
+    <Compile Include="Pokemon\Proto\Player\EquippedBadge.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\ByteUtil.cs" />
     <Compile Include="Util\ConsoleUtil.cs" />
     <Compile Include="Util\HashUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

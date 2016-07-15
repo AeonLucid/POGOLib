@@ -62,7 +62,11 @@ namespace Demo
 
                 if(!client.Authenticate(password).Result)
                     throw new Exception("Wrong password.");
+
+                client.SaveClientData();
             }
+
+            client.RPCClient.GetProfile();
 
             // Make sure to save if you want to use save / loading.
             client.SaveClientData();

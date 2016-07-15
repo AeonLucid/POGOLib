@@ -5,8 +5,10 @@ using System.Net.Http;
 using Google.Protobuf;
 using log4net;
 using POGOLib.Pokemon.Proto;
-using static POGOLib.Pokemon.Proto.RequestEnvelop.Types;
-using static POGOLib.Pokemon.Proto.RequestEnvelop.Types.AuthInfo.Types;
+using POGOLib.Pokemon.Proto.Enums.Envelopes;
+using static POGOLib.Pokemon.Proto.Envelopes.Types;
+using static POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types;
+using static POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types;
 
 namespace POGOLib.Net
 {
@@ -16,6 +18,7 @@ namespace POGOLib.Net
 
         private readonly POClient _poClient;
         private readonly HttpClient _httpClient;
+        private ulong _requestId;
         private readonly string _apiUrl;
 
         public RPCClient(POClient poClient)
@@ -23,34 +26,43 @@ namespace POGOLib.Net
             _poClient = poClient;
             _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Configuration.ApiUserAgent);
-            _apiUrl = GetApiEndpoint();
+            _requestId = (ulong) new Random().Next(100000000, 999999999);
+            _apiUrl = $"https://{GetApiEndpoint()}/rpc";
 
-            Log.Debug($"Using ApiUrl {_apiUrl}");
+            Log.Debug($"API Endpoint: '{_apiUrl}'");
+        }
+
+        private ulong RequestId
+        {
+            get {
+                _requestId = _requestId + 1;
+                return _requestId;
+            }
         }
 
         private string GetApiEndpoint()
         {
-            var response = SendRemoteProtocolCall(new[]
+            var response = SendRemoteProtocolCall(Configuration.ApiUrl, new[]
             {
-                new Requests
+                new Request
                 {
-                    Type = 2
+                    RequestType = RequestType.GetPlayer
                 },
-                new Requests
+                new Request
                 {
-                    Type = 126
+                    RequestType = RequestType.GetInventory
                 },
-                new Requests
+                new Request
                 {
-                    Type = 4
+                    RequestType = RequestType.GetHatchedEggs
                 },
-                new Requests
+                new Request
                 {
-                    Type = 129
+                    RequestType = RequestType.CheckAwardedBadges
                 },
-                new Requests
+                new Request
                 {
-                    Type = 5,
+                    RequestType = RequestType.DownloadSettings,
                     Message = new Unknown3
                     {
                         Unknown4 = "4a2e9bc330dae60e7b74fc85b98868ab4700802e"
@@ -61,18 +73,36 @@ namespace POGOLib.Net
             return response.ApiUrl;
         }
 
-        private ResponseEnvelop SendRemoteProtocolCall(IEnumerable<Requests> requests)
+        public void GetProfile()
+        {
+            var response = SendRemoteProtocolCall(_apiUrl, new[]
+            {
+                new Request
+                {
+                    RequestType = RequestType.GetPlayer
+                }
+            });
+
+            var player = LocalPlayer.Parser.ParseFrom(response.Payloads[0].Data);
+            Log.Debug($"Success: {response.Payloads[0].Success}");
+            Log.Debug($"Username: {player.Username}");
+            Log.Debug($"Creation time: {player.CreationTimestampMs}");
+            Log.Debug($"Pokemons: {player.MaxPokemonStorage}");
+            Log.Debug($"Items: {player.MaxItemStorage}");
+        }
+
+        private ResponseEnvelope SendRemoteProtocolCall(string apiUrl, IEnumerable<Request> requests)
         {
             if (!_poClient.HasGpsData())
                 throw new Exception("No gps data has been set, can't send a rpc call.");
 
-            var req = new RequestEnvelop
+            var requestEnvelope = new RequestEnvelope
             {
-                Unknown1 = 2,
-                RpcId = 8145806132888207460,
-                Latitude = BitConverter.ToUInt64(BitConverter.GetBytes(_poClient.ClientData.GpsData.Latitude), 0),
-                Longitude = BitConverter.ToUInt64(BitConverter.GetBytes(_poClient.ClientData.GpsData.Longitude), 0),
-                Altitude = BitConverter.ToUInt64(BitConverter.GetBytes(_poClient.ClientData.GpsData.Altitude), 0),
+                Direction = Direction.Request,
+                RequestId = RequestId,
+                Latitude = _poClient.ClientData.GpsData.Latitude,
+                Longitude = _poClient.ClientData.GpsData.Longitude,
+                Altitude = _poClient.ClientData.GpsData.Altitude,
                 Unknown12 = 989,
                 Auth = new AuthInfo
                 {
@@ -80,22 +110,25 @@ namespace POGOLib.Net
                     Token = new JWT
                     {
                         Contents = _poClient.ClientData.AuthData.AccessToken,
-                        Unknown13 = 59
+                        Unknown2 = 59
                     }
                 }
             };
 
-            req.Requests.Add(requests);
+            requestEnvelope.Requests.Add(requests);
 
             using (var memoryStream = new MemoryStream())
             {
-                req.WriteTo(memoryStream);
+                requestEnvelope.WriteTo(memoryStream);
 
-                using (var response = _httpClient.PostAsync(Configuration.ApiUrl, new ByteArrayContent(memoryStream.ToArray())).Result)
+                using (var response = _httpClient.PostAsync(apiUrl, new ByteArrayContent(memoryStream.ToArray())).Result)
                 {
                     var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
+                    var responseEnvelope = ResponseEnvelope.Parser.ParseFrom(responseBytes);
 
-                    return ResponseEnvelop.Parser.ParseFrom(responseBytes);
+                    Log.Debug($"Received {responseEnvelope.Payloads.Count} payloads.");
+
+                    return responseEnvelope;
                 }
             }
         }
