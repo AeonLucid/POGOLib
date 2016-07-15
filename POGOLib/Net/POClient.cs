@@ -15,10 +15,6 @@ namespace POGOLib.Net
 {
     public class POClient
     {
-        public string UID { get; }
-        public string Username { get; }
-        public LoginProvider LoginProvider { get; }
-
         public POClient(string username, LoginProvider loginProvider)
         {
             UID = HashUtil.HashMD5(username + loginProvider).ToLower();
@@ -27,8 +23,14 @@ namespace POGOLib.Net
 
             if(LoginProvider == LoginProvider.GoogleAuth)
                 throw new Exception("Google Authentication is not supported.");
+
+            Authenticated += OnAuthenticated;
         }
 
+        public string UID { get; }
+        public string Username { get; }
+        public LoginProvider LoginProvider { get; }
+        public RPCClient RPCClient { get; private set; }
         public AuthData AuthData { get; private set; }
 
         public bool LoadAuthData()
@@ -40,7 +42,12 @@ namespace POGOLib.Net
 
             AuthData = JsonConvert.DeserializeObject<AuthData>(File.ReadAllText(saveDataPath));
 
-            return AuthData.ExpireDateTime > DateTime.Now;
+            if (!(AuthData.ExpireDateTime > DateTime.Now))
+                return false;
+            
+            OnAuthenticated(EventArgs.Empty);
+
+            return true;
         }
 
         public void SaveAuthData()
@@ -66,6 +73,8 @@ namespace POGOLib.Net
 
                     AuthData = await PostLoginOauth(httpClient, ticket);
                     SaveAuthData();
+
+                    OnAuthenticated(EventArgs.Empty);
 
                     return true;
                 }
@@ -133,5 +142,17 @@ namespace POGOLib.Net
                 ExpireDateTime = DateTime.Now.AddSeconds(int.Parse(oAuthData.Groups["expires"].Value))
             };
         }
+        
+        private void OnAuthenticated(object sender, EventArgs eventArgs)
+        {
+            RPCClient = new RPCClient(this);
+        }
+
+        private void OnAuthenticated(EventArgs e)
+        {
+            Authenticated?.Invoke(this, e);
+        }
+
+        private event EventHandler Authenticated;
     }
 }
