@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using Google.Protobuf;
+using log4net;
 using POGOLib.Pokemon.Proto;
 using static POGOLib.Pokemon.Proto.RequestEnvelop.Types;
 using static POGOLib.Pokemon.Proto.RequestEnvelop.Types.AuthInfo.Types;
@@ -11,6 +12,8 @@ namespace POGOLib.Net
 {
     public class RPCClient
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(RPCClient));
+
         private readonly POClient _poClient;
         private readonly HttpClient _httpClient;
         private readonly string _apiUrl;
@@ -22,7 +25,7 @@ namespace POGOLib.Net
             _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Configuration.ApiUserAgent);
             _apiUrl = GetApiEndpoint();
 
-            Console.WriteLine($"Using ApiUrl {_apiUrl}");
+            Log.Debug($"Using ApiUrl {_apiUrl}");
         }
 
         private string GetApiEndpoint()

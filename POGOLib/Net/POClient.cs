@@ -4,6 +4,7 @@ using System.IO;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using log4net;
 using POGOLib.Net.Data;
 using POGOLib.Net.Data.Login;
 using POGOLib.Pokemon;
@@ -15,6 +16,8 @@ namespace POGOLib.Net
 {
     public class POClient
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(POClient));
+
         public POClient(string username, LoginProvider loginProvider)
         {
             UID = HashUtil.HashMD5(username + loginProvider).ToLower();
@@ -53,8 +56,6 @@ namespace POGOLib.Net
 
         public void SaveClientData()
         {
-            Console.WriteLine(JsonConvert.SerializeObject(ClientData));
-
             File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "savedata", $"{UID}.json"), JsonConvert.SerializeObject(ClientData, Formatting.Indented));
         }
 
@@ -114,7 +115,7 @@ namespace POGOLib.Net
 
             foreach (var loginResponseError in loginResponseErrors)
             {
-                Console.WriteLine($"Login error: '{loginResponseError}'");
+                Log.Debug($"Login error: '{loginResponseError}'");
             }
 
             return null;

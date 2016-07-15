@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Demo.Util;
+using log4net;
 using POGOLib.Net;
 using POGOLib.Net.Data;
 using POGOLib.Pokemon;
@@ -10,6 +11,8 @@ namespace Demo
     public class Program
     {
         public static string SaveDataPath { get; private set; }
+        
+        private static readonly ILog Log = LogManager.GetLogger(typeof(POClient));
 
         /// <summary>
         /// This is just a demo application to test out the library / show a bit how it works.
@@ -22,7 +25,7 @@ namespace Demo
             SaveDataPath = Path.Combine(Environment.CurrentDirectory, "savedata");
             if (!Directory.Exists(SaveDataPath)) Directory.CreateDirectory(SaveDataPath);
             
-            Console.WriteLine("Hi, please enter your PTC details.");
+            Log.Info("Hi, please enter your PTC details.");
             Console.Write("Username: ");
             var username = Console.ReadLine();
 
