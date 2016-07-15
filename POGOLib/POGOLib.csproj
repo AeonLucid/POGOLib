@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
+    <Compile Include="Net\Data\GpsData.cs" />
+    <Compile Include="Net\Data\SaveData.cs" />
     <Compile Include="Net\POClient.cs" />
     <Compile Include="Net\Data\AuthData.cs" />
     <Compile Include="Net\Data\Login\LoginData.cs" />

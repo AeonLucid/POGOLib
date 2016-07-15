@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace POGOLib.Net.Data
 {
-    public struct AuthData
+    public class AuthData
     {
 
         [JsonProperty("access_token")]

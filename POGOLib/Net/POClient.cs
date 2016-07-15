@@ -18,31 +18,32 @@ namespace POGOLib.Net
         public POClient(string username, LoginProvider loginProvider)
         {
             UID = HashUtil.HashMD5(username + loginProvider).ToLower();
-            Username = username;
-            LoginProvider = loginProvider;
+            ClientData = new ClientData
+            {
+                Username = username,
+                LoginProvider = loginProvider
+            };
 
-            if(LoginProvider == LoginProvider.GoogleAuth)
+            if(ClientData.LoginProvider == LoginProvider.GoogleAuth)
                 throw new Exception("Google Authentication is not supported.");
 
             Authenticated += OnAuthenticated;
         }
 
         public string UID { get; }
-        public string Username { get; }
-        public LoginProvider LoginProvider { get; }
+        public ClientData ClientData { get; private set; }
         public RPCClient RPCClient { get; private set; }
-        public AuthData AuthData { get; private set; }
 
-        public bool LoadAuthData()
+        public bool LoadClientData()
         {
             var saveDataPath = Path.Combine(Environment.CurrentDirectory, "savedata", $"{UID}.json");
 
             if (!File.Exists(saveDataPath))
                 return false;
 
-            AuthData = JsonConvert.DeserializeObject<AuthData>(File.ReadAllText(saveDataPath));
+            ClientData = JsonConvert.DeserializeObject<ClientData>(File.ReadAllText(saveDataPath));
 
-            if (!(AuthData.ExpireDateTime > DateTime.Now))
+            if (!(ClientData.AuthData.ExpireDateTime > DateTime.Now))
                 return false;
             
             OnAuthenticated(EventArgs.Empty);
@@ -50,9 +51,11 @@ namespace POGOLib.Net
             return true;
         }
 
-        public void SaveAuthData()
+        public void SaveClientData()
         {
-            File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "savedata", $"{UID}.json"), JsonConvert.SerializeObject(AuthData, Formatting.Indented));
+            Console.WriteLine(JsonConvert.SerializeObject(ClientData));
+
+            File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "savedata", $"{UID}.json"), JsonConvert.SerializeObject(ClientData, Formatting.Indented));
         }
 
         public async Task<bool> Authenticate(string password)
@@ -71,9 +74,7 @@ namespace POGOLib.Net
                     if (ticket == null)
                         return false;
 
-                    AuthData = await PostLoginOauth(httpClient, ticket);
-                    SaveAuthData();
-
+                    ClientData.AuthData = await PostLoginOauth(httpClient, ticket);
                     OnAuthenticated(EventArgs.Empty);
 
                     return true;
@@ -96,7 +97,7 @@ namespace POGOLib.Net
                 {"lt", loginData.Lt},
                 {"execution", loginData.Execution},
                 {"_eventId", "submit"},
-                {"username", Username},
+                {"username", ClientData.Username},
                 {"password", password}
             }));
 
@@ -142,7 +143,36 @@ namespace POGOLib.Net
                 ExpireDateTime = DateTime.Now.AddSeconds(int.Parse(oAuthData.Groups["expires"].Value))
             };
         }
-        
+
+        public bool HasGpsData()
+        {
+            return ClientData.GpsData != null;
+        }
+
+        public void SetGpsData(GpsData gpsData)
+        {
+            ClientData.GpsData = gpsData;
+        }
+
+        public void SetGpsData(double latitude, double longitude, double altitude = 50.0)
+        {
+            if (!HasGpsData())
+            {
+                ClientData.GpsData = new GpsData
+                {
+                    Latitude = latitude,
+                    Longitude = longitude,
+                    Altitude = altitude
+                };
+            }
+            else
+            {
+                ClientData.GpsData.Latitude = latitude;
+                ClientData.GpsData.Longitude = longitude;
+                ClientData.GpsData.Altitude = altitude;
+            }
+        }
+
         private void OnAuthenticated(object sender, EventArgs eventArgs)
         {
             RPCClient = new RPCClient(this);
