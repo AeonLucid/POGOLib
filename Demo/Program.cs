@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Demo.Util;
 using log4net;
@@ -22,12 +23,24 @@ namespace Demo
         {
             Console.Title = "POGO Demo";
 
+            var arguments = ParseArguments(args);
+
             SaveDataPath = Path.Combine(Environment.CurrentDirectory, "savedata");
             if (!Directory.Exists(SaveDataPath)) Directory.CreateDirectory(SaveDataPath);
             
-            Log.Info("Hi, please enter your PTC details.");
-            Console.Write("Username: ");
-            var username = Console.ReadLine();
+            string username;
+
+            if (!arguments.ContainsKey("username"))
+            {
+                Log.Info("Hi, please enter your PTC details.");
+
+                Console.Write("Username: ");
+                username = Console.ReadLine();
+            }
+            else
+            {
+                username = arguments["username"];
+            }
 
             var client = new POClient(username, LoginProvider.PokemonTrainerClub);
             // Load previous data.
@@ -55,6 +68,29 @@ namespace Demo
             client.SaveClientData();
 
             Console.ReadKey();
+        }
+
+        private static Dictionary<string, string> ParseArguments(IEnumerable<string> args)
+        {
+            var arguments = new Dictionary<string, string>();
+
+            foreach (var s in args)
+            {
+                if (!s.StartsWith("--") || !s.Contains("="))
+                {
+                    Log.Error($"Invalid argument: '{s}'");
+                    throw new ArgumentException(nameof(s));
+                }
+
+                var argument = s.Substring(2, s.Length - 2);
+                var equalPos = s.IndexOf("=", StringComparison.Ordinal) - 2;
+                var key = argument.Substring(0, equalPos);
+                var value = argument.Substring(equalPos + 1, argument.Length - key.Length - 1);
+
+                arguments.Add(key, value);
+            }
+
+            return arguments;
         }
     }
 }
