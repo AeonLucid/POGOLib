@@ -78,9 +78,9 @@ message ResponseEnvelop {
     AvatarDetails avatar = 8; 
     int32 poke_storage = 9;
     int32 item_storage = 10;
-    string unknown11 = 11;
-    string unknown12 = 12;
-    string unknown13 = 13;
+    DailyBonus daily_bonus = 11;
+    bytes unknown12 = 12;
+    bytes unknown13 = 13;
     repeated Currency currency = 14;
 
     message AvatarDetails {
@@ -88,6 +88,11 @@ message ResponseEnvelop {
       int32 unknown3 = 3;
       int32 unknown9 = 9;
       int32 unknown10 = 10;
+    }
+
+    message DailyBonus {
+      int64 NextCollectTimestampMs = 1;
+      int64 NextDefenderBonusCollectTimestampMs = 2;
     }
 
     message Currency {

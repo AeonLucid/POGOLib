@@ -36,7 +36,7 @@ namespace POGOLib.Pokemon.Proto {
             "bjIaHAoIVW5rbm93bjISEAoIdW5rbm93bjEYASABKAwadQoIQXV0aEluZm8S",
             "EAoIcHJvdmlkZXIYASABKAkSKwoFdG9rZW4YAiABKAsyHC5SZXF1ZXN0RW52",
             "ZWxvcC5BdXRoSW5mby5KV1QaKgoDSldUEhAKCGNvbnRlbnRzGAEgASgJEhEK",
-            "CXVua25vd24xMxgCIAEoBSL1BgoPUmVzcG9uc2VFbnZlbG9wEhAKCHVua25v",
+            "CXVua25vd24xMxgCIAEoBSL3BwoPUmVzcG9uc2VFbnZlbG9wEhAKCHVua25v",
             "d24xGAEgASgFEhAKCHVua25vd24yGAIgASgDEg8KB2FwaV91cmwYAyABKAkS",
             "KwoIdW5rbm93bjYYBiABKAsyGS5SZXNwb25zZUVudmVsb3AuVW5rbm93bjYS",
             "KwoIdW5rbm93bjcYByABKAsyGS5SZXNwb25zZUVudmVsb3AuVW5rbm93bjcS",
@@ -46,17 +46,20 @@ namespace POGOLib.Pokemon.Proto {
             "d24yEhAKCHVua25vd24xGAEgASgMGkMKCFVua25vd243EhEKCXVua25vd243",
             "MRgBIAEoDBIRCgl1bmtub3duNzIYAiABKAMSEQoJdW5rbm93bjczGAMgASgM",
             "GkYKB1BheWxvYWQSEAoIdW5rbm93bjEYASABKAUSKQoHcHJvZmlsZRgCIAEo",
-            "CzIYLlJlc3BvbnNlRW52ZWxvcC5Qcm9maWxlGqgDCgdQcm9maWxlEhUKDWNy",
+            "CzIYLlJlc3BvbnNlRW52ZWxvcC5Qcm9maWxlGqoECgdQcm9maWxlEhUKDWNy",
             "ZWF0aW9uX3RpbWUYASABKAMSEAoIdXNlcm5hbWUYAiABKAkSDAoEdGVhbRgF",
             "IAEoBRIQCgh0dXRvcmlhbBgHIAEoDBI2CgZhdmF0YXIYCCABKAsyJi5SZXNw",
             "b25zZUVudmVsb3AuUHJvZmlsZS5BdmF0YXJEZXRhaWxzEhQKDHBva2Vfc3Rv",
-            "cmFnZRgJIAEoBRIUCgxpdGVtX3N0b3JhZ2UYCiABKAUSEQoJdW5rbm93bjEx",
-            "GAsgASgJEhEKCXVua25vd24xMhgMIAEoCRIRCgl1bmtub3duMTMYDSABKAkS",
-            "MwoIY3VycmVuY3kYDiADKAsyIS5SZXNwb25zZUVudmVsb3AuUHJvZmlsZS5D",
-            "dXJyZW5jeRpYCg1BdmF0YXJEZXRhaWxzEhAKCHVua25vd24yGAIgASgFEhAK",
-            "CHVua25vd24zGAMgASgFEhAKCHVua25vd245GAkgASgFEhEKCXVua25vd24x",
-            "MBgKIAEoBRooCghDdXJyZW5jeRIMCgR0eXBlGAEgASgJEg4KBmFtb3VudBgC",
-            "IAEoBUIYqgIVUE9HT0xpYi5Qb2tlbW9uLlByb3RvYgZwcm90bzM="));
+            "cmFnZRgJIAEoBRIUCgxpdGVtX3N0b3JhZ2UYCiABKAUSOAoLZGFpbHlfYm9u",
+            "dXMYCyABKAsyIy5SZXNwb25zZUVudmVsb3AuUHJvZmlsZS5EYWlseUJvbnVz",
+            "EhEKCXVua25vd24xMhgMIAEoDBIRCgl1bmtub3duMTMYDSABKAwSMwoIY3Vy",
+            "cmVuY3kYDiADKAsyIS5SZXNwb25zZUVudmVsb3AuUHJvZmlsZS5DdXJyZW5j",
+            "eRpYCg1BdmF0YXJEZXRhaWxzEhAKCHVua25vd24yGAIgASgFEhAKCHVua25v",
+            "d24zGAMgASgFEhAKCHVua25vd245GAkgASgFEhEKCXVua25vd24xMBgKIAEo",
+            "BRpZCgpEYWlseUJvbnVzEh4KFk5leHRDb2xsZWN0VGltZXN0YW1wTXMYASAB",
+            "KAMSKwojTmV4dERlZmVuZGVyQm9udXNDb2xsZWN0VGltZXN0YW1wTXMYAiAB",
+            "KAMaKAoIQ3VycmVuY3kSDAoEdHlwZRgBIAEoCRIOCgZhbW91bnQYAiABKAVC",
+            "GKoCFVBPR09MaWIuUG9rZW1vbi5Qcm90b2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -67,7 +70,8 @@ namespace POGOLib.Pokemon.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.ResponseEnvelop), global::POGOLib.Pokemon.Proto.ResponseEnvelop.Parser, new[]{ "Unknown1", "Unknown2", "ApiUrl", "Unknown6", "Unknown7", "Payload" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Unknown6), global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Unknown6.Parser, new[]{ "Unknown1", "Unknown2" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Unknown6.Types.Unknown2), global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Unknown6.Types.Unknown2.Parser, new[]{ "Unknown1" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Unknown7), global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Unknown7.Parser, new[]{ "Unknown71", "Unknown72", "Unknown73" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Payload), global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Payload.Parser, new[]{ "Unknown1", "Profile" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile), global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Parser, new[]{ "CreationTime", "Username", "Team", "Tutorial", "Avatar", "PokeStorage", "ItemStorage", "Unknown11", "Unknown12", "Unknown13", "Currency" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Types.AvatarDetails), global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Types.AvatarDetails.Parser, new[]{ "Unknown2", "Unknown3", "Unknown9", "Unknown10" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile), global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Parser, new[]{ "CreationTime", "Username", "Team", "Tutorial", "Avatar", "PokeStorage", "ItemStorage", "DailyBonus", "Unknown12", "Unknown13", "Currency" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Types.AvatarDetails), global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Types.AvatarDetails.Parser, new[]{ "Unknown2", "Unknown3", "Unknown9", "Unknown10" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Types.DailyBonus), global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Types.DailyBonus.Parser, new[]{ "NextCollectTimestampMs", "NextDefenderBonusCollectTimestampMs" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Types.Currency), global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Types.Currency.Parser, new[]{ "Type", "Amount" }, null, null, null)})})
           }));
     }
@@ -1973,7 +1977,7 @@ namespace POGOLib.Pokemon.Proto {
           Avatar = other.avatar_ != null ? other.Avatar.Clone() : null;
           pokeStorage_ = other.pokeStorage_;
           itemStorage_ = other.itemStorage_;
-          unknown11_ = other.unknown11_;
+          DailyBonus = other.dailyBonus_ != null ? other.DailyBonus.Clone() : null;
           unknown12_ = other.unknown12_;
           unknown13_ = other.unknown13_;
           currency_ = other.currency_.Clone();
@@ -2053,20 +2057,20 @@ namespace POGOLib.Pokemon.Proto {
           }
         }
 
-        /// <summary>Field number for the "unknown11" field.</summary>
-        public const int Unknown11FieldNumber = 11;
-        private string unknown11_ = "";
-        public string Unknown11 {
-          get { return unknown11_; }
+        /// <summary>Field number for the "daily_bonus" field.</summary>
+        public const int DailyBonusFieldNumber = 11;
+        private global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Types.DailyBonus dailyBonus_;
+        public global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Types.DailyBonus DailyBonus {
+          get { return dailyBonus_; }
           set {
-            unknown11_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            dailyBonus_ = value;
           }
         }
 
         /// <summary>Field number for the "unknown12" field.</summary>
         public const int Unknown12FieldNumber = 12;
-        private string unknown12_ = "";
-        public string Unknown12 {
+        private pb::ByteString unknown12_ = pb::ByteString.Empty;
+        public pb::ByteString Unknown12 {
           get { return unknown12_; }
           set {
             unknown12_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
@@ -2075,8 +2079,8 @@ namespace POGOLib.Pokemon.Proto {
 
         /// <summary>Field number for the "unknown13" field.</summary>
         public const int Unknown13FieldNumber = 13;
-        private string unknown13_ = "";
-        public string Unknown13 {
+        private pb::ByteString unknown13_ = pb::ByteString.Empty;
+        public pb::ByteString Unknown13 {
           get { return unknown13_; }
           set {
             unknown13_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
@@ -2110,7 +2114,7 @@ namespace POGOLib.Pokemon.Proto {
           if (!object.Equals(Avatar, other.Avatar)) return false;
           if (PokeStorage != other.PokeStorage) return false;
           if (ItemStorage != other.ItemStorage) return false;
-          if (Unknown11 != other.Unknown11) return false;
+          if (!object.Equals(DailyBonus, other.DailyBonus)) return false;
           if (Unknown12 != other.Unknown12) return false;
           if (Unknown13 != other.Unknown13) return false;
           if(!currency_.Equals(other.currency_)) return false;
@@ -2126,7 +2130,7 @@ namespace POGOLib.Pokemon.Proto {
           if (avatar_ != null) hash ^= Avatar.GetHashCode();
           if (PokeStorage != 0) hash ^= PokeStorage.GetHashCode();
           if (ItemStorage != 0) hash ^= ItemStorage.GetHashCode();
-          if (Unknown11.Length != 0) hash ^= Unknown11.GetHashCode();
+          if (dailyBonus_ != null) hash ^= DailyBonus.GetHashCode();
           if (Unknown12.Length != 0) hash ^= Unknown12.GetHashCode();
           if (Unknown13.Length != 0) hash ^= Unknown13.GetHashCode();
           hash ^= currency_.GetHashCode();
@@ -2166,17 +2170,17 @@ namespace POGOLib.Pokemon.Proto {
             output.WriteRawTag(80);
             output.WriteInt32(ItemStorage);
           }
-          if (Unknown11.Length != 0) {
+          if (dailyBonus_ != null) {
             output.WriteRawTag(90);
-            output.WriteString(Unknown11);
+            output.WriteMessage(DailyBonus);
           }
           if (Unknown12.Length != 0) {
             output.WriteRawTag(98);
-            output.WriteString(Unknown12);
+            output.WriteBytes(Unknown12);
           }
           if (Unknown13.Length != 0) {
             output.WriteRawTag(106);
-            output.WriteString(Unknown13);
+            output.WriteBytes(Unknown13);
           }
           currency_.WriteTo(output, _repeated_currency_codec);
         }
@@ -2204,14 +2208,14 @@ namespace POGOLib.Pokemon.Proto {
           if (ItemStorage != 0) {
             size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemStorage);
           }
-          if (Unknown11.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(Unknown11);
+          if (dailyBonus_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(DailyBonus);
           }
           if (Unknown12.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(Unknown12);
+            size += 1 + pb::CodedOutputStream.ComputeBytesSize(Unknown12);
           }
           if (Unknown13.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(Unknown13);
+            size += 1 + pb::CodedOutputStream.ComputeBytesSize(Unknown13);
           }
           size += currency_.CalculateSize(_repeated_currency_codec);
           return size;
@@ -2245,8 +2249,11 @@ namespace POGOLib.Pokemon.Proto {
           if (other.ItemStorage != 0) {
             ItemStorage = other.ItemStorage;
           }
-          if (other.Unknown11.Length != 0) {
-            Unknown11 = other.Unknown11;
+          if (other.dailyBonus_ != null) {
+            if (dailyBonus_ == null) {
+              dailyBonus_ = new global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Types.DailyBonus();
+            }
+            DailyBonus.MergeFrom(other.DailyBonus);
           }
           if (other.Unknown12.Length != 0) {
             Unknown12 = other.Unknown12;
@@ -2296,15 +2303,18 @@ namespace POGOLib.Pokemon.Proto {
                 break;
               }
               case 90: {
-                Unknown11 = input.ReadString();
+                if (dailyBonus_ == null) {
+                  dailyBonus_ = new global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Types.DailyBonus();
+                }
+                input.ReadMessage(dailyBonus_);
                 break;
               }
               case 98: {
-                Unknown12 = input.ReadString();
+                Unknown12 = input.ReadBytes();
                 break;
               }
               case 106: {
-                Unknown13 = input.ReadString();
+                Unknown13 = input.ReadBytes();
                 break;
               }
               case 114: {
@@ -2504,12 +2514,142 @@ namespace POGOLib.Pokemon.Proto {
           }
 
           [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+          public sealed partial class DailyBonus : pb::IMessage<DailyBonus> {
+            private static readonly pb::MessageParser<DailyBonus> _parser = new pb::MessageParser<DailyBonus>(() => new DailyBonus());
+            public static pb::MessageParser<DailyBonus> Parser { get { return _parser; } }
+
+            public static pbr::MessageDescriptor Descriptor {
+              get { return global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Descriptor.NestedTypes[1]; }
+            }
+
+            pbr::MessageDescriptor pb::IMessage.Descriptor {
+              get { return Descriptor; }
+            }
+
+            public DailyBonus() {
+              OnConstruction();
+            }
+
+            partial void OnConstruction();
+
+            public DailyBonus(DailyBonus other) : this() {
+              nextCollectTimestampMs_ = other.nextCollectTimestampMs_;
+              nextDefenderBonusCollectTimestampMs_ = other.nextDefenderBonusCollectTimestampMs_;
+            }
+
+            public DailyBonus Clone() {
+              return new DailyBonus(this);
+            }
+
+            /// <summary>Field number for the "NextCollectTimestampMs" field.</summary>
+            public const int NextCollectTimestampMsFieldNumber = 1;
+            private long nextCollectTimestampMs_;
+            public long NextCollectTimestampMs {
+              get { return nextCollectTimestampMs_; }
+              set {
+                nextCollectTimestampMs_ = value;
+              }
+            }
+
+            /// <summary>Field number for the "NextDefenderBonusCollectTimestampMs" field.</summary>
+            public const int NextDefenderBonusCollectTimestampMsFieldNumber = 2;
+            private long nextDefenderBonusCollectTimestampMs_;
+            public long NextDefenderBonusCollectTimestampMs {
+              get { return nextDefenderBonusCollectTimestampMs_; }
+              set {
+                nextDefenderBonusCollectTimestampMs_ = value;
+              }
+            }
+
+            public override bool Equals(object other) {
+              return Equals(other as DailyBonus);
+            }
+
+            public bool Equals(DailyBonus other) {
+              if (ReferenceEquals(other, null)) {
+                return false;
+              }
+              if (ReferenceEquals(other, this)) {
+                return true;
+              }
+              if (NextCollectTimestampMs != other.NextCollectTimestampMs) return false;
+              if (NextDefenderBonusCollectTimestampMs != other.NextDefenderBonusCollectTimestampMs) return false;
+              return true;
+            }
+
+            public override int GetHashCode() {
+              int hash = 1;
+              if (NextCollectTimestampMs != 0L) hash ^= NextCollectTimestampMs.GetHashCode();
+              if (NextDefenderBonusCollectTimestampMs != 0L) hash ^= NextDefenderBonusCollectTimestampMs.GetHashCode();
+              return hash;
+            }
+
+            public override string ToString() {
+              return pb::JsonFormatter.ToDiagnosticString(this);
+            }
+
+            public void WriteTo(pb::CodedOutputStream output) {
+              if (NextCollectTimestampMs != 0L) {
+                output.WriteRawTag(8);
+                output.WriteInt64(NextCollectTimestampMs);
+              }
+              if (NextDefenderBonusCollectTimestampMs != 0L) {
+                output.WriteRawTag(16);
+                output.WriteInt64(NextDefenderBonusCollectTimestampMs);
+              }
+            }
+
+            public int CalculateSize() {
+              int size = 0;
+              if (NextCollectTimestampMs != 0L) {
+                size += 1 + pb::CodedOutputStream.ComputeInt64Size(NextCollectTimestampMs);
+              }
+              if (NextDefenderBonusCollectTimestampMs != 0L) {
+                size += 1 + pb::CodedOutputStream.ComputeInt64Size(NextDefenderBonusCollectTimestampMs);
+              }
+              return size;
+            }
+
+            public void MergeFrom(DailyBonus other) {
+              if (other == null) {
+                return;
+              }
+              if (other.NextCollectTimestampMs != 0L) {
+                NextCollectTimestampMs = other.NextCollectTimestampMs;
+              }
+              if (other.NextDefenderBonusCollectTimestampMs != 0L) {
+                NextDefenderBonusCollectTimestampMs = other.NextDefenderBonusCollectTimestampMs;
+              }
+            }
+
+            public void MergeFrom(pb::CodedInputStream input) {
+              uint tag;
+              while ((tag = input.ReadTag()) != 0) {
+                switch(tag) {
+                  default:
+                    input.SkipLastField();
+                    break;
+                  case 8: {
+                    NextCollectTimestampMs = input.ReadInt64();
+                    break;
+                  }
+                  case 16: {
+                    NextDefenderBonusCollectTimestampMs = input.ReadInt64();
+                    break;
+                  }
+                }
+              }
+            }
+
+          }
+
+          [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
           public sealed partial class Currency : pb::IMessage<Currency> {
             private static readonly pb::MessageParser<Currency> _parser = new pb::MessageParser<Currency>(() => new Currency());
             public static pb::MessageParser<Currency> Parser { get { return _parser; } }
 
             public static pbr::MessageDescriptor Descriptor {
-              get { return global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Descriptor.NestedTypes[1]; }
+              get { return global::POGOLib.Pokemon.Proto.ResponseEnvelop.Types.Profile.Descriptor.NestedTypes[2]; }
             }
 
             pbr::MessageDescriptor pb::IMessage.Descriptor {
