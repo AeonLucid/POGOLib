@@ -25,5 +25,5 @@ message MapCell {
 
   // Each pokemon within 2 "steps" or closer will have a WildPokemonProto and MapPokemonProto object
   repeated POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon wild_pokemons = 5;
-  repeated POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon map_pokemons = 10;
+  repeated POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon catchable_pokemons = 10;
 }

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Demo.Util;
 using log4net;
 using POGOLib;
 using POGOLib.Net;
 using POGOLib.Pokemon;
+using POGOLib.Util;
+using ConsoleUtil = Demo.Util.ConsoleUtil;
 
 namespace Demo
 {
@@ -66,25 +67,35 @@ namespace Demo
                 client.SaveClientData();
             }
 
-            var profile = client.RPCClient.GetProfile();
-            Log.Info($"Username: {profile.Username}");
+//            var profile = client.RPCClient.GetProfile();
+//            Log.Info($"Username: {profile.Username}");
 
             var mapObjects = client.RPCClient.GetMapObjects();
 
             Log.Info($"Cells: {mapObjects.MapCells.Count}");
             foreach (var mapCell in mapObjects.MapCells)
             {
-                foreach (var fortData in mapCell.Forts)
-                {
-                    Log.Info($"FortId: {fortData.Id}");
-                    Log.Info($"\tFortType: {fortData.Type}");
-                }
+//                foreach (var fortData in mapCell.Forts)
+//                {
+//                    Log.Info($"FortId: {fortData.Id}");
+//                    Log.Info($"\tFortType: {fortData.Type}");
+//                }
 
-                foreach (var fortSummary in mapCell.FortSummaries)
+//                foreach (var fortSummary in mapCell.FortSummaries)
+//                {
+//                    Log.Info($"FortSummaryId: {fortSummary.FortSummaryId}");
+//                    Log.Info($"\tLatitude: {fortSummary.Latitude}");
+//                    Log.Info($"\tLongitude: {fortSummary.Longitude}");
+//                }
+
+                foreach (var pokemon in mapCell.CatchablePokemons)
                 {
-                    Log.Info($"FortSummaryId: {fortSummary.FortSummaryId}");
-                    Log.Info($"\tLatitude: {fortSummary.Latitude}");
-                    Log.Info($"\tLongitude: {fortSummary.Longitude}");
+                    Log.Info($"PokemonType: {pokemon.PokemonType}");
+                    Log.Info($"\tEncounterId: {pokemon.EncounterId}");
+                    Log.Info($"\tSpawnpointId: {pokemon.SpawnpointId}");
+                    Log.Info($"\tLatitude: {pokemon.Latitude}");
+                    Log.Info($"\tLongitude: {pokemon.Longitude}");
+                    Log.Info($"\tExpiration: {TimeUtil.GetDateTime(pokemon.ExpirationTimestampMs).AddHours(2)}"); // I'm in GMT+2 so I add two hours.
                 }
             }
 
