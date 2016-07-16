@@ -4,6 +4,7 @@ using System.IO;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using DankMemes.GPSOAuthSharp;
 using log4net;
 using POGOLib.Net.Data;
 using POGOLib.Net.Data.Login;
@@ -26,10 +27,7 @@ namespace POGOLib.Net
                 Username = username,
                 LoginProvider = loginProvider
             };
-
-            if(ClientData.LoginProvider == LoginProvider.GoogleAuth)
-                throw new Exception("Google Authentication is not supported.");
-
+            
             Authenticated += OnAuthenticated;
         }
 
@@ -61,26 +59,57 @@ namespace POGOLib.Net
 
         public async Task<bool> Authenticate(string password)
         {
-            using (var httpClientHandler = new HttpClientHandler())
+            if (ClientData.LoginProvider == LoginProvider.PokemonTrainerClub)
             {
-                httpClientHandler.AllowAutoRedirect = false;
-
-                using (var httpClient = new HttpClient(httpClientHandler))
+                using (var httpClientHandler = new HttpClientHandler())
                 {
-                    httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Configuration.LoginUserAgent);
+                    httpClientHandler.AllowAutoRedirect = false;
 
-                    var loginData = await GetLoginData(httpClient);
-                    var ticket = await PostLogin(httpClient, loginData, password);
+                    using (var httpClient = new HttpClient(httpClientHandler))
+                    {
+                        httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Configuration.LoginUserAgent);
 
-                    if (ticket == null)
-                        return false;
+                        var loginData = await GetLoginData(httpClient);
+                        var ticket = await PostLogin(httpClient, loginData, password);
 
-                    ClientData.AuthData = await PostLoginOauth(httpClient, ticket);
-                    OnAuthenticated(EventArgs.Empty);
+                        if (ticket == null)
+                            return false;
 
-                    return true;
+                        ClientData.AuthData = await PostLoginOauth(httpClient, ticket);
+                        OnAuthenticated(EventArgs.Empty);
+
+                        return true;
+                    }
                 }
             }
+
+            if (ClientData.LoginProvider == LoginProvider.GoogleAuth)
+            {
+                var googleClient = new GPSOAuthClient(ClientData.Username, password);
+                var masterLoginResponse = googleClient.PerformMasterLogin();
+
+                if (masterLoginResponse.ContainsKey("Error") && masterLoginResponse["Error"] == "BadAuthentication")
+                    return false;
+
+                if (!masterLoginResponse.ContainsKey("Token"))
+                    throw new Exception("Token was missing from master login response.");
+                
+                var oauthResponse = googleClient.PerformOAuth(masterLoginResponse["Token"], Configuration.GoogleAuthService, Configuration.GoogleAuthApp, Configuration.GoogleAuthClientSig);
+
+                if(!oauthResponse.ContainsKey("Auth"))
+                    throw new Exception("Auth token was missing from oauth login response.");
+
+                ClientData.AuthData = new AuthData
+                {
+                    AccessToken = oauthResponse["Auth"],
+                    ExpireDateTime = TimeUtil.GetDateTimeFromS(int.Parse(oauthResponse["Expiry"]))
+                };
+                OnAuthenticated(EventArgs.Empty);
+
+                return true;
+            }
+
+            throw new Exception("Unknown login provider.");
         }
 
         private async Task<LoginData> GetLoginData(HttpClient httpClient)

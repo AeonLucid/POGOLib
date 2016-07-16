@@ -12,9 +12,14 @@ namespace POGOLib.Util
             return (long) (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds;
         }
 
-        public static DateTime GetDateTime(long timestampMs)
+        public static DateTime GetDateTimeFromMs(long timestampMs)
         {
             return _posixTime.AddMilliseconds(timestampMs);
+        }
+
+        public static DateTime GetDateTimeFromS(int timestampS)
+        {
+            return _posixTime.AddSeconds(timestampS);
         }
     }
 }

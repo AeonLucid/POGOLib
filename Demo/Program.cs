@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using log4net;
-using POGOLib;
 using POGOLib.Net;
 using POGOLib.Pokemon;
 using POGOLib.Util;
@@ -67,8 +66,6 @@ namespace Demo
                 client.SaveClientData();
             }
 
-            client.SetGpsData(52.101427, 5.093521);
-
 //            var profile = client.RPCClient.GetProfile();
 //            Log.Info($"Username: {profile.Username}");
 
@@ -97,7 +94,7 @@ namespace Demo
                     Log.Info($"\tSpawnpointId: {pokemon.SpawnpointId}");
 //                    Log.Info($"\tLatitude: {pokemon.Latitude}");
 //                    Log.Info($"\tLongitude: {pokemon.Longitude}");
-                    Log.Info($"\tExpiration: {TimeUtil.GetDateTime(pokemon.ExpirationTimestampMs).AddHours(2)}"); // I'm in GMT+2 so I add two hours.
+                    Log.Info($"\tExpiration: {TimeUtil.GetDateTimeFromMs(pokemon.ExpirationTimestampMs).AddHours(2)}"); // I'm in GMT+2 so I add two hours.
                 }
 
                 foreach (var pokemon in mapCell.NearbyPokemons)

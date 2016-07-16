@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using Google.Protobuf;
 using log4net;
+using POGOLib.Pokemon;
 using POGOLib.Pokemon.Proto;
 using POGOLib.Pokemon.Proto.Enums.Envelopes;
 using POGOLib.Pokemon.Proto.Requests;
@@ -133,7 +134,7 @@ namespace POGOLib.Net
             {
                 requestEnvelope.AuthInfo = new AuthInfo
                 {
-                    Provider = "ptc",
+                    Provider = _poClient.ClientData.LoginProvider == LoginProvider.PokemonTrainerClub ? "ptc" : "google",
                     Token = new JWT
                     {
                         Contents = _poClient.ClientData.AuthData.AccessToken,
