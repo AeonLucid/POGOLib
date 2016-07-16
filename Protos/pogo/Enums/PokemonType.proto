@@ -1,7 +1,7 @@
 syntax = "proto3";
 package POGOLib.Pokemon.Proto.Enums;
 
-enum Pokemon {
+enum PokemonType {
   MISSINGNO = 0;
   BULBASAUR = 1;
   IVYSAUR = 2;

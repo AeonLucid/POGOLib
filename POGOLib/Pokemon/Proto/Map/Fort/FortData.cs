@@ -24,29 +24,29 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChdNYXAvRm9ydC9Gb3J0RGF0YS5wcm90bxIeUE9HT0xpYi5Qb2tlbW9uLlBy",
-            "b3RvLk1hcC5Gb3J0GhNFbnVtcy9Qb2tlbW9uLnByb3RvGhVFbnVtcy9UZWFt",
-            "Q29sb3IucHJvdG8aF01hcC9Gb3J0L0ZvcnRUeXBlLnByb3RvGhpNYXAvRm9y",
-            "dC9Gb3J0U3BvbnNvci5wcm90bxogTWFwL0ZvcnQvRm9ydFJlbmRlcmluZ1R5",
-            "cGUucHJvdG8aG01hcC9Gb3J0L0ZvcnRMdXJlSW5mby5wcm90byL+BAoIRm9y",
-            "dERhdGESCgoCaWQYASABKAkSIgoabGFzdF9tb2RpZmllZF90aW1lc3RhbXBf",
-            "bXMYAiABKAMSEAoIbGF0aXR1ZGUYAyABKAESEQoJbG9uZ2l0dWRlGAQgASgB",
-            "Eg8KB2VuYWJsZWQYCCABKAgSNgoEdHlwZRgJIAEoDjIoLlBPR09MaWIuUG9r",
-            "ZW1vbi5Qcm90by5NYXAuRm9ydC5Gb3J0VHlwZRI9Cg1vd25lZF9ieV90ZWFt",
-            "GAUgASgOMiYuUE9HT0xpYi5Qb2tlbW9uLlByb3RvLkVudW1zLlRlYW1Db2xv",
-            "chI+ChBndWFyZF9wb2tlbW9uX2lkGAYgASgOMiQuUE9HT0xpYi5Qb2tlbW9u",
-            "LlByb3RvLkVudW1zLlBva2Vtb24SGwoTZ3VhcmRfcG9rZW1vbl9sZXZlbBgH",
-            "IAEoBRISCgpneW1fcG9pbnRzGAogASgDEhQKDGlzX2luX2JhdHRsZRgLIAEo",
-            "CBImCh5jb29sZG93bl9jb21wbGV0ZV90aW1lc3RhbXBfbXMYDiABKAMSPAoH",
-            "c3BvbnNvchgPIAEoDjIrLlBPR09MaWIuUG9rZW1vbi5Qcm90by5NYXAuRm9y",
-            "dC5Gb3J0U3BvbnNvchJJCg5yZW5kZXJpbmdfdHlwZRgQIAEoDjIxLlBPR09M",
-            "aWIuUG9rZW1vbi5Qcm90by5NYXAuRm9ydC5Gb3J0UmVuZGVyaW5nVHlwZRIc",
-            "ChRhY3RpdmVfZm9ydF9tb2RpZmllchgMIAEoDBI/CglsdXJlX2luZm8YDSAB",
-            "KAsyLC5QT0dPTGliLlBva2Vtb24uUHJvdG8uTWFwLkZvcnQuRm9ydEx1cmVJ",
-            "bmZvUABQAVACUANQBFAFYgZwcm90bzM="));
+            "b3RvLk1hcC5Gb3J0GhdFbnVtcy9Qb2tlbW9uVHlwZS5wcm90bxoVRW51bXMv",
+            "VGVhbUNvbG9yLnByb3RvGhdNYXAvRm9ydC9Gb3J0VHlwZS5wcm90bxoaTWFw",
+            "L0ZvcnQvRm9ydFNwb25zb3IucHJvdG8aIE1hcC9Gb3J0L0ZvcnRSZW5kZXJp",
+            "bmdUeXBlLnByb3RvGhtNYXAvRm9ydC9Gb3J0THVyZUluZm8ucHJvdG8ihAUK",
+            "CEZvcnREYXRhEgoKAmlkGAEgASgJEiIKGmxhc3RfbW9kaWZpZWRfdGltZXN0",
+            "YW1wX21zGAIgASgDEhAKCGxhdGl0dWRlGAMgASgBEhEKCWxvbmdpdHVkZRgE",
+            "IAEoARIPCgdlbmFibGVkGAggASgIEjYKBHR5cGUYCSABKA4yKC5QT0dPTGli",
+            "LlBva2Vtb24uUHJvdG8uTWFwLkZvcnQuRm9ydFR5cGUSPQoNb3duZWRfYnlf",
+            "dGVhbRgFIAEoDjImLlBPR09MaWIuUG9rZW1vbi5Qcm90by5FbnVtcy5UZWFt",
+            "Q29sb3ISRAoSZ3VhcmRfcG9rZW1vbl90eXBlGAYgASgOMiguUE9HT0xpYi5Q",
+            "b2tlbW9uLlByb3RvLkVudW1zLlBva2Vtb25UeXBlEhsKE2d1YXJkX3Bva2Vt",
+            "b25fbGV2ZWwYByABKAUSEgoKZ3ltX3BvaW50cxgKIAEoAxIUCgxpc19pbl9i",
+            "YXR0bGUYCyABKAgSJgoeY29vbGRvd25fY29tcGxldGVfdGltZXN0YW1wX21z",
+            "GA4gASgDEjwKB3Nwb25zb3IYDyABKA4yKy5QT0dPTGliLlBva2Vtb24uUHJv",
+            "dG8uTWFwLkZvcnQuRm9ydFNwb25zb3ISSQoOcmVuZGVyaW5nX3R5cGUYECAB",
+            "KA4yMS5QT0dPTGliLlBva2Vtb24uUHJvdG8uTWFwLkZvcnQuRm9ydFJlbmRl",
+            "cmluZ1R5cGUSHAoUYWN0aXZlX2ZvcnRfbW9kaWZpZXIYDCABKAwSPwoJbHVy",
+            "ZV9pbmZvGA0gASgLMiwuUE9HT0xpYi5Qb2tlbW9uLlByb3RvLk1hcC5Gb3J0",
+            "LkZvcnRMdXJlSW5mb1AAUAFQAlADUARQBWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Enums.PokemonReflection.Descriptor, global::POGOLib.Pokemon.Proto.Enums.TeamColorReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Fort.FortTypeReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Fort.FortSponsorReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Fort.FortRenderingTypeReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Fort.FortLureInfoReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Enums.PokemonTypeReflection.Descriptor, global::POGOLib.Pokemon.Proto.Enums.TeamColorReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Fort.FortTypeReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Fort.FortSponsorReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Fort.FortRenderingTypeReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Fort.FortLureInfoReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Fort.FortData), global::POGOLib.Pokemon.Proto.Map.Fort.FortData.Parser, new[]{ "Id", "LastModifiedTimestampMs", "Latitude", "Longitude", "Enabled", "Type", "OwnedByTeam", "GuardPokemonId", "GuardPokemonLevel", "GymPoints", "IsInBattle", "CooldownCompleteTimestampMs", "Sponsor", "RenderingType", "ActiveFortModifier", "LureInfo" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Fort.FortData), global::POGOLib.Pokemon.Proto.Map.Fort.FortData.Parser, new[]{ "Id", "LastModifiedTimestampMs", "Latitude", "Longitude", "Enabled", "Type", "OwnedByTeam", "GuardPokemonType", "GuardPokemonLevel", "GymPoints", "IsInBattle", "CooldownCompleteTimestampMs", "Sponsor", "RenderingType", "ActiveFortModifier", "LureInfo" }, null, null, null)
           }));
     }
     #endregion
@@ -80,7 +80,7 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
       enabled_ = other.enabled_;
       type_ = other.type_;
       ownedByTeam_ = other.ownedByTeam_;
-      guardPokemonId_ = other.guardPokemonId_;
+      guardPokemonType_ = other.guardPokemonType_;
       guardPokemonLevel_ = other.guardPokemonLevel_;
       gymPoints_ = other.gymPoints_;
       isInBattle_ = other.isInBattle_;
@@ -168,16 +168,16 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
       }
     }
 
-    /// <summary>Field number for the "guard_pokemon_id" field.</summary>
-    public const int GuardPokemonIdFieldNumber = 6;
-    private global::POGOLib.Pokemon.Proto.Enums.Pokemon guardPokemonId_ = 0;
+    /// <summary>Field number for the "guard_pokemon_type" field.</summary>
+    public const int GuardPokemonTypeFieldNumber = 6;
+    private global::POGOLib.Pokemon.Proto.Enums.PokemonType guardPokemonType_ = 0;
     /// <summary>
     ///  Highest CP Pokemon at the gym
     /// </summary>
-    public global::POGOLib.Pokemon.Proto.Enums.Pokemon GuardPokemonId {
-      get { return guardPokemonId_; }
+    public global::POGOLib.Pokemon.Proto.Enums.PokemonType GuardPokemonType {
+      get { return guardPokemonType_; }
       set {
-        guardPokemonId_ = value;
+        guardPokemonType_ = value;
       }
     }
 
@@ -291,7 +291,7 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
       if (Enabled != other.Enabled) return false;
       if (Type != other.Type) return false;
       if (OwnedByTeam != other.OwnedByTeam) return false;
-      if (GuardPokemonId != other.GuardPokemonId) return false;
+      if (GuardPokemonType != other.GuardPokemonType) return false;
       if (GuardPokemonLevel != other.GuardPokemonLevel) return false;
       if (GymPoints != other.GymPoints) return false;
       if (IsInBattle != other.IsInBattle) return false;
@@ -312,7 +312,7 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
       if (Enabled != false) hash ^= Enabled.GetHashCode();
       if (Type != 0) hash ^= Type.GetHashCode();
       if (OwnedByTeam != 0) hash ^= OwnedByTeam.GetHashCode();
-      if (GuardPokemonId != 0) hash ^= GuardPokemonId.GetHashCode();
+      if (GuardPokemonType != 0) hash ^= GuardPokemonType.GetHashCode();
       if (GuardPokemonLevel != 0) hash ^= GuardPokemonLevel.GetHashCode();
       if (GymPoints != 0L) hash ^= GymPoints.GetHashCode();
       if (IsInBattle != false) hash ^= IsInBattle.GetHashCode();
@@ -349,9 +349,9 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
         output.WriteRawTag(40);
         output.WriteEnum((int) OwnedByTeam);
       }
-      if (GuardPokemonId != 0) {
+      if (GuardPokemonType != 0) {
         output.WriteRawTag(48);
-        output.WriteEnum((int) GuardPokemonId);
+        output.WriteEnum((int) GuardPokemonType);
       }
       if (GuardPokemonLevel != 0) {
         output.WriteRawTag(56);
@@ -418,8 +418,8 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
       if (OwnedByTeam != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) OwnedByTeam);
       }
-      if (GuardPokemonId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) GuardPokemonId);
+      if (GuardPokemonType != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) GuardPokemonType);
       }
       if (GuardPokemonLevel != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(GuardPokemonLevel);
@@ -473,8 +473,8 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
       if (other.OwnedByTeam != 0) {
         OwnedByTeam = other.OwnedByTeam;
       }
-      if (other.GuardPokemonId != 0) {
-        GuardPokemonId = other.GuardPokemonId;
+      if (other.GuardPokemonType != 0) {
+        GuardPokemonType = other.GuardPokemonType;
       }
       if (other.GuardPokemonLevel != 0) {
         GuardPokemonLevel = other.GuardPokemonLevel;
@@ -533,7 +533,7 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
             break;
           }
           case 48: {
-            guardPokemonId_ = (global::POGOLib.Pokemon.Proto.Enums.Pokemon) input.ReadEnum();
+            guardPokemonType_ = (global::POGOLib.Pokemon.Proto.Enums.PokemonType) input.ReadEnum();
             break;
           }
           case 56: {

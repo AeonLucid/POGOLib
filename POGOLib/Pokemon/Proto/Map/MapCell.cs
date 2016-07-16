@@ -36,16 +36,16 @@ namespace POGOLib.Pokemon.Proto.Map {
             "DmZvcnRfc3VtbWFyaWVzGAggAygLMisuUE9HT0xpYi5Qb2tlbW9uLlByb3Rv",
             "Lk1hcC5Gb3J0LkZvcnRTdW1tYXJ5EkUKFmRlY2ltYXRlZF9zcGF3bl9wb2lu",
             "dHMYCSADKAsyJS5QT0dPTGliLlBva2Vtb24uUHJvdG8uTWFwLlNwYXduUG9p",
-            "bnQSSQoPbmVhcmJ5X3Bva2Vtb25zGAsgAygLMjAuUE9HT0xpYi5Qb2tlbW9u",
-            "LlByb3RvLk1hcC5Qb2tlbW9uLk5lYXJieVBva2Vtb24SRQoNd2lsZF9wb2tl",
-            "bW9ucxgFIAMoCzIuLlBPR09MaWIuUG9rZW1vbi5Qcm90by5NYXAuUG9rZW1v",
-            "bi5XaWxkUG9rZW1vbhJJChJjYXRjaGFibGVfcG9rZW1vbnMYCiADKAsyLS5Q",
-            "T0dPTGliLlBva2Vtb24uUHJvdG8uTWFwLlBva2Vtb24uTWFwUG9rZW1vblAA",
+            "bnQSRQoNd2lsZF9wb2tlbW9ucxgFIAMoCzIuLlBPR09MaWIuUG9rZW1vbi5Q",
+            "cm90by5NYXAuUG9rZW1vbi5XaWxkUG9rZW1vbhJJChJjYXRjaGFibGVfcG9r",
+            "ZW1vbnMYCiADKAsyLS5QT0dPTGliLlBva2Vtb24uUHJvdG8uTWFwLlBva2Vt",
+            "b24uTWFwUG9rZW1vbhJJCg9uZWFyYnlfcG9rZW1vbnMYCyADKAsyMC5QT0dP",
+            "TGliLlBva2Vtb24uUHJvdG8uTWFwLlBva2Vtb24uTmVhcmJ5UG9rZW1vblAA",
             "UAFQAlADUARQBWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Map.SpawnPointReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Fort.FortDataReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Fort.FortSummaryReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemonReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemonReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemonReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.MapCell), global::POGOLib.Pokemon.Proto.Map.MapCell.Parser, new[]{ "S2CellId", "CurrentTimestampMs", "Forts", "SpawnPoints", "DeletedObjects", "IsTruncatedList", "FortSummaries", "DecimatedSpawnPoints", "NearbyPokemons", "WildPokemons", "CatchablePokemons" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.MapCell), global::POGOLib.Pokemon.Proto.Map.MapCell.Parser, new[]{ "S2CellId", "CurrentTimestampMs", "Forts", "SpawnPoints", "DeletedObjects", "IsTruncatedList", "FortSummaries", "DecimatedSpawnPoints", "WildPokemons", "CatchablePokemons", "NearbyPokemons" }, null, null, null)
           }));
     }
     #endregion
@@ -83,9 +83,9 @@ namespace POGOLib.Pokemon.Proto.Map {
       isTruncatedList_ = other.isTruncatedList_;
       fortSummaries_ = other.fortSummaries_.Clone();
       decimatedSpawnPoints_ = other.decimatedSpawnPoints_.Clone();
-      nearbyPokemons_ = other.nearbyPokemons_.Clone();
       wildPokemons_ = other.wildPokemons_.Clone();
       catchablePokemons_ = other.catchablePokemons_.Clone();
+      nearbyPokemons_ = other.nearbyPokemons_.Clone();
     }
 
     public MapCell Clone() {
@@ -170,25 +170,13 @@ namespace POGOLib.Pokemon.Proto.Map {
       get { return decimatedSpawnPoints_; }
     }
 
-    /// <summary>Field number for the "nearby_pokemons" field.</summary>
-    public const int NearbyPokemonsFieldNumber = 11;
-    private static readonly pb::FieldCodec<global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon> _repeated_nearbyPokemons_codec
-        = pb::FieldCodec.ForMessage(90, global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon.Parser);
-    private readonly pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon> nearbyPokemons_ = new pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon>();
-    /// <summary>
-    ///  Pokemon farther away than 2 "steps", but still in the area (3 "steps" away)
-    /// </summary>
-    public pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon> NearbyPokemons {
-      get { return nearbyPokemons_; }
-    }
-
     /// <summary>Field number for the "wild_pokemons" field.</summary>
     public const int WildPokemonsFieldNumber = 5;
     private static readonly pb::FieldCodec<global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon> _repeated_wildPokemons_codec
         = pb::FieldCodec.ForMessage(42, global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon.Parser);
     private readonly pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon> wildPokemons_ = new pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon>();
     /// <summary>
-    ///  Each pokemon within 2 "steps" or closer will have a WildPokemonProto and MapPokemonProto object
+    ///  Pokemon within 2 steps or less.
     /// </summary>
     public pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon> WildPokemons {
       get { return wildPokemons_; }
@@ -199,8 +187,23 @@ namespace POGOLib.Pokemon.Proto.Map {
     private static readonly pb::FieldCodec<global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon> _repeated_catchablePokemons_codec
         = pb::FieldCodec.ForMessage(82, global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon.Parser);
     private readonly pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon> catchablePokemons_ = new pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon>();
+    /// <summary>
+    ///  Pokemon within 1 step or none.
+    /// </summary>
     public pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon> CatchablePokemons {
       get { return catchablePokemons_; }
+    }
+
+    /// <summary>Field number for the "nearby_pokemons" field.</summary>
+    public const int NearbyPokemonsFieldNumber = 11;
+    private static readonly pb::FieldCodec<global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon> _repeated_nearbyPokemons_codec
+        = pb::FieldCodec.ForMessage(90, global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon.Parser);
+    private readonly pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon> nearbyPokemons_ = new pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon>();
+    /// <summary>
+    ///  Pokemon father away than 2 steps, but still in the area.
+    /// </summary>
+    public pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon> NearbyPokemons {
+      get { return nearbyPokemons_; }
     }
 
     public override bool Equals(object other) {
@@ -222,9 +225,9 @@ namespace POGOLib.Pokemon.Proto.Map {
       if (IsTruncatedList != other.IsTruncatedList) return false;
       if(!fortSummaries_.Equals(other.fortSummaries_)) return false;
       if(!decimatedSpawnPoints_.Equals(other.decimatedSpawnPoints_)) return false;
-      if(!nearbyPokemons_.Equals(other.nearbyPokemons_)) return false;
       if(!wildPokemons_.Equals(other.wildPokemons_)) return false;
       if(!catchablePokemons_.Equals(other.catchablePokemons_)) return false;
+      if(!nearbyPokemons_.Equals(other.nearbyPokemons_)) return false;
       return true;
     }
 
@@ -238,9 +241,9 @@ namespace POGOLib.Pokemon.Proto.Map {
       if (IsTruncatedList != false) hash ^= IsTruncatedList.GetHashCode();
       hash ^= fortSummaries_.GetHashCode();
       hash ^= decimatedSpawnPoints_.GetHashCode();
-      hash ^= nearbyPokemons_.GetHashCode();
       hash ^= wildPokemons_.GetHashCode();
       hash ^= catchablePokemons_.GetHashCode();
+      hash ^= nearbyPokemons_.GetHashCode();
       return hash;
     }
 
@@ -287,9 +290,9 @@ namespace POGOLib.Pokemon.Proto.Map {
       }
       size += fortSummaries_.CalculateSize(_repeated_fortSummaries_codec);
       size += decimatedSpawnPoints_.CalculateSize(_repeated_decimatedSpawnPoints_codec);
-      size += nearbyPokemons_.CalculateSize(_repeated_nearbyPokemons_codec);
       size += wildPokemons_.CalculateSize(_repeated_wildPokemons_codec);
       size += catchablePokemons_.CalculateSize(_repeated_catchablePokemons_codec);
+      size += nearbyPokemons_.CalculateSize(_repeated_nearbyPokemons_codec);
       return size;
     }
 
@@ -311,9 +314,9 @@ namespace POGOLib.Pokemon.Proto.Map {
       }
       fortSummaries_.Add(other.fortSummaries_);
       decimatedSpawnPoints_.Add(other.decimatedSpawnPoints_);
-      nearbyPokemons_.Add(other.nearbyPokemons_);
       wildPokemons_.Add(other.wildPokemons_);
       catchablePokemons_.Add(other.catchablePokemons_);
+      nearbyPokemons_.Add(other.nearbyPokemons_);
     }
 
     public void MergeFrom(pb::CodedInputStream input) {

@@ -1,7 +1,7 @@
 syntax = "proto3";
 package POGOLib.Pokemon.Proto.Map.Fort;
 
-import public "Enums/Pokemon.proto";
+import public "Enums/PokemonType.proto";
 import public "Enums/TeamColor.proto";
 import public "Map/Fort/FortType.proto";
 import public "Map/Fort/FortSponsor.proto";
@@ -22,7 +22,7 @@ message FortData {
   POGOLib.Pokemon.Proto.Enums.TeamColor owned_by_team = 5;
 
   // Highest CP Pokemon at the gym
-  POGOLib.Pokemon.Proto.Enums.Pokemon guard_pokemon_id = 6;
+  POGOLib.Pokemon.Proto.Enums.PokemonType guard_pokemon_type = 6;
   int32 guard_pokemon_level = 7;
 
   // Prestigate / experience of the gym

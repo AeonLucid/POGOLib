@@ -24,17 +24,16 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Ch1NYXAvUG9rZW1vbi9XaWxkUG9rZW1vbi5wcm90bxIhUE9HT0xpYi5Qb2tl",
-            "bW9uLlByb3RvLk1hcC5Qb2tlbW9uGhNFbnVtcy9Qb2tlbW9uLnByb3RvItwB",
-            "CgtXaWxkUG9rZW1vbhIUCgxlbmNvdW50ZXJfaWQYASABKAYSIgoabGFzdF9t",
-            "b2RpZmllZF90aW1lc3RhbXBfbXMYAiABKAMSEAoIbGF0aXR1ZGUYAyABKAES",
-            "EQoJbG9uZ2l0dWRlGAQgASgBEhUKDXNwYXducG9pbnRfaWQYBSABKAkSOgoM",
-            "cG9rZW1vbl90eXBlGAcgASgOMiQuUE9HT0xpYi5Qb2tlbW9uLlByb3RvLkVu",
-            "dW1zLlBva2Vtb24SGwoTdGltZV90aWxsX2hpZGRlbl9tcxgLIAEoBVAAYgZw",
-            "cm90bzM="));
+            "bW9uLlByb3RvLk1hcC5Qb2tlbW9uGhJEYXRhL1Bva2Vtb24ucHJvdG8i1gEK",
+            "C1dpbGRQb2tlbW9uEhQKDGVuY291bnRlcl9pZBgBIAEoBhIiChpsYXN0X21v",
+            "ZGlmaWVkX3RpbWVzdGFtcF9tcxgCIAEoAxIQCghsYXRpdHVkZRgDIAEoARIR",
+            "Cglsb25naXR1ZGUYBCABKAESFQoNc3Bhd25wb2ludF9pZBgFIAEoCRI0Cgdw",
+            "b2tlbW9uGAcgASgLMiMuUE9HT0xpYi5Qb2tlbW9uLlByb3RvLkRhdGEuUG9r",
+            "ZW1vbhIbChN0aW1lX3RpbGxfaGlkZGVuX21zGAsgASgFUABiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Enums.PokemonReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Data.PokemonReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon), global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon.Parser, new[]{ "EncounterId", "LastModifiedTimestampMs", "Latitude", "Longitude", "SpawnpointId", "PokemonType", "TimeTillHiddenMs" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon), global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon.Parser, new[]{ "EncounterId", "LastModifiedTimestampMs", "Latitude", "Longitude", "SpawnpointId", "Pokemon", "TimeTillHiddenMs" }, null, null, null)
           }));
     }
     #endregion
@@ -66,7 +65,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       latitude_ = other.latitude_;
       longitude_ = other.longitude_;
       spawnpointId_ = other.spawnpointId_;
-      pokemonType_ = other.pokemonType_;
+      Pokemon = other.pokemon_ != null ? other.Pokemon.Clone() : null;
       timeTillHiddenMs_ = other.timeTillHiddenMs_;
     }
 
@@ -124,13 +123,13 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       }
     }
 
-    /// <summary>Field number for the "pokemon_type" field.</summary>
-    public const int PokemonTypeFieldNumber = 7;
-    private global::POGOLib.Pokemon.Proto.Enums.Pokemon pokemonType_ = 0;
-    public global::POGOLib.Pokemon.Proto.Enums.Pokemon PokemonType {
-      get { return pokemonType_; }
+    /// <summary>Field number for the "pokemon" field.</summary>
+    public const int PokemonFieldNumber = 7;
+    private global::POGOLib.Pokemon.Proto.Data.Pokemon pokemon_;
+    public global::POGOLib.Pokemon.Proto.Data.Pokemon Pokemon {
+      get { return pokemon_; }
       set {
-        pokemonType_ = value;
+        pokemon_ = value;
       }
     }
 
@@ -160,7 +159,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       if (Latitude != other.Latitude) return false;
       if (Longitude != other.Longitude) return false;
       if (SpawnpointId != other.SpawnpointId) return false;
-      if (PokemonType != other.PokemonType) return false;
+      if (!object.Equals(Pokemon, other.Pokemon)) return false;
       if (TimeTillHiddenMs != other.TimeTillHiddenMs) return false;
       return true;
     }
@@ -172,7 +171,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       if (Latitude != 0D) hash ^= Latitude.GetHashCode();
       if (Longitude != 0D) hash ^= Longitude.GetHashCode();
       if (SpawnpointId.Length != 0) hash ^= SpawnpointId.GetHashCode();
-      if (PokemonType != 0) hash ^= PokemonType.GetHashCode();
+      if (pokemon_ != null) hash ^= Pokemon.GetHashCode();
       if (TimeTillHiddenMs != 0) hash ^= TimeTillHiddenMs.GetHashCode();
       return hash;
     }
@@ -202,9 +201,9 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
         output.WriteRawTag(42);
         output.WriteString(SpawnpointId);
       }
-      if (PokemonType != 0) {
-        output.WriteRawTag(56);
-        output.WriteEnum((int) PokemonType);
+      if (pokemon_ != null) {
+        output.WriteRawTag(58);
+        output.WriteMessage(Pokemon);
       }
       if (TimeTillHiddenMs != 0) {
         output.WriteRawTag(88);
@@ -229,8 +228,8 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       if (SpawnpointId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(SpawnpointId);
       }
-      if (PokemonType != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) PokemonType);
+      if (pokemon_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Pokemon);
       }
       if (TimeTillHiddenMs != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(TimeTillHiddenMs);
@@ -257,8 +256,11 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       if (other.SpawnpointId.Length != 0) {
         SpawnpointId = other.SpawnpointId;
       }
-      if (other.PokemonType != 0) {
-        PokemonType = other.PokemonType;
+      if (other.pokemon_ != null) {
+        if (pokemon_ == null) {
+          pokemon_ = new global::POGOLib.Pokemon.Proto.Data.Pokemon();
+        }
+        Pokemon.MergeFrom(other.Pokemon);
       }
       if (other.TimeTillHiddenMs != 0) {
         TimeTillHiddenMs = other.TimeTillHiddenMs;
@@ -292,8 +294,11 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
             SpawnpointId = input.ReadString();
             break;
           }
-          case 56: {
-            pokemonType_ = (global::POGOLib.Pokemon.Proto.Enums.Pokemon) input.ReadEnum();
+          case 58: {
+            if (pokemon_ == null) {
+              pokemon_ = new global::POGOLib.Pokemon.Proto.Data.Pokemon();
+            }
+            input.ReadMessage(pokemon_);
             break;
           }
           case 88: {

@@ -24,15 +24,15 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChtNYXAvRm9ydC9Gb3J0THVyZUluZm8ucHJvdG8SHlBPR09MaWIuUG9rZW1v",
-            "bi5Qcm90by5NYXAuRm9ydBoTRW51bXMvUG9rZW1vbi5wcm90byKSAQoMRm9y",
-            "dEx1cmVJbmZvEg8KB2ZvcnRfaWQYASABKAkSEAoIdW5rbm93bjIYAiABKAES",
-            "PAoOYWN0aXZlX3Bva2Vtb24YAyABKA4yJC5QT0dPTGliLlBva2Vtb24uUHJv",
-            "dG8uRW51bXMuUG9rZW1vbhIhChlsdXJlX2V4cGlyZXNfdGltZXN0YW1wX21z",
-            "GAQgASgDUABiBnByb3RvMw=="));
+            "bi5Qcm90by5NYXAuRm9ydBoXRW51bXMvUG9rZW1vblR5cGUucHJvdG8imwEK",
+            "DEZvcnRMdXJlSW5mbxIPCgdmb3J0X2lkGAEgASgJEhAKCHVua25vd24yGAIg",
+            "ASgBEkUKE2FjdGl2ZV9wb2tlbW9uX3R5cGUYAyABKA4yKC5QT0dPTGliLlBv",
+            "a2Vtb24uUHJvdG8uRW51bXMuUG9rZW1vblR5cGUSIQoZbHVyZV9leHBpcmVz",
+            "X3RpbWVzdGFtcF9tcxgEIAEoA1AAYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Enums.PokemonReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Enums.PokemonTypeReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Fort.FortLureInfo), global::POGOLib.Pokemon.Proto.Map.Fort.FortLureInfo.Parser, new[]{ "FortId", "Unknown2", "ActivePokemon", "LureExpiresTimestampMs" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Fort.FortLureInfo), global::POGOLib.Pokemon.Proto.Map.Fort.FortLureInfo.Parser, new[]{ "FortId", "Unknown2", "ActivePokemonType", "LureExpiresTimestampMs" }, null, null, null)
           }));
     }
     #endregion
@@ -61,7 +61,7 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
     public FortLureInfo(FortLureInfo other) : this() {
       fortId_ = other.fortId_;
       unknown2_ = other.unknown2_;
-      activePokemon_ = other.activePokemon_;
+      activePokemonType_ = other.activePokemonType_;
       lureExpiresTimestampMs_ = other.lureExpiresTimestampMs_;
     }
 
@@ -89,13 +89,13 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
       }
     }
 
-    /// <summary>Field number for the "active_pokemon" field.</summary>
-    public const int ActivePokemonFieldNumber = 3;
-    private global::POGOLib.Pokemon.Proto.Enums.Pokemon activePokemon_ = 0;
-    public global::POGOLib.Pokemon.Proto.Enums.Pokemon ActivePokemon {
-      get { return activePokemon_; }
+    /// <summary>Field number for the "active_pokemon_type" field.</summary>
+    public const int ActivePokemonTypeFieldNumber = 3;
+    private global::POGOLib.Pokemon.Proto.Enums.PokemonType activePokemonType_ = 0;
+    public global::POGOLib.Pokemon.Proto.Enums.PokemonType ActivePokemonType {
+      get { return activePokemonType_; }
       set {
-        activePokemon_ = value;
+        activePokemonType_ = value;
       }
     }
 
@@ -122,7 +122,7 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
       }
       if (FortId != other.FortId) return false;
       if (Unknown2 != other.Unknown2) return false;
-      if (ActivePokemon != other.ActivePokemon) return false;
+      if (ActivePokemonType != other.ActivePokemonType) return false;
       if (LureExpiresTimestampMs != other.LureExpiresTimestampMs) return false;
       return true;
     }
@@ -131,7 +131,7 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
       int hash = 1;
       if (FortId.Length != 0) hash ^= FortId.GetHashCode();
       if (Unknown2 != 0D) hash ^= Unknown2.GetHashCode();
-      if (ActivePokemon != 0) hash ^= ActivePokemon.GetHashCode();
+      if (ActivePokemonType != 0) hash ^= ActivePokemonType.GetHashCode();
       if (LureExpiresTimestampMs != 0L) hash ^= LureExpiresTimestampMs.GetHashCode();
       return hash;
     }
@@ -149,9 +149,9 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
         output.WriteRawTag(17);
         output.WriteDouble(Unknown2);
       }
-      if (ActivePokemon != 0) {
+      if (ActivePokemonType != 0) {
         output.WriteRawTag(24);
-        output.WriteEnum((int) ActivePokemon);
+        output.WriteEnum((int) ActivePokemonType);
       }
       if (LureExpiresTimestampMs != 0L) {
         output.WriteRawTag(32);
@@ -167,8 +167,8 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
       if (Unknown2 != 0D) {
         size += 1 + 8;
       }
-      if (ActivePokemon != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ActivePokemon);
+      if (ActivePokemonType != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ActivePokemonType);
       }
       if (LureExpiresTimestampMs != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(LureExpiresTimestampMs);
@@ -186,8 +186,8 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
       if (other.Unknown2 != 0D) {
         Unknown2 = other.Unknown2;
       }
-      if (other.ActivePokemon != 0) {
-        ActivePokemon = other.ActivePokemon;
+      if (other.ActivePokemonType != 0) {
+        ActivePokemonType = other.ActivePokemonType;
       }
       if (other.LureExpiresTimestampMs != 0L) {
         LureExpiresTimestampMs = other.LureExpiresTimestampMs;
@@ -210,7 +210,7 @@ namespace POGOLib.Pokemon.Proto.Map.Fort {
             break;
           }
           case 24: {
-            activePokemon_ = (global::POGOLib.Pokemon.Proto.Enums.Pokemon) input.ReadEnum();
+            activePokemonType_ = (global::POGOLib.Pokemon.Proto.Enums.PokemonType) input.ReadEnum();
             break;
           }
           case 32: {

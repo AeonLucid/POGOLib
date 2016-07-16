@@ -73,10 +73,11 @@
     <Compile Include="Net\RPCClient.cs" />
     <Compile Include="Pokemon\LoginProvider.cs" />
     <Compile Include="Pokemon\Proto\Data.cs" />
+    <Compile Include="Pokemon\Proto\Data\Pokemon.cs" />
     <Compile Include="Pokemon\Proto\Enums\Envelopes\Direction.cs" />
     <Compile Include="Pokemon\Proto\Enums\Gender.cs" />
     <Compile Include="Pokemon\Proto\Enums\HoloBadgeType.cs" />
-    <Compile Include="Pokemon\Proto\Enums\Pokemon.cs" />
+    <Compile Include="Pokemon\Proto\Enums\PokemonType.cs" />
     <Compile Include="Pokemon\Proto\Enums\TeamColor.cs" />
     <Compile Include="Pokemon\Proto\Envelopes.cs" />
     <Compile Include="Pokemon\Proto\LocalPlayer.cs" />

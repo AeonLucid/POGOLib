@@ -65,7 +65,7 @@ namespace Demo
 
                 client.SaveClientData();
             }
-
+            
 //            var profile = client.RPCClient.GetProfile();
 //            Log.Info($"Username: {profile.Username}");
 
@@ -74,43 +74,23 @@ namespace Demo
             Log.Info($"Cells: {mapObjects.MapCells.Count}");
             foreach (var mapCell in mapObjects.MapCells)
             {
-//                foreach (var fortData in mapCell.Forts)
-//                {
-//                    Log.Info($"FortId: {fortData.Id}");
-//                    Log.Info($"\tFortType: {fortData.Type}");
-//                }
-
-//                foreach (var fortSummary in mapCell.FortSummaries)
-//                {
-//                    Log.Info($"FortSummaryId: {fortSummary.FortSummaryId}");
-//                    Log.Info($"\tLatitude: {fortSummary.Latitude}");
-//                    Log.Info($"\tLongitude: {fortSummary.Longitude}");
-//                }
+                Log.Info($"CellId: {mapCell.S2CellId}");
 
                 foreach (var pokemon in mapCell.CatchablePokemons)
                 {
-                    Log.Info($"CatchablePokemon: {pokemon.PokemonType}");
-//                    Log.Info($"\tEncounterId: {pokemon.EncounterId}");
-                    Log.Info($"\tSpawnpointId: {pokemon.SpawnpointId}");
-//                    Log.Info($"\tLatitude: {pokemon.Latitude}");
-//                    Log.Info($"\tLongitude: {pokemon.Longitude}");
-                    Log.Info($"\tExpiration: {TimeUtil.GetDateTimeFromMs(pokemon.ExpirationTimestampMs).AddHours(2)}"); // I'm in GMT+2 so I add two hours.
+                    Log.Info($"\tCatchablePokemon: {pokemon.PokemonType}");
+                    Log.Info($"\t\tExpiration: {TimeUtil.GetDateTimeFromMs(pokemon.ExpirationTimestampMs).AddHours(2)}"); // I'm in GMT+2 so I add two hours.
                 }
 
                 foreach (var pokemon in mapCell.NearbyPokemons)
                 {
-                    Log.Info($"NearbyPokemon: {pokemon.PokemonType}");
-//                    Log.Info($"\tEncounterId: {pokemon.EncounterId}");
-                    Log.Info($"\tDistanceInMeters: {pokemon.DistanceInMeters}");
+                    Log.Info($"\tNearbyPokemon: {pokemon.PokemonType}");
+                    Log.Info($"\t\tDistanceInMeters: {pokemon.DistanceInMeters}");
                 }
 
-                foreach (var pokemon in mapCell.WildPokemons)
+                foreach (var wildPokemon in mapCell.WildPokemons)
                 {
-                    Log.Info($"WildPokemon: {pokemon.PokemonType}");
-                    Log.Info($"\tEncounterId: {pokemon.EncounterId}");
-                    Log.Info($"\tSpawnpointId: {pokemon.SpawnpointId}");
-//                    Log.Info($"\tLatitude: {pokemon.Latitude}");
-//                    Log.Info($"\tLongitude: {pokemon.Longitude}");
+                    Log.Info($"\tWildPokemon: {wildPokemon.Pokemon.PokemonId}");
                 }
             }
 

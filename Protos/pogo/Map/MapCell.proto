@@ -20,10 +20,10 @@ message MapCell {
   repeated POGOLib.Pokemon.Proto.Map.Fort.FortSummary fort_summaries = 8;
   repeated POGOLib.Pokemon.Proto.Map.SpawnPoint decimated_spawn_points = 9;
 
-  // Pokemon farther away than 2 "steps", but still in the area (3 "steps" away)
-  repeated POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon nearby_pokemons = 11;
-
-  // Each pokemon within 2 "steps" or closer will have a WildPokemonProto and MapPokemonProto object
+  // Pokemon within 2 steps or less.
   repeated POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon wild_pokemons = 5;
+  // Pokemon within 1 step or none.
   repeated POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon catchable_pokemons = 10;
+  // Pokemon father away than 2 steps, but still in the area.
+  repeated POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon nearby_pokemons = 11;
 }

@@ -24,14 +24,14 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChxNYXAvUG9rZW1vbi9NYXBQb2tlbW9uLnByb3RvEiFQT0dPTGliLlBva2Vt",
-            "b24uUHJvdG8uTWFwLlBva2Vtb24aE0VudW1zL1Bva2Vtb24ucHJvdG8iuwEK",
-            "Ck1hcFBva2Vtb24SFQoNc3Bhd25wb2ludF9pZBgBIAEoCRIUCgxlbmNvdW50",
-            "ZXJfaWQYAiABKAYSOgoMcG9rZW1vbl90eXBlGAMgASgOMiQuUE9HT0xpYi5Q",
-            "b2tlbW9uLlByb3RvLkVudW1zLlBva2Vtb24SHwoXZXhwaXJhdGlvbl90aW1l",
-            "c3RhbXBfbXMYBCABKAMSEAoIbGF0aXR1ZGUYBSABKAESEQoJbG9uZ2l0dWRl",
-            "GAYgASgBUABiBnByb3RvMw=="));
+            "b24uUHJvdG8uTWFwLlBva2Vtb24aF0VudW1zL1Bva2Vtb25UeXBlLnByb3Rv",
+            "Ir8BCgpNYXBQb2tlbW9uEhUKDXNwYXducG9pbnRfaWQYASABKAkSFAoMZW5j",
+            "b3VudGVyX2lkGAIgASgGEj4KDHBva2Vtb25fdHlwZRgDIAEoDjIoLlBPR09M",
+            "aWIuUG9rZW1vbi5Qcm90by5FbnVtcy5Qb2tlbW9uVHlwZRIfChdleHBpcmF0",
+            "aW9uX3RpbWVzdGFtcF9tcxgEIAEoAxIQCghsYXRpdHVkZRgFIAEoARIRCgls",
+            "b25naXR1ZGUYBiABKAFQAGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Enums.PokemonReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Enums.PokemonTypeReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon), global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon.Parser, new[]{ "SpawnpointId", "EncounterId", "PokemonType", "ExpirationTimestampMs", "Latitude", "Longitude" }, null, null, null)
           }));
@@ -94,8 +94,8 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
 
     /// <summary>Field number for the "pokemon_type" field.</summary>
     public const int PokemonTypeFieldNumber = 3;
-    private global::POGOLib.Pokemon.Proto.Enums.Pokemon pokemonType_ = 0;
-    public global::POGOLib.Pokemon.Proto.Enums.Pokemon PokemonType {
+    private global::POGOLib.Pokemon.Proto.Enums.PokemonType pokemonType_ = 0;
+    public global::POGOLib.Pokemon.Proto.Enums.PokemonType PokemonType {
       get { return pokemonType_; }
       set {
         pokemonType_ = value;
@@ -260,7 +260,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
             break;
           }
           case 24: {
-            pokemonType_ = (global::POGOLib.Pokemon.Proto.Enums.Pokemon) input.ReadEnum();
+            pokemonType_ = (global::POGOLib.Pokemon.Proto.Enums.PokemonType) input.ReadEnum();
             break;
           }
           case 32: {
