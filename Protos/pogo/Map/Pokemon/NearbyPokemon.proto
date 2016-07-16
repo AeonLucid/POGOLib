@@ -6,5 +6,5 @@ import public "Enums/Pokemon.proto";
 message NearbyPokemon {
 	POGOLib.Pokemon.Proto.Enums.Pokemon pokemon_type = 1;
 	float distance_in_meters = 2;
-	fixed64 encounted_id = 3;
+	fixed64 encounter_id = 3;
 }

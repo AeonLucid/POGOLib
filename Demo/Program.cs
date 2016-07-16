@@ -67,6 +67,8 @@ namespace Demo
                 client.SaveClientData();
             }
 
+            client.SetGpsData(52.101427, 5.093521);
+
 //            var profile = client.RPCClient.GetProfile();
 //            Log.Info($"Username: {profile.Username}");
 
@@ -90,12 +92,28 @@ namespace Demo
 
                 foreach (var pokemon in mapCell.CatchablePokemons)
                 {
-                    Log.Info($"PokemonType: {pokemon.PokemonType}");
+                    Log.Info($"CatchablePokemon: {pokemon.PokemonType}");
+//                    Log.Info($"\tEncounterId: {pokemon.EncounterId}");
+                    Log.Info($"\tSpawnpointId: {pokemon.SpawnpointId}");
+//                    Log.Info($"\tLatitude: {pokemon.Latitude}");
+//                    Log.Info($"\tLongitude: {pokemon.Longitude}");
+                    Log.Info($"\tExpiration: {TimeUtil.GetDateTime(pokemon.ExpirationTimestampMs).AddHours(2)}"); // I'm in GMT+2 so I add two hours.
+                }
+
+                foreach (var pokemon in mapCell.NearbyPokemons)
+                {
+                    Log.Info($"NearbyPokemon: {pokemon.PokemonType}");
+//                    Log.Info($"\tEncounterId: {pokemon.EncounterId}");
+                    Log.Info($"\tDistanceInMeters: {pokemon.DistanceInMeters}");
+                }
+
+                foreach (var pokemon in mapCell.WildPokemons)
+                {
+                    Log.Info($"WildPokemon: {pokemon.PokemonType}");
                     Log.Info($"\tEncounterId: {pokemon.EncounterId}");
                     Log.Info($"\tSpawnpointId: {pokemon.SpawnpointId}");
-                    Log.Info($"\tLatitude: {pokemon.Latitude}");
-                    Log.Info($"\tLongitude: {pokemon.Longitude}");
-                    Log.Info($"\tExpiration: {TimeUtil.GetDateTime(pokemon.ExpirationTimestampMs).AddHours(2)}"); // I'm in GMT+2 so I add two hours.
+//                    Log.Info($"\tLatitude: {pokemon.Latitude}");
+//                    Log.Info($"\tLongitude: {pokemon.Longitude}");
                 }
             }
 

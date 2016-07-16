@@ -25,7 +25,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
           string.Concat(
             "Ch1NYXAvUG9rZW1vbi9XaWxkUG9rZW1vbi5wcm90bxIhUE9HT0xpYi5Qb2tl",
             "bW9uLlByb3RvLk1hcC5Qb2tlbW9uGhNFbnVtcy9Qb2tlbW9uLnByb3RvItwB",
-            "CgtXaWxkUG9rZW1vbhIUCgxlbmNvdW50ZWRfaWQYASABKAYSIgoabGFzdF9t",
+            "CgtXaWxkUG9rZW1vbhIUCgxlbmNvdW50ZXJfaWQYASABKAYSIgoabGFzdF9t",
             "b2RpZmllZF90aW1lc3RhbXBfbXMYAiABKAMSEAoIbGF0aXR1ZGUYAyABKAES",
             "EQoJbG9uZ2l0dWRlGAQgASgBEhUKDXNwYXducG9pbnRfaWQYBSABKAkSOgoM",
             "cG9rZW1vbl90eXBlGAcgASgOMiQuUE9HT0xpYi5Qb2tlbW9uLlByb3RvLkVu",
@@ -34,7 +34,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Enums.PokemonReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon), global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon.Parser, new[]{ "EncountedId", "LastModifiedTimestampMs", "Latitude", "Longitude", "SpawnpointId", "PokemonType", "TimeTillHiddenMs" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon), global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon.Parser, new[]{ "EncounterId", "LastModifiedTimestampMs", "Latitude", "Longitude", "SpawnpointId", "PokemonType", "TimeTillHiddenMs" }, null, null, null)
           }));
     }
     #endregion
@@ -61,7 +61,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
     partial void OnConstruction();
 
     public WildPokemon(WildPokemon other) : this() {
-      encountedId_ = other.encountedId_;
+      encounterId_ = other.encounterId_;
       lastModifiedTimestampMs_ = other.lastModifiedTimestampMs_;
       latitude_ = other.latitude_;
       longitude_ = other.longitude_;
@@ -74,13 +74,13 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       return new WildPokemon(this);
     }
 
-    /// <summary>Field number for the "encounted_id" field.</summary>
-    public const int EncountedIdFieldNumber = 1;
-    private ulong encountedId_;
-    public ulong EncountedId {
-      get { return encountedId_; }
+    /// <summary>Field number for the "encounter_id" field.</summary>
+    public const int EncounterIdFieldNumber = 1;
+    private ulong encounterId_;
+    public ulong EncounterId {
+      get { return encounterId_; }
       set {
-        encountedId_ = value;
+        encounterId_ = value;
       }
     }
 
@@ -155,7 +155,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (EncountedId != other.EncountedId) return false;
+      if (EncounterId != other.EncounterId) return false;
       if (LastModifiedTimestampMs != other.LastModifiedTimestampMs) return false;
       if (Latitude != other.Latitude) return false;
       if (Longitude != other.Longitude) return false;
@@ -167,7 +167,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
 
     public override int GetHashCode() {
       int hash = 1;
-      if (EncountedId != 0UL) hash ^= EncountedId.GetHashCode();
+      if (EncounterId != 0UL) hash ^= EncounterId.GetHashCode();
       if (LastModifiedTimestampMs != 0L) hash ^= LastModifiedTimestampMs.GetHashCode();
       if (Latitude != 0D) hash ^= Latitude.GetHashCode();
       if (Longitude != 0D) hash ^= Longitude.GetHashCode();
@@ -182,9 +182,9 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
     }
 
     public void WriteTo(pb::CodedOutputStream output) {
-      if (EncountedId != 0UL) {
+      if (EncounterId != 0UL) {
         output.WriteRawTag(9);
-        output.WriteFixed64(EncountedId);
+        output.WriteFixed64(EncounterId);
       }
       if (LastModifiedTimestampMs != 0L) {
         output.WriteRawTag(16);
@@ -214,7 +214,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
 
     public int CalculateSize() {
       int size = 0;
-      if (EncountedId != 0UL) {
+      if (EncounterId != 0UL) {
         size += 1 + 8;
       }
       if (LastModifiedTimestampMs != 0L) {
@@ -242,8 +242,8 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       if (other == null) {
         return;
       }
-      if (other.EncountedId != 0UL) {
-        EncountedId = other.EncountedId;
+      if (other.EncounterId != 0UL) {
+        EncounterId = other.EncounterId;
       }
       if (other.LastModifiedTimestampMs != 0L) {
         LastModifiedTimestampMs = other.LastModifiedTimestampMs;
@@ -273,7 +273,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
             input.SkipLastField();
             break;
           case 9: {
-            EncountedId = input.ReadFixed64();
+            EncounterId = input.ReadFixed64();
             break;
           }
           case 16: {

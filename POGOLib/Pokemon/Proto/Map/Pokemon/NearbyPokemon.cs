@@ -27,12 +27,12 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
             "a2Vtb24uUHJvdG8uTWFwLlBva2Vtb24aE0VudW1zL1Bva2Vtb24ucHJvdG8i",
             "fQoNTmVhcmJ5UG9rZW1vbhI6Cgxwb2tlbW9uX3R5cGUYASABKA4yJC5QT0dP",
             "TGliLlBva2Vtb24uUHJvdG8uRW51bXMuUG9rZW1vbhIaChJkaXN0YW5jZV9p",
-            "bl9tZXRlcnMYAiABKAISFAoMZW5jb3VudGVkX2lkGAMgASgGUABiBnByb3Rv",
+            "bl9tZXRlcnMYAiABKAISFAoMZW5jb3VudGVyX2lkGAMgASgGUABiBnByb3Rv",
             "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Enums.PokemonReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon), global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon.Parser, new[]{ "PokemonType", "DistanceInMeters", "EncountedId" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon), global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon.Parser, new[]{ "PokemonType", "DistanceInMeters", "EncounterId" }, null, null, null)
           }));
     }
     #endregion
@@ -61,7 +61,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
     public NearbyPokemon(NearbyPokemon other) : this() {
       pokemonType_ = other.pokemonType_;
       distanceInMeters_ = other.distanceInMeters_;
-      encountedId_ = other.encountedId_;
+      encounterId_ = other.encounterId_;
     }
 
     public NearbyPokemon Clone() {
@@ -88,13 +88,13 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       }
     }
 
-    /// <summary>Field number for the "encounted_id" field.</summary>
-    public const int EncountedIdFieldNumber = 3;
-    private ulong encountedId_;
-    public ulong EncountedId {
-      get { return encountedId_; }
+    /// <summary>Field number for the "encounter_id" field.</summary>
+    public const int EncounterIdFieldNumber = 3;
+    private ulong encounterId_;
+    public ulong EncounterId {
+      get { return encounterId_; }
       set {
-        encountedId_ = value;
+        encounterId_ = value;
       }
     }
 
@@ -111,7 +111,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       }
       if (PokemonType != other.PokemonType) return false;
       if (DistanceInMeters != other.DistanceInMeters) return false;
-      if (EncountedId != other.EncountedId) return false;
+      if (EncounterId != other.EncounterId) return false;
       return true;
     }
 
@@ -119,7 +119,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       int hash = 1;
       if (PokemonType != 0) hash ^= PokemonType.GetHashCode();
       if (DistanceInMeters != 0F) hash ^= DistanceInMeters.GetHashCode();
-      if (EncountedId != 0UL) hash ^= EncountedId.GetHashCode();
+      if (EncounterId != 0UL) hash ^= EncounterId.GetHashCode();
       return hash;
     }
 
@@ -136,9 +136,9 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
         output.WriteRawTag(21);
         output.WriteFloat(DistanceInMeters);
       }
-      if (EncountedId != 0UL) {
+      if (EncounterId != 0UL) {
         output.WriteRawTag(25);
-        output.WriteFixed64(EncountedId);
+        output.WriteFixed64(EncounterId);
       }
     }
 
@@ -150,7 +150,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       if (DistanceInMeters != 0F) {
         size += 1 + 4;
       }
-      if (EncountedId != 0UL) {
+      if (EncounterId != 0UL) {
         size += 1 + 8;
       }
       return size;
@@ -166,8 +166,8 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       if (other.DistanceInMeters != 0F) {
         DistanceInMeters = other.DistanceInMeters;
       }
-      if (other.EncountedId != 0UL) {
-        EncountedId = other.EncountedId;
+      if (other.EncounterId != 0UL) {
+        EncounterId = other.EncounterId;
       }
     }
 
@@ -187,7 +187,7 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
             break;
           }
           case 25: {
-            EncountedId = input.ReadFixed64();
+            EncounterId = input.ReadFixed64();
             break;
           }
         }
