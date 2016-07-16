@@ -27,7 +27,7 @@ namespace POGOLib.Pokemon.Proto.Map {
             "cBoUTWFwL1NwYXduUG9pbnQucHJvdG8aF01hcC9Gb3J0L0ZvcnREYXRhLnBy",
             "b3RvGhpNYXAvRm9ydC9Gb3J0U3VtbWFyeS5wcm90bxofTWFwL1Bva2Vtb24v",
             "TmVhcmJ5UG9rZW1vbi5wcm90bxodTWFwL1Bva2Vtb24vV2lsZFBva2Vtb24u",
-            "cHJvdG8aHE1hcC9Qb2tlbW9uL01hcFBva2Vtb24ucHJvdG8izgQKB01hcENl",
+            "cHJvdG8aHE1hcC9Qb2tlbW9uL01hcFBva2Vtb24ucHJvdG8iyAQKB01hcENl",
             "bGwSEgoKczJfY2VsbF9pZBgBIAEoBBIcChRjdXJyZW50X3RpbWVzdGFtcF9t",
             "cxgCIAEoAxI3CgVmb3J0cxgDIAMoCzIoLlBPR09MaWIuUG9rZW1vbi5Qcm90",
             "by5NYXAuRm9ydC5Gb3J0RGF0YRI7CgxzcGF3bl9wb2ludHMYBCADKAsyJS5Q",
@@ -39,13 +39,13 @@ namespace POGOLib.Pokemon.Proto.Map {
             "bnQSSQoPbmVhcmJ5X3Bva2Vtb25zGAsgAygLMjAuUE9HT0xpYi5Qb2tlbW9u",
             "LlByb3RvLk1hcC5Qb2tlbW9uLk5lYXJieVBva2Vtb24SRQoNd2lsZF9wb2tl",
             "bW9ucxgFIAMoCzIuLlBPR09MaWIuUG9rZW1vbi5Qcm90by5NYXAuUG9rZW1v",
-            "bi5XaWxkUG9rZW1vbhJJChJjYXRjaGFibGVfcG9rZW1vbnMYCiADKAsyLS5Q",
-            "T0dPTGliLlBva2Vtb24uUHJvdG8uTWFwLlBva2Vtb24uTWFwUG9rZW1vblAA",
-            "UAFQAlADUARQBWIGcHJvdG8z"));
+            "bi5XaWxkUG9rZW1vbhJDCgxtYXBfcG9rZW1vbnMYCiADKAsyLS5QT0dPTGli",
+            "LlBva2Vtb24uUHJvdG8uTWFwLlBva2Vtb24uTWFwUG9rZW1vblAAUAFQAlAD",
+            "UARQBWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Map.SpawnPointReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Fort.FortDataReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Fort.FortSummaryReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemonReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemonReflection.Descriptor, global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemonReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.MapCell), global::POGOLib.Pokemon.Proto.Map.MapCell.Parser, new[]{ "S2CellId", "CurrentTimestampMs", "Forts", "SpawnPoints", "DeletedObjects", "IsTruncatedList", "FortSummaries", "DecimatedSpawnPoints", "NearbyPokemons", "WildPokemons", "CatchablePokemons" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.MapCell), global::POGOLib.Pokemon.Proto.Map.MapCell.Parser, new[]{ "S2CellId", "CurrentTimestampMs", "Forts", "SpawnPoints", "DeletedObjects", "IsTruncatedList", "FortSummaries", "DecimatedSpawnPoints", "NearbyPokemons", "WildPokemons", "MapPokemons" }, null, null, null)
           }));
     }
     #endregion
@@ -85,7 +85,7 @@ namespace POGOLib.Pokemon.Proto.Map {
       decimatedSpawnPoints_ = other.decimatedSpawnPoints_.Clone();
       nearbyPokemons_ = other.nearbyPokemons_.Clone();
       wildPokemons_ = other.wildPokemons_.Clone();
-      catchablePokemons_ = other.catchablePokemons_.Clone();
+      mapPokemons_ = other.mapPokemons_.Clone();
     }
 
     public MapCell Clone() {
@@ -194,13 +194,13 @@ namespace POGOLib.Pokemon.Proto.Map {
       get { return wildPokemons_; }
     }
 
-    /// <summary>Field number for the "catchable_pokemons" field.</summary>
-    public const int CatchablePokemonsFieldNumber = 10;
-    private static readonly pb::FieldCodec<global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon> _repeated_catchablePokemons_codec
+    /// <summary>Field number for the "map_pokemons" field.</summary>
+    public const int MapPokemonsFieldNumber = 10;
+    private static readonly pb::FieldCodec<global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon> _repeated_mapPokemons_codec
         = pb::FieldCodec.ForMessage(82, global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon.Parser);
-    private readonly pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon> catchablePokemons_ = new pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon>();
-    public pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon> CatchablePokemons {
-      get { return catchablePokemons_; }
+    private readonly pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon> mapPokemons_ = new pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon>();
+    public pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Map.Pokemon.MapPokemon> MapPokemons {
+      get { return mapPokemons_; }
     }
 
     public override bool Equals(object other) {
@@ -224,7 +224,7 @@ namespace POGOLib.Pokemon.Proto.Map {
       if(!decimatedSpawnPoints_.Equals(other.decimatedSpawnPoints_)) return false;
       if(!nearbyPokemons_.Equals(other.nearbyPokemons_)) return false;
       if(!wildPokemons_.Equals(other.wildPokemons_)) return false;
-      if(!catchablePokemons_.Equals(other.catchablePokemons_)) return false;
+      if(!mapPokemons_.Equals(other.mapPokemons_)) return false;
       return true;
     }
 
@@ -240,7 +240,7 @@ namespace POGOLib.Pokemon.Proto.Map {
       hash ^= decimatedSpawnPoints_.GetHashCode();
       hash ^= nearbyPokemons_.GetHashCode();
       hash ^= wildPokemons_.GetHashCode();
-      hash ^= catchablePokemons_.GetHashCode();
+      hash ^= mapPokemons_.GetHashCode();
       return hash;
     }
 
@@ -267,7 +267,7 @@ namespace POGOLib.Pokemon.Proto.Map {
       }
       fortSummaries_.WriteTo(output, _repeated_fortSummaries_codec);
       decimatedSpawnPoints_.WriteTo(output, _repeated_decimatedSpawnPoints_codec);
-      catchablePokemons_.WriteTo(output, _repeated_catchablePokemons_codec);
+      mapPokemons_.WriteTo(output, _repeated_mapPokemons_codec);
       nearbyPokemons_.WriteTo(output, _repeated_nearbyPokemons_codec);
     }
 
@@ -289,7 +289,7 @@ namespace POGOLib.Pokemon.Proto.Map {
       size += decimatedSpawnPoints_.CalculateSize(_repeated_decimatedSpawnPoints_codec);
       size += nearbyPokemons_.CalculateSize(_repeated_nearbyPokemons_codec);
       size += wildPokemons_.CalculateSize(_repeated_wildPokemons_codec);
-      size += catchablePokemons_.CalculateSize(_repeated_catchablePokemons_codec);
+      size += mapPokemons_.CalculateSize(_repeated_mapPokemons_codec);
       return size;
     }
 
@@ -313,7 +313,7 @@ namespace POGOLib.Pokemon.Proto.Map {
       decimatedSpawnPoints_.Add(other.decimatedSpawnPoints_);
       nearbyPokemons_.Add(other.nearbyPokemons_);
       wildPokemons_.Add(other.wildPokemons_);
-      catchablePokemons_.Add(other.catchablePokemons_);
+      mapPokemons_.Add(other.mapPokemons_);
     }
 
     public void MergeFrom(pb::CodedInputStream input) {
@@ -360,7 +360,7 @@ namespace POGOLib.Pokemon.Proto.Map {
             break;
           }
           case 82: {
-            catchablePokemons_.AddEntriesFrom(input, _repeated_catchablePokemons_codec);
+            mapPokemons_.AddEntriesFrom(input, _repeated_mapPokemons_codec);
             break;
           }
           case 90: {
