@@ -1,0 +1,8 @@
+syntax = "proto3";
+package POGOLib.Pokemon.Proto.Map.Pokemon;
+
+message NearbyPokemon {
+	int32 PokedexNumber = 1;
+	int32 DistanceMeters = 2;
+	int32 EncounterId = 3;
+}

@@ -4,7 +4,6 @@ using System.IO;
 using Demo.Util;
 using log4net;
 using POGOLib.Net;
-using POGOLib.Net.Data;
 using POGOLib.Pokemon;
 
 namespace Demo
@@ -66,7 +65,23 @@ namespace Demo
                 client.SaveClientData();
             }
 
-            client.RPCClient.GetProfile();
+            var mapObjects = client.RPCClient.GetMapObjects();
+
+            foreach (var mapCell in mapObjects.MapCells)
+            {
+                foreach (var fortData in mapCell.Forts)
+                {
+                    Log.Info($"FortId: {fortData.Id}");
+                    Log.Info($"\tFortType: {fortData.Type}");
+                }
+
+                foreach (var fortSummary in mapCell.FortSummaries)
+                {
+                    Log.Info($"FortSummaryId: {fortSummary.FortSummaryId}");
+                    Log.Info($"\tLatitude: {fortSummary.Latitude}");
+                    Log.Info($"\tLongitude: {fortSummary.Longitude}");
+                }
+            }
 
             // Make sure to save if you want to use save / loading.
             client.SaveClientData();

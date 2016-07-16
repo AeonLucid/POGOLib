@@ -23,50 +23,43 @@ namespace POGOLib.Pokemon.Proto {
     static EnvelopesReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg9FbnZlbG9wZXMucHJvdG8SFVBPR09MaWIuUG9rZW1vbi5Qcm90bxofRW51",
-            "bXMvRW52ZWxvcGVzL0RpcmVjdGlvbi5wcm90bxohRW51bXMvRW52ZWxvcGVz",
-            "L1JlcXVlc3RUeXBlLnByb3RvIs4LCglFbnZlbG9wZXMagAEKCFVua25vd242",
-            "EhAKCHVua25vd24xGAEgASgFEkQKCHVua25vd24yGAIgASgLMjIuUE9HT0xp",
-            "Yi5Qb2tlbW9uLlByb3RvLkVudmVsb3Blcy5Vbmtub3duNi5Vbmtub3duMhoc",
-            "CghVbmtub3duMhIQCgh1bmtub3duMRgBIAEoDBo2CgVUaGluZxINCgVzdGFy",
-            "dBgBIAEoDBIRCgl0aW1lc3RhbXAYAiABKAQSCwoDZW5kGAMgASgMGpUGCg9S",
-            "ZXF1ZXN0RW52ZWxvcGUSQwoJZGlyZWN0aW9uGAEgASgOMjAuUE9HT0xpYi5Q",
-            "b2tlbW9uLlByb3RvLkVudW1zLkVudmVsb3Blcy5EaXJlY3Rpb24SEgoKcmVx",
-            "dWVzdF9pZBgDIAEoBBJKCghyZXF1ZXN0cxgEIAMoCzI4LlBPR09MaWIuUG9r",
-            "ZW1vbi5Qcm90by5FbnZlbG9wZXMuUmVxdWVzdEVudmVsb3BlLlJlcXVlc3QS",
-            "OwoIdW5rbm93bjYYBiABKAsyKS5QT0dPTGliLlBva2Vtb24uUHJvdG8uRW52",
-            "ZWxvcGVzLlVua25vd242EhAKCGxhdGl0dWRlGAcgASgBEhEKCWxvbmdpdHVk",
-            "ZRgIIAEoARIQCghhbHRpdHVkZRgJIAEoARJHCgRhdXRoGAogASgLMjkuUE9H",
-            "T0xpYi5Qb2tlbW9uLlByb3RvLkVudmVsb3Blcy5SZXF1ZXN0RW52ZWxvcGUu",
-            "QXV0aEluZm8SNQoFdGhpbmcYCyABKAsyJi5QT0dPTGliLlBva2Vtb24uUHJv",
-            "dG8uRW52ZWxvcGVzLlRoaW5nEhEKCXVua25vd24xMhgMIAEoAxqfAQoHUmVx",
-            "dWVzdBJICgxyZXF1ZXN0X3R5cGUYASABKA4yMi5QT0dPTGliLlBva2Vtb24u",
-            "UHJvdG8uRW51bXMuRW52ZWxvcGVzLlJlcXVlc3RUeXBlEkoKB21lc3NhZ2UY",
-            "AiABKAsyOS5QT0dPTGliLlBva2Vtb24uUHJvdG8uRW52ZWxvcGVzLlJlcXVl",
-            "c3RFbnZlbG9wZS5Vbmtub3duMxocCghVbmtub3duMxIQCgh1bmtub3duNBgB",
-            "IAEoCRqVAQoIQXV0aEluZm8SEAoIcHJvdmlkZXIYASABKAkSTAoFdG9rZW4Y",
-            "AiABKAsyPS5QT0dPTGliLlBva2Vtb24uUHJvdG8uRW52ZWxvcGVzLlJlcXVl",
-            "c3RFbnZlbG9wZS5BdXRoSW5mby5KV1QaKQoDSldUEhAKCGNvbnRlbnRzGAEg",
-            "ASgJEhAKCHVua25vd24yGAIgASgFGu0DChBSZXNwb25zZUVudmVsb3BlEkMK",
-            "CWRpcmVjdGlvbhgBIAEoDjIwLlBPR09MaWIuUG9rZW1vbi5Qcm90by5FbnVt",
-            "cy5FbnZlbG9wZXMuRGlyZWN0aW9uEhMKC3Jlc3BvbnNlX2lkGAIgASgEEg8K",
-            "B2FwaV91cmwYAyABKAkSOwoIdW5rbm93bjYYBiABKAsyKS5QT0dPTGliLlBv",
-            "a2Vtb24uUHJvdG8uRW52ZWxvcGVzLlVua25vd242EgsKA2xhdBgHIAEoARIM",
-            "CgRsb25nGAggASgBEhAKCGFsdGl0dWRlGAkgASgBEjUKBXRoaW5nGAsgASgL",
-            "MiYuUE9HT0xpYi5Qb2tlbW9uLlByb3RvLkVudmVsb3Blcy5UaGluZxIRCgl1",
-            "bmtub3duMTIYDCABKAUSSwoIcGF5bG9hZHMYZCADKAsyOS5QT0dPTGliLlBv",
-            "a2Vtb24uUHJvdG8uRW52ZWxvcGVzLlJlc3BvbnNlRW52ZWxvcGUuUGF5bG9h",
-            "ZBpDCghVbmtub3duNxIRCgl1bmtub3duNzEYASABKAwSEQoJdW5rbm93bjcy",
-            "GAIgASgDEhEKCXVua25vd243MxgDIAEoDBooCgdQYXlsb2FkEg8KB3N1Y2Nl",
-            "c3MYASABKAgSDAoEZGF0YRgCIAEoDFAAUAFiBnByb3RvMw=="));
+            "Cg9FbnZlbG9wZXMucHJvdG8SFVBPR09MaWIuUG9rZW1vbi5Qcm90bxoWUmVx",
+            "dWVzdHMvUmVxdWVzdC5wcm90bxofRW51bXMvRW52ZWxvcGVzL0RpcmVjdGlv",
+            "bi5wcm90byL9CQoJRW52ZWxvcGVzGoABCghVbmtub3duNhIQCgh1bmtub3du",
+            "MRgBIAEoBRJECgh1bmtub3duMhgCIAEoCzIyLlBPR09MaWIuUG9rZW1vbi5Q",
+            "cm90by5FbnZlbG9wZXMuVW5rbm93bjYuVW5rbm93bjIaHAoIVW5rbm93bjIS",
+            "EAoIdW5rbm93bjEYASABKAwaNgoFVGhpbmcSDQoFc3RhcnQYASABKAwSEQoJ",
+            "dGltZXN0YW1wGAIgASgEEgsKA2VuZBgDIAEoDBrEBAoPUmVxdWVzdEVudmVs",
+            "b3BlEkMKCWRpcmVjdGlvbhgBIAEoDjIwLlBPR09MaWIuUG9rZW1vbi5Qcm90",
+            "by5FbnVtcy5FbnZlbG9wZXMuRGlyZWN0aW9uEhIKCnJlcXVlc3RfaWQYAyAB",
+            "KAQSOQoIcmVxdWVzdHMYBCADKAsyJy5QT0dPTGliLlBva2Vtb24uUHJvdG8u",
+            "UmVxdWVzdHMuUmVxdWVzdBI7Cgh1bmtub3duNhgGIAEoCzIpLlBPR09MaWIu",
+            "UG9rZW1vbi5Qcm90by5FbnZlbG9wZXMuVW5rbm93bjYSEAoIbGF0aXR1ZGUY",
+            "ByABKAESEQoJbG9uZ2l0dWRlGAggASgBEhAKCGFsdGl0dWRlGAkgASgBEkcK",
+            "BGF1dGgYCiABKAsyOS5QT0dPTGliLlBva2Vtb24uUHJvdG8uRW52ZWxvcGVz",
+            "LlJlcXVlc3RFbnZlbG9wZS5BdXRoSW5mbxI1CgV0aGluZxgLIAEoCzImLlBP",
+            "R09MaWIuUG9rZW1vbi5Qcm90by5FbnZlbG9wZXMuVGhpbmcSEQoJdW5rbm93",
+            "bjEyGAwgASgDGpUBCghBdXRoSW5mbxIQCghwcm92aWRlchgBIAEoCRJMCgV0",
+            "b2tlbhgCIAEoCzI9LlBPR09MaWIuUG9rZW1vbi5Qcm90by5FbnZlbG9wZXMu",
+            "UmVxdWVzdEVudmVsb3BlLkF1dGhJbmZvLkpXVBopCgNKV1QSEAoIY29udGVu",
+            "dHMYASABKAkSEAoIdW5rbm93bjIYAiABKAUa7QMKEFJlc3BvbnNlRW52ZWxv",
+            "cGUSQwoJZGlyZWN0aW9uGAEgASgOMjAuUE9HT0xpYi5Qb2tlbW9uLlByb3Rv",
+            "LkVudW1zLkVudmVsb3Blcy5EaXJlY3Rpb24SEwoLcmVzcG9uc2VfaWQYAiAB",
+            "KAQSDwoHYXBpX3VybBgDIAEoCRI7Cgh1bmtub3duNhgGIAEoCzIpLlBPR09M",
+            "aWIuUG9rZW1vbi5Qcm90by5FbnZlbG9wZXMuVW5rbm93bjYSCwoDbGF0GAcg",
+            "ASgBEgwKBGxvbmcYCCABKAESEAoIYWx0aXR1ZGUYCSABKAESNQoFdGhpbmcY",
+            "CyABKAsyJi5QT0dPTGliLlBva2Vtb24uUHJvdG8uRW52ZWxvcGVzLlRoaW5n",
+            "EhEKCXVua25vd24xMhgMIAEoBRJLCghwYXlsb2FkcxhkIAMoCzI5LlBPR09M",
+            "aWIuUG9rZW1vbi5Qcm90by5FbnZlbG9wZXMuUmVzcG9uc2VFbnZlbG9wZS5Q",
+            "YXlsb2FkGkMKCFVua25vd243EhEKCXVua25vd243MRgBIAEoDBIRCgl1bmtu",
+            "b3duNzIYAiABKAMSEQoJdW5rbm93bjczGAMgASgMGigKB1BheWxvYWQSDwoH",
+            "c3VjY2VzcxgBIAEoCBIMCgRkYXRhGAIgASgMUABQAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Enums.Envelopes.DirectionReflection.Descriptor, global::POGOLib.Pokemon.Proto.Enums.Envelopes.RequestTypeReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Requests.RequestReflection.Descriptor, global::POGOLib.Pokemon.Proto.Enums.Envelopes.DirectionReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes), global::POGOLib.Pokemon.Proto.Envelopes.Parser, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.Unknown6), global::POGOLib.Pokemon.Proto.Envelopes.Types.Unknown6.Parser, new[]{ "Unknown1", "Unknown2" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.Unknown6.Types.Unknown2), global::POGOLib.Pokemon.Proto.Envelopes.Types.Unknown6.Types.Unknown2.Parser, new[]{ "Unknown1" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.Thing), global::POGOLib.Pokemon.Proto.Envelopes.Types.Thing.Parser, new[]{ "Start", "Timestamp", "End" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope), global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Parser, new[]{ "Direction", "RequestId", "Requests", "Unknown6", "Latitude", "Longitude", "Altitude", "Auth", "Thing", "Unknown12" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.Request), global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.Request.Parser, new[]{ "RequestType", "Message" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.Unknown3), global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.Unknown3.Parser, new[]{ "Unknown4" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo), global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Parser, new[]{ "Provider", "Token" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types.JWT), global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types.JWT.Parser, new[]{ "Contents", "Unknown2" }, null, null, null)})}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope), global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Parser, new[]{ "Direction", "RequestId", "Requests", "Unknown6", "Latitude", "Longitude", "Altitude", "Auth", "Thing", "Unknown12" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo), global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Parser, new[]{ "Provider", "Token" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types.JWT), global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types.JWT.Parser, new[]{ "Contents", "Unknown2" }, null, null, null)})}),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope), global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Parser, new[]{ "Direction", "ResponseId", "ApiUrl", "Unknown6", "Lat", "Long", "Altitude", "Thing", "Unknown12", "Payloads" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Unknown7), global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Unknown7.Parser, new[]{ "Unknown71", "Unknown72", "Unknown73" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Payload), global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Payload.Parser, new[]{ "Success", "Data" }, null, null, null)})})
           }));
@@ -617,10 +610,10 @@ namespace POGOLib.Pokemon.Proto {
 
         /// <summary>Field number for the "requests" field.</summary>
         public const int RequestsFieldNumber = 4;
-        private static readonly pb::FieldCodec<global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.Request> _repeated_requests_codec
-            = pb::FieldCodec.ForMessage(34, global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.Request.Parser);
-        private readonly pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.Request> requests_ = new pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.Request>();
-        public pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.Request> Requests {
+        private static readonly pb::FieldCodec<global::POGOLib.Pokemon.Proto.Requests.Request> _repeated_requests_codec
+            = pb::FieldCodec.ForMessage(34, global::POGOLib.Pokemon.Proto.Requests.Request.Parser);
+        private readonly pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Requests.Request> requests_ = new pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Requests.Request>();
+        public pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Requests.Request> Requests {
           get { return requests_; }
         }
 
@@ -921,251 +914,12 @@ namespace POGOLib.Pokemon.Proto {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public static partial class Types {
           [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-          public sealed partial class Request : pb::IMessage<Request> {
-            private static readonly pb::MessageParser<Request> _parser = new pb::MessageParser<Request>(() => new Request());
-            public static pb::MessageParser<Request> Parser { get { return _parser; } }
-
-            public static pbr::MessageDescriptor Descriptor {
-              get { return global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Descriptor.NestedTypes[0]; }
-            }
-
-            pbr::MessageDescriptor pb::IMessage.Descriptor {
-              get { return Descriptor; }
-            }
-
-            public Request() {
-              OnConstruction();
-            }
-
-            partial void OnConstruction();
-
-            public Request(Request other) : this() {
-              requestType_ = other.requestType_;
-              Message = other.message_ != null ? other.Message.Clone() : null;
-            }
-
-            public Request Clone() {
-              return new Request(this);
-            }
-
-            /// <summary>Field number for the "request_type" field.</summary>
-            public const int RequestTypeFieldNumber = 1;
-            private global::POGOLib.Pokemon.Proto.Enums.Envelopes.RequestType requestType_ = 0;
-            public global::POGOLib.Pokemon.Proto.Enums.Envelopes.RequestType RequestType {
-              get { return requestType_; }
-              set {
-                requestType_ = value;
-              }
-            }
-
-            /// <summary>Field number for the "message" field.</summary>
-            public const int MessageFieldNumber = 2;
-            private global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.Unknown3 message_;
-            public global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.Unknown3 Message {
-              get { return message_; }
-              set {
-                message_ = value;
-              }
-            }
-
-            public override bool Equals(object other) {
-              return Equals(other as Request);
-            }
-
-            public bool Equals(Request other) {
-              if (ReferenceEquals(other, null)) {
-                return false;
-              }
-              if (ReferenceEquals(other, this)) {
-                return true;
-              }
-              if (RequestType != other.RequestType) return false;
-              if (!object.Equals(Message, other.Message)) return false;
-              return true;
-            }
-
-            public override int GetHashCode() {
-              int hash = 1;
-              if (RequestType != 0) hash ^= RequestType.GetHashCode();
-              if (message_ != null) hash ^= Message.GetHashCode();
-              return hash;
-            }
-
-            public override string ToString() {
-              return pb::JsonFormatter.ToDiagnosticString(this);
-            }
-
-            public void WriteTo(pb::CodedOutputStream output) {
-              if (RequestType != 0) {
-                output.WriteRawTag(8);
-                output.WriteEnum((int) RequestType);
-              }
-              if (message_ != null) {
-                output.WriteRawTag(18);
-                output.WriteMessage(Message);
-              }
-            }
-
-            public int CalculateSize() {
-              int size = 0;
-              if (RequestType != 0) {
-                size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) RequestType);
-              }
-              if (message_ != null) {
-                size += 1 + pb::CodedOutputStream.ComputeMessageSize(Message);
-              }
-              return size;
-            }
-
-            public void MergeFrom(Request other) {
-              if (other == null) {
-                return;
-              }
-              if (other.RequestType != 0) {
-                RequestType = other.RequestType;
-              }
-              if (other.message_ != null) {
-                if (message_ == null) {
-                  message_ = new global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.Unknown3();
-                }
-                Message.MergeFrom(other.Message);
-              }
-            }
-
-            public void MergeFrom(pb::CodedInputStream input) {
-              uint tag;
-              while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
-                  default:
-                    input.SkipLastField();
-                    break;
-                  case 8: {
-                    requestType_ = (global::POGOLib.Pokemon.Proto.Enums.Envelopes.RequestType) input.ReadEnum();
-                    break;
-                  }
-                  case 18: {
-                    if (message_ == null) {
-                      message_ = new global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.Unknown3();
-                    }
-                    input.ReadMessage(message_);
-                    break;
-                  }
-                }
-              }
-            }
-
-          }
-
-          [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-          public sealed partial class Unknown3 : pb::IMessage<Unknown3> {
-            private static readonly pb::MessageParser<Unknown3> _parser = new pb::MessageParser<Unknown3>(() => new Unknown3());
-            public static pb::MessageParser<Unknown3> Parser { get { return _parser; } }
-
-            public static pbr::MessageDescriptor Descriptor {
-              get { return global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Descriptor.NestedTypes[1]; }
-            }
-
-            pbr::MessageDescriptor pb::IMessage.Descriptor {
-              get { return Descriptor; }
-            }
-
-            public Unknown3() {
-              OnConstruction();
-            }
-
-            partial void OnConstruction();
-
-            public Unknown3(Unknown3 other) : this() {
-              unknown4_ = other.unknown4_;
-            }
-
-            public Unknown3 Clone() {
-              return new Unknown3(this);
-            }
-
-            /// <summary>Field number for the "unknown4" field.</summary>
-            public const int Unknown4FieldNumber = 1;
-            private string unknown4_ = "";
-            public string Unknown4 {
-              get { return unknown4_; }
-              set {
-                unknown4_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-              }
-            }
-
-            public override bool Equals(object other) {
-              return Equals(other as Unknown3);
-            }
-
-            public bool Equals(Unknown3 other) {
-              if (ReferenceEquals(other, null)) {
-                return false;
-              }
-              if (ReferenceEquals(other, this)) {
-                return true;
-              }
-              if (Unknown4 != other.Unknown4) return false;
-              return true;
-            }
-
-            public override int GetHashCode() {
-              int hash = 1;
-              if (Unknown4.Length != 0) hash ^= Unknown4.GetHashCode();
-              return hash;
-            }
-
-            public override string ToString() {
-              return pb::JsonFormatter.ToDiagnosticString(this);
-            }
-
-            public void WriteTo(pb::CodedOutputStream output) {
-              if (Unknown4.Length != 0) {
-                output.WriteRawTag(10);
-                output.WriteString(Unknown4);
-              }
-            }
-
-            public int CalculateSize() {
-              int size = 0;
-              if (Unknown4.Length != 0) {
-                size += 1 + pb::CodedOutputStream.ComputeStringSize(Unknown4);
-              }
-              return size;
-            }
-
-            public void MergeFrom(Unknown3 other) {
-              if (other == null) {
-                return;
-              }
-              if (other.Unknown4.Length != 0) {
-                Unknown4 = other.Unknown4;
-              }
-            }
-
-            public void MergeFrom(pb::CodedInputStream input) {
-              uint tag;
-              while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
-                  default:
-                    input.SkipLastField();
-                    break;
-                  case 10: {
-                    Unknown4 = input.ReadString();
-                    break;
-                  }
-                }
-              }
-            }
-
-          }
-
-          [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
           public sealed partial class AuthInfo : pb::IMessage<AuthInfo> {
             private static readonly pb::MessageParser<AuthInfo> _parser = new pb::MessageParser<AuthInfo>(() => new AuthInfo());
             public static pb::MessageParser<AuthInfo> Parser { get { return _parser; } }
 
             public static pbr::MessageDescriptor Descriptor {
-              get { return global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Descriptor.NestedTypes[2]; }
+              get { return global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Descriptor.NestedTypes[0]; }
             }
 
             pbr::MessageDescriptor pb::IMessage.Descriptor {

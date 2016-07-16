@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using Google.Protobuf;
 using log4net;
 using POGOLib.Pokemon.Proto;
 using POGOLib.Pokemon.Proto.Enums.Envelopes;
+using POGOLib.Pokemon.Proto.Requests;
+using POGOLib.Pokemon.Proto.Requests.Messages;
+using POGOLib.Util;
 using static POGOLib.Pokemon.Proto.Envelopes.Types;
 using static POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types;
 using static POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types;
@@ -42,56 +44,66 @@ namespace POGOLib.Net
 
         private string GetApiEndpoint()
         {
-            var response = SendRemoteProtocolCall(Configuration.ApiUrl, new[]
+            var response = SendRemoteProtocolCall(Configuration.ApiUrl, new Request
             {
-                new Request
-                {
-                    RequestType = RequestType.GetPlayer
-                },
-                new Request
-                {
-                    RequestType = RequestType.GetInventory
-                },
-                new Request
-                {
-                    RequestType = RequestType.GetHatchedEggs
-                },
-                new Request
-                {
-                    RequestType = RequestType.CheckAwardedBadges
-                },
-                new Request
-                {
-                    RequestType = RequestType.DownloadSettings,
-                    Message = new Unknown3
-                    {
-                        Unknown4 = "4a2e9bc330dae60e7b74fc85b98868ab4700802e"
-                    }
-                }
+                RequestType = RequestType.GetPlayer
             });
 
             return response.ApiUrl;
         }
 
-        public void GetProfile()
+        public MapObjects GetMapObjects()
         {
-            var response = SendRemoteProtocolCall(_apiUrl, new[]
+            var response = SendRemoteProtocolCall(_apiUrl, new Request
             {
-                new Request
+                RequestType = RequestType.GetMapObjects,
+                RequestMessage = new GetMapObjectsMessage
                 {
-                    RequestType = RequestType.GetPlayer
-                }
+                    CellId =
+                    {
+                        // TODO: Figure this out
+                    },
+                    SinceTimeMs =
+                    {
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    },
+                    PlayerLat = _poClient.ClientData.GpsData.Latitude,
+                    PlayerLng = _poClient.ClientData.GpsData.Longitude
+                }.ToByteString()
             });
 
-            var player = LocalPlayer.Parser.ParseFrom(response.Payloads[0].Data);
-            Log.Debug($"Success: {response.Payloads[0].Success}");
-            Log.Debug($"Username: {player.Username}");
-            Log.Debug($"Creation time: {player.CreationTimestampMs}");
-            Log.Debug($"Pokemons: {player.MaxPokemonStorage}");
-            Log.Debug($"Items: {player.MaxItemStorage}");
+            return MapObjects.Parser.ParseFrom(response.Payloads[0].Data);
         }
 
-        private ResponseEnvelope SendRemoteProtocolCall(string apiUrl, IEnumerable<Request> requests)
+        public LocalPlayer GetProfile()
+        {
+            var response = SendRemoteProtocolCall(_apiUrl, new Request
+            {
+                RequestType = RequestType.GetPlayer
+            });
+
+            return LocalPlayer.Parser.ParseFrom(response.Payloads[0].Data);
+        }
+
+        private ResponseEnvelope SendRemoteProtocolCall(string apiUrl, Request request)
         {
             if (!_poClient.HasGpsData())
                 throw new Exception("No gps data has been set, can't send a rpc call.");
@@ -103,7 +115,7 @@ namespace POGOLib.Net
                 Latitude = _poClient.ClientData.GpsData.Latitude,
                 Longitude = _poClient.ClientData.GpsData.Longitude,
                 Altitude = _poClient.ClientData.GpsData.Altitude,
-                Unknown12 = 989,
+                Unknown12 = 123, // TODO: Figure this out.
                 Auth = new AuthInfo
                 {
                     Provider = "ptc",
@@ -112,10 +124,36 @@ namespace POGOLib.Net
                         Contents = _poClient.ClientData.AuthData.AccessToken,
                         Unknown2 = 59
                     }
+                },
+                Requests = {
+                    new Request
+                    {
+                        RequestType = RequestType.GetHatchedEggs
+                    },
+                    new Request
+                    {
+                        RequestType = RequestType.GetInventory,
+                        RequestMessage = new GetInventoryMessage
+                        {
+                            TimestampMs = TimeUtil.GetCurrentTimestampInMs()
+                        }.ToByteString()
+                    },
+                    new Request
+                    {
+                        RequestType = RequestType.CheckAwardedBadges
+                    },
+                    new Request
+                    {
+                        RequestType = RequestType.DownloadSettings,
+                        RequestMessage = new GetDownloadSettingsMessage()
+                        {
+                            Hash = "4a2e9bc330dae60e7b74fc85b98868ab4700802e"
+                        }.ToByteString()
+                    }
                 }
             };
 
-            requestEnvelope.Requests.Add(requests);
+            requestEnvelope.Requests.Insert(0, request);
 
             using (var memoryStream = new MemoryStream())
             {
@@ -125,7 +163,7 @@ namespace POGOLib.Net
                 {
                     var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
                     var responseEnvelope = ResponseEnvelope.Parser.ParseFrom(responseBytes);
-
+                    
                     Log.Debug($"Received {responseEnvelope.Payloads.Count} payloads.");
 
                     return responseEnvelope;

@@ -1,0 +1,11 @@
+syntax = "proto3";
+package POGOLib.Pokemon.Proto.Map.Pokemon;
+
+message MapPokemon {
+  int32 SpawnpointId = 1;
+	int32 EncounterId = 2;
+	int32 PokedexTypeId = 3;
+	int32 ExpirationTimeMs = 4;
+	int32 Latitude = 5;
+	int32 Longitude = 6;
+}

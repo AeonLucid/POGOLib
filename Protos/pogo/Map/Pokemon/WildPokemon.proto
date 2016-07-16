@@ -1,0 +1,12 @@
+syntax = "proto3";
+package POGOLib.Pokemon.Proto.Map.Pokemon;
+
+message WildPokemon {
+  int32 EncounterId = 1;
+  int32 LastModifiedMs = 2;
+  int32 Latitude = 3;
+  int32 Longitude = 4;
+  int32 SpawnPointId = 5;
+  int32 Pokemon = 7;
+  int32 TimeTillHiddenMs = 11;
+}
