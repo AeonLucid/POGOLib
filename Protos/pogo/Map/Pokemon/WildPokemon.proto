@@ -1,12 +1,14 @@
 syntax = "proto3";
 package POGOLib.Pokemon.Proto.Map.Pokemon;
 
+import public "Enums/Pokemon.proto";
+
 message WildPokemon {
-  int32 EncounterId = 1;
-  int32 LastModifiedMs = 2;
-  int32 Latitude = 3;
-  int32 Longitude = 4;
-  int32 SpawnPointId = 5;
-  int32 Pokemon = 7;
-  int32 TimeTillHiddenMs = 11;
+  fixed64 encounted_id = 1;
+  int64 last_modified_timestamp_ms = 2;
+	double latitude = 3;
+	double longitude = 4;
+  string spawnpoint_id = 5;
+	POGOLib.Pokemon.Proto.Enums.Pokemon pokemon_type = 7;
+  int32 time_till_hidden_ms = 11;
 }

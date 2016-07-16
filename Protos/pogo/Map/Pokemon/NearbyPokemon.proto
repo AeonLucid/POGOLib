@@ -1,8 +1,10 @@
 syntax = "proto3";
 package POGOLib.Pokemon.Proto.Map.Pokemon;
 
+import public "Enums/Pokemon.proto";
+
 message NearbyPokemon {
-	int32 PokedexNumber = 1;
-	int32 DistanceMeters = 2;
-	int32 EncounterId = 3;
+	POGOLib.Pokemon.Proto.Enums.Pokemon pokemon_type = 1;
+	float distance_in_meters = 2;
+	fixed64 encounted_id = 3;
 }

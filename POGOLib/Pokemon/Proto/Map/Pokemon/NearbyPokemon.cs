@@ -24,13 +24,15 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Ch9NYXAvUG9rZW1vbi9OZWFyYnlQb2tlbW9uLnByb3RvEiFQT0dPTGliLlBv",
-            "a2Vtb24uUHJvdG8uTWFwLlBva2Vtb24iUwoNTmVhcmJ5UG9rZW1vbhIVCg1Q",
-            "b2tlZGV4TnVtYmVyGAEgASgFEhYKDkRpc3RhbmNlTWV0ZXJzGAIgASgFEhMK",
-            "C0VuY291bnRlcklkGAMgASgFYgZwcm90bzM="));
+            "a2Vtb24uUHJvdG8uTWFwLlBva2Vtb24aE0VudW1zL1Bva2Vtb24ucHJvdG8i",
+            "fQoNTmVhcmJ5UG9rZW1vbhI6Cgxwb2tlbW9uX3R5cGUYASABKA4yJC5QT0dP",
+            "TGliLlBva2Vtb24uUHJvdG8uRW51bXMuUG9rZW1vbhIaChJkaXN0YW5jZV9p",
+            "bl9tZXRlcnMYAiABKAISFAoMZW5jb3VudGVkX2lkGAMgASgGUABiBnByb3Rv",
+            "Mw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Enums.PokemonReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon), global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon.Parser, new[]{ "PokedexNumber", "DistanceMeters", "EncounterId" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon), global::POGOLib.Pokemon.Proto.Map.Pokemon.NearbyPokemon.Parser, new[]{ "PokemonType", "DistanceInMeters", "EncountedId" }, null, null, null)
           }));
     }
     #endregion
@@ -57,42 +59,42 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
     partial void OnConstruction();
 
     public NearbyPokemon(NearbyPokemon other) : this() {
-      pokedexNumber_ = other.pokedexNumber_;
-      distanceMeters_ = other.distanceMeters_;
-      encounterId_ = other.encounterId_;
+      pokemonType_ = other.pokemonType_;
+      distanceInMeters_ = other.distanceInMeters_;
+      encountedId_ = other.encountedId_;
     }
 
     public NearbyPokemon Clone() {
       return new NearbyPokemon(this);
     }
 
-    /// <summary>Field number for the "PokedexNumber" field.</summary>
-    public const int PokedexNumberFieldNumber = 1;
-    private int pokedexNumber_;
-    public int PokedexNumber {
-      get { return pokedexNumber_; }
+    /// <summary>Field number for the "pokemon_type" field.</summary>
+    public const int PokemonTypeFieldNumber = 1;
+    private global::POGOLib.Pokemon.Proto.Enums.Pokemon pokemonType_ = 0;
+    public global::POGOLib.Pokemon.Proto.Enums.Pokemon PokemonType {
+      get { return pokemonType_; }
       set {
-        pokedexNumber_ = value;
+        pokemonType_ = value;
       }
     }
 
-    /// <summary>Field number for the "DistanceMeters" field.</summary>
-    public const int DistanceMetersFieldNumber = 2;
-    private int distanceMeters_;
-    public int DistanceMeters {
-      get { return distanceMeters_; }
+    /// <summary>Field number for the "distance_in_meters" field.</summary>
+    public const int DistanceInMetersFieldNumber = 2;
+    private float distanceInMeters_;
+    public float DistanceInMeters {
+      get { return distanceInMeters_; }
       set {
-        distanceMeters_ = value;
+        distanceInMeters_ = value;
       }
     }
 
-    /// <summary>Field number for the "EncounterId" field.</summary>
-    public const int EncounterIdFieldNumber = 3;
-    private int encounterId_;
-    public int EncounterId {
-      get { return encounterId_; }
+    /// <summary>Field number for the "encounted_id" field.</summary>
+    public const int EncountedIdFieldNumber = 3;
+    private ulong encountedId_;
+    public ulong EncountedId {
+      get { return encountedId_; }
       set {
-        encounterId_ = value;
+        encountedId_ = value;
       }
     }
 
@@ -107,17 +109,17 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (PokedexNumber != other.PokedexNumber) return false;
-      if (DistanceMeters != other.DistanceMeters) return false;
-      if (EncounterId != other.EncounterId) return false;
+      if (PokemonType != other.PokemonType) return false;
+      if (DistanceInMeters != other.DistanceInMeters) return false;
+      if (EncountedId != other.EncountedId) return false;
       return true;
     }
 
     public override int GetHashCode() {
       int hash = 1;
-      if (PokedexNumber != 0) hash ^= PokedexNumber.GetHashCode();
-      if (DistanceMeters != 0) hash ^= DistanceMeters.GetHashCode();
-      if (EncounterId != 0) hash ^= EncounterId.GetHashCode();
+      if (PokemonType != 0) hash ^= PokemonType.GetHashCode();
+      if (DistanceInMeters != 0F) hash ^= DistanceInMeters.GetHashCode();
+      if (EncountedId != 0UL) hash ^= EncountedId.GetHashCode();
       return hash;
     }
 
@@ -126,30 +128,30 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
     }
 
     public void WriteTo(pb::CodedOutputStream output) {
-      if (PokedexNumber != 0) {
+      if (PokemonType != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(PokedexNumber);
+        output.WriteEnum((int) PokemonType);
       }
-      if (DistanceMeters != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(DistanceMeters);
+      if (DistanceInMeters != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(DistanceInMeters);
       }
-      if (EncounterId != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(EncounterId);
+      if (EncountedId != 0UL) {
+        output.WriteRawTag(25);
+        output.WriteFixed64(EncountedId);
       }
     }
 
     public int CalculateSize() {
       int size = 0;
-      if (PokedexNumber != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PokedexNumber);
+      if (PokemonType != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) PokemonType);
       }
-      if (DistanceMeters != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DistanceMeters);
+      if (DistanceInMeters != 0F) {
+        size += 1 + 4;
       }
-      if (EncounterId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(EncounterId);
+      if (EncountedId != 0UL) {
+        size += 1 + 8;
       }
       return size;
     }
@@ -158,14 +160,14 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       if (other == null) {
         return;
       }
-      if (other.PokedexNumber != 0) {
-        PokedexNumber = other.PokedexNumber;
+      if (other.PokemonType != 0) {
+        PokemonType = other.PokemonType;
       }
-      if (other.DistanceMeters != 0) {
-        DistanceMeters = other.DistanceMeters;
+      if (other.DistanceInMeters != 0F) {
+        DistanceInMeters = other.DistanceInMeters;
       }
-      if (other.EncounterId != 0) {
-        EncounterId = other.EncounterId;
+      if (other.EncountedId != 0UL) {
+        EncountedId = other.EncountedId;
       }
     }
 
@@ -177,15 +179,15 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
             input.SkipLastField();
             break;
           case 8: {
-            PokedexNumber = input.ReadInt32();
+            pokemonType_ = (global::POGOLib.Pokemon.Proto.Enums.Pokemon) input.ReadEnum();
             break;
           }
-          case 16: {
-            DistanceMeters = input.ReadInt32();
+          case 21: {
+            DistanceInMeters = input.ReadFloat();
             break;
           }
-          case 24: {
-            EncounterId = input.ReadInt32();
+          case 25: {
+            EncountedId = input.ReadFixed64();
             break;
           }
         }

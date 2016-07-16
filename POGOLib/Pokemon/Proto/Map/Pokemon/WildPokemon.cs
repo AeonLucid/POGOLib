@@ -24,15 +24,17 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Ch1NYXAvUG9rZW1vbi9XaWxkUG9rZW1vbi5wcm90bxIhUE9HT0xpYi5Qb2tl",
-            "bW9uLlByb3RvLk1hcC5Qb2tlbW9uIqABCgtXaWxkUG9rZW1vbhITCgtFbmNv",
-            "dW50ZXJJZBgBIAEoBRIWCg5MYXN0TW9kaWZpZWRNcxgCIAEoBRIQCghMYXRp",
-            "dHVkZRgDIAEoBRIRCglMb25naXR1ZGUYBCABKAUSFAoMU3Bhd25Qb2ludElk",
-            "GAUgASgFEg8KB1Bva2Vtb24YByABKAUSGAoQVGltZVRpbGxIaWRkZW5NcxgL",
-            "IAEoBWIGcHJvdG8z"));
+            "bW9uLlByb3RvLk1hcC5Qb2tlbW9uGhNFbnVtcy9Qb2tlbW9uLnByb3RvItwB",
+            "CgtXaWxkUG9rZW1vbhIUCgxlbmNvdW50ZWRfaWQYASABKAYSIgoabGFzdF9t",
+            "b2RpZmllZF90aW1lc3RhbXBfbXMYAiABKAMSEAoIbGF0aXR1ZGUYAyABKAES",
+            "EQoJbG9uZ2l0dWRlGAQgASgBEhUKDXNwYXducG9pbnRfaWQYBSABKAkSOgoM",
+            "cG9rZW1vbl90eXBlGAcgASgOMiQuUE9HT0xpYi5Qb2tlbW9uLlByb3RvLkVu",
+            "dW1zLlBva2Vtb24SGwoTdGltZV90aWxsX2hpZGRlbl9tcxgLIAEoBVAAYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Enums.PokemonReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon), global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon.Parser, new[]{ "EncounterId", "LastModifiedMs", "Latitude", "Longitude", "SpawnPointId", "Pokemon", "TimeTillHiddenMs" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon), global::POGOLib.Pokemon.Proto.Map.Pokemon.WildPokemon.Parser, new[]{ "EncountedId", "LastModifiedTimestampMs", "Latitude", "Longitude", "SpawnpointId", "PokemonType", "TimeTillHiddenMs" }, null, null, null)
           }));
     }
     #endregion
@@ -59,12 +61,12 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
     partial void OnConstruction();
 
     public WildPokemon(WildPokemon other) : this() {
-      encounterId_ = other.encounterId_;
-      lastModifiedMs_ = other.lastModifiedMs_;
+      encountedId_ = other.encountedId_;
+      lastModifiedTimestampMs_ = other.lastModifiedTimestampMs_;
       latitude_ = other.latitude_;
       longitude_ = other.longitude_;
-      spawnPointId_ = other.spawnPointId_;
-      pokemon_ = other.pokemon_;
+      spawnpointId_ = other.spawnpointId_;
+      pokemonType_ = other.pokemonType_;
       timeTillHiddenMs_ = other.timeTillHiddenMs_;
     }
 
@@ -72,67 +74,67 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       return new WildPokemon(this);
     }
 
-    /// <summary>Field number for the "EncounterId" field.</summary>
-    public const int EncounterIdFieldNumber = 1;
-    private int encounterId_;
-    public int EncounterId {
-      get { return encounterId_; }
+    /// <summary>Field number for the "encounted_id" field.</summary>
+    public const int EncountedIdFieldNumber = 1;
+    private ulong encountedId_;
+    public ulong EncountedId {
+      get { return encountedId_; }
       set {
-        encounterId_ = value;
+        encountedId_ = value;
       }
     }
 
-    /// <summary>Field number for the "LastModifiedMs" field.</summary>
-    public const int LastModifiedMsFieldNumber = 2;
-    private int lastModifiedMs_;
-    public int LastModifiedMs {
-      get { return lastModifiedMs_; }
+    /// <summary>Field number for the "last_modified_timestamp_ms" field.</summary>
+    public const int LastModifiedTimestampMsFieldNumber = 2;
+    private long lastModifiedTimestampMs_;
+    public long LastModifiedTimestampMs {
+      get { return lastModifiedTimestampMs_; }
       set {
-        lastModifiedMs_ = value;
+        lastModifiedTimestampMs_ = value;
       }
     }
 
-    /// <summary>Field number for the "Latitude" field.</summary>
+    /// <summary>Field number for the "latitude" field.</summary>
     public const int LatitudeFieldNumber = 3;
-    private int latitude_;
-    public int Latitude {
+    private double latitude_;
+    public double Latitude {
       get { return latitude_; }
       set {
         latitude_ = value;
       }
     }
 
-    /// <summary>Field number for the "Longitude" field.</summary>
+    /// <summary>Field number for the "longitude" field.</summary>
     public const int LongitudeFieldNumber = 4;
-    private int longitude_;
-    public int Longitude {
+    private double longitude_;
+    public double Longitude {
       get { return longitude_; }
       set {
         longitude_ = value;
       }
     }
 
-    /// <summary>Field number for the "SpawnPointId" field.</summary>
-    public const int SpawnPointIdFieldNumber = 5;
-    private int spawnPointId_;
-    public int SpawnPointId {
-      get { return spawnPointId_; }
+    /// <summary>Field number for the "spawnpoint_id" field.</summary>
+    public const int SpawnpointIdFieldNumber = 5;
+    private string spawnpointId_ = "";
+    public string SpawnpointId {
+      get { return spawnpointId_; }
       set {
-        spawnPointId_ = value;
+        spawnpointId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
-    /// <summary>Field number for the "Pokemon" field.</summary>
-    public const int PokemonFieldNumber = 7;
-    private int pokemon_;
-    public int Pokemon {
-      get { return pokemon_; }
+    /// <summary>Field number for the "pokemon_type" field.</summary>
+    public const int PokemonTypeFieldNumber = 7;
+    private global::POGOLib.Pokemon.Proto.Enums.Pokemon pokemonType_ = 0;
+    public global::POGOLib.Pokemon.Proto.Enums.Pokemon PokemonType {
+      get { return pokemonType_; }
       set {
-        pokemon_ = value;
+        pokemonType_ = value;
       }
     }
 
-    /// <summary>Field number for the "TimeTillHiddenMs" field.</summary>
+    /// <summary>Field number for the "time_till_hidden_ms" field.</summary>
     public const int TimeTillHiddenMsFieldNumber = 11;
     private int timeTillHiddenMs_;
     public int TimeTillHiddenMs {
@@ -153,24 +155,24 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (EncounterId != other.EncounterId) return false;
-      if (LastModifiedMs != other.LastModifiedMs) return false;
+      if (EncountedId != other.EncountedId) return false;
+      if (LastModifiedTimestampMs != other.LastModifiedTimestampMs) return false;
       if (Latitude != other.Latitude) return false;
       if (Longitude != other.Longitude) return false;
-      if (SpawnPointId != other.SpawnPointId) return false;
-      if (Pokemon != other.Pokemon) return false;
+      if (SpawnpointId != other.SpawnpointId) return false;
+      if (PokemonType != other.PokemonType) return false;
       if (TimeTillHiddenMs != other.TimeTillHiddenMs) return false;
       return true;
     }
 
     public override int GetHashCode() {
       int hash = 1;
-      if (EncounterId != 0) hash ^= EncounterId.GetHashCode();
-      if (LastModifiedMs != 0) hash ^= LastModifiedMs.GetHashCode();
-      if (Latitude != 0) hash ^= Latitude.GetHashCode();
-      if (Longitude != 0) hash ^= Longitude.GetHashCode();
-      if (SpawnPointId != 0) hash ^= SpawnPointId.GetHashCode();
-      if (Pokemon != 0) hash ^= Pokemon.GetHashCode();
+      if (EncountedId != 0UL) hash ^= EncountedId.GetHashCode();
+      if (LastModifiedTimestampMs != 0L) hash ^= LastModifiedTimestampMs.GetHashCode();
+      if (Latitude != 0D) hash ^= Latitude.GetHashCode();
+      if (Longitude != 0D) hash ^= Longitude.GetHashCode();
+      if (SpawnpointId.Length != 0) hash ^= SpawnpointId.GetHashCode();
+      if (PokemonType != 0) hash ^= PokemonType.GetHashCode();
       if (TimeTillHiddenMs != 0) hash ^= TimeTillHiddenMs.GetHashCode();
       return hash;
     }
@@ -180,29 +182,29 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
     }
 
     public void WriteTo(pb::CodedOutputStream output) {
-      if (EncounterId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(EncounterId);
+      if (EncountedId != 0UL) {
+        output.WriteRawTag(9);
+        output.WriteFixed64(EncountedId);
       }
-      if (LastModifiedMs != 0) {
+      if (LastModifiedTimestampMs != 0L) {
         output.WriteRawTag(16);
-        output.WriteInt32(LastModifiedMs);
+        output.WriteInt64(LastModifiedTimestampMs);
       }
-      if (Latitude != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(Latitude);
+      if (Latitude != 0D) {
+        output.WriteRawTag(25);
+        output.WriteDouble(Latitude);
       }
-      if (Longitude != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(Longitude);
+      if (Longitude != 0D) {
+        output.WriteRawTag(33);
+        output.WriteDouble(Longitude);
       }
-      if (SpawnPointId != 0) {
-        output.WriteRawTag(40);
-        output.WriteInt32(SpawnPointId);
+      if (SpawnpointId.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(SpawnpointId);
       }
-      if (Pokemon != 0) {
+      if (PokemonType != 0) {
         output.WriteRawTag(56);
-        output.WriteInt32(Pokemon);
+        output.WriteEnum((int) PokemonType);
       }
       if (TimeTillHiddenMs != 0) {
         output.WriteRawTag(88);
@@ -212,23 +214,23 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
 
     public int CalculateSize() {
       int size = 0;
-      if (EncounterId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(EncounterId);
+      if (EncountedId != 0UL) {
+        size += 1 + 8;
       }
-      if (LastModifiedMs != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastModifiedMs);
+      if (LastModifiedTimestampMs != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(LastModifiedTimestampMs);
       }
-      if (Latitude != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Latitude);
+      if (Latitude != 0D) {
+        size += 1 + 8;
       }
-      if (Longitude != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Longitude);
+      if (Longitude != 0D) {
+        size += 1 + 8;
       }
-      if (SpawnPointId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SpawnPointId);
+      if (SpawnpointId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SpawnpointId);
       }
-      if (Pokemon != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Pokemon);
+      if (PokemonType != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) PokemonType);
       }
       if (TimeTillHiddenMs != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(TimeTillHiddenMs);
@@ -240,23 +242,23 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
       if (other == null) {
         return;
       }
-      if (other.EncounterId != 0) {
-        EncounterId = other.EncounterId;
+      if (other.EncountedId != 0UL) {
+        EncountedId = other.EncountedId;
       }
-      if (other.LastModifiedMs != 0) {
-        LastModifiedMs = other.LastModifiedMs;
+      if (other.LastModifiedTimestampMs != 0L) {
+        LastModifiedTimestampMs = other.LastModifiedTimestampMs;
       }
-      if (other.Latitude != 0) {
+      if (other.Latitude != 0D) {
         Latitude = other.Latitude;
       }
-      if (other.Longitude != 0) {
+      if (other.Longitude != 0D) {
         Longitude = other.Longitude;
       }
-      if (other.SpawnPointId != 0) {
-        SpawnPointId = other.SpawnPointId;
+      if (other.SpawnpointId.Length != 0) {
+        SpawnpointId = other.SpawnpointId;
       }
-      if (other.Pokemon != 0) {
-        Pokemon = other.Pokemon;
+      if (other.PokemonType != 0) {
+        PokemonType = other.PokemonType;
       }
       if (other.TimeTillHiddenMs != 0) {
         TimeTillHiddenMs = other.TimeTillHiddenMs;
@@ -270,28 +272,28 @@ namespace POGOLib.Pokemon.Proto.Map.Pokemon {
           default:
             input.SkipLastField();
             break;
-          case 8: {
-            EncounterId = input.ReadInt32();
+          case 9: {
+            EncountedId = input.ReadFixed64();
             break;
           }
           case 16: {
-            LastModifiedMs = input.ReadInt32();
+            LastModifiedTimestampMs = input.ReadInt64();
             break;
           }
-          case 24: {
-            Latitude = input.ReadInt32();
+          case 25: {
+            Latitude = input.ReadDouble();
             break;
           }
-          case 32: {
-            Longitude = input.ReadInt32();
+          case 33: {
+            Longitude = input.ReadDouble();
             break;
           }
-          case 40: {
-            SpawnPointId = input.ReadInt32();
+          case 42: {
+            SpawnpointId = input.ReadString();
             break;
           }
           case 56: {
-            Pokemon = input.ReadInt32();
+            pokemonType_ = (global::POGOLib.Pokemon.Proto.Enums.Pokemon) input.ReadEnum();
             break;
           }
           case 88: {
