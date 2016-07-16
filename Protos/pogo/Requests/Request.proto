@@ -1,9 +1,0 @@
-syntax = "proto3";
-package POGOLib.Pokemon.Proto.Requests;
-
-import public "Requests/RequestType.proto";
-
-message Request {
-  POGOLib.Pokemon.Proto.Requests.RequestType request_type = 1;
-  bytes request_message = 2;
-}

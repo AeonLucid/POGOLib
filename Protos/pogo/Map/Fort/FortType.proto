@@ -1,7 +1,0 @@
-syntax = "proto3";
-package POGOLib.Pokemon.Proto.Map.Fort;
-
-enum FortType {
-  GYM = 0;
-  CHECKPOINT = 1;
-}

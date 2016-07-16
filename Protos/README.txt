@@ -1,1 +1,0 @@
-Make sure you have installed the NuGet packages before compiling.

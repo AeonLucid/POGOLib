@@ -1,6 +1,0 @@
-syntax = "proto3";
-package POGOLib.Pokemon.Proto.Requests.Messages;
-
-message GetDownloadSettingsMessage {
-  string hash = 1;
-}

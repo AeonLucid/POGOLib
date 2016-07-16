@@ -46,6 +46,7 @@ namespace POGOLib.Net
                 return _requestId;
             }
         }
+
         private string GetApiEndpoint()
         {
             var response = SendRemoteProtocolCall(Configuration.ApiUrl, new Request
@@ -89,6 +90,37 @@ namespace POGOLib.Net
             return GetPlayerResponse.Parser.ParseFrom(response.Returns[0]).LocalPlayer;
         }
 
+        private IEnumerable<Request> GetDefaultRequests()
+        {
+            return new[]
+            {
+                new Request
+                {
+                    RequestType = RequestType.GetHatchedEggs
+                },
+                new Request
+                {
+                    RequestType = RequestType.GetInventory,
+                    RequestMessage = new GetInventoryMessage
+                    {
+                        TimestampMs = TimeUtil.GetCurrentTimestampInMs()
+                    }.ToByteString()
+                },
+                new Request
+                {
+                    RequestType = RequestType.CheckAwardedBadges
+                },
+                new Request
+                {
+                    RequestType = RequestType.DownloadSettings,
+                    RequestMessage = new GetDownloadSettingsMessage()
+                    {
+                        Hash = "4a2e9bc330dae60e7b74fc85b98868ab4700802e"
+                    }.ToByteString()
+                }
+            };
+        }
+
         private ResponseEnvelope SendRemoteProtocolCall(string apiUrl, Request request)
         {
             if (!_poClient.HasGpsData())
@@ -102,32 +134,7 @@ namespace POGOLib.Net
                 Longitude = _poClient.ClientData.GpsData.Longitude,
                 Altitude = _poClient.ClientData.GpsData.Altitude,
                 Unknown12 = 123, // TODO: Figure this out.
-                Requests = {
-                    new Request
-                    {
-                        RequestType = RequestType.GetHatchedEggs
-                    },
-                    new Request
-                    {
-                        RequestType = RequestType.GetInventory,
-                        RequestMessage = new GetInventoryMessage
-                        {
-                            TimestampMs = TimeUtil.GetCurrentTimestampInMs()
-                        }.ToByteString()
-                    },
-                    new Request
-                    {
-                        RequestType = RequestType.CheckAwardedBadges
-                    },
-                    new Request
-                    {
-                        RequestType = RequestType.DownloadSettings,
-                        RequestMessage = new GetDownloadSettingsMessage()
-                        {
-                            Hash = "4a2e9bc330dae60e7b74fc85b98868ab4700802e"
-                        }.ToByteString()
-                    }
-                }
+                Requests = { GetDefaultRequests() }
             };
 
             if (_authTicket == null)
@@ -163,14 +170,26 @@ namespace POGOLib.Net
 
                     Log.Debug($"Received {responseBytes.Length} bytes.");
 
-                    var count = 0;
-                    foreach (var @return in responseEnvelope.Returns)
-                    {
-                        Log.Debug($"\tIndex: {count}");
-                        Log.Debug($"\t\tLength: {@return.Length}");
+                    // Problems:
+                    // 5 Payloads are received but only the first one (request) is made available.
+                    // Fix the other 4.
 
-                        count++;
-                    }
+                    // 0 = request
+                    // 1 = GetHatchedEggs
+                    // 2 = GetInventory
+                    // 3 = CheckAwardedBadges
+                    // 4 = DownloadSettings
+
+
+
+//                    var count = 0;
+//                    foreach (var @return in responseEnvelope.Returns)
+//                    {
+//                        Log.Debug($"\tIndex: {count}");
+//                        Log.Debug($"\t\tLength: {@return.Length}");
+//
+//                        count++;
+//                    }
 
                     return responseEnvelope;
                 }

@@ -1,7 +1,0 @@
-syntax = "proto3";
-package POGOLib.Pokemon.Proto.Enums;
-
-enum Gender {
-  MALE = 0;
-  FEMALE = 1;
-}
