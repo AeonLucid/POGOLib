@@ -25,43 +25,40 @@ namespace POGOLib.Pokemon.Proto {
           string.Concat(
             "Cg9FbnZlbG9wZXMucHJvdG8SFVBPR09MaWIuUG9rZW1vbi5Qcm90bxoWUmVx",
             "dWVzdHMvUmVxdWVzdC5wcm90bxofRW51bXMvRW52ZWxvcGVzL0RpcmVjdGlv",
-            "bi5wcm90byL9CQoJRW52ZWxvcGVzGoABCghVbmtub3duNhIQCgh1bmtub3du",
+            "bi5wcm90byKBCQoJRW52ZWxvcGVzGoABCghVbmtub3duNhIQCgh1bmtub3du",
             "MRgBIAEoBRJECgh1bmtub3duMhgCIAEoCzIyLlBPR09MaWIuUG9rZW1vbi5Q",
             "cm90by5FbnZlbG9wZXMuVW5rbm93bjYuVW5rbm93bjIaHAoIVW5rbm93bjIS",
-            "EAoIdW5rbm93bjEYASABKAwaNgoFVGhpbmcSDQoFc3RhcnQYASABKAwSEQoJ",
-            "dGltZXN0YW1wGAIgASgEEgsKA2VuZBgDIAEoDBrEBAoPUmVxdWVzdEVudmVs",
-            "b3BlEkMKCWRpcmVjdGlvbhgBIAEoDjIwLlBPR09MaWIuUG9rZW1vbi5Qcm90",
-            "by5FbnVtcy5FbnZlbG9wZXMuRGlyZWN0aW9uEhIKCnJlcXVlc3RfaWQYAyAB",
-            "KAQSOQoIcmVxdWVzdHMYBCADKAsyJy5QT0dPTGliLlBva2Vtb24uUHJvdG8u",
-            "UmVxdWVzdHMuUmVxdWVzdBI7Cgh1bmtub3duNhgGIAEoCzIpLlBPR09MaWIu",
-            "UG9rZW1vbi5Qcm90by5FbnZlbG9wZXMuVW5rbm93bjYSEAoIbGF0aXR1ZGUY",
-            "ByABKAESEQoJbG9uZ2l0dWRlGAggASgBEhAKCGFsdGl0dWRlGAkgASgBEkcK",
-            "BGF1dGgYCiABKAsyOS5QT0dPTGliLlBva2Vtb24uUHJvdG8uRW52ZWxvcGVz",
-            "LlJlcXVlc3RFbnZlbG9wZS5BdXRoSW5mbxI1CgV0aGluZxgLIAEoCzImLlBP",
-            "R09MaWIuUG9rZW1vbi5Qcm90by5FbnZlbG9wZXMuVGhpbmcSEQoJdW5rbm93",
-            "bjEyGAwgASgDGpUBCghBdXRoSW5mbxIQCghwcm92aWRlchgBIAEoCRJMCgV0",
-            "b2tlbhgCIAEoCzI9LlBPR09MaWIuUG9rZW1vbi5Qcm90by5FbnZlbG9wZXMu",
-            "UmVxdWVzdEVudmVsb3BlLkF1dGhJbmZvLkpXVBopCgNKV1QSEAoIY29udGVu",
-            "dHMYASABKAkSEAoIdW5rbm93bjIYAiABKAUa7QMKEFJlc3BvbnNlRW52ZWxv",
-            "cGUSQwoJZGlyZWN0aW9uGAEgASgOMjAuUE9HT0xpYi5Qb2tlbW9uLlByb3Rv",
-            "LkVudW1zLkVudmVsb3Blcy5EaXJlY3Rpb24SEwoLcmVzcG9uc2VfaWQYAiAB",
-            "KAQSDwoHYXBpX3VybBgDIAEoCRI7Cgh1bmtub3duNhgGIAEoCzIpLlBPR09M",
-            "aWIuUG9rZW1vbi5Qcm90by5FbnZlbG9wZXMuVW5rbm93bjYSCwoDbGF0GAcg",
-            "ASgBEgwKBGxvbmcYCCABKAESEAoIYWx0aXR1ZGUYCSABKAESNQoFdGhpbmcY",
-            "CyABKAsyJi5QT0dPTGliLlBva2Vtb24uUHJvdG8uRW52ZWxvcGVzLlRoaW5n",
-            "EhEKCXVua25vd24xMhgMIAEoBRJLCghwYXlsb2FkcxhkIAMoCzI5LlBPR09M",
-            "aWIuUG9rZW1vbi5Qcm90by5FbnZlbG9wZXMuUmVzcG9uc2VFbnZlbG9wZS5Q",
-            "YXlsb2FkGkMKCFVua25vd243EhEKCXVua25vd243MRgBIAEoDBIRCgl1bmtu",
-            "b3duNzIYAiABKAMSEQoJdW5rbm93bjczGAMgASgMGigKB1BheWxvYWQSDwoH",
-            "c3VjY2VzcxgBIAEoCBIMCgRkYXRhGAIgASgMUABQAWIGcHJvdG8z"));
+            "EAoIdW5rbm93bjEYASABKAwaRQoKQXV0aFRpY2tldBINCgVzdGFydBgBIAEo",
+            "DBIbChNleHBpcmVfdGltZXN0YW1wX21zGAIgASgEEgsKA2VuZBgDIAEoDBrU",
+            "BAoPUmVxdWVzdEVudmVsb3BlEkMKCWRpcmVjdGlvbhgBIAEoDjIwLlBPR09M",
+            "aWIuUG9rZW1vbi5Qcm90by5FbnVtcy5FbnZlbG9wZXMuRGlyZWN0aW9uEhIK",
+            "CnJlcXVlc3RfaWQYAyABKAQSOQoIcmVxdWVzdHMYBCADKAsyJy5QT0dPTGli",
+            "LlBva2Vtb24uUHJvdG8uUmVxdWVzdHMuUmVxdWVzdBI7Cgh1bmtub3duNhgG",
+            "IAEoCzIpLlBPR09MaWIuUG9rZW1vbi5Qcm90by5FbnZlbG9wZXMuVW5rbm93",
+            "bjYSEAoIbGF0aXR1ZGUYByABKAESEQoJbG9uZ2l0dWRlGAggASgBEhAKCGFs",
+            "dGl0dWRlGAkgASgBEkwKCWF1dGhfaW5mbxgKIAEoCzI5LlBPR09MaWIuUG9r",
+            "ZW1vbi5Qcm90by5FbnZlbG9wZXMuUmVxdWVzdEVudmVsb3BlLkF1dGhJbmZv",
+            "EkAKC2F1dGhfdGlja2V0GAsgASgLMisuUE9HT0xpYi5Qb2tlbW9uLlByb3Rv",
+            "LkVudmVsb3Blcy5BdXRoVGlja2V0EhEKCXVua25vd24xMhgMIAEoAxqVAQoI",
+            "QXV0aEluZm8SEAoIcHJvdmlkZXIYASABKAkSTAoFdG9rZW4YAiABKAsyPS5Q",
+            "T0dPTGliLlBva2Vtb24uUHJvdG8uRW52ZWxvcGVzLlJlcXVlc3RFbnZlbG9w",
+            "ZS5BdXRoSW5mby5KV1QaKQoDSldUEhAKCGNvbnRlbnRzGAEgASgJEhAKCHVu",
+            "a25vd24yGAIgASgFGtICChBSZXNwb25zZUVudmVsb3BlEkMKCWRpcmVjdGlv",
+            "bhgBIAEoDjIwLlBPR09MaWIuUG9rZW1vbi5Qcm90by5FbnVtcy5FbnZlbG9w",
+            "ZXMuRGlyZWN0aW9uEhMKC3Jlc3BvbnNlX2lkGAIgASgEEg8KB2FwaV91cmwY",
+            "AyABKAkSOwoIdW5rbm93bjYYBiABKAsyKS5QT0dPTGliLlBva2Vtb24uUHJv",
+            "dG8uRW52ZWxvcGVzLlVua25vd242EkAKC2F1dGhfdGlja2V0GAcgASgLMisu",
+            "UE9HT0xpYi5Qb2tlbW9uLlByb3RvLkVudmVsb3Blcy5BdXRoVGlja2V0Eg8K",
+            "B3JldHVybnMYZCADKAwaQwoIVW5rbm93bjcSEQoJdW5rbm93bjcxGAEgASgM",
+            "EhEKCXVua25vd243MhgCIAEoAxIRCgl1bmtub3duNzMYAyABKAxQAFABYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::POGOLib.Pokemon.Proto.Requests.RequestReflection.Descriptor, global::POGOLib.Pokemon.Proto.Enums.Envelopes.DirectionReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes), global::POGOLib.Pokemon.Proto.Envelopes.Parser, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.Unknown6), global::POGOLib.Pokemon.Proto.Envelopes.Types.Unknown6.Parser, new[]{ "Unknown1", "Unknown2" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.Unknown6.Types.Unknown2), global::POGOLib.Pokemon.Proto.Envelopes.Types.Unknown6.Types.Unknown2.Parser, new[]{ "Unknown1" }, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.Thing), global::POGOLib.Pokemon.Proto.Envelopes.Types.Thing.Parser, new[]{ "Start", "Timestamp", "End" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope), global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Parser, new[]{ "Direction", "RequestId", "Requests", "Unknown6", "Latitude", "Longitude", "Altitude", "Auth", "Thing", "Unknown12" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo), global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Parser, new[]{ "Provider", "Token" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types.JWT), global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types.JWT.Parser, new[]{ "Contents", "Unknown2" }, null, null, null)})}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope), global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Parser, new[]{ "Direction", "ResponseId", "ApiUrl", "Unknown6", "Lat", "Long", "Altitude", "Thing", "Unknown12", "Payloads" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Unknown7), global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Unknown7.Parser, new[]{ "Unknown71", "Unknown72", "Unknown73" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Payload), global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Payload.Parser, new[]{ "Success", "Data" }, null, null, null)})})
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.AuthTicket), global::POGOLib.Pokemon.Proto.Envelopes.Types.AuthTicket.Parser, new[]{ "Start", "ExpireTimestampMs", "End" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope), global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Parser, new[]{ "Direction", "RequestId", "Requests", "Unknown6", "Latitude", "Longitude", "Altitude", "AuthInfo", "AuthTicket", "Unknown12" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo), global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Parser, new[]{ "Provider", "Token" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types.JWT), global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types.JWT.Parser, new[]{ "Contents", "Unknown2" }, null, null, null)})}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope), global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Parser, new[]{ "Direction", "ResponseId", "ApiUrl", "Unknown6", "AuthTicket", "Returns" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Unknown7), global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Unknown7.Parser, new[]{ "Unknown71", "Unknown72", "Unknown73" }, null, null, null)})})
           }));
     }
     #endregion
@@ -177,6 +174,9 @@ namespace POGOLib.Pokemon.Proto {
         /// <summary>Field number for the "unknown1" field.</summary>
         public const int Unknown1FieldNumber = 1;
         private int unknown1_;
+        /// <summary>
+        /// 6
+        /// </summary>
         public int Unknown1 {
           get { return unknown1_; }
           set {
@@ -393,9 +393,9 @@ namespace POGOLib.Pokemon.Proto {
       }
 
       [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-      public sealed partial class Thing : pb::IMessage<Thing> {
-        private static readonly pb::MessageParser<Thing> _parser = new pb::MessageParser<Thing>(() => new Thing());
-        public static pb::MessageParser<Thing> Parser { get { return _parser; } }
+      public sealed partial class AuthTicket : pb::IMessage<AuthTicket> {
+        private static readonly pb::MessageParser<AuthTicket> _parser = new pb::MessageParser<AuthTicket>(() => new AuthTicket());
+        public static pb::MessageParser<AuthTicket> Parser { get { return _parser; } }
 
         public static pbr::MessageDescriptor Descriptor {
           get { return global::POGOLib.Pokemon.Proto.Envelopes.Descriptor.NestedTypes[1]; }
@@ -405,20 +405,20 @@ namespace POGOLib.Pokemon.Proto {
           get { return Descriptor; }
         }
 
-        public Thing() {
+        public AuthTicket() {
           OnConstruction();
         }
 
         partial void OnConstruction();
 
-        public Thing(Thing other) : this() {
+        public AuthTicket(AuthTicket other) : this() {
           start_ = other.start_;
-          timestamp_ = other.timestamp_;
+          expireTimestampMs_ = other.expireTimestampMs_;
           end_ = other.end_;
         }
 
-        public Thing Clone() {
-          return new Thing(this);
+        public AuthTicket Clone() {
+          return new AuthTicket(this);
         }
 
         /// <summary>Field number for the "start" field.</summary>
@@ -431,13 +431,13 @@ namespace POGOLib.Pokemon.Proto {
           }
         }
 
-        /// <summary>Field number for the "timestamp" field.</summary>
-        public const int TimestampFieldNumber = 2;
-        private ulong timestamp_;
-        public ulong Timestamp {
-          get { return timestamp_; }
+        /// <summary>Field number for the "expire_timestamp_ms" field.</summary>
+        public const int ExpireTimestampMsFieldNumber = 2;
+        private ulong expireTimestampMs_;
+        public ulong ExpireTimestampMs {
+          get { return expireTimestampMs_; }
           set {
-            timestamp_ = value;
+            expireTimestampMs_ = value;
           }
         }
 
@@ -452,10 +452,10 @@ namespace POGOLib.Pokemon.Proto {
         }
 
         public override bool Equals(object other) {
-          return Equals(other as Thing);
+          return Equals(other as AuthTicket);
         }
 
-        public bool Equals(Thing other) {
+        public bool Equals(AuthTicket other) {
           if (ReferenceEquals(other, null)) {
             return false;
           }
@@ -463,7 +463,7 @@ namespace POGOLib.Pokemon.Proto {
             return true;
           }
           if (Start != other.Start) return false;
-          if (Timestamp != other.Timestamp) return false;
+          if (ExpireTimestampMs != other.ExpireTimestampMs) return false;
           if (End != other.End) return false;
           return true;
         }
@@ -471,7 +471,7 @@ namespace POGOLib.Pokemon.Proto {
         public override int GetHashCode() {
           int hash = 1;
           if (Start.Length != 0) hash ^= Start.GetHashCode();
-          if (Timestamp != 0UL) hash ^= Timestamp.GetHashCode();
+          if (ExpireTimestampMs != 0UL) hash ^= ExpireTimestampMs.GetHashCode();
           if (End.Length != 0) hash ^= End.GetHashCode();
           return hash;
         }
@@ -485,9 +485,9 @@ namespace POGOLib.Pokemon.Proto {
             output.WriteRawTag(10);
             output.WriteBytes(Start);
           }
-          if (Timestamp != 0UL) {
+          if (ExpireTimestampMs != 0UL) {
             output.WriteRawTag(16);
-            output.WriteUInt64(Timestamp);
+            output.WriteUInt64(ExpireTimestampMs);
           }
           if (End.Length != 0) {
             output.WriteRawTag(26);
@@ -500,8 +500,8 @@ namespace POGOLib.Pokemon.Proto {
           if (Start.Length != 0) {
             size += 1 + pb::CodedOutputStream.ComputeBytesSize(Start);
           }
-          if (Timestamp != 0UL) {
-            size += 1 + pb::CodedOutputStream.ComputeUInt64Size(Timestamp);
+          if (ExpireTimestampMs != 0UL) {
+            size += 1 + pb::CodedOutputStream.ComputeUInt64Size(ExpireTimestampMs);
           }
           if (End.Length != 0) {
             size += 1 + pb::CodedOutputStream.ComputeBytesSize(End);
@@ -509,15 +509,15 @@ namespace POGOLib.Pokemon.Proto {
           return size;
         }
 
-        public void MergeFrom(Thing other) {
+        public void MergeFrom(AuthTicket other) {
           if (other == null) {
             return;
           }
           if (other.Start.Length != 0) {
             Start = other.Start;
           }
-          if (other.Timestamp != 0UL) {
-            Timestamp = other.Timestamp;
+          if (other.ExpireTimestampMs != 0UL) {
+            ExpireTimestampMs = other.ExpireTimestampMs;
           }
           if (other.End.Length != 0) {
             End = other.End;
@@ -536,7 +536,7 @@ namespace POGOLib.Pokemon.Proto {
                 break;
               }
               case 16: {
-                Timestamp = input.ReadUInt64();
+                ExpireTimestampMs = input.ReadUInt64();
                 break;
               }
               case 26: {
@@ -576,8 +576,8 @@ namespace POGOLib.Pokemon.Proto {
           latitude_ = other.latitude_;
           longitude_ = other.longitude_;
           altitude_ = other.altitude_;
-          Auth = other.auth_ != null ? other.Auth.Clone() : null;
-          Thing = other.thing_ != null ? other.Thing.Clone() : null;
+          AuthInfo = other.authInfo_ != null ? other.AuthInfo.Clone() : null;
+          AuthTicket = other.authTicket_ != null ? other.AuthTicket.Clone() : null;
           unknown12_ = other.unknown12_;
         }
 
@@ -660,23 +660,23 @@ namespace POGOLib.Pokemon.Proto {
           }
         }
 
-        /// <summary>Field number for the "auth" field.</summary>
-        public const int AuthFieldNumber = 10;
-        private global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo auth_;
-        public global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo Auth {
-          get { return auth_; }
+        /// <summary>Field number for the "auth_info" field.</summary>
+        public const int AuthInfoFieldNumber = 10;
+        private global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo authInfo_;
+        public global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo AuthInfo {
+          get { return authInfo_; }
           set {
-            auth_ = value;
+            authInfo_ = value;
           }
         }
 
-        /// <summary>Field number for the "thing" field.</summary>
-        public const int ThingFieldNumber = 11;
-        private global::POGOLib.Pokemon.Proto.Envelopes.Types.Thing thing_;
-        public global::POGOLib.Pokemon.Proto.Envelopes.Types.Thing Thing {
-          get { return thing_; }
+        /// <summary>Field number for the "auth_ticket" field.</summary>
+        public const int AuthTicketFieldNumber = 11;
+        private global::POGOLib.Pokemon.Proto.Envelopes.Types.AuthTicket authTicket_;
+        public global::POGOLib.Pokemon.Proto.Envelopes.Types.AuthTicket AuthTicket {
+          get { return authTicket_; }
           set {
-            thing_ = value;
+            authTicket_ = value;
           }
         }
 
@@ -708,8 +708,8 @@ namespace POGOLib.Pokemon.Proto {
           if (Latitude != other.Latitude) return false;
           if (Longitude != other.Longitude) return false;
           if (Altitude != other.Altitude) return false;
-          if (!object.Equals(Auth, other.Auth)) return false;
-          if (!object.Equals(Thing, other.Thing)) return false;
+          if (!object.Equals(AuthInfo, other.AuthInfo)) return false;
+          if (!object.Equals(AuthTicket, other.AuthTicket)) return false;
           if (Unknown12 != other.Unknown12) return false;
           return true;
         }
@@ -723,8 +723,8 @@ namespace POGOLib.Pokemon.Proto {
           if (Latitude != 0D) hash ^= Latitude.GetHashCode();
           if (Longitude != 0D) hash ^= Longitude.GetHashCode();
           if (Altitude != 0D) hash ^= Altitude.GetHashCode();
-          if (auth_ != null) hash ^= Auth.GetHashCode();
-          if (thing_ != null) hash ^= Thing.GetHashCode();
+          if (authInfo_ != null) hash ^= AuthInfo.GetHashCode();
+          if (authTicket_ != null) hash ^= AuthTicket.GetHashCode();
           if (Unknown12 != 0L) hash ^= Unknown12.GetHashCode();
           return hash;
         }
@@ -759,13 +759,13 @@ namespace POGOLib.Pokemon.Proto {
             output.WriteRawTag(73);
             output.WriteDouble(Altitude);
           }
-          if (auth_ != null) {
+          if (authInfo_ != null) {
             output.WriteRawTag(82);
-            output.WriteMessage(Auth);
+            output.WriteMessage(AuthInfo);
           }
-          if (thing_ != null) {
+          if (authTicket_ != null) {
             output.WriteRawTag(90);
-            output.WriteMessage(Thing);
+            output.WriteMessage(AuthTicket);
           }
           if (Unknown12 != 0L) {
             output.WriteRawTag(96);
@@ -794,11 +794,11 @@ namespace POGOLib.Pokemon.Proto {
           if (Altitude != 0D) {
             size += 1 + 8;
           }
-          if (auth_ != null) {
-            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Auth);
+          if (authInfo_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(AuthInfo);
           }
-          if (thing_ != null) {
-            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Thing);
+          if (authTicket_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(AuthTicket);
           }
           if (Unknown12 != 0L) {
             size += 1 + pb::CodedOutputStream.ComputeInt64Size(Unknown12);
@@ -832,17 +832,17 @@ namespace POGOLib.Pokemon.Proto {
           if (other.Altitude != 0D) {
             Altitude = other.Altitude;
           }
-          if (other.auth_ != null) {
-            if (auth_ == null) {
-              auth_ = new global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo();
+          if (other.authInfo_ != null) {
+            if (authInfo_ == null) {
+              authInfo_ = new global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo();
             }
-            Auth.MergeFrom(other.Auth);
+            AuthInfo.MergeFrom(other.AuthInfo);
           }
-          if (other.thing_ != null) {
-            if (thing_ == null) {
-              thing_ = new global::POGOLib.Pokemon.Proto.Envelopes.Types.Thing();
+          if (other.authTicket_ != null) {
+            if (authTicket_ == null) {
+              authTicket_ = new global::POGOLib.Pokemon.Proto.Envelopes.Types.AuthTicket();
             }
-            Thing.MergeFrom(other.Thing);
+            AuthTicket.MergeFrom(other.AuthTicket);
           }
           if (other.Unknown12 != 0L) {
             Unknown12 = other.Unknown12;
@@ -888,17 +888,17 @@ namespace POGOLib.Pokemon.Proto {
                 break;
               }
               case 82: {
-                if (auth_ == null) {
-                  auth_ = new global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo();
+                if (authInfo_ == null) {
+                  authInfo_ = new global::POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo();
                 }
-                input.ReadMessage(auth_);
+                input.ReadMessage(authInfo_);
                 break;
               }
               case 90: {
-                if (thing_ == null) {
-                  thing_ = new global::POGOLib.Pokemon.Proto.Envelopes.Types.Thing();
+                if (authTicket_ == null) {
+                  authTicket_ = new global::POGOLib.Pokemon.Proto.Envelopes.Types.AuthTicket();
                 }
-                input.ReadMessage(thing_);
+                input.ReadMessage(authTicket_);
                 break;
               }
               case 96: {
@@ -1215,12 +1215,8 @@ namespace POGOLib.Pokemon.Proto {
           responseId_ = other.responseId_;
           apiUrl_ = other.apiUrl_;
           Unknown6 = other.unknown6_ != null ? other.Unknown6.Clone() : null;
-          lat_ = other.lat_;
-          long_ = other.long_;
-          altitude_ = other.altitude_;
-          Thing = other.thing_ != null ? other.Thing.Clone() : null;
-          unknown12_ = other.unknown12_;
-          payloads_ = other.payloads_.Clone();
+          AuthTicket = other.authTicket_ != null ? other.AuthTicket.Clone() : null;
+          returns_ = other.returns_.Clone();
         }
 
         public ResponseEnvelope Clone() {
@@ -1260,10 +1256,6 @@ namespace POGOLib.Pokemon.Proto {
         /// <summary>Field number for the "unknown6" field.</summary>
         public const int Unknown6FieldNumber = 6;
         private global::POGOLib.Pokemon.Proto.Envelopes.Types.Unknown6 unknown6_;
-        /// <summary>
-        ///  Missing field 4.
-        ///  Missing field 5.
-        /// </summary>
         public global::POGOLib.Pokemon.Proto.Envelopes.Types.Unknown6 Unknown6 {
           get { return unknown6_; }
           set {
@@ -1271,69 +1263,23 @@ namespace POGOLib.Pokemon.Proto {
           }
         }
 
-        /// <summary>Field number for the "lat" field.</summary>
-        public const int LatFieldNumber = 7;
-        private double lat_;
-        public double Lat {
-          get { return lat_; }
+        /// <summary>Field number for the "auth_ticket" field.</summary>
+        public const int AuthTicketFieldNumber = 7;
+        private global::POGOLib.Pokemon.Proto.Envelopes.Types.AuthTicket authTicket_;
+        public global::POGOLib.Pokemon.Proto.Envelopes.Types.AuthTicket AuthTicket {
+          get { return authTicket_; }
           set {
-            lat_ = value;
+            authTicket_ = value;
           }
         }
 
-        /// <summary>Field number for the "long" field.</summary>
-        public const int LongFieldNumber = 8;
-        private double long_;
-        public double Long {
-          get { return long_; }
-          set {
-            long_ = value;
-          }
-        }
-
-        /// <summary>Field number for the "altitude" field.</summary>
-        public const int AltitudeFieldNumber = 9;
-        private double altitude_;
-        public double Altitude {
-          get { return altitude_; }
-          set {
-            altitude_ = value;
-          }
-        }
-
-        /// <summary>Field number for the "thing" field.</summary>
-        public const int ThingFieldNumber = 11;
-        private global::POGOLib.Pokemon.Proto.Envelopes.Types.Thing thing_;
-        /// <summary>
-        ///  Missing field 10.
-        /// </summary>
-        public global::POGOLib.Pokemon.Proto.Envelopes.Types.Thing Thing {
-          get { return thing_; }
-          set {
-            thing_ = value;
-          }
-        }
-
-        /// <summary>Field number for the "unknown12" field.</summary>
-        public const int Unknown12FieldNumber = 12;
-        private int unknown12_;
-        public int Unknown12 {
-          get { return unknown12_; }
-          set {
-            unknown12_ = value;
-          }
-        }
-
-        /// <summary>Field number for the "payloads" field.</summary>
-        public const int PayloadsFieldNumber = 100;
-        private static readonly pb::FieldCodec<global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Payload> _repeated_payloads_codec
-            = pb::FieldCodec.ForMessage(802, global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Payload.Parser);
-        private readonly pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Payload> payloads_ = new pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Payload>();
-        /// <summary>
-        ///  Missing a lot??
-        /// </summary>
-        public pbc::RepeatedField<global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Types.Payload> Payloads {
-          get { return payloads_; }
+        /// <summary>Field number for the "returns" field.</summary>
+        public const int ReturnsFieldNumber = 100;
+        private static readonly pb::FieldCodec<pb::ByteString> _repeated_returns_codec
+            = pb::FieldCodec.ForBytes(802);
+        private readonly pbc::RepeatedField<pb::ByteString> returns_ = new pbc::RepeatedField<pb::ByteString>();
+        public pbc::RepeatedField<pb::ByteString> Returns {
+          get { return returns_; }
         }
 
         public override bool Equals(object other) {
@@ -1351,12 +1297,8 @@ namespace POGOLib.Pokemon.Proto {
           if (ResponseId != other.ResponseId) return false;
           if (ApiUrl != other.ApiUrl) return false;
           if (!object.Equals(Unknown6, other.Unknown6)) return false;
-          if (Lat != other.Lat) return false;
-          if (Long != other.Long) return false;
-          if (Altitude != other.Altitude) return false;
-          if (!object.Equals(Thing, other.Thing)) return false;
-          if (Unknown12 != other.Unknown12) return false;
-          if(!payloads_.Equals(other.payloads_)) return false;
+          if (!object.Equals(AuthTicket, other.AuthTicket)) return false;
+          if(!returns_.Equals(other.returns_)) return false;
           return true;
         }
 
@@ -1366,12 +1308,8 @@ namespace POGOLib.Pokemon.Proto {
           if (ResponseId != 0UL) hash ^= ResponseId.GetHashCode();
           if (ApiUrl.Length != 0) hash ^= ApiUrl.GetHashCode();
           if (unknown6_ != null) hash ^= Unknown6.GetHashCode();
-          if (Lat != 0D) hash ^= Lat.GetHashCode();
-          if (Long != 0D) hash ^= Long.GetHashCode();
-          if (Altitude != 0D) hash ^= Altitude.GetHashCode();
-          if (thing_ != null) hash ^= Thing.GetHashCode();
-          if (Unknown12 != 0) hash ^= Unknown12.GetHashCode();
-          hash ^= payloads_.GetHashCode();
+          if (authTicket_ != null) hash ^= AuthTicket.GetHashCode();
+          hash ^= returns_.GetHashCode();
           return hash;
         }
 
@@ -1396,27 +1334,11 @@ namespace POGOLib.Pokemon.Proto {
             output.WriteRawTag(50);
             output.WriteMessage(Unknown6);
           }
-          if (Lat != 0D) {
-            output.WriteRawTag(57);
-            output.WriteDouble(Lat);
+          if (authTicket_ != null) {
+            output.WriteRawTag(58);
+            output.WriteMessage(AuthTicket);
           }
-          if (Long != 0D) {
-            output.WriteRawTag(65);
-            output.WriteDouble(Long);
-          }
-          if (Altitude != 0D) {
-            output.WriteRawTag(73);
-            output.WriteDouble(Altitude);
-          }
-          if (thing_ != null) {
-            output.WriteRawTag(90);
-            output.WriteMessage(Thing);
-          }
-          if (Unknown12 != 0) {
-            output.WriteRawTag(96);
-            output.WriteInt32(Unknown12);
-          }
-          payloads_.WriteTo(output, _repeated_payloads_codec);
+          returns_.WriteTo(output, _repeated_returns_codec);
         }
 
         public int CalculateSize() {
@@ -1433,22 +1355,10 @@ namespace POGOLib.Pokemon.Proto {
           if (unknown6_ != null) {
             size += 1 + pb::CodedOutputStream.ComputeMessageSize(Unknown6);
           }
-          if (Lat != 0D) {
-            size += 1 + 8;
+          if (authTicket_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(AuthTicket);
           }
-          if (Long != 0D) {
-            size += 1 + 8;
-          }
-          if (Altitude != 0D) {
-            size += 1 + 8;
-          }
-          if (thing_ != null) {
-            size += 1 + pb::CodedOutputStream.ComputeMessageSize(Thing);
-          }
-          if (Unknown12 != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeInt32Size(Unknown12);
-          }
-          size += payloads_.CalculateSize(_repeated_payloads_codec);
+          size += returns_.CalculateSize(_repeated_returns_codec);
           return size;
         }
 
@@ -1471,25 +1381,13 @@ namespace POGOLib.Pokemon.Proto {
             }
             Unknown6.MergeFrom(other.Unknown6);
           }
-          if (other.Lat != 0D) {
-            Lat = other.Lat;
-          }
-          if (other.Long != 0D) {
-            Long = other.Long;
-          }
-          if (other.Altitude != 0D) {
-            Altitude = other.Altitude;
-          }
-          if (other.thing_ != null) {
-            if (thing_ == null) {
-              thing_ = new global::POGOLib.Pokemon.Proto.Envelopes.Types.Thing();
+          if (other.authTicket_ != null) {
+            if (authTicket_ == null) {
+              authTicket_ = new global::POGOLib.Pokemon.Proto.Envelopes.Types.AuthTicket();
             }
-            Thing.MergeFrom(other.Thing);
+            AuthTicket.MergeFrom(other.AuthTicket);
           }
-          if (other.Unknown12 != 0) {
-            Unknown12 = other.Unknown12;
-          }
-          payloads_.Add(other.payloads_);
+          returns_.Add(other.returns_);
         }
 
         public void MergeFrom(pb::CodedInputStream input) {
@@ -1518,31 +1416,15 @@ namespace POGOLib.Pokemon.Proto {
                 input.ReadMessage(unknown6_);
                 break;
               }
-              case 57: {
-                Lat = input.ReadDouble();
-                break;
-              }
-              case 65: {
-                Long = input.ReadDouble();
-                break;
-              }
-              case 73: {
-                Altitude = input.ReadDouble();
-                break;
-              }
-              case 90: {
-                if (thing_ == null) {
-                  thing_ = new global::POGOLib.Pokemon.Proto.Envelopes.Types.Thing();
+              case 58: {
+                if (authTicket_ == null) {
+                  authTicket_ = new global::POGOLib.Pokemon.Proto.Envelopes.Types.AuthTicket();
                 }
-                input.ReadMessage(thing_);
-                break;
-              }
-              case 96: {
-                Unknown12 = input.ReadInt32();
+                input.ReadMessage(authTicket_);
                 break;
               }
               case 802: {
-                payloads_.AddEntriesFrom(input, _repeated_payloads_codec);
+                returns_.AddEntriesFrom(input, _repeated_returns_codec);
                 break;
               }
             }
@@ -1702,136 +1584,6 @@ namespace POGOLib.Pokemon.Proto {
                   }
                   case 26: {
                     Unknown73 = input.ReadBytes();
-                    break;
-                  }
-                }
-              }
-            }
-
-          }
-
-          [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-          public sealed partial class Payload : pb::IMessage<Payload> {
-            private static readonly pb::MessageParser<Payload> _parser = new pb::MessageParser<Payload>(() => new Payload());
-            public static pb::MessageParser<Payload> Parser { get { return _parser; } }
-
-            public static pbr::MessageDescriptor Descriptor {
-              get { return global::POGOLib.Pokemon.Proto.Envelopes.Types.ResponseEnvelope.Descriptor.NestedTypes[1]; }
-            }
-
-            pbr::MessageDescriptor pb::IMessage.Descriptor {
-              get { return Descriptor; }
-            }
-
-            public Payload() {
-              OnConstruction();
-            }
-
-            partial void OnConstruction();
-
-            public Payload(Payload other) : this() {
-              success_ = other.success_;
-              data_ = other.data_;
-            }
-
-            public Payload Clone() {
-              return new Payload(this);
-            }
-
-            /// <summary>Field number for the "success" field.</summary>
-            public const int SuccessFieldNumber = 1;
-            private bool success_;
-            public bool Success {
-              get { return success_; }
-              set {
-                success_ = value;
-              }
-            }
-
-            /// <summary>Field number for the "data" field.</summary>
-            public const int DataFieldNumber = 2;
-            private pb::ByteString data_ = pb::ByteString.Empty;
-            public pb::ByteString Data {
-              get { return data_; }
-              set {
-                data_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-              }
-            }
-
-            public override bool Equals(object other) {
-              return Equals(other as Payload);
-            }
-
-            public bool Equals(Payload other) {
-              if (ReferenceEquals(other, null)) {
-                return false;
-              }
-              if (ReferenceEquals(other, this)) {
-                return true;
-              }
-              if (Success != other.Success) return false;
-              if (Data != other.Data) return false;
-              return true;
-            }
-
-            public override int GetHashCode() {
-              int hash = 1;
-              if (Success != false) hash ^= Success.GetHashCode();
-              if (Data.Length != 0) hash ^= Data.GetHashCode();
-              return hash;
-            }
-
-            public override string ToString() {
-              return pb::JsonFormatter.ToDiagnosticString(this);
-            }
-
-            public void WriteTo(pb::CodedOutputStream output) {
-              if (Success != false) {
-                output.WriteRawTag(8);
-                output.WriteBool(Success);
-              }
-              if (Data.Length != 0) {
-                output.WriteRawTag(18);
-                output.WriteBytes(Data);
-              }
-            }
-
-            public int CalculateSize() {
-              int size = 0;
-              if (Success != false) {
-                size += 1 + 1;
-              }
-              if (Data.Length != 0) {
-                size += 1 + pb::CodedOutputStream.ComputeBytesSize(Data);
-              }
-              return size;
-            }
-
-            public void MergeFrom(Payload other) {
-              if (other == null) {
-                return;
-              }
-              if (other.Success != false) {
-                Success = other.Success;
-              }
-              if (other.Data.Length != 0) {
-                Data = other.Data;
-              }
-            }
-
-            public void MergeFrom(pb::CodedInputStream input) {
-              uint tag;
-              while ((tag = input.ReadTag()) != 0) {
-                switch(tag) {
-                  default:
-                    input.SkipLastField();
-                    break;
-                  case 8: {
-                    Success = input.ReadBool();
-                    break;
-                  }
-                  case 18: {
-                    Data = input.ReadBytes();
                     break;
                   }
                 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Demo.Util;
 using log4net;
+using POGOLib;
 using POGOLib.Net;
 using POGOLib.Pokemon;
 
@@ -65,8 +66,12 @@ namespace Demo
                 client.SaveClientData();
             }
 
+            var profile = client.RPCClient.GetProfile();
+            Log.Info($"Username: {profile.Username}");
+
             var mapObjects = client.RPCClient.GetMapObjects();
 
+            Log.Info($"Cells: {mapObjects.MapCells.Count}");
             foreach (var mapCell in mapObjects.MapCells)
             {
                 foreach (var fortData in mapCell.Forts)

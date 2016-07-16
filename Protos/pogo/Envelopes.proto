@@ -6,7 +6,7 @@ import public "Enums/Envelopes/Direction.proto";
 
 message Envelopes {
   message Unknown6 {
-    int32 unknown1 = 1;
+    int32 unknown1 = 1; //6
     Unknown2 unknown2 = 2;
 
     message Unknown2 {
@@ -14,9 +14,9 @@ message Envelopes {
     }
   }
 
-  message Thing {
+  message AuthTicket {
     bytes start = 1;
-    uint64 timestamp = 2;
+    uint64 expire_timestamp_ms = 2;
     bytes end = 3;
   }
 
@@ -30,8 +30,8 @@ message Envelopes {
     double latitude = 7;
     double longitude = 8;
     double altitude = 9;
-    AuthInfo auth = 10;
-    Thing thing = 11;
+    AuthInfo auth_info = 10;
+    AuthTicket auth_ticket = 11;
     int64 unknown12 = 12;
 
     message AuthInfo {
@@ -49,27 +49,16 @@ message Envelopes {
     POGOLib.Pokemon.Proto.Enums.Envelopes.Direction direction = 1;
     uint64 response_id = 2;
     string api_url = 3;
-    // Missing field 4.
-    // Missing field 5.
+
     Unknown6 unknown6 = 6;
-    double lat = 7;
-    double long = 8;
-    double altitude = 9;
-    // Missing field 10.
-    Thing thing = 11;
-    int32 unknown12 = 12;
-    // Missing a lot??
-    repeated Payload payloads = 100;
+    AuthTicket auth_ticket = 7;
+
+    repeated bytes returns = 100;
 
     message Unknown7 {
       bytes unknown71 = 1;
       int64 unknown72 = 2;
       bytes unknown73 = 3;
-    }
-
-    message Payload {
-      bool success = 1;
-      bytes data = 2;
     }
   }
 }

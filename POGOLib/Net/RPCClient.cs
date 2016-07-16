@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Text;
 using Google.Protobuf;
 using log4net;
 using POGOLib.Pokemon.Proto;
 using POGOLib.Pokemon.Proto.Enums.Envelopes;
 using POGOLib.Pokemon.Proto.Requests;
 using POGOLib.Pokemon.Proto.Requests.Messages;
+using POGOLib.Pokemon.Proto.Responses;
 using POGOLib.Util;
 using static POGOLib.Pokemon.Proto.Envelopes.Types;
 using static POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types;
@@ -22,6 +25,7 @@ namespace POGOLib.Net
         private readonly HttpClient _httpClient;
         private ulong _requestId;
         private readonly string _apiUrl;
+        private AuthTicket _authTicket;
 
         public RPCClient(POClient poClient)
         {
@@ -41,7 +45,6 @@ namespace POGOLib.Net
                 return _requestId;
             }
         }
-
         private string GetApiEndpoint()
         {
             var response = SendRemoteProtocolCall(Configuration.ApiUrl, new Request
@@ -54,43 +57,25 @@ namespace POGOLib.Net
 
         public MapObjects GetMapObjects()
         {
+            var cellIds = MapUtil.GetCellIdsForLatLong(_poClient.ClientData.GpsData.Latitude, _poClient.ClientData.GpsData.Longitude);
+            var sinceTimeMs = new List<long>(cellIds.Length);
+
+            for (var i = 0; i < cellIds.Length; i++)
+                sinceTimeMs.Add(0);
+
             var response = SendRemoteProtocolCall(_apiUrl, new Request
             {
                 RequestType = RequestType.GetMapObjects,
                 RequestMessage = new GetMapObjectsMessage
                 {
-                    CellId =
-                    {
-                        // TODO: Figure this out
-                    },
-                    SinceTimeMs =
-                    {
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
-                    },
-                    PlayerLat = _poClient.ClientData.GpsData.Latitude,
-                    PlayerLng = _poClient.ClientData.GpsData.Longitude
+                    CellId = {cellIds},
+                    SinceTimeMs ={ sinceTimeMs.ToArray() },
+                    Latitude = _poClient.ClientData.GpsData.Latitude,
+                    Longitude = _poClient.ClientData.GpsData.Longitude
                 }.ToByteString()
             });
 
-            return MapObjects.Parser.ParseFrom(response.Payloads[0].Data);
+            return MapObjects.Parser.ParseFrom(response.Returns[0]);
         }
 
         public LocalPlayer GetProfile()
@@ -100,7 +85,7 @@ namespace POGOLib.Net
                 RequestType = RequestType.GetPlayer
             });
 
-            return LocalPlayer.Parser.ParseFrom(response.Payloads[0].Data);
+            return GetPlayerResponse.Parser.ParseFrom(response.Returns[0]).LocalPlayer;
         }
 
         private ResponseEnvelope SendRemoteProtocolCall(string apiUrl, Request request)
@@ -116,15 +101,6 @@ namespace POGOLib.Net
                 Longitude = _poClient.ClientData.GpsData.Longitude,
                 Altitude = _poClient.ClientData.GpsData.Altitude,
                 Unknown12 = 123, // TODO: Figure this out.
-                Auth = new AuthInfo
-                {
-                    Provider = "ptc",
-                    Token = new JWT
-                    {
-                        Contents = _poClient.ClientData.AuthData.AccessToken,
-                        Unknown2 = 59
-                    }
-                },
                 Requests = {
                     new Request
                     {
@@ -153,6 +129,23 @@ namespace POGOLib.Net
                 }
             };
 
+            if (_authTicket == null)
+            {
+                requestEnvelope.AuthInfo = new AuthInfo
+                {
+                    Provider = "ptc",
+                    Token = new JWT
+                    {
+                        Contents = _poClient.ClientData.AuthData.AccessToken,
+                        Unknown2 = 59
+                    }
+                };
+            }
+            else
+            {
+                requestEnvelope.AuthTicket = _authTicket;
+            }
+
             requestEnvelope.Requests.Insert(0, request);
 
             using (var memoryStream = new MemoryStream())
@@ -163,8 +156,20 @@ namespace POGOLib.Net
                 {
                     var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
                     var responseEnvelope = ResponseEnvelope.Parser.ParseFrom(responseBytes);
-                    
-                    Log.Debug($"Received {responseEnvelope.Payloads.Count} payloads.");
+
+                    if (_authTicket == null && responseEnvelope.AuthTicket != null)
+                        _authTicket = responseEnvelope.AuthTicket;
+
+                    Log.Debug($"Received {responseBytes.Length} bytes.");
+
+                    var count = 0;
+                    foreach (var @return in responseEnvelope.Returns)
+                    {
+                        Log.Debug($"\tIndex: {count}");
+                        Log.Debug($"\t\tLength: {@return.Length}");
+
+                        count++;
+                    }
 
                     return responseEnvelope;
                 }

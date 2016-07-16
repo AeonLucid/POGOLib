@@ -24,14 +24,14 @@ namespace POGOLib.Pokemon.Proto.Requests.Messages {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CixSZXF1ZXN0cy9NZXNzYWdlcy9HZXRNYXBPYmplY3RzTWVzc2FnZS5wcm90",
-            "bxInUE9HT0xpYi5Qb2tlbW9uLlByb3RvLlJlcXVlc3RzLk1lc3NhZ2VzImEK",
+            "bxInUE9HT0xpYi5Qb2tlbW9uLlByb3RvLlJlcXVlc3RzLk1lc3NhZ2VzImAK",
             "FEdldE1hcE9iamVjdHNNZXNzYWdlEg4KBkNlbGxJZBgBIAMoBBITCgtTaW5j",
-            "ZVRpbWVNcxgCIAMoAxIRCglQbGF5ZXJMYXQYAyABKAESEQoJUGxheWVyTG5n",
-            "GAQgASgBYgZwcm90bzM="));
+            "ZVRpbWVNcxgCIAMoAxIQCghsYXRpdHVkZRgDIAEoARIRCglsb25naXR1ZGUY",
+            "BCABKAFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Requests.Messages.GetMapObjectsMessage), global::POGOLib.Pokemon.Proto.Requests.Messages.GetMapObjectsMessage.Parser, new[]{ "CellId", "SinceTimeMs", "PlayerLat", "PlayerLng" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOLib.Pokemon.Proto.Requests.Messages.GetMapObjectsMessage), global::POGOLib.Pokemon.Proto.Requests.Messages.GetMapObjectsMessage.Parser, new[]{ "CellId", "SinceTimeMs", "Latitude", "Longitude" }, null, null, null)
           }));
     }
     #endregion
@@ -60,8 +60,8 @@ namespace POGOLib.Pokemon.Proto.Requests.Messages {
     public GetMapObjectsMessage(GetMapObjectsMessage other) : this() {
       cellId_ = other.cellId_.Clone();
       sinceTimeMs_ = other.sinceTimeMs_.Clone();
-      playerLat_ = other.playerLat_;
-      playerLng_ = other.playerLng_;
+      latitude_ = other.latitude_;
+      longitude_ = other.longitude_;
     }
 
     public GetMapObjectsMessage Clone() {
@@ -86,23 +86,23 @@ namespace POGOLib.Pokemon.Proto.Requests.Messages {
       get { return sinceTimeMs_; }
     }
 
-    /// <summary>Field number for the "PlayerLat" field.</summary>
-    public const int PlayerLatFieldNumber = 3;
-    private double playerLat_;
-    public double PlayerLat {
-      get { return playerLat_; }
+    /// <summary>Field number for the "latitude" field.</summary>
+    public const int LatitudeFieldNumber = 3;
+    private double latitude_;
+    public double Latitude {
+      get { return latitude_; }
       set {
-        playerLat_ = value;
+        latitude_ = value;
       }
     }
 
-    /// <summary>Field number for the "PlayerLng" field.</summary>
-    public const int PlayerLngFieldNumber = 4;
-    private double playerLng_;
-    public double PlayerLng {
-      get { return playerLng_; }
+    /// <summary>Field number for the "longitude" field.</summary>
+    public const int LongitudeFieldNumber = 4;
+    private double longitude_;
+    public double Longitude {
+      get { return longitude_; }
       set {
-        playerLng_ = value;
+        longitude_ = value;
       }
     }
 
@@ -119,8 +119,8 @@ namespace POGOLib.Pokemon.Proto.Requests.Messages {
       }
       if(!cellId_.Equals(other.cellId_)) return false;
       if(!sinceTimeMs_.Equals(other.sinceTimeMs_)) return false;
-      if (PlayerLat != other.PlayerLat) return false;
-      if (PlayerLng != other.PlayerLng) return false;
+      if (Latitude != other.Latitude) return false;
+      if (Longitude != other.Longitude) return false;
       return true;
     }
 
@@ -128,8 +128,8 @@ namespace POGOLib.Pokemon.Proto.Requests.Messages {
       int hash = 1;
       hash ^= cellId_.GetHashCode();
       hash ^= sinceTimeMs_.GetHashCode();
-      if (PlayerLat != 0D) hash ^= PlayerLat.GetHashCode();
-      if (PlayerLng != 0D) hash ^= PlayerLng.GetHashCode();
+      if (Latitude != 0D) hash ^= Latitude.GetHashCode();
+      if (Longitude != 0D) hash ^= Longitude.GetHashCode();
       return hash;
     }
 
@@ -140,13 +140,13 @@ namespace POGOLib.Pokemon.Proto.Requests.Messages {
     public void WriteTo(pb::CodedOutputStream output) {
       cellId_.WriteTo(output, _repeated_cellId_codec);
       sinceTimeMs_.WriteTo(output, _repeated_sinceTimeMs_codec);
-      if (PlayerLat != 0D) {
+      if (Latitude != 0D) {
         output.WriteRawTag(25);
-        output.WriteDouble(PlayerLat);
+        output.WriteDouble(Latitude);
       }
-      if (PlayerLng != 0D) {
+      if (Longitude != 0D) {
         output.WriteRawTag(33);
-        output.WriteDouble(PlayerLng);
+        output.WriteDouble(Longitude);
       }
     }
 
@@ -154,10 +154,10 @@ namespace POGOLib.Pokemon.Proto.Requests.Messages {
       int size = 0;
       size += cellId_.CalculateSize(_repeated_cellId_codec);
       size += sinceTimeMs_.CalculateSize(_repeated_sinceTimeMs_codec);
-      if (PlayerLat != 0D) {
+      if (Latitude != 0D) {
         size += 1 + 8;
       }
-      if (PlayerLng != 0D) {
+      if (Longitude != 0D) {
         size += 1 + 8;
       }
       return size;
@@ -169,11 +169,11 @@ namespace POGOLib.Pokemon.Proto.Requests.Messages {
       }
       cellId_.Add(other.cellId_);
       sinceTimeMs_.Add(other.sinceTimeMs_);
-      if (other.PlayerLat != 0D) {
-        PlayerLat = other.PlayerLat;
+      if (other.Latitude != 0D) {
+        Latitude = other.Latitude;
       }
-      if (other.PlayerLng != 0D) {
-        PlayerLng = other.PlayerLng;
+      if (other.Longitude != 0D) {
+        Longitude = other.Longitude;
       }
     }
 
@@ -195,11 +195,11 @@ namespace POGOLib.Pokemon.Proto.Requests.Messages {
             break;
           }
           case 25: {
-            PlayerLat = input.ReadDouble();
+            Latitude = input.ReadDouble();
             break;
           }
           case 33: {
-            PlayerLng = input.ReadDouble();
+            Longitude = input.ReadDouble();
             break;
           }
         }
