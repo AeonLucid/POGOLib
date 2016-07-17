@@ -60,7 +60,7 @@ namespace POGOLib.Net
             File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "savedata", $"{Uid}.json"), JsonConvert.SerializeObject(ClientData, Formatting.Indented));
         }
 
-        public async Task<bool> AuthenticateAsync(string password)
+        public bool Authenticate(string password)
         {
             if (ClientData.LoginProvider == LoginProvider.PokemonTrainerClub)
             {
@@ -72,13 +72,13 @@ namespace POGOLib.Net
                     {
                         httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Configuration.LoginUserAgent);
 
-                        var loginData = await GetLoginDataAsync(httpClient);
-                        var ticket = await PostLoginAsync(httpClient, loginData, password);
+                        var loginData = GetLoginDataAsync(httpClient).Result;
+                        var ticket = PostLoginAsync(httpClient, loginData, password).Result;
 
                         if (ticket == null)
                             return false;
 
-                        ClientData.AuthData = await PostLoginOauthAsync(httpClient, ticket);
+                        ClientData.AuthData = PostLoginOauthAsync(httpClient, ticket).Result;
                         OnAuthenticated(EventArgs.Empty);
 
                         return true;

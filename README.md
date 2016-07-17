@@ -1,7 +1,7 @@
 POGOLib
 ===================
 
-POGOLib is written in C# and aims to be a community-driven PokémonGO API. Feel free to submit pull requests.
+POGOLib is written in C# and aims to be a community-driven PokémonGo API. Feel free to submit pull requests.
 
 Libraries
 -------

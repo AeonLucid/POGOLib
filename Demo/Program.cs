@@ -68,7 +68,7 @@ namespace Demo
                     client.SetGpsData(double.Parse(latitude), double.Parse(longitude));
                 }
 
-                if(!client.AuthenticateAsync(password).Result)
+                if(!client.Authenticate(password))
                     throw new Exception("Wrong password.");
 
                 client.SaveClientData();
