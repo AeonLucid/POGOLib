@@ -7,10 +7,10 @@ using log4net;
 using POGOLib.Pokemon;
 using POGOLib.Util;
 using POGOProtos;
-using POGOProtos.Enums.Envelopes;
 using POGOProtos.Requests;
 using POGOProtos.Requests.Messages;
 using POGOProtos.Responses;
+using POGOProtos.Settings;
 using static POGOProtos.Envelopes.Types;
 using static POGOProtos.Envelopes.Types.RequestEnvelope.Types;
 using static POGOProtos.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types;
@@ -27,6 +27,8 @@ namespace POGOLib.Net
         private readonly string _apiUrl;
         private AuthTicket _authTicket;
 
+        private string _settingsHash;
+
         public RpcClient(PoClient poClient)
         {
             _poClient = poClient;
@@ -34,9 +36,10 @@ namespace POGOLib.Net
             _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Configuration.ApiUserAgent);
             _requestId = (ulong) new Random().Next(100000000, 999999999);
             _apiUrl = $"https://{GetApiEndpoint()}/rpc";
-
-            Log.Debug($"API Endpoint: '{_apiUrl}'");
         }
+
+        public GlobalSettings GlobalSettings { get; private set; }
+        public MapObjects MapObjects { get; private set; }
 
         private ulong RequestId
         {
@@ -127,7 +130,7 @@ namespace POGOLib.Net
 
             var requestEnvelope = new RequestEnvelope
             {
-                Direction = Direction.Request,
+                StatusCode = 2,
                 RequestId = RequestId,
                 Latitude = _poClient.ClientData.GpsData.Latitude,
                 Longitude = _poClient.ClientData.GpsData.Longitude,
@@ -141,7 +144,7 @@ namespace POGOLib.Net
                 requestEnvelope.AuthInfo = new AuthInfo
                 {
                     Provider = _poClient.ClientData.LoginProvider == LoginProvider.PokemonTrainerClub ? "ptc" : "google",
-                    Token = new AuthInfo.Types.JWT
+                    Token = new JWT
                     {
                         Contents = _poClient.ClientData.AuthData.AccessToken,
                         Unknown2 = 59
@@ -179,7 +182,26 @@ namespace POGOLib.Net
                     // 3 = CheckAwardedBadges
                     // 4 = DownloadSettings
 
+                    if (responseEnvelope.Returns.Count == 5)
+                    {
+                        var hatchedEggs = GetHatchedEggsResponse.Parser.ParseFrom(responseEnvelope.Returns[1]);
 
+                        var checkAwardedBadges = CheckAwardedBadgesResponse.Parser.ParseFrom(responseEnvelope.Returns[3]);
+                        var downloadSettingsResponse = DownloadSettingsResponse.Parser.ParseFrom(responseEnvelope.Returns[4]);
+
+                        if (downloadSettingsResponse.Settings != null)
+                        {
+                            if (GlobalSettings == null || _settingsHash != downloadSettingsResponse.Hash)
+                            {
+                                _settingsHash = downloadSettingsResponse.Hash;
+                                GlobalSettings = downloadSettingsResponse.Settings;
+                            }
+                            else
+                            {
+                                GlobalSettings = downloadSettingsResponse.Settings;
+                            }
+                        }
+                    }
 
 //                    var count = 0;
 //                    foreach (var @return in responseEnvelope.Returns)
@@ -193,6 +215,11 @@ namespace POGOLib.Net
                     return responseEnvelope;
                 }
             }
+        }
+
+        internal void Heartbeat()
+        {
+            MapObjects = GetMapObjects();
         }
     }
 }

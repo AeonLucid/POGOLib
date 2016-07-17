@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security;
 using log4net;
 using POGOLib.Net;
 using POGOLib.Pokemon;
@@ -42,7 +43,14 @@ namespace Demo
                 username = arguments["username"];
             }
 
-            var client = new PoClient(username, LoginProvider.PokemonTrainerClub);
+            var loginProvider = LoginProvider.PokemonTrainerClub;
+
+            if (arguments.ContainsKey("auth"))
+            {
+                if(arguments["auth"] == "google") loginProvider = LoginProvider.GoogleAuth;
+            }
+
+            var client = new PoClient(username, loginProvider);
             // Load previous data.
             if (!client.LoadClientData())
             {
@@ -60,19 +68,16 @@ namespace Demo
                     client.SetGpsData(double.Parse(latitude), double.Parse(longitude));
                 }
 
-                if(!client.Authenticate(password).Result)
+                if(!client.AuthenticateAsync(password).Result)
                     throw new Exception("Wrong password.");
 
                 client.SaveClientData();
             }
             
-//            var profile = client.RPCClient.GetProfile();
+//            var profile = client.RpcClient.GetProfile();
 //            Log.Info($"Username: {profile.Username}");
 
-            var mapObjects = client.RpcClient.GetMapObjects();
-
-            Log.Info($"Cells: {mapObjects.MapCells.Count}");
-            foreach (var mapCell in mapObjects.MapCells)
+            foreach (var mapCell in client.RpcClient.MapObjects.MapCells)
             {
                 Log.Info($"CellId: {mapCell.S2CellId}");
 

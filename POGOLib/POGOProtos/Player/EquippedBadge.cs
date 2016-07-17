@@ -24,12 +24,12 @@ namespace POGOProtos.Player {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChpQbGF5ZXIvRXF1aXBwZWRCYWRnZS5wcm90bxIRUE9HT1Byb3Rvcy5QbGF5",
-            "ZXIaGUVudW1zL0hvbG9CYWRnZVR5cGUucHJvdG8igwEKDUVxdWlwcGVkQmFk",
-            "Z2USMwoKYmFkZ2VfdHlwZRgBIAEoDjIfLlBPR09Qcm90b3MuRW51bXMuSG9s",
-            "b0JhZGdlVHlwZRINCgVsZXZlbBgCIAEoBRIuCiZuZXh0X2VxdWlwX2NoYW5n",
-            "ZV9hbGxvd2VkX3RpbWVzdGFtcF9tcxgDIAEoA1AAYgZwcm90bzM="));
+            "ZXIaFUVudW1zL0JhZGdlVHlwZS5wcm90byJ/Cg1FcXVpcHBlZEJhZGdlEi8K",
+            "CmJhZGdlX3R5cGUYASABKA4yGy5QT0dPUHJvdG9zLkVudW1zLkJhZGdlVHlw",
+            "ZRINCgVsZXZlbBgCIAEoBRIuCiZuZXh0X2VxdWlwX2NoYW5nZV9hbGxvd2Vk",
+            "X3RpbWVzdGFtcF9tcxgDIAEoA1AAYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOProtos.Enums.HoloBadgeTypeReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::POGOProtos.Enums.BadgeTypeReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Player.EquippedBadge), global::POGOProtos.Player.EquippedBadge.Parser, new[]{ "BadgeType", "Level", "NextEquipChangeAllowedTimestampMs" }, null, null, null)
           }));
@@ -69,11 +69,11 @@ namespace POGOProtos.Player {
 
     /// <summary>Field number for the "badge_type" field.</summary>
     public const int BadgeTypeFieldNumber = 1;
-    private global::POGOProtos.Enums.HoloBadgeType badgeType_ = 0;
+    private global::POGOProtos.Enums.BadgeType badgeType_ = 0;
     /// <summary>
     ///  enum HoloBadgeType
     /// </summary>
-    public global::POGOProtos.Enums.HoloBadgeType BadgeType {
+    public global::POGOProtos.Enums.BadgeType BadgeType {
       get { return badgeType_; }
       set {
         badgeType_ = value;
@@ -181,7 +181,7 @@ namespace POGOProtos.Player {
             input.SkipLastField();
             break;
           case 8: {
-            badgeType_ = (global::POGOProtos.Enums.HoloBadgeType) input.ReadEnum();
+            badgeType_ = (global::POGOProtos.Enums.BadgeType) input.ReadEnum();
             break;
           }
           case 16: {

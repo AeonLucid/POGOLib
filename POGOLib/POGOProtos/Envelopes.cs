@@ -24,38 +24,36 @@ namespace POGOProtos {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Cg9FbnZlbG9wZXMucHJvdG8SClBPR09Qcm90b3MaFlJlcXVlc3RzL1JlcXVl",
-            "c3QucHJvdG8aH0VudW1zL0VudmVsb3Blcy9EaXJlY3Rpb24ucHJvdG8ikggK",
-            "CUVudmVsb3Blcxp1CghVbmtub3duNhIQCgh1bmtub3duMRgBIAEoBRI5Cgh1",
-            "bmtub3duMhgCIAEoCzInLlBPR09Qcm90b3MuRW52ZWxvcGVzLlVua25vd242",
-            "LlVua25vd24yGhwKCFVua25vd24yEhAKCHVua25vd24xGAEgASgMGkUKCkF1",
-            "dGhUaWNrZXQSDQoFc3RhcnQYASABKAwSGwoTZXhwaXJlX3RpbWVzdGFtcF9t",
-            "cxgCIAEoBBILCgNlbmQYAyABKAwakgQKD1JlcXVlc3RFbnZlbG9wZRI4Cglk",
-            "aXJlY3Rpb24YASABKA4yJS5QT0dPUHJvdG9zLkVudW1zLkVudmVsb3Blcy5E",
-            "aXJlY3Rpb24SEgoKcmVxdWVzdF9pZBgDIAEoBBIuCghyZXF1ZXN0cxgEIAMo",
-            "CzIcLlBPR09Qcm90b3MuUmVxdWVzdHMuUmVxdWVzdBIwCgh1bmtub3duNhgG",
-            "IAEoCzIeLlBPR09Qcm90b3MuRW52ZWxvcGVzLlVua25vd242EhAKCGxhdGl0",
-            "dWRlGAcgASgBEhEKCWxvbmdpdHVkZRgIIAEoARIQCghhbHRpdHVkZRgJIAEo",
-            "ARJBCglhdXRoX2luZm8YCiABKAsyLi5QT0dPUHJvdG9zLkVudmVsb3Blcy5S",
-            "ZXF1ZXN0RW52ZWxvcGUuQXV0aEluZm8SNQoLYXV0aF90aWNrZXQYCyABKAsy",
-            "IC5QT0dPUHJvdG9zLkVudmVsb3Blcy5BdXRoVGlja2V0EhEKCXVua25vd24x",
-            "MhgMIAEoAxqKAQoIQXV0aEluZm8SEAoIcHJvdmlkZXIYASABKAkSQQoFdG9r",
-            "ZW4YAiABKAsyMi5QT0dPUHJvdG9zLkVudmVsb3Blcy5SZXF1ZXN0RW52ZWxv",
-            "cGUuQXV0aEluZm8uSldUGikKA0pXVBIQCghjb250ZW50cxgBIAEoCRIQCgh1",
-            "bmtub3duMhgCIAEoBRqxAgoQUmVzcG9uc2VFbnZlbG9wZRI4CglkaXJlY3Rp",
-            "b24YASABKA4yJS5QT0dPUHJvdG9zLkVudW1zLkVudmVsb3Blcy5EaXJlY3Rp",
-            "b24SEwoLcmVzcG9uc2VfaWQYAiABKAQSDwoHYXBpX3VybBgDIAEoCRIwCgh1",
-            "bmtub3duNhgGIAEoCzIeLlBPR09Qcm90b3MuRW52ZWxvcGVzLlVua25vd242",
-            "EjUKC2F1dGhfdGlja2V0GAcgASgLMiAuUE9HT1Byb3Rvcy5FbnZlbG9wZXMu",
-            "QXV0aFRpY2tldBIPCgdyZXR1cm5zGGQgAygMGkMKCFVua25vd243EhEKCXVu",
-            "a25vd243MRgBIAEoDBIRCgl1bmtub3duNzIYAiABKAMSEQoJdW5rbm93bjcz",
-            "GAMgASgMUABQAWIGcHJvdG8z"));
+            "c3QucHJvdG8i1wcKCUVudmVsb3Blcxp1CghVbmtub3duNhIQCgh1bmtub3du",
+            "MRgBIAEoBRI5Cgh1bmtub3duMhgCIAEoCzInLlBPR09Qcm90b3MuRW52ZWxv",
+            "cGVzLlVua25vd242LlVua25vd24yGhwKCFVua25vd24yEhAKCHVua25vd24x",
+            "GAEgASgMGkUKCkF1dGhUaWNrZXQSDQoFc3RhcnQYASABKAwSGwoTZXhwaXJl",
+            "X3RpbWVzdGFtcF9tcxgCIAEoBBILCgNlbmQYAyABKAwa7QMKD1JlcXVlc3RF",
+            "bnZlbG9wZRITCgtzdGF0dXNfY29kZRgBIAEoBRISCgpyZXF1ZXN0X2lkGAMg",
+            "ASgEEi4KCHJlcXVlc3RzGAQgAygLMhwuUE9HT1Byb3Rvcy5SZXF1ZXN0cy5S",
+            "ZXF1ZXN0EjAKCHVua25vd242GAYgASgLMh4uUE9HT1Byb3Rvcy5FbnZlbG9w",
+            "ZXMuVW5rbm93bjYSEAoIbGF0aXR1ZGUYByABKAESEQoJbG9uZ2l0dWRlGAgg",
+            "ASgBEhAKCGFsdGl0dWRlGAkgASgBEkEKCWF1dGhfaW5mbxgKIAEoCzIuLlBP",
+            "R09Qcm90b3MuRW52ZWxvcGVzLlJlcXVlc3RFbnZlbG9wZS5BdXRoSW5mbxI1",
+            "CgthdXRoX3RpY2tldBgLIAEoCzIgLlBPR09Qcm90b3MuRW52ZWxvcGVzLkF1",
+            "dGhUaWNrZXQSEQoJdW5rbm93bjEyGAwgASgDGooBCghBdXRoSW5mbxIQCghw",
+            "cm92aWRlchgBIAEoCRJBCgV0b2tlbhgCIAEoCzIyLlBPR09Qcm90b3MuRW52",
+            "ZWxvcGVzLlJlcXVlc3RFbnZlbG9wZS5BdXRoSW5mby5KV1QaKQoDSldUEhAK",
+            "CGNvbnRlbnRzGAEgASgJEhAKCHVua25vd24yGAIgASgFGpsCChBSZXNwb25z",
+            "ZUVudmVsb3BlEhMKC3N0YXR1c19jb2RlGAEgASgFEhMKC3Jlc3BvbnNlX2lk",
+            "GAIgASgEEg8KB2FwaV91cmwYAyABKAkSMAoIdW5rbm93bjYYBiABKAsyHi5Q",
+            "T0dPUHJvdG9zLkVudmVsb3Blcy5Vbmtub3duNhI1CgthdXRoX3RpY2tldBgH",
+            "IAEoCzIgLlBPR09Qcm90b3MuRW52ZWxvcGVzLkF1dGhUaWNrZXQSDwoHcmV0",
+            "dXJucxhkIAMoDBINCgVlcnJvchhlIAEoCRpDCghVbmtub3duNxIRCgl1bmtu",
+            "b3duNzEYASABKAwSEQoJdW5rbm93bjcyGAIgASgDEhEKCXVua25vd243MxgD",
+            "IAEoDFAAYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOProtos.Requests.RequestReflection.Descriptor, global::POGOProtos.Enums.Envelopes.DirectionReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::POGOProtos.Requests.RequestReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Envelopes), global::POGOProtos.Envelopes.Parser, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Envelopes.Types.Unknown6), global::POGOProtos.Envelopes.Types.Unknown6.Parser, new[]{ "Unknown1", "Unknown2" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Envelopes.Types.Unknown6.Types.Unknown2), global::POGOProtos.Envelopes.Types.Unknown6.Types.Unknown2.Parser, new[]{ "Unknown1" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Envelopes.Types.AuthTicket), global::POGOProtos.Envelopes.Types.AuthTicket.Parser, new[]{ "Start", "ExpireTimestampMs", "End" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Envelopes.Types.RequestEnvelope), global::POGOProtos.Envelopes.Types.RequestEnvelope.Parser, new[]{ "Direction", "RequestId", "Requests", "Unknown6", "Latitude", "Longitude", "Altitude", "AuthInfo", "AuthTicket", "Unknown12" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Envelopes.Types.RequestEnvelope.Types.AuthInfo), global::POGOProtos.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Parser, new[]{ "Provider", "Token" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types.JWT), global::POGOProtos.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types.JWT.Parser, new[]{ "Contents", "Unknown2" }, null, null, null)})}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Envelopes.Types.ResponseEnvelope), global::POGOProtos.Envelopes.Types.ResponseEnvelope.Parser, new[]{ "Direction", "ResponseId", "ApiUrl", "Unknown6", "AuthTicket", "Returns" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Envelopes.Types.ResponseEnvelope.Types.Unknown7), global::POGOProtos.Envelopes.Types.ResponseEnvelope.Types.Unknown7.Parser, new[]{ "Unknown71", "Unknown72", "Unknown73" }, null, null, null)})})
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Envelopes.Types.RequestEnvelope), global::POGOProtos.Envelopes.Types.RequestEnvelope.Parser, new[]{ "StatusCode", "RequestId", "Requests", "Unknown6", "Latitude", "Longitude", "Altitude", "AuthInfo", "AuthTicket", "Unknown12" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Envelopes.Types.RequestEnvelope.Types.AuthInfo), global::POGOProtos.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Parser, new[]{ "Provider", "Token" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types.JWT), global::POGOProtos.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types.JWT.Parser, new[]{ "Contents", "Unknown2" }, null, null, null)})}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Envelopes.Types.ResponseEnvelope), global::POGOProtos.Envelopes.Types.ResponseEnvelope.Parser, new[]{ "StatusCode", "ResponseId", "ApiUrl", "Unknown6", "AuthTicket", "Returns", "Error" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Envelopes.Types.ResponseEnvelope.Types.Unknown7), global::POGOProtos.Envelopes.Types.ResponseEnvelope.Types.Unknown7.Parser, new[]{ "Unknown71", "Unknown72", "Unknown73" }, null, null, null)})})
           }));
     }
     #endregion
@@ -566,7 +564,7 @@ namespace POGOProtos {
         partial void OnConstruction();
 
         public RequestEnvelope(RequestEnvelope other) : this() {
-          direction_ = other.direction_;
+          statusCode_ = other.statusCode_;
           requestId_ = other.requestId_;
           requests_ = other.requests_.Clone();
           Unknown6 = other.unknown6_ != null ? other.Unknown6.Clone() : null;
@@ -582,13 +580,13 @@ namespace POGOProtos {
           return new RequestEnvelope(this);
         }
 
-        /// <summary>Field number for the "direction" field.</summary>
-        public const int DirectionFieldNumber = 1;
-        private global::POGOProtos.Enums.Envelopes.Direction direction_ = 0;
-        public global::POGOProtos.Enums.Envelopes.Direction Direction {
-          get { return direction_; }
+        /// <summary>Field number for the "status_code" field.</summary>
+        public const int StatusCodeFieldNumber = 1;
+        private int statusCode_;
+        public int StatusCode {
+          get { return statusCode_; }
           set {
-            direction_ = value;
+            statusCode_ = value;
           }
         }
 
@@ -698,7 +696,7 @@ namespace POGOProtos {
           if (ReferenceEquals(other, this)) {
             return true;
           }
-          if (Direction != other.Direction) return false;
+          if (StatusCode != other.StatusCode) return false;
           if (RequestId != other.RequestId) return false;
           if(!requests_.Equals(other.requests_)) return false;
           if (!object.Equals(Unknown6, other.Unknown6)) return false;
@@ -713,7 +711,7 @@ namespace POGOProtos {
 
         public override int GetHashCode() {
           int hash = 1;
-          if (Direction != 0) hash ^= Direction.GetHashCode();
+          if (StatusCode != 0) hash ^= StatusCode.GetHashCode();
           if (RequestId != 0UL) hash ^= RequestId.GetHashCode();
           hash ^= requests_.GetHashCode();
           if (unknown6_ != null) hash ^= Unknown6.GetHashCode();
@@ -731,9 +729,9 @@ namespace POGOProtos {
         }
 
         public void WriteTo(pb::CodedOutputStream output) {
-          if (Direction != 0) {
+          if (StatusCode != 0) {
             output.WriteRawTag(8);
-            output.WriteEnum((int) Direction);
+            output.WriteInt32(StatusCode);
           }
           if (RequestId != 0UL) {
             output.WriteRawTag(24);
@@ -772,8 +770,8 @@ namespace POGOProtos {
 
         public int CalculateSize() {
           int size = 0;
-          if (Direction != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Direction);
+          if (StatusCode != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(StatusCode);
           }
           if (RequestId != 0UL) {
             size += 1 + pb::CodedOutputStream.ComputeUInt64Size(RequestId);
@@ -807,8 +805,8 @@ namespace POGOProtos {
           if (other == null) {
             return;
           }
-          if (other.Direction != 0) {
-            Direction = other.Direction;
+          if (other.StatusCode != 0) {
+            StatusCode = other.StatusCode;
           }
           if (other.RequestId != 0UL) {
             RequestId = other.RequestId;
@@ -854,7 +852,7 @@ namespace POGOProtos {
                 input.SkipLastField();
                 break;
               case 8: {
-                direction_ = (global::POGOProtos.Enums.Envelopes.Direction) input.ReadEnum();
+                StatusCode = input.ReadInt32();
                 break;
               }
               case 24: {
@@ -1208,25 +1206,26 @@ namespace POGOProtos {
         partial void OnConstruction();
 
         public ResponseEnvelope(ResponseEnvelope other) : this() {
-          direction_ = other.direction_;
+          statusCode_ = other.statusCode_;
           responseId_ = other.responseId_;
           apiUrl_ = other.apiUrl_;
           Unknown6 = other.unknown6_ != null ? other.Unknown6.Clone() : null;
           AuthTicket = other.authTicket_ != null ? other.AuthTicket.Clone() : null;
           returns_ = other.returns_.Clone();
+          error_ = other.error_;
         }
 
         public ResponseEnvelope Clone() {
           return new ResponseEnvelope(this);
         }
 
-        /// <summary>Field number for the "direction" field.</summary>
-        public const int DirectionFieldNumber = 1;
-        private global::POGOProtos.Enums.Envelopes.Direction direction_ = 0;
-        public global::POGOProtos.Enums.Envelopes.Direction Direction {
-          get { return direction_; }
+        /// <summary>Field number for the "status_code" field.</summary>
+        public const int StatusCodeFieldNumber = 1;
+        private int statusCode_;
+        public int StatusCode {
+          get { return statusCode_; }
           set {
-            direction_ = value;
+            statusCode_ = value;
           }
         }
 
@@ -1279,6 +1278,16 @@ namespace POGOProtos {
           get { return returns_; }
         }
 
+        /// <summary>Field number for the "error" field.</summary>
+        public const int ErrorFieldNumber = 101;
+        private string error_ = "";
+        public string Error {
+          get { return error_; }
+          set {
+            error_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
         public override bool Equals(object other) {
           return Equals(other as ResponseEnvelope);
         }
@@ -1290,23 +1299,25 @@ namespace POGOProtos {
           if (ReferenceEquals(other, this)) {
             return true;
           }
-          if (Direction != other.Direction) return false;
+          if (StatusCode != other.StatusCode) return false;
           if (ResponseId != other.ResponseId) return false;
           if (ApiUrl != other.ApiUrl) return false;
           if (!object.Equals(Unknown6, other.Unknown6)) return false;
           if (!object.Equals(AuthTicket, other.AuthTicket)) return false;
           if(!returns_.Equals(other.returns_)) return false;
+          if (Error != other.Error) return false;
           return true;
         }
 
         public override int GetHashCode() {
           int hash = 1;
-          if (Direction != 0) hash ^= Direction.GetHashCode();
+          if (StatusCode != 0) hash ^= StatusCode.GetHashCode();
           if (ResponseId != 0UL) hash ^= ResponseId.GetHashCode();
           if (ApiUrl.Length != 0) hash ^= ApiUrl.GetHashCode();
           if (unknown6_ != null) hash ^= Unknown6.GetHashCode();
           if (authTicket_ != null) hash ^= AuthTicket.GetHashCode();
           hash ^= returns_.GetHashCode();
+          if (Error.Length != 0) hash ^= Error.GetHashCode();
           return hash;
         }
 
@@ -1315,9 +1326,9 @@ namespace POGOProtos {
         }
 
         public void WriteTo(pb::CodedOutputStream output) {
-          if (Direction != 0) {
+          if (StatusCode != 0) {
             output.WriteRawTag(8);
-            output.WriteEnum((int) Direction);
+            output.WriteInt32(StatusCode);
           }
           if (ResponseId != 0UL) {
             output.WriteRawTag(16);
@@ -1336,12 +1347,16 @@ namespace POGOProtos {
             output.WriteMessage(AuthTicket);
           }
           returns_.WriteTo(output, _repeated_returns_codec);
+          if (Error.Length != 0) {
+            output.WriteRawTag(170, 6);
+            output.WriteString(Error);
+          }
         }
 
         public int CalculateSize() {
           int size = 0;
-          if (Direction != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Direction);
+          if (StatusCode != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(StatusCode);
           }
           if (ResponseId != 0UL) {
             size += 1 + pb::CodedOutputStream.ComputeUInt64Size(ResponseId);
@@ -1356,6 +1371,9 @@ namespace POGOProtos {
             size += 1 + pb::CodedOutputStream.ComputeMessageSize(AuthTicket);
           }
           size += returns_.CalculateSize(_repeated_returns_codec);
+          if (Error.Length != 0) {
+            size += 2 + pb::CodedOutputStream.ComputeStringSize(Error);
+          }
           return size;
         }
 
@@ -1363,8 +1381,8 @@ namespace POGOProtos {
           if (other == null) {
             return;
           }
-          if (other.Direction != 0) {
-            Direction = other.Direction;
+          if (other.StatusCode != 0) {
+            StatusCode = other.StatusCode;
           }
           if (other.ResponseId != 0UL) {
             ResponseId = other.ResponseId;
@@ -1385,6 +1403,9 @@ namespace POGOProtos {
             AuthTicket.MergeFrom(other.AuthTicket);
           }
           returns_.Add(other.returns_);
+          if (other.Error.Length != 0) {
+            Error = other.Error;
+          }
         }
 
         public void MergeFrom(pb::CodedInputStream input) {
@@ -1395,7 +1416,7 @@ namespace POGOProtos {
                 input.SkipLastField();
                 break;
               case 8: {
-                direction_ = (global::POGOProtos.Enums.Envelopes.Direction) input.ReadEnum();
+                StatusCode = input.ReadInt32();
                 break;
               }
               case 16: {
@@ -1422,6 +1443,10 @@ namespace POGOProtos {
               }
               case 802: {
                 returns_.AddEntriesFrom(input, _repeated_returns_codec);
+                break;
+              }
+              case 810: {
+                Error = input.ReadString();
                 break;
               }
             }

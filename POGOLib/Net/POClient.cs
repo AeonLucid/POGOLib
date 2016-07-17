@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using DankMemes.GPSOAuthSharp;
 using log4net;
@@ -19,6 +20,7 @@ namespace POGOLib.Net
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(PoClient));
 
+
         public PoClient(string username, LoginProvider loginProvider)
         {
             Uid = HashUtil.HashMD5(username + loginProvider).ToLower();
@@ -34,6 +36,7 @@ namespace POGOLib.Net
         public string Uid { get; }
         public ClientData ClientData { get; private set; }
         public RpcClient RpcClient { get; private set; }
+        public bool HeartBeating { get; private set; }
 
         public bool LoadClientData()
         {
@@ -44,7 +47,7 @@ namespace POGOLib.Net
 
             ClientData = JsonConvert.DeserializeObject<ClientData>(File.ReadAllText(saveDataPath));
 
-            if (!(ClientData.AuthData.ExpireDateTime > DateTime.Now))
+            if (!(ClientData.AuthData.ExpireDateTime > DateTime.UtcNow))
                 return false;
             
             OnAuthenticated(EventArgs.Empty);
@@ -57,7 +60,7 @@ namespace POGOLib.Net
             File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "savedata", $"{Uid}.json"), JsonConvert.SerializeObject(ClientData, Formatting.Indented));
         }
 
-        public async Task<bool> Authenticate(string password)
+        public async Task<bool> AuthenticateAsync(string password)
         {
             if (ClientData.LoginProvider == LoginProvider.PokemonTrainerClub)
             {
@@ -69,13 +72,13 @@ namespace POGOLib.Net
                     {
                         httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Configuration.LoginUserAgent);
 
-                        var loginData = await GetLoginData(httpClient);
-                        var ticket = await PostLogin(httpClient, loginData, password);
+                        var loginData = await GetLoginDataAsync(httpClient);
+                        var ticket = await PostLoginAsync(httpClient, loginData, password);
 
                         if (ticket == null)
                             return false;
 
-                        ClientData.AuthData = await PostLoginOauth(httpClient, ticket);
+                        ClientData.AuthData = await PostLoginOauthAsync(httpClient, ticket);
                         OnAuthenticated(EventArgs.Empty);
 
                         return true;
@@ -112,7 +115,7 @@ namespace POGOLib.Net
             throw new Exception("Unknown login provider.");
         }
 
-        private async Task<LoginData> GetLoginData(HttpClient httpClient)
+        private async Task<LoginData> GetLoginDataAsync(HttpClient httpClient)
         {
             var loginDataResponse = await httpClient.GetAsync(Configuration.LoginUrl);
             var loginData = JsonConvert.DeserializeObject<LoginData>(await loginDataResponse.Content.ReadAsStringAsync());
@@ -120,7 +123,7 @@ namespace POGOLib.Net
             return loginData;
         }
 
-        private async Task<string> PostLogin(HttpClient httpClient, LoginData loginData, string password)
+        private async Task<string> PostLoginAsync(HttpClient httpClient, LoginData loginData, string password)
         {
             var loginResponse = await httpClient.PostAsync(Configuration.LoginUrl, new FormUrlEncodedContent(new Dictionary<string, string>
             {
@@ -150,7 +153,7 @@ namespace POGOLib.Net
             return null;
         }
 
-        private async Task<AuthData> PostLoginOauth(HttpClient httpClient, string ticket)
+        private async Task<AuthData> PostLoginOauthAsync(HttpClient httpClient, string ticket)
         {
             var loginResponse = await httpClient.PostAsync(Configuration.LoginOauthUrl, new FormUrlEncodedContent(new Dictionary<string, string>
             {
@@ -170,7 +173,7 @@ namespace POGOLib.Net
             return new AuthData
             {
                 AccessToken = oAuthData.Groups["accessToken"].Value,
-                ExpireDateTime = DateTime.Now.AddSeconds(int.Parse(oAuthData.Groups["expires"].Value))
+                ExpireDateTime = DateTime.UtcNow.AddSeconds(int.Parse(oAuthData.Groups["expires"].Value))
             };
         }
 
@@ -206,6 +209,7 @@ namespace POGOLib.Net
         private void OnAuthenticated(object sender, EventArgs eventArgs)
         {
             RpcClient = new RpcClient(this);
+            StartHeartbeats();
         }
 
         private void OnAuthenticated(EventArgs e)
@@ -214,5 +218,49 @@ namespace POGOLib.Net
         }
 
         private event EventHandler Authenticated;
+        
+        public void StartHeartbeats()
+        {
+            if (HeartBeating)
+            {
+                Log.Debug("Heartbeating has already been started.");
+                return;
+            }
+
+            if (RpcClient.GlobalSettings == null)
+            {
+                RpcClient.Heartbeat(); // Forcekick
+
+                if(RpcClient.GlobalSettings == null)
+                    throw new Exception("Couldn't fetch settings.");
+            }
+
+            HeartBeating = true;
+
+            new Thread(() =>
+            {
+                var sleepTime = Convert.ToInt32(RpcClient.GlobalSettings.Map.GetMapObjectsMinRefreshSeconds) * 1000;
+
+                while (HeartBeating)
+                {
+                    RpcClient.Heartbeat();
+
+                    Thread.Sleep(sleepTime);
+                }
+            }) { IsBackground = true }.Start();
+
+            Log.Debug(JsonConvert.SerializeObject(RpcClient.GlobalSettings, Formatting.Indented));
+        }
+
+        public void StopHeartbeats()
+        {
+            if (!HeartBeating)
+            {
+                Log.Debug("Heartbeating has already been stopped.");
+                return;
+            }
+
+            HeartBeating = false;
+        }
     }
 }
