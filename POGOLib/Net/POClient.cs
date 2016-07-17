@@ -15,13 +15,13 @@ using Newtonsoft.Json.Linq;
 
 namespace POGOLib.Net
 {
-    public class POClient
+    public class PoClient
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(POClient));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(PoClient));
 
-        public POClient(string username, LoginProvider loginProvider)
+        public PoClient(string username, LoginProvider loginProvider)
         {
-            UID = HashUtil.HashMD5(username + loginProvider).ToLower();
+            Uid = HashUtil.HashMD5(username + loginProvider).ToLower();
             ClientData = new ClientData
             {
                 Username = username,
@@ -31,13 +31,13 @@ namespace POGOLib.Net
             Authenticated += OnAuthenticated;
         }
 
-        public string UID { get; }
+        public string Uid { get; }
         public ClientData ClientData { get; private set; }
-        public RPCClient RPCClient { get; private set; }
+        public RpcClient RpcClient { get; private set; }
 
         public bool LoadClientData()
         {
-            var saveDataPath = Path.Combine(Environment.CurrentDirectory, "savedata", $"{UID}.json");
+            var saveDataPath = Path.Combine(Environment.CurrentDirectory, "savedata", $"{Uid}.json");
 
             if (!File.Exists(saveDataPath))
                 return false;
@@ -54,7 +54,7 @@ namespace POGOLib.Net
 
         public void SaveClientData()
         {
-            File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "savedata", $"{UID}.json"), JsonConvert.SerializeObject(ClientData, Formatting.Indented));
+            File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "savedata", $"{Uid}.json"), JsonConvert.SerializeObject(ClientData, Formatting.Indented));
         }
 
         public async Task<bool> Authenticate(string password)
@@ -205,7 +205,7 @@ namespace POGOLib.Net
 
         private void OnAuthenticated(object sender, EventArgs eventArgs)
         {
-            RPCClient = new RPCClient(this);
+            RpcClient = new RpcClient(this);
         }
 
         private void OnAuthenticated(EventArgs e)

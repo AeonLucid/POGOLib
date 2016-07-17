@@ -2,33 +2,32 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Text;
 using Google.Protobuf;
 using log4net;
 using POGOLib.Pokemon;
-using POGOLib.Pokemon.Proto;
-using POGOLib.Pokemon.Proto.Enums.Envelopes;
-using POGOLib.Pokemon.Proto.Requests;
-using POGOLib.Pokemon.Proto.Requests.Messages;
-using POGOLib.Pokemon.Proto.Responses;
 using POGOLib.Util;
-using static POGOLib.Pokemon.Proto.Envelopes.Types;
-using static POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types;
-using static POGOLib.Pokemon.Proto.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types;
+using POGOProtos;
+using POGOProtos.Enums.Envelopes;
+using POGOProtos.Requests;
+using POGOProtos.Requests.Messages;
+using POGOProtos.Responses;
+using static POGOProtos.Envelopes.Types;
+using static POGOProtos.Envelopes.Types.RequestEnvelope.Types;
+using static POGOProtos.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types;
 
 namespace POGOLib.Net
 {
-    public class RPCClient
+    public class RpcClient
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(RPCClient));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(RpcClient));
 
-        private readonly POClient _poClient;
+        private readonly PoClient _poClient;
         private readonly HttpClient _httpClient;
         private ulong _requestId;
         private readonly string _apiUrl;
         private AuthTicket _authTicket;
 
-        public RPCClient(POClient poClient)
+        public RpcClient(PoClient poClient)
         {
             _poClient = poClient;
             _httpClient = new HttpClient();
@@ -113,7 +112,7 @@ namespace POGOLib.Net
                 new Request
                 {
                     RequestType = RequestType.DownloadSettings,
-                    RequestMessage = new GetDownloadSettingsMessage()
+                    RequestMessage = new GetDownloadSettingsMessage
                     {
                         Hash = "4a2e9bc330dae60e7b74fc85b98868ab4700802e"
                     }.ToByteString()
@@ -142,7 +141,7 @@ namespace POGOLib.Net
                 requestEnvelope.AuthInfo = new AuthInfo
                 {
                     Provider = _poClient.ClientData.LoginProvider == LoginProvider.PokemonTrainerClub ? "ptc" : "google",
-                    Token = new JWT
+                    Token = new AuthInfo.Types.JWT
                     {
                         Contents = _poClient.ClientData.AuthData.AccessToken,
                         Unknown2 = 59

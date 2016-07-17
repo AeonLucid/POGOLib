@@ -13,7 +13,7 @@ namespace Demo
     {
         public static string SaveDataPath { get; private set; }
         
-        private static readonly ILog Log = LogManager.GetLogger(typeof(POClient));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(PoClient));
 
         /// <summary>
         /// This is just a demo application to test out the library / show a bit how it works.
@@ -42,7 +42,7 @@ namespace Demo
                 username = arguments["username"];
             }
 
-            var client = new POClient(username, LoginProvider.PokemonTrainerClub);
+            var client = new PoClient(username, LoginProvider.PokemonTrainerClub);
             // Load previous data.
             if (!client.LoadClientData())
             {
@@ -69,7 +69,7 @@ namespace Demo
 //            var profile = client.RPCClient.GetProfile();
 //            Log.Info($"Username: {profile.Username}");
 
-            var mapObjects = client.RPCClient.GetMapObjects();
+            var mapObjects = client.RpcClient.GetMapObjects();
 
             Log.Info($"Cells: {mapObjects.MapCells.Count}");
             foreach (var mapCell in mapObjects.MapCells)
