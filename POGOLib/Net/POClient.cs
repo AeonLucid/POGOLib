@@ -13,6 +13,9 @@ using POGOLib.Pokemon;
 using POGOLib.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using POGOProtos.Inventory;
+using POGOProtos.Networking.Responses;
+using POGOProtos.Settings;
 
 namespace POGOLib.Net
 {
@@ -35,8 +38,28 @@ namespace POGOLib.Net
 
         public string Uid { get; }
         public ClientData ClientData { get; private set; }
+
+        /// <summary>
+        /// <see cref="RpcClient"/> is used to manually send rpc requests to pokemon, use with caution.
+        /// </summary>
         public RpcClient RpcClient { get; private set; }
+
         public bool HeartBeating { get; private set; }
+
+        /// <summary>
+        /// <see cref="GlobalSettings"/> is automatically updated and only accessible after authenticating.
+        /// </summary>
+        public GlobalSettings GlobalSettings { get; internal set; }
+
+        /// <summary>
+        /// <see cref="MapObjects"/> is automatically updated and only accessible after authenticating.
+        /// </summary>
+        public GetMapObjectsResponse MapObjects { get; internal set; }
+        
+        /// <summary>
+        /// <see cref="Inventory"/> is automatically updated and only accessible after authenticating.
+        /// </summary>
+        public InventoryDelta Inventory { get; internal set; }
 
         public bool LoadClientData()
         {
@@ -182,6 +205,11 @@ namespace POGOLib.Net
             return ClientData.GpsData != null;
         }
 
+        public GpsData GetGpsData()
+        {
+            return ClientData.GpsData;
+        }
+
         public void SetGpsData(GpsData gpsData)
         {
             ClientData.GpsData = gpsData;
@@ -227,11 +255,11 @@ namespace POGOLib.Net
                 return;
             }
 
-            if (RpcClient.GlobalSettings == null)
+            if (GlobalSettings == null)
             {
                 RpcClient.Heartbeat(); // Forcekick
 
-                if(RpcClient.GlobalSettings == null)
+                if(GlobalSettings == null)
                     throw new Exception("Couldn't fetch settings.");
             }
 
@@ -239,7 +267,7 @@ namespace POGOLib.Net
 
             new Thread(() =>
             {
-                var sleepTime = Convert.ToInt32(RpcClient.GlobalSettings.Map.GetMapObjectsMinRefreshSeconds) * 1000;
+                var sleepTime = Convert.ToInt32(GlobalSettings.Map.GetMapObjectsMinRefreshSeconds) * 1000;
 
                 while (HeartBeating)
                 {
@@ -248,8 +276,6 @@ namespace POGOLib.Net
                     Thread.Sleep(sleepTime);
                 }
             }) { IsBackground = true }.Start();
-
-            Log.Debug(JsonConvert.SerializeObject(RpcClient.GlobalSettings, Formatting.Indented));
         }
 
         public void StopHeartbeats()

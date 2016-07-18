@@ -7,13 +7,12 @@ using log4net;
 using POGOLib.Pokemon;
 using POGOLib.Util;
 using POGOProtos;
-using POGOProtos.Requests;
-using POGOProtos.Requests.Messages;
-using POGOProtos.Responses;
-using POGOProtos.Settings;
-using static POGOProtos.Envelopes.Types;
-using static POGOProtos.Envelopes.Types.RequestEnvelope.Types;
-using static POGOProtos.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types;
+using POGOProtos.Networking.Requests;
+using POGOProtos.Networking.Requests.Messages;
+using POGOProtos.Networking.Responses;
+using static POGOProtos.Networking.Envelopes.Types;
+using static POGOProtos.Networking.Envelopes.Types.RequestEnvelope.Types;
+using static POGOProtos.Networking.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types;
 
 namespace POGOLib.Net
 {
@@ -28,6 +27,7 @@ namespace POGOLib.Net
         private AuthTicket _authTicket;
 
         private string _settingsHash;
+        private long _lastInventoryTimestamp;
 
         public RpcClient(PoClient poClient)
         {
@@ -37,9 +37,6 @@ namespace POGOLib.Net
             _requestId = (ulong) new Random().Next(100000000, 999999999);
             _apiUrl = $"https://{GetApiEndpoint()}/rpc";
         }
-
-        public GlobalSettings GlobalSettings { get; private set; }
-        public MapObjects MapObjects { get; private set; }
 
         private ulong RequestId
         {
@@ -59,7 +56,7 @@ namespace POGOLib.Net
             return response.ApiUrl;
         }
 
-        public MapObjects GetMapObjects()
+        private GetMapObjectsResponse GetMapObjects()
         {
             var cellIds = MapUtil.GetCellIdsForLatLong(_poClient.ClientData.GpsData.Latitude, _poClient.ClientData.GpsData.Longitude);
             var sinceTimeMs = new List<long>(cellIds.Length);
@@ -73,13 +70,13 @@ namespace POGOLib.Net
                 RequestMessage = new GetMapObjectsMessage
                 {
                     CellId = {cellIds},
-                    SinceTimeMs ={ sinceTimeMs.ToArray() },
+                    SinceTimestampMs = { sinceTimeMs.ToArray() },
                     Latitude = _poClient.ClientData.GpsData.Latitude,
                     Longitude = _poClient.ClientData.GpsData.Longitude
                 }.ToByteString()
             });
 
-            return MapObjects.Parser.ParseFrom(response.Returns[0]);
+            return GetMapObjectsResponse.Parser.ParseFrom(response.Returns[0]);
         }
 
         public LocalPlayer GetProfile()
@@ -105,7 +102,7 @@ namespace POGOLib.Net
                     RequestType = RequestType.GetInventory,
                     RequestMessage = new GetInventoryMessage
                     {
-                        TimestampMs = TimeUtil.GetCurrentTimestampInMs()
+                       LastTimestampMs = _lastInventoryTimestamp
                     }.ToByteString()
                 },
                 new Request
@@ -115,7 +112,7 @@ namespace POGOLib.Net
                 new Request
                 {
                     RequestType = RequestType.DownloadSettings,
-                    RequestMessage = new GetDownloadSettingsMessage
+                    RequestMessage = new DownloadSettingsMessage
                     {
                         Hash = "4a2e9bc330dae60e7b74fc85b98868ab4700802e"
                     }.ToByteString()
@@ -175,42 +172,51 @@ namespace POGOLib.Net
                     // Problems:
                     // 5 Payloads are received but only the first one (request) is made available.
                     // Fix the other 4.
+                    // Also assign to property with a private set and public get.
 
                     // 0 = request
                     // 1 = GetHatchedEggs
                     // 2 = GetInventory
                     // 3 = CheckAwardedBadges
                     // 4 = DownloadSettings
-
+                    
                     if (responseEnvelope.Returns.Count == 5)
                     {
                         var hatchedEggs = GetHatchedEggsResponse.Parser.ParseFrom(responseEnvelope.Returns[1]);
-
+                        var getInventory = GetInventoryResponse.Parser.ParseFrom(responseEnvelope.Returns[2]);
                         var checkAwardedBadges = CheckAwardedBadgesResponse.Parser.ParseFrom(responseEnvelope.Returns[3]);
                         var downloadSettingsResponse = DownloadSettingsResponse.Parser.ParseFrom(responseEnvelope.Returns[4]);
 
+                        // Used to verify that data is being received correctly.
+//                        Log.Debug($"\tGetHatchedEggs Size: {responseEnvelope.Returns[1].Length}");
+//                        Log.Debug($"\tGetInventory Size: {responseEnvelope.Returns[2].Length}");
+//                        Log.Debug($"\tCheckAwardedBadges Size: {responseEnvelope.Returns[3].Length}");
+//                        Log.Debug($"\tDownloadSettings Size: {responseEnvelope.Returns[4].Length}");
+
                         if (downloadSettingsResponse.Settings != null)
                         {
-                            if (GlobalSettings == null || _settingsHash != downloadSettingsResponse.Hash)
+                            if (_poClient.GlobalSettings == null || _settingsHash != downloadSettingsResponse.Hash)
                             {
                                 _settingsHash = downloadSettingsResponse.Hash;
-                                GlobalSettings = downloadSettingsResponse.Settings;
+                                _poClient.GlobalSettings = downloadSettingsResponse.Settings;
                             }
                             else
                             {
-                                GlobalSettings = downloadSettingsResponse.Settings;
+                                _poClient.GlobalSettings = downloadSettingsResponse.Settings;
+                            }
+                        }
+
+                        if (getInventory.Success)
+                        {
+                            if (getInventory.InventoryDelta.NewTimestampMs > _lastInventoryTimestamp)
+                            {
+                                // Inventory has been updated, fire an event or whatever.
+
+                                _poClient.Inventory = getInventory.InventoryDelta;
+                                _lastInventoryTimestamp = getInventory.InventoryDelta.NewTimestampMs;
                             }
                         }
                     }
-
-//                    var count = 0;
-//                    foreach (var @return in responseEnvelope.Returns)
-//                    {
-//                        Log.Debug($"\tIndex: {count}");
-//                        Log.Debug($"\t\tLength: {@return.Length}");
-//
-//                        count++;
-//                    }
 
                     return responseEnvelope;
                 }
@@ -219,7 +225,7 @@ namespace POGOLib.Net
 
         internal void Heartbeat()
         {
-            MapObjects = GetMapObjects();
+            _poClient.MapObjects = GetMapObjects();
         }
     }
 }

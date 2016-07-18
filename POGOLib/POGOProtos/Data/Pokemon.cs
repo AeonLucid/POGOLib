@@ -23,26 +23,28 @@ namespace POGOProtos.Data {
     static PokemonReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChJEYXRhL1Bva2Vtb24ucHJvdG8SD1BPR09Qcm90b3MuRGF0YSKWBQoHUG9r",
-            "ZW1vbhIKCgJpZBgBIAEoBRISCgpwb2tlbW9uX2lkGAIgASgFEgoKAmNwGAMg",
-            "ASgFEg8KB3N0YW1pbmEYBCABKAUSEwoLc3RhbWluYV9tYXgYBSABKAUSDgoG",
-            "bW92ZV8xGAYgASgFEg4KBm1vdmVfMhgHIAEoBRIYChBkZXBsb3llZF9mb3J0",
-            "X2lkGAggASgFEhIKCm93bmVyX25hbWUYCSABKAkSDgoGaXNfZWdnGAogASgF",
-            "EhwKFGVnZ19rbV93YWxrZWRfdGFyZ2V0GAsgASgFEhsKE2VnZ19rbV93YWxr",
-            "ZWRfc3RhcnQYDCABKAUSDgoGb3JpZ2luGA4gASgFEhAKCGhlaWdodF9tGA8g",
-            "ASgCEhEKCXdlaWdodF9rZxgQIAEoAhIZChFpbmRpdmlkdWFsX2F0dGFjaxgR",
-            "IAEoBRIaChJpbmRpdmlkdWFsX2RlZmVuc2UYEiABKAUSGgoSaW5kaXZpZHVh",
-            "bF9zdGFtaW5hGBMgASgFEhUKDWNwX211bHRpcGxpZXIYFCABKAUSEAoIcG9r",
-            "ZWJhbGwYFSABKAUSGAoQY2FwdHVyZWRfY2VsbF9pZBgWIAEoBBIYChBiYXR0",
-            "bGVzX2F0dGFja2VkGBcgASgFEhgKEGJhdHRsZXNfZGVmZW5kZWQYGCABKAUS",
-            "GAoQZWdnX2luY3ViYXRvcl9pZBgZIAEoBRIYChBjcmVhdGlvbl90aW1lX21z",
-            "GBogASgEEhQKDG51bV91cGdyYWRlcxgbIAEoBRIgChhhZGRpdGlvbmFsX2Nw",
-            "X211bHRpcGxpZXIYHCABKAUSEAoIZmF2b3JpdGUYHSABKAUSEAoIbmlja25h",
-            "bWUYHiABKAkSEQoJZnJvbV9mb3J0GB8gASgFYgZwcm90bzM="));
+            "ChJEYXRhL1Bva2Vtb24ucHJvdG8SD1BPR09Qcm90b3MuRGF0YRoXRW51bXMv",
+            "UG9rZW1vblR5cGUucHJvdG8itwUKB1Bva2Vtb24SCgoCaWQYASABKAUSMwoM",
+            "cG9rZW1vbl90eXBlGAIgASgOMh0uUE9HT1Byb3Rvcy5FbnVtcy5Qb2tlbW9u",
+            "VHlwZRIKCgJjcBgDIAEoBRIPCgdzdGFtaW5hGAQgASgFEhMKC3N0YW1pbmFf",
+            "bWF4GAUgASgFEg4KBm1vdmVfMRgGIAEoBRIOCgZtb3ZlXzIYByABKAUSGAoQ",
+            "ZGVwbG95ZWRfZm9ydF9pZBgIIAEoBRISCgpvd25lcl9uYW1lGAkgASgJEg4K",
+            "BmlzX2VnZxgKIAEoCBIcChRlZ2dfa21fd2Fsa2VkX3RhcmdldBgLIAEoBRIb",
+            "ChNlZ2dfa21fd2Fsa2VkX3N0YXJ0GAwgASgFEg4KBm9yaWdpbhgOIAEoBRIQ",
+            "CghoZWlnaHRfbRgPIAEoAhIRCgl3ZWlnaHRfa2cYECABKAISGQoRaW5kaXZp",
+            "ZHVhbF9hdHRhY2sYESABKAUSGgoSaW5kaXZpZHVhbF9kZWZlbnNlGBIgASgF",
+            "EhoKEmluZGl2aWR1YWxfc3RhbWluYRgTIAEoBRIVCg1jcF9tdWx0aXBsaWVy",
+            "GBQgASgFEhAKCHBva2ViYWxsGBUgASgFEhgKEGNhcHR1cmVkX2NlbGxfaWQY",
+            "FiABKAQSGAoQYmF0dGxlc19hdHRhY2tlZBgXIAEoBRIYChBiYXR0bGVzX2Rl",
+            "ZmVuZGVkGBggASgFEhgKEGVnZ19pbmN1YmF0b3JfaWQYGSABKAUSGAoQY3Jl",
+            "YXRpb25fdGltZV9tcxgaIAEoBBIUCgxudW1fdXBncmFkZXMYGyABKAUSIAoY",
+            "YWRkaXRpb25hbF9jcF9tdWx0aXBsaWVyGBwgASgFEhAKCGZhdm9yaXRlGB0g",
+            "ASgFEhAKCG5pY2tuYW1lGB4gASgJEhEKCWZyb21fZm9ydBgfIAEoBVAAYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::POGOProtos.Enums.PokemonTypeReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Data.Pokemon), global::POGOProtos.Data.Pokemon.Parser, new[]{ "Id", "PokemonId", "Cp", "Stamina", "StaminaMax", "Move1", "Move2", "DeployedFortId", "OwnerName", "IsEgg", "EggKmWalkedTarget", "EggKmWalkedStart", "Origin", "HeightM", "WeightKg", "IndividualAttack", "IndividualDefense", "IndividualStamina", "CpMultiplier", "Pokeball", "CapturedCellId", "BattlesAttacked", "BattlesDefended", "EggIncubatorId", "CreationTimeMs", "NumUpgrades", "AdditionalCpMultiplier", "Favorite", "Nickname", "FromFort" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Data.Pokemon), global::POGOProtos.Data.Pokemon.Parser, new[]{ "Id", "PokemonType", "Cp", "Stamina", "StaminaMax", "Move1", "Move2", "DeployedFortId", "OwnerName", "IsEgg", "EggKmWalkedTarget", "EggKmWalkedStart", "Origin", "HeightM", "WeightKg", "IndividualAttack", "IndividualDefense", "IndividualStamina", "CpMultiplier", "Pokeball", "CapturedCellId", "BattlesAttacked", "BattlesDefended", "EggIncubatorId", "CreationTimeMs", "NumUpgrades", "AdditionalCpMultiplier", "Favorite", "Nickname", "FromFort" }, null, null, null)
           }));
     }
     #endregion
@@ -70,7 +72,7 @@ namespace POGOProtos.Data {
 
     public Pokemon(Pokemon other) : this() {
       id_ = other.id_;
-      pokemonId_ = other.pokemonId_;
+      pokemonType_ = other.pokemonType_;
       cp_ = other.cp_;
       stamina_ = other.stamina_;
       staminaMax_ = other.staminaMax_;
@@ -115,13 +117,13 @@ namespace POGOProtos.Data {
       }
     }
 
-    /// <summary>Field number for the "pokemon_id" field.</summary>
-    public const int PokemonIdFieldNumber = 2;
-    private int pokemonId_;
-    public int PokemonId {
-      get { return pokemonId_; }
+    /// <summary>Field number for the "pokemon_type" field.</summary>
+    public const int PokemonTypeFieldNumber = 2;
+    private global::POGOProtos.Enums.PokemonType pokemonType_ = 0;
+    public global::POGOProtos.Enums.PokemonType PokemonType {
+      get { return pokemonType_; }
       set {
-        pokemonId_ = value;
+        pokemonType_ = value;
       }
     }
 
@@ -197,8 +199,8 @@ namespace POGOProtos.Data {
 
     /// <summary>Field number for the "is_egg" field.</summary>
     public const int IsEggFieldNumber = 10;
-    private int isEgg_;
-    public int IsEgg {
+    private bool isEgg_;
+    public bool IsEgg {
       get { return isEgg_; }
       set {
         isEgg_ = value;
@@ -417,7 +419,7 @@ namespace POGOProtos.Data {
         return true;
       }
       if (Id != other.Id) return false;
-      if (PokemonId != other.PokemonId) return false;
+      if (PokemonType != other.PokemonType) return false;
       if (Cp != other.Cp) return false;
       if (Stamina != other.Stamina) return false;
       if (StaminaMax != other.StaminaMax) return false;
@@ -452,7 +454,7 @@ namespace POGOProtos.Data {
     public override int GetHashCode() {
       int hash = 1;
       if (Id != 0) hash ^= Id.GetHashCode();
-      if (PokemonId != 0) hash ^= PokemonId.GetHashCode();
+      if (PokemonType != 0) hash ^= PokemonType.GetHashCode();
       if (Cp != 0) hash ^= Cp.GetHashCode();
       if (Stamina != 0) hash ^= Stamina.GetHashCode();
       if (StaminaMax != 0) hash ^= StaminaMax.GetHashCode();
@@ -460,7 +462,7 @@ namespace POGOProtos.Data {
       if (Move2 != 0) hash ^= Move2.GetHashCode();
       if (DeployedFortId != 0) hash ^= DeployedFortId.GetHashCode();
       if (OwnerName.Length != 0) hash ^= OwnerName.GetHashCode();
-      if (IsEgg != 0) hash ^= IsEgg.GetHashCode();
+      if (IsEgg != false) hash ^= IsEgg.GetHashCode();
       if (EggKmWalkedTarget != 0) hash ^= EggKmWalkedTarget.GetHashCode();
       if (EggKmWalkedStart != 0) hash ^= EggKmWalkedStart.GetHashCode();
       if (Origin != 0) hash ^= Origin.GetHashCode();
@@ -493,9 +495,9 @@ namespace POGOProtos.Data {
         output.WriteRawTag(8);
         output.WriteInt32(Id);
       }
-      if (PokemonId != 0) {
+      if (PokemonType != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(PokemonId);
+        output.WriteEnum((int) PokemonType);
       }
       if (Cp != 0) {
         output.WriteRawTag(24);
@@ -525,9 +527,9 @@ namespace POGOProtos.Data {
         output.WriteRawTag(74);
         output.WriteString(OwnerName);
       }
-      if (IsEgg != 0) {
+      if (IsEgg != false) {
         output.WriteRawTag(80);
-        output.WriteInt32(IsEgg);
+        output.WriteBool(IsEgg);
       }
       if (EggKmWalkedTarget != 0) {
         output.WriteRawTag(88);
@@ -616,8 +618,8 @@ namespace POGOProtos.Data {
       if (Id != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
       }
-      if (PokemonId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PokemonId);
+      if (PokemonType != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) PokemonType);
       }
       if (Cp != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Cp);
@@ -640,8 +642,8 @@ namespace POGOProtos.Data {
       if (OwnerName.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(OwnerName);
       }
-      if (IsEgg != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(IsEgg);
+      if (IsEgg != false) {
+        size += 1 + 1;
       }
       if (EggKmWalkedTarget != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(EggKmWalkedTarget);
@@ -713,8 +715,8 @@ namespace POGOProtos.Data {
       if (other.Id != 0) {
         Id = other.Id;
       }
-      if (other.PokemonId != 0) {
-        PokemonId = other.PokemonId;
+      if (other.PokemonType != 0) {
+        PokemonType = other.PokemonType;
       }
       if (other.Cp != 0) {
         Cp = other.Cp;
@@ -737,7 +739,7 @@ namespace POGOProtos.Data {
       if (other.OwnerName.Length != 0) {
         OwnerName = other.OwnerName;
       }
-      if (other.IsEgg != 0) {
+      if (other.IsEgg != false) {
         IsEgg = other.IsEgg;
       }
       if (other.EggKmWalkedTarget != 0) {
@@ -814,7 +816,7 @@ namespace POGOProtos.Data {
             break;
           }
           case 16: {
-            PokemonId = input.ReadInt32();
+            pokemonType_ = (global::POGOProtos.Enums.PokemonType) input.ReadEnum();
             break;
           }
           case 24: {
@@ -846,7 +848,7 @@ namespace POGOProtos.Data {
             break;
           }
           case 80: {
-            IsEgg = input.ReadInt32();
+            IsEgg = input.ReadBool();
             break;
           }
           case 88: {

@@ -198,7 +198,7 @@ namespace POGOProtos.Map {
         = pb::FieldCodec.ForMessage(90, global::POGOProtos.Map.Pokemon.NearbyPokemon.Parser);
     private readonly pbc::RepeatedField<global::POGOProtos.Map.Pokemon.NearbyPokemon> nearbyPokemons_ = new pbc::RepeatedField<global::POGOProtos.Map.Pokemon.NearbyPokemon>();
     /// <summary>
-    ///  Pokemon father away than 2 steps, but still in the area.
+    ///  Pokemon farther away than 2 steps, but still in the area.
     /// </summary>
     public pbc::RepeatedField<global::POGOProtos.Map.Pokemon.NearbyPokemon> NearbyPokemons {
       get { return nearbyPokemons_; }

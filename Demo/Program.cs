@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security;
 using log4net;
 using POGOLib.Net;
 using POGOLib.Pokemon;
-using POGOLib.Util;
 using ConsoleUtil = Demo.Util.ConsoleUtil;
 
 namespace Demo
@@ -74,30 +72,30 @@ namespace Demo
                 client.SaveClientData();
             }
             
-//            var profile = client.RpcClient.GetProfile();
-//            Log.Info($"Username: {profile.Username}");
+            var profile = client.RpcClient.GetProfile();
+            Log.Info($"Username: {profile.Username}");
 
-            foreach (var mapCell in client.RpcClient.MapObjects.MapCells)
-            {
-                Log.Info($"CellId: {mapCell.S2CellId}");
-
-                foreach (var pokemon in mapCell.CatchablePokemons)
-                {
-                    Log.Info($"\tCatchablePokemon: {pokemon.PokemonType}");
-                    Log.Info($"\t\tExpiration: {TimeUtil.GetDateTimeFromMs(pokemon.ExpirationTimestampMs).AddHours(2)}"); // I'm in GMT+2 so I add two hours.
-                }
-
-                foreach (var pokemon in mapCell.NearbyPokemons)
-                {
-                    Log.Info($"\tNearbyPokemon: {pokemon.PokemonType}");
-                    Log.Info($"\t\tDistanceInMeters: {pokemon.DistanceInMeters}");
-                }
-
-                foreach (var wildPokemon in mapCell.WildPokemons)
-                {
-                    Log.Info($"\tWildPokemon: {wildPokemon.Pokemon.PokemonId}");
-                }
-            }
+//            foreach (var mapCell in client.MapObjects.MapCells)
+//            {
+//                Log.Info($"CellId: {mapCell.S2CellId}");
+//
+//                foreach (var pokemon in mapCell.CatchablePokemons)
+//                {
+//                    Log.Info($"\tCatchablePokemon: {pokemon.PokemonType}");
+//                    Log.Info($"\t\tExpiration: {TimeUtil.GetDateTimeFromMs(pokemon.ExpirationTimestampMs).AddHours(2)}"); // I'm in GMT+2 so I add two hours.
+//                }
+//
+//                foreach (var pokemon in mapCell.NearbyPokemons)
+//                {
+//                    Log.Info($"\tNearbyPokemon: {pokemon.PokemonType}");
+//                    Log.Info($"\t\tDistanceInMeters: {pokemon.DistanceInMeters}");
+//                }
+//
+//                foreach (var wildPokemon in mapCell.WildPokemons)
+//                {
+//                    Log.Info(JsonConvert.SerializeObject(wildPokemon, Formatting.Indented));
+//                }
+//            }
 
             // Make sure to save if you want to use save / loading.
             client.SaveClientData();
