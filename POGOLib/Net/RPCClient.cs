@@ -34,6 +34,7 @@ namespace POGOLib.Net
             _poClient = poClient;
             _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Configuration.ApiUserAgent);
+            _httpClient.DefaultRequestHeaders.ExpectContinue = false;
             _requestId = (ulong) new Random().Next(100000000, 999999999);
             _apiUrl = $"https://{GetApiEndpoint()}/rpc";
         }
