@@ -1,6 +1,6 @@
 ﻿namespace POGOLib
 {
-    internal static class Configuration
+    internal static class Constants
     {
         public const string ApiUrl = "https://pgorelease.nianticlabs.com/plfe/rpc";
         public const string ApiUserAgent = "Dalvik/2.1.0 (Linux; U; Android 6.0.1; ONEPLUS A3003 Build/MMB29M)";

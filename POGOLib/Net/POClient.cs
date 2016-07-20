@@ -23,7 +23,11 @@ namespace POGOLib.Net
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(PoClient));
 
-
+        /// <summary>
+        /// Initializes an instance of the <see cref="PoClient"/> class.
+        /// </summary>
+        /// <param name="username">The username to authenticate with.</param>
+        /// <param name="loginProvider">The login provider to authenticate with.</param>
         public PoClient(string username, LoginProvider loginProvider)
         {
             Uid = HashUtil.HashMD5(username + loginProvider).ToLower();
@@ -36,15 +40,25 @@ namespace POGOLib.Net
             Authenticated += OnAuthenticated;
         }
 
+        /// <summary>
+        /// Gets a unique user identifier for the <see cref="PoClient"/>.
+        /// </summary>
         public string Uid { get; }
+
+        /// <summary>
+        /// Gets the client-side data of the <see cref="PoClient"/>.
+        /// </summary>
         public ClientData ClientData { get; private set; }
 
         /// <summary>
-        /// <see cref="RpcClient"/> is used to manually send rpc requests to pokemon, use with caution.
+        /// Gets the underlying RPC client of the <see cref="PoClient"/>.
         /// </summary>
         public RpcClient RpcClient { get; private set; }
 
-        public bool HeartBeating { get; private set; }
+        /// <summary>
+        /// Gets whether the <see cref="PoClient"/> is current dispatching heartbeats.
+        /// </summary>
+        public bool IsHeartbeating { get; private set; }
 
         /// <summary>
         /// <see cref="GlobalSettings"/> is automatically updated and only accessible after authenticating.
@@ -52,15 +66,19 @@ namespace POGOLib.Net
         public GlobalSettings GlobalSettings { get; internal set; }
 
         /// <summary>
-        /// <see cref="MapObjects"/> is automatically updated and only accessible after authenticating.
+        /// Gets the map objects of the latest response in the <see cref="PoClient"/>.
         /// </summary>
         public GetMapObjectsResponse MapObjects { get; internal set; }
-        
+
         /// <summary>
-        /// <see cref="Inventory"/> is automatically updated and only accessible after authenticating.
+        /// Gets the inventory, according to the latest response in the <see cref="PoClient"/>.
         /// </summary>
         public InventoryDelta Inventory { get; internal set; }
 
+        /// <summary>
+        /// Loads the client data from a local destination.
+        /// </summary>
+        /// <returns></returns>
         public bool LoadClientData()
         {
             var saveDataPath = Path.Combine(Environment.CurrentDirectory, "savedata", $"{Uid}.json");
@@ -78,61 +96,72 @@ namespace POGOLib.Net
             return true;
         }
 
+        /// <summary>
+        /// Saves the client to a local destination.
+        /// </summary>
         public void SaveClientData()
         {
             File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "savedata", $"{Uid}.json"), JsonConvert.SerializeObject(ClientData, Formatting.Indented));
         }
 
+        /// <summary>
+        /// Authenticates using the <see cref="ClientData"/> along with a specific password.
+        /// </summary>
+        /// <param name="password">The password to authenticate with.</param>
+        /// <returns>True if the authentication was successful; otherwise false.</returns>
         public bool Authenticate(string password)
         {
-            if (ClientData.LoginProvider == LoginProvider.PokemonTrainerClub)
+            switch (ClientData.LoginProvider)
             {
-                using (var httpClientHandler = new HttpClientHandler())
+                case LoginProvider.PokemonTrainerClub:
                 {
-                    httpClientHandler.AllowAutoRedirect = false;
+                        using (var httpClientHandler = new HttpClientHandler())
+                        {
+                            httpClientHandler.AllowAutoRedirect = false;
 
-                    using (var httpClient = new HttpClient(httpClientHandler))
-                    {
-                        httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Configuration.LoginUserAgent);
+                            using (var httpClient = new HttpClient(httpClientHandler))
+                            {
+                                httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.LoginUserAgent);
 
-                        var loginData = GetLoginDataAsync(httpClient).Result;
-                        var ticket = PostLoginAsync(httpClient, loginData, password).Result;
+                                var loginData = GetLoginDataAsync(httpClient).Result;
+                                var ticket = PostLoginAsync(httpClient, loginData, password).Result;
 
-                        if (ticket == null)
+                                if (ticket == null)
+                                    return false;
+
+                                ClientData.AuthData = PostLoginOauthAsync(httpClient, ticket).Result;
+                                OnAuthenticated(EventArgs.Empty);
+
+                                return true;
+                            }
+                        }
+                }
+
+                case LoginProvider.GoogleAuth:
+                {
+                        var googleClient = new GPSOAuthClient(ClientData.Username, password);
+                        var masterLoginResponse = googleClient.PerformMasterLogin();
+
+                        if (masterLoginResponse.ContainsKey("Error") && masterLoginResponse["Error"] == "BadAuthentication")
                             return false;
 
-                        ClientData.AuthData = PostLoginOauthAsync(httpClient, ticket).Result;
+                        if (!masterLoginResponse.ContainsKey("Token"))
+                            throw new Exception("Token was missing from master login response.");
+
+                        var oauthResponse = googleClient.PerformOAuth(masterLoginResponse["Token"], Constants.GoogleAuthService, Constants.GoogleAuthApp, Constants.GoogleAuthClientSig);
+
+                        if (!oauthResponse.ContainsKey("Auth"))
+                            throw new Exception("Auth token was missing from oauth login response.");
+
+                        ClientData.AuthData = new AuthData
+                        {
+                            AccessToken = oauthResponse["Auth"],
+                            ExpireDateTime = TimeUtil.GetDateTimeFromS(int.Parse(oauthResponse["Expiry"]))
+                        };
                         OnAuthenticated(EventArgs.Empty);
 
                         return true;
                     }
-                }
-            }
-
-            if (ClientData.LoginProvider == LoginProvider.GoogleAuth)
-            {
-                var googleClient = new GPSOAuthClient(ClientData.Username, password);
-                var masterLoginResponse = googleClient.PerformMasterLogin();
-
-                if (masterLoginResponse.ContainsKey("Error") && masterLoginResponse["Error"] == "BadAuthentication")
-                    return false;
-
-                if (!masterLoginResponse.ContainsKey("Token"))
-                    throw new Exception("Token was missing from master login response.");
-                
-                var oauthResponse = googleClient.PerformOAuth(masterLoginResponse["Token"], Configuration.GoogleAuthService, Configuration.GoogleAuthApp, Configuration.GoogleAuthClientSig);
-
-                if(!oauthResponse.ContainsKey("Auth"))
-                    throw new Exception("Auth token was missing from oauth login response.");
-
-                ClientData.AuthData = new AuthData
-                {
-                    AccessToken = oauthResponse["Auth"],
-                    ExpireDateTime = TimeUtil.GetDateTimeFromS(int.Parse(oauthResponse["Expiry"]))
-                };
-                OnAuthenticated(EventArgs.Empty);
-
-                return true;
             }
 
             throw new Exception("Unknown login provider.");
@@ -140,7 +169,7 @@ namespace POGOLib.Net
 
         private async Task<LoginData> GetLoginDataAsync(HttpClient httpClient)
         {
-            var loginDataResponse = await httpClient.GetAsync(Configuration.LoginUrl);
+            var loginDataResponse = await httpClient.GetAsync(Constants.LoginUrl);
             var loginData = JsonConvert.DeserializeObject<LoginData>(await loginDataResponse.Content.ReadAsStringAsync());
 
             return loginData;
@@ -148,7 +177,7 @@ namespace POGOLib.Net
 
         private async Task<string> PostLoginAsync(HttpClient httpClient, LoginData loginData, string password)
         {
-            var loginResponse = await httpClient.PostAsync(Configuration.LoginUrl, new FormUrlEncodedContent(new Dictionary<string, string>
+            var loginResponse = await httpClient.PostAsync(Constants.LoginUrl, new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 {"lt", loginData.Lt},
                 {"execution", loginData.Execution},
@@ -178,7 +207,7 @@ namespace POGOLib.Net
 
         private async Task<AuthData> PostLoginOauthAsync(HttpClient httpClient, string ticket)
         {
-            var loginResponse = await httpClient.PostAsync(Configuration.LoginOauthUrl, new FormUrlEncodedContent(new Dictionary<string, string>
+            var loginResponse = await httpClient.PostAsync(Constants.LoginOauthUrl, new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 {"client_id", "mobile-app_pokemon-go"},
                 {"redirect_uri", "https://www.nianticlabs.com/pokemongo/error"},
@@ -200,21 +229,30 @@ namespace POGOLib.Net
             };
         }
 
+        /// <summary>
+        /// Determines whether there is GPS data.
+        /// </summary>
+        /// <returns></returns>
         public bool HasGpsData()
         {
-            return ClientData.GpsData != null;
+            return GpsData != null;
         }
 
-        public GpsData GetGpsData()
+        /// <summary>
+        /// Gets or sets the GPS data of the <see cref="PoClient"/>.
+        /// </summary>
+        public GpsData GpsData
         {
-            return ClientData.GpsData;
+            get { return ClientData.GpsData; }
+            set { ClientData.GpsData = value; }
         }
-
-        public void SetGpsData(GpsData gpsData)
-        {
-            ClientData.GpsData = gpsData;
-        }
-
+        
+        /// <summary>
+        /// Sets the GPS data to a specific latitude, longitude and altitude.
+        /// </summary>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="longitude">The longitude.</param>
+        /// <param name="altitude">The altitude.</param>
         public void SetGpsData(double latitude, double longitude, double altitude = 50.0)
         {
             if (!HasGpsData())
@@ -247,9 +285,12 @@ namespace POGOLib.Net
 
         private event EventHandler Authenticated;
         
+        /// <summary>
+        /// Starts sending heartbeats through the underlying <see cref="RpcClient"/>.
+        /// </summary>
         public void StartHeartbeats()
         {
-            if (HeartBeating)
+            if (IsHeartbeating)
             {
                 Log.Debug("Heartbeating has already been started.");
                 return;
@@ -263,13 +304,13 @@ namespace POGOLib.Net
                     throw new Exception("Couldn't fetch settings.");
             }
 
-            HeartBeating = true;
+            IsHeartbeating = true;
 
             new Thread(() =>
             {
                 var sleepTime = Convert.ToInt32(GlobalSettings.Map.GetMapObjectsMinRefreshSeconds) * 1000;
 
-                while (HeartBeating)
+                while (IsHeartbeating)
                 {
                     RpcClient.Heartbeat();
 
@@ -278,15 +319,18 @@ namespace POGOLib.Net
             }) { IsBackground = true }.Start();
         }
 
+        /// <summary>
+        /// Stops sending heartbeats through the underlying <see cref="RpcClient"/>.
+        /// </summary>
         public void StopHeartbeats()
         {
-            if (!HeartBeating)
+            if (!IsHeartbeating)
             {
                 Log.Debug("Heartbeating has already been stopped.");
                 return;
             }
 
-            HeartBeating = false;
+            IsHeartbeating = false;
         }
     }
 }

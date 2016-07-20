@@ -29,11 +29,15 @@ namespace POGOLib.Net
         private string _settingsHash;
         private long _lastInventoryTimestamp;
 
+        /// <summary>
+        /// Initializes an instance of the <see cref="RpcClient"/> class.
+        /// </summary>
+        /// <param name="poClient">The PO client.</param>
         public RpcClient(PoClient poClient)
         {
             _poClient = poClient;
             _httpClient = new HttpClient();
-            _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Configuration.ApiUserAgent);
+            _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.ApiUserAgent);
             _requestId = (ulong) new Random().Next(100000000, 999999999);
             _apiUrl = $"https://{GetApiEndpoint()}/rpc";
         }
@@ -48,7 +52,7 @@ namespace POGOLib.Net
 
         private string GetApiEndpoint()
         {
-            var response = SendRemoteProtocolCall(Configuration.ApiUrl, new Request
+            var response = SendRemoteProtocolCall(Constants.ApiUrl, new Request
             {
                 RequestType = RequestType.GetPlayer
             });
@@ -79,6 +83,10 @@ namespace POGOLib.Net
             return GetMapObjectsResponse.Parser.ParseFrom(response.Returns[0]);
         }
 
+        /// <summary>
+        /// Gets the player profile parsed from a response of the <see cref="RpcClient"/>.
+        /// </summary>
+        /// <returns></returns>
         public LocalPlayer GetProfile()
         {
             var response = SendRemoteProtocolCall(_apiUrl, new Request
