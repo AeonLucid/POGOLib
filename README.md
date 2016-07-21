@@ -1,13 +1,15 @@
 POGOLib
 ===================
 
-POGOLib is written in C# and aims to be a community-driven PokémonGo API. Feel free to submit pull requests.
+*I am rewriting POGOLib at the moment, please do not submit PRs until the rewritten version is pushed.*
+
+POGOLib is written in C# and aims to be a community-driven PokÃ©monGo API. Feel free to submit pull requests.
 
 Libraries
 -------
 These libraries are used and should be installed automatically through NuGet:
 
- - [Google Protocol Buffers C# 3.0.0-beta3](https://www.nuget.org/packages/Google.Protobuf) (For communicating with PokémonGO)
+ - [Google Protocol Buffers C# 3.0.0-beta3](https://www.nuget.org/packages/Google.Protobuf) (For communicating with PokÃ©monGO)
  - [Newtonsoft.Json 9.0.1](https://www.nuget.org/packages/newtonsoft.json/) (For the PTC login flow and savedata)
  - [log4net [1.2.15] 2.0.5](https://www.nuget.org/packages/log4net/) (For debug logging)
  - [S2 Geometry Library 1.0.1](https://www.nuget.org/packages/S2Geometry/1.0.1) (For calculating the necessary cells)
