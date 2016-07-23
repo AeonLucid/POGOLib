@@ -69,54 +69,63 @@ namespace POGOLib.Net
         /// <summary>
         /// It is not recommended to call this. Map objects will update automatically and fire the <see cref="Map.Update"/> event.
         /// </summary>
-        public void Startup()
+        public bool Startup()
         {
-            ByteString response;
-            // Send GetPlayer to check if we're connected and authenticated
-            GetPlayerResponse playerResponse = null;
-            do
+            try
             {
+                ByteString response;
+                // Send GetPlayer to check if we're connected and authenticated
+                GetPlayerResponse playerResponse = null;
+                do
+                {
+                    response = SendRemoteProcedureCall(new Request
+                    {
+                        RequestType = RequestType.GetPlayer
+                    });
+                    playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
+                    if (!playerResponse.Success)
+                        Thread.Sleep(1000);
+                }
+                while (!playerResponse.Success);
+
+                // Get DownloadRemoteConfig
                 response = SendRemoteProcedureCall(new Request
                 {
-                    RequestType = RequestType.GetPlayer
+                    RequestType = RequestType.DownloadRemoteConfigVersion,
+                    RequestMessage = new DownloadRemoteConfigVersionMessage
+                    {
+                        Platform = POGOProtos.Enums.Platform.Android,
+                        AppVersion = 2903
+                    }.ToByteString()
                 });
-                playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
-                if (!playerResponse.Success)
-                    Thread.Sleep(1000);
+
+                // GetAssetDigest
+                response = SendRemoteProcedureCall(new Request
+                {
+                    RequestType = RequestType.GetAssetDigest,
+                    RequestMessage = new GetAssetDigestMessage
+                    {
+                        Platform = POGOProtos.Enums.Platform.Android,
+                        AppVersion = 2903
+                    }.ToByteString()
+                });
+
+                // LevelUp Rewards
+                response = SendRemoteProcedureCall(new Request
+                {
+                    RequestType = RequestType.LevelUpRewards,
+                    RequestMessage = new LevelUpRewardsMessage
+                    {
+                        Level = _session.Player.Stats.Level
+                    }.ToByteString()
+                });  
             }
-            while (!playerResponse.Success);
-
-            // Get DownloadRemoteConfig
-            response = SendRemoteProcedureCall(new Request
+            catch (Exception)
             {
-                RequestType = RequestType.DownloadRemoteConfigVersion,
-                RequestMessage = new DownloadRemoteConfigVersionMessage
-                {
-                    Platform = POGOProtos.Enums.Platform.Android,
-                    AppVersion = 2903
-                }.ToByteString()
-            });
+                return false;
+            }
 
-            // GetAssetDigest
-            response = SendRemoteProcedureCall(new Request
-            {
-                RequestType = RequestType.GetAssetDigest,
-                RequestMessage = new GetAssetDigestMessage
-                {
-                    Platform = POGOProtos.Enums.Platform.Android,
-                    AppVersion = 2903
-                }.ToByteString()
-            });
-
-            // LevelUp Rewards
-            response = SendRemoteProcedureCall(new Request
-            {
-                RequestType = RequestType.LevelUpRewards,
-                RequestMessage = new LevelUpRewardsMessage
-                {
-                    Level = _session.Player.Stats.Level
-                }.ToByteString()
-            });
+            return true;
         }
 
         /// <summary>

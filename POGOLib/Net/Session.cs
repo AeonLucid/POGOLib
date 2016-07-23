@@ -32,11 +32,17 @@ namespace POGOLib.Net
 
             RpcClient = new RpcClient(this);
 
-            // Moved to RpcClient.Startup
-            //RpcClient.SendRemoteProcedureCall(RequestType.GetPlayer);
-            //RpcClient.RefreshMapObjects();
-
             _heartbeat = new HeartbeatDispatcher(this);
+        }
+
+        public bool Startup()
+        {
+            if (!RpcClient.Startup())
+                return false;
+
+            _heartbeat.StartDispatcher();
+
+            return true;
         }
 
         /// <summary>

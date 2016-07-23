@@ -22,10 +22,6 @@ namespace POGOLib.Pokemon
         internal HeartbeatDispatcher(Session session)
         {
             _session = session;
-            new Thread(CheckDispatch)
-            {
-                IsBackground = true
-            }.Start();
         }
 
         /// <summary>
@@ -83,7 +79,15 @@ namespace POGOLib.Pokemon
                 Thread.Sleep(1000);
             }
         }
-        
+
+        internal void StartDispatcher()
+        {
+            new Thread(CheckDispatch)
+            {
+                IsBackground = true
+            }.Start();
+        }
+
         private void Dispatch()
         {
             _session.RpcClient.RefreshMapObjects();
