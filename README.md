@@ -148,7 +148,7 @@ foreach (var fortData in session.Map.GetFortsSortedByDistance(f => f.Type == For
 
 			foreach (var itemAward in fortSearchResponse.ItemsAwarded)
 			{
-				Console.WriteLine($"\n({itemAward.ItemCount}) {itemAward.ItemId}");
+				Console.WriteLine($"\t({itemAward.ItemCount}) {itemAward.ItemId}");
 			}
 		}
 		else
