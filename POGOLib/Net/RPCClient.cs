@@ -468,6 +468,9 @@ namespace POGOLib.Net
                             {
                                 _session.GlobalSettings = downloadSettings.Settings;
                             }
+
+                            _session.Player.Inventory.BaseBagItems = _session.GlobalSettings.InventorySettings.BaseBagItems;
+                            _session.Player.Inventory.BasePokemon = _session.GlobalSettings.InventorySettings.BasePokemon;
                         }
                         else
                         {

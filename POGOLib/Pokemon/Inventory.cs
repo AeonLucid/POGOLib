@@ -39,6 +39,16 @@ namespace POGOLib.Pokemon
             }
         }
 
+        /// <summary>
+        /// Base maximum amount of items a player can hold (can be extended)
+        /// </summary>
+        public int BaseBagItems { get; internal set; }
+
+        /// <summary>
+        /// Base maximum amount of pokemon a player can hold (can be extended)
+        /// </summary>
+        public int BasePokemon { get; internal set; }
+
         internal void OnUpdate()
         {
             Update?.Invoke(this, EventArgs.Empty);
