@@ -24,4 +24,3 @@ build:
 artifacts:
   - path: POGOLib\bin\Release\POGOLib.dll
     name: POGOLib.dll
-  - path: '**\*.nupkg'
