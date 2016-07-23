@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+#if MONO
+using GeoCoordinatePortable;
+#else
 using System.Device.Location;
+#endif
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using DankMemes.GPSOAuthSharp;

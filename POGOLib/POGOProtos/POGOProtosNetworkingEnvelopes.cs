@@ -239,7 +239,7 @@ namespace POGOProtos.Networking.Envelopes {
 
   }
 
-  public sealed partial class RequestEnvelope : pb::IMessage<RequestEnvelope> {
+  public sealed partial class RequestEnvelope : Google.Protobuf.IMessage<RequestEnvelope> {
     private static readonly pb::MessageParser<RequestEnvelope> _parser = new pb::MessageParser<RequestEnvelope>(() => new RequestEnvelope());
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pb::MessageParser<RequestEnvelope> Parser { get { return _parser; } }
@@ -620,7 +620,7 @@ namespace POGOProtos.Networking.Envelopes {
     /// <summary>Container for nested types declared in the RequestEnvelope message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static partial class Types {
-      public sealed partial class AuthInfo : pb::IMessage<AuthInfo> {
+      public sealed partial class AuthInfo : Google.Protobuf.IMessage<AuthInfo> {
         private static readonly pb::MessageParser<AuthInfo> _parser = new pb::MessageParser<AuthInfo>(() => new AuthInfo());
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pb::MessageParser<AuthInfo> Parser { get { return _parser; } }
@@ -773,7 +773,7 @@ namespace POGOProtos.Networking.Envelopes {
         /// <summary>Container for nested types declared in the AuthInfo message type.</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static partial class Types {
-          public sealed partial class JWT : pb::IMessage<JWT> {
+          public sealed partial class JWT : Google.Protobuf.IMessage<JWT> {
             private static readonly pb::MessageParser<JWT> _parser = new pb::MessageParser<JWT>(() => new JWT());
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
             public static pb::MessageParser<JWT> Parser { get { return _parser; } }
