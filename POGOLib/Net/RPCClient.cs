@@ -168,6 +168,18 @@ namespace POGOLib.Net
                 });
             }
 
+
+            //If Incense is active we add this:
+            //request.Add(new Request
+            //{
+            //    RequestType = RequestType.GetIncensePokemon,
+            //    RequestMessage = new GetIncensePokemonMessage
+            //    {
+            //        PlayerLatitude = _session.Player.Coordinate.Latitude,
+            //        PlayerLongitude = _session.Player.Coordinate.Longitude
+            //    }
+            //});
+
             return request;
         }
 
