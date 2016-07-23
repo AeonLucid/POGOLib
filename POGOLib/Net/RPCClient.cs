@@ -239,7 +239,7 @@ namespace POGOLib.Net
             //    {
             //        PlayerLatitude = _session.Player.Coordinate.Latitude,
             //        PlayerLongitude = _session.Player.Coordinate.Longitude
-            //    }
+            //    }.ToByteString()
             //});
 
             return request;
