@@ -63,7 +63,7 @@ namespace POGOLib.Pokemon
                         else if (metersMoved >= minDistance)
                         {
                             if (Configuration.Debug)
-                                Log.Debug("Refreshing MapObjects, reason: 'metersMoved >= maxDistance'.");
+                                Log.Debug("Refreshing MapObjects, reason: 'metersMoved >= minDistance'.");
 
                             canRefresh = true;
                         }
