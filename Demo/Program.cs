@@ -45,6 +45,9 @@ namespace Demo
                 session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
                 session.Player.Inventory.Update += InventoryOnUpdate;
                 session.Map.Update += MapOnUpdate;
+
+                // Send initial requests and start HeartbeatDispatcher
+                session.Startup();
                 
                 var fortDetailsBytes = session.RpcClient.SendRemoteProcedureCall(new Request
                 {
