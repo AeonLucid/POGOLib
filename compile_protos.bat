@@ -1,6 +1,6 @@
 @echo off
 
 cd POGOProtos
-python compile.py -l csharp -o ..\POGOLib\POGOProtos
+python compile_single.py -l csharp -o ..\POGOLib\POGOProtos
 
 pause

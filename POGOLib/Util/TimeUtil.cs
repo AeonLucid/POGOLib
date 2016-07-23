@@ -4,22 +4,34 @@ namespace POGOLib.Util
 {
     public static class TimeUtil
     {
-
         private static DateTime _posixTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        public static long GetCurrentTimestampInMs()
+        /// <summary>
+        /// Returns the current unix timestamp in milliseconds (UTC).
+        /// </summary>
+        /// <returns></returns>
+        public static long GetCurrentTimestampInMilliseconds()
         {
-            return (long) (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds;
+            return (long) (DateTime.UtcNow - _posixTime).TotalMilliseconds;
         }
 
-        public static DateTime GetDateTimeFromMs(long timestampMs)
+        /// <summary>
+        /// Returns the current unix timestamp in seconds (UTC).
+        /// </summary>
+        /// <returns></returns>
+        public static long GetCurrentTimestampInSeconds()
         {
-            return _posixTime.AddMilliseconds(timestampMs);
+            return (long)(DateTime.UtcNow - _posixTime).TotalSeconds;
         }
 
-        public static DateTime GetDateTimeFromS(int timestampS)
+        public static DateTime GetDateTimeFromMilliseconds(long timestampMilliseconds)
         {
-            return _posixTime.AddSeconds(timestampS);
+            return _posixTime.AddMilliseconds(timestampMilliseconds);
+        }
+
+        public static DateTime GetDateTimeFromSeconds(int timestampSeconds)
+        {
+            return _posixTime.AddSeconds(timestampSeconds);
         }
     }
 }

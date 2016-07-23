@@ -1,18 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using Google.Protobuf;
 using log4net;
+using Newtonsoft.Json;
+using POGOLib;
 using POGOLib.Net;
-using POGOLib.Pokemon;
-using ConsoleUtil = Demo.Util.ConsoleUtil;
+using POGOLib.Net.Authentication;
+using POGOLib.Net.Authentication.Data;
+using POGOLib.Pokemon.Data;
+using POGOLib.Util;
+using POGOProtos.Map.Fort;
+using POGOProtos.Networking.Requests;
+using POGOProtos.Networking.Requests.Messages;
+using POGOProtos.Networking.Responses;
 
 namespace Demo
 {
     public class Program
     {
-        public static string SaveDataPath { get; private set; }
-        
-        private static readonly ILog Log = LogManager.GetLogger(typeof(PoClient));
+
+        private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
 
         /// <summary>
         /// This is just a demo application to test out the library / show a bit how it works.
@@ -20,110 +27,136 @@ namespace Demo
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
+            Log.Info("Booting up.");
+            Log.Info("Type 'q', 'quit' or 'exit' to exit.");
             Console.Title = "POGO Demo";
 
-            var arguments = ParseArguments(args);
-
-            SaveDataPath = Path.Combine(Environment.CurrentDirectory, "savedata");
-            if (!Directory.Exists(SaveDataPath)) Directory.CreateDirectory(SaveDataPath);
-            
-            string username;
-
-            if (!arguments.ContainsKey("username"))
+            var arguments = new Arguments();
+            if (CommandLine.Parser.Default.ParseArguments(args, arguments))
             {
-                Log.Info("Hi, please enter your PTC details.");
+                Configuration.Debug = arguments.Debug;
 
-                Console.Write("Username: ");
-                username = Console.ReadLine();
-            }
-            else
-            {
-                username = arguments["username"];
-            }
+                var latitude = 51.507351; // Somewhere in London
+                var longitude = -0.127758;
+                var session = GetSession(arguments.Username, arguments.Password, arguments.LoginProvider, latitude, longitude, true);
 
-            var loginProvider = LoginProvider.PokemonTrainerClub;
+                SaveAccessToken(session.AccessToken);
 
-            if (arguments.ContainsKey("auth"))
-            {
-                if(arguments["auth"] == "google") loginProvider = LoginProvider.GoogleAuth;
-            }
-
-            var client = new PoClient(username, loginProvider);
-            // Load previous data.
-            if (!client.LoadClientData())
-            {
-                Console.Write("Password: ");
-                var password = ConsoleUtil.ReadLineMasked();
+                session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
+                session.Player.Inventory.Update += InventoryOnUpdate;
+                session.Map.Update += MapOnUpdate;
                 
-                // Need to set initial gps data before authenticating!
-                if (!client.HasGpsData())
+                var fortDetailsBytes = session.RpcClient.SendRemoteProcedureCall(new Request
                 {
-                    Console.Write("First time lat: ");
-                    var latitude = Console.ReadLine()?.Replace(".", ",");
-                    Console.Write("First time long: ");
-                    var longitude = Console.ReadLine()?.Replace(".", ",");
-
-                    client.SetGpsData(double.Parse(latitude), double.Parse(longitude));
-                }
-
-                if(!client.Authenticate(password))
-                    throw new Exception("Wrong password.");
-
-                client.SaveClientData();
+                    RequestType = RequestType.FortDetails,
+                    RequestMessage = new FortDetailsMessage
+                    {
+                        FortId = "e4a5b5a63cf34100bd620c598597f21c.12",
+                        Latitude = 51.507335,
+                        Longitude = -0.127689
+                    }.ToByteString()
+                });
+                var fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(fortDetailsBytes);
+                    
+                Console.WriteLine(JsonConvert.SerializeObject(fortDetailsResponse, Formatting.Indented));
             }
             
-            var profile = client.RpcClient.GetProfile();
-            Log.Info($"Username: {profile.Username}");
-
-//            foreach (var mapCell in client.MapObjects.MapCells)
-//            {
-//                Log.Info($"CellId: {mapCell.S2CellId}");
-//
-//                foreach (var pokemon in mapCell.CatchablePokemons)
-//                {
-//                    Log.Info($"\tCatchablePokemon: {pokemon.PokemonType}");
-//                    Log.Info($"\t\tExpiration: {TimeUtil.GetDateTimeFromMs(pokemon.ExpirationTimestampMs).AddHours(2)}"); // I'm in GMT+2 so I add two hours.
-//                }
-//
-//                foreach (var pokemon in mapCell.NearbyPokemons)
-//                {
-//                    Log.Info($"\tNearbyPokemon: {pokemon.PokemonType}");
-//                    Log.Info($"\t\tDistanceInMeters: {pokemon.DistanceInMeters}");
-//                }
-//
-//                foreach (var wildPokemon in mapCell.WildPokemons)
-//                {
-//                    Log.Info(JsonConvert.SerializeObject(wildPokemon, Formatting.Indented));
-//                }
-//            }
-
-            // Make sure to save if you want to use save / loading.
-            client.SaveClientData();
-
-            Console.ReadKey();
+            HandleCommands();
         }
 
-        private static Dictionary<string, string> ParseArguments(IEnumerable<string> args)
+        private static void SessionOnAccessTokenUpdated(object sender, EventArgs eventArgs)
         {
-            var arguments = new Dictionary<string, string>();
+            var session = (Session)sender;
 
-            foreach (var s in args)
+            SaveAccessToken(session.AccessToken);
+
+            Log.Info("Saved access token to file.");
+        }
+
+        private static void InventoryOnUpdate(object sender, EventArgs eventArgs)
+        {
+            Log.Info("Inventory was updated.");
+        }
+
+        private static void MapOnUpdate(object sender, EventArgs eventArgs)
+        {
+            Log.Info("Map was updated.");
+        }
+
+        private static void SaveAccessToken(AccessToken accessToken)
+        {
+            var fileName = Path.Combine(Environment.CurrentDirectory, "cache", $"{accessToken.Uid}.json");
+            
+            File.WriteAllText(fileName, JsonConvert.SerializeObject(accessToken, Formatting.Indented));
+        }
+
+        private static void HandleCommands()
+        {
+            var keepRunning = true;
+
+            while (keepRunning)
             {
-                if (!s.StartsWith("--") || !s.Contains("="))
+                var command = Console.ReadLine();
+
+                switch (command)
                 {
-                    Log.Error($"Invalid argument: '{s}'");
-                    throw new ArgumentException(nameof(s));
+                    case "q":
+                    case "quit":
+                    case "exit":
+                        keepRunning = false;
+                        break;
                 }
+            }
+        }
 
-                var argument = s.Substring(2, s.Length - 2);
-                var equalPos = s.IndexOf("=", StringComparison.Ordinal) - 2;
-                var key = argument.Substring(0, equalPos);
-                var value = argument.Substring(equalPos + 1, argument.Length - key.Length - 1);
+        /// <summary>
+        /// Login to PokémonGo and return an authenticated <see cref="Session"/>.
+        /// </summary>
+        /// <param name="username">The username of your PTC / Google account.</param>
+        /// <param name="password">The password of your PTC / Google account.</param>
+        /// <param name="loginProviderStr">Must be 'PTC' or 'Google'.</param>
+        /// <param name="initLat">The initial latitude.</param>
+        /// <param name="initLong">The initial longitude.</param>
+        /// <param name="mayCache">Can we cache the <see cref="AccessToken"/> to a local file?</param>
+        private static Session GetSession(string username, string password, string loginProviderStr, double initLat, double initLong, bool mayCache = false)
+        {
+            var loginProvider = ResolveLoginProvider(loginProviderStr);
+            var cacheDir = Path.Combine(Environment.CurrentDirectory, "cache");
+            var fileName = Path.Combine(cacheDir, $"{username}-{loginProvider}.json");
 
-                arguments.Add(key, value);
+            if (mayCache)
+            {
+                if (!Directory.Exists(cacheDir))
+                    Directory.CreateDirectory(cacheDir);
+
+                if (File.Exists(fileName))
+                {
+                    var accessToken = JsonConvert.DeserializeObject<AccessToken>(File.ReadAllText(fileName));
+
+                    if (!accessToken.IsExpired)
+                        return Login.GetSession(accessToken, password, initLat, initLong);
+                }
             }
 
-            return arguments;
+            var session = Login.GetSession(username, password, loginProvider, initLat, initLong);
+
+            if (mayCache)
+                SaveAccessToken(session.AccessToken);
+
+            return session;
+        }
+
+        private static LoginProvider ResolveLoginProvider(string loginProvider)
+        {
+            switch (loginProvider)
+            {
+                case "PTC":
+                    return LoginProvider.PokemonTrainerClub;
+                case "Google":
+                    return LoginProvider.GoogleAuth;
+                default:
+                    throw new Exception($"The login method '{loginProvider}' is not supported.");
+            }
         }
     }
 }

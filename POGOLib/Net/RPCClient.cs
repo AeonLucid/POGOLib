@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Device.Location;
+using System.Net;
 using System.Net.Http;
+using System.Text.RegularExpressions;
+using System.Threading;
 using Google.Protobuf;
+using Google.Protobuf.Collections;
 using log4net;
 using POGOLib.Pokemon;
+using POGOLib.Pokemon.Data;
 using POGOLib.Util;
-using POGOProtos;
+using POGOProtos.Map;
+using POGOProtos.Networking.Envelopes;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
-using static POGOProtos.Networking.Envelopes.Types;
-using static POGOProtos.Networking.Envelopes.Types.RequestEnvelope.Types;
-using static POGOProtos.Networking.Envelopes.Types.RequestEnvelope.Types.AuthInfo.Types;
+using static POGOProtos.Networking.Envelopes.RequestEnvelope.Types;
+using static POGOProtos.Networking.Envelopes.RequestEnvelope.Types.AuthInfo.Types;
 
 namespace POGOLib.Net
 {
@@ -20,84 +25,110 @@ namespace POGOLib.Net
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(RpcClient));
 
-        private readonly PoClient _poClient;
-        private readonly HttpClient _httpClient;
-        private ulong _requestId;
-        private readonly string _apiUrl;
-        private AuthTicket _authTicket;
-
-        private string _settingsHash;
-        private long _lastInventoryTimestamp;
+        /// <summary>
+        /// The authenticated <see cref="Session"/>.
+        /// </summary>
+        private readonly Session _session;
 
         /// <summary>
-        /// Initializes an instance of the <see cref="RpcClient"/> class.
+        /// The <see cref="HttpClient"/> used for communication with PokémonGo.
         /// </summary>
-        /// <param name="poClient">The PO client.</param>
-        public RpcClient(PoClient poClient)
+        private readonly HttpClient _httpClient;
+
+        /// <summary>
+        /// The rpc url we have to call.
+        /// </summary>
+        private string _requestUrl;
+
+        /// <summary>
+        /// The current 'unique' request id we are at.
+        /// </summary>
+        private ulong _requestId;
+
+        internal RpcClient(Session session)
         {
-            _poClient = poClient;
-            _httpClient = new HttpClient();
+            _session = session;
+
+            var httpClientHandler = new HttpClientHandler
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+
+            _httpClient = new HttpClient(httpClientHandler);
             _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.ApiUserAgent);
             _httpClient.DefaultRequestHeaders.ExpectContinue = false;
             _requestId = (ulong) new Random().Next(100000000, 999999999);
-            _apiUrl = $"https://{GetApiEndpoint()}/rpc";
         }
 
-        private ulong RequestId
-        {
-            get {
-                _requestId = _requestId + 1;
-                return _requestId;
-            }
-        }
+        internal DateTime LastRpcRequest { get; private set; }
 
-        private string GetApiEndpoint()
-        {
-            var response = SendRemoteProtocolCall(Constants.ApiUrl, new Request
-            {
-                RequestType = RequestType.GetPlayer
-            });
+        internal DateTime LastRpcMapObjectsRequest { get; private set; }
 
-            return response.ApiUrl;
-        }
+        internal GeoCoordinate LastGeoCoordinateMapObjectsRequest { get; private set; } = new GeoCoordinate();
 
-        private GetMapObjectsResponse GetMapObjects()
+        /// <summary>
+        /// It is not recommended to call this. Map objects will update automatically and fire the <see cref="Map.Update"/> event.
+        /// </summary>
+        public void RefreshMapObjects()
         {
-            var cellIds = MapUtil.GetCellIdsForLatLong(_poClient.ClientData.GpsData.Latitude, _poClient.ClientData.GpsData.Longitude);
+            var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
             var sinceTimeMs = new List<long>(cellIds.Length);
 
             for (var i = 0; i < cellIds.Length; i++)
                 sinceTimeMs.Add(0);
 
-            var response = SendRemoteProtocolCall(_apiUrl, new Request
+            var response = SendRemoteProcedureCall(new Request
             {
                 RequestType = RequestType.GetMapObjects,
                 RequestMessage = new GetMapObjectsMessage
                 {
-                    CellId = {cellIds},
-                    SinceTimestampMs = { sinceTimeMs.ToArray() },
-                    Latitude = _poClient.ClientData.GpsData.Latitude,
-                    Longitude = _poClient.ClientData.GpsData.Longitude
+                    CellId =
+                    {
+                        cellIds
+                    },
+                    SinceTimestampMs =
+                    {
+                        sinceTimeMs.ToArray()
+                    },
+                    Latitude = _session.Player.Coordinate.Latitude,
+                    Longitude = _session.Player.Coordinate.Longitude
                 }.ToByteString()
             });
 
-            return GetMapObjectsResponse.Parser.ParseFrom(response.Returns[0]);
+            var mapObjects = GetMapObjectsResponse.Parser.ParseFrom(response);
+
+            if (mapObjects.Status == MapObjectsStatus.Success)
+            {
+                if (Configuration.Debug)
+                    Log.Debug($"Received '{mapObjects.MapCells.Count}' map cells.");
+
+                if (mapObjects.MapCells.Count == 0)
+                {
+                    Log.Error("We received 0 map cells, are your GPS coordinates correct?");
+                    return;
+                }
+
+                _session.Map.Cells = mapObjects.MapCells;
+            }
+            else
+            {
+                Log.Error($"GetMapObjects status is: '{mapObjects.Status}'.");
+            }
         }
 
         /// <summary>
-        /// Gets the player profile parsed from a response of the <see cref="RpcClient"/>.
+        /// Gets the next <see cref="_requestId"/> for the <see cref="RequestEnvelope"/>.
         /// </summary>
         /// <returns></returns>
-        public LocalPlayer GetProfile()
+        private ulong GetNextRequestId()
         {
-            var response = SendRemoteProtocolCall(_apiUrl, new Request
-            {
-                RequestType = RequestType.GetPlayer
-            });
-
-            return GetPlayerResponse.Parser.ParseFrom(response.Returns[0]).LocalPlayer;
+            return _requestId++;
         }
 
+        /// <summary>
+        /// Gets a collection of requests that should be sent in every request to PokémonGo along with your own <see cref="Request"/>.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerable<Request> GetDefaultRequests()
         {
             return new[]
@@ -111,7 +142,7 @@ namespace POGOLib.Net
                     RequestType = RequestType.GetInventory,
                     RequestMessage = new GetInventoryMessage
                     {
-                       LastTimestampMs = _lastInventoryTimestamp
+                       LastTimestampMs = _session.Player.Inventory.LastInventoryTimestampMs
                     }.ToByteString()
                 },
                 new Request
@@ -129,112 +160,244 @@ namespace POGOLib.Net
             };
         }
 
-        private ResponseEnvelope SendRemoteProtocolCall(string apiUrl, Request request)
+        /// <summary>
+        /// Gets a <see cref="RequestEnvelope"/> with the default requests and authentication data.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        private RequestEnvelope GetRequestEnvelope(Request request)
         {
-            if (!_poClient.HasGpsData())
-                throw new Exception("No gps data has been set, can't send a rpc call.");
-
             var requestEnvelope = new RequestEnvelope
             {
                 StatusCode = 2,
-                RequestId = RequestId,
-                Latitude = _poClient.ClientData.GpsData.Latitude,
-                Longitude = _poClient.ClientData.GpsData.Longitude,
-                Altitude = _poClient.ClientData.GpsData.Altitude,
+                RequestId = GetNextRequestId(),
+                Latitude = _session.Player.Coordinate.Latitude,
+                Longitude = _session.Player.Coordinate.Longitude,
+                Altitude = _session.Player.Coordinate.Altitude,
                 Unknown12 = 123, // TODO: Figure this out.
                 Requests = { GetDefaultRequests() }
             };
 
-            if (_authTicket == null)
+            if (_session.AccessToken.AuthTicket == null || _session.AccessToken.IsExpired)
             {
+                if (_session.AccessToken.IsExpired)
+                    _session.Reauthenticate();
+
                 requestEnvelope.AuthInfo = new AuthInfo
                 {
-                    Provider = _poClient.ClientData.LoginProvider == LoginProvider.PokemonTrainerClub ? "ptc" : "google",
+                    Provider = _session.AccessToken.LoginProvider == LoginProvider.PokemonTrainerClub ? "ptc" : "google",
                     Token = new JWT
                     {
-                        Contents = _poClient.ClientData.AuthData.AccessToken,
+                        Contents = _session.AccessToken.Token,
                         Unknown2 = 59
                     }
                 };
             }
             else
             {
-                requestEnvelope.AuthTicket = _authTicket;
+                requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
             }
 
             requestEnvelope.Requests.Insert(0, request);
 
-            using (var memoryStream = new MemoryStream())
-            {
-                requestEnvelope.WriteTo(memoryStream);
+            return requestEnvelope;
+        }
 
-                using (var response = _httpClient.PostAsync(apiUrl, new ByteArrayContent(memoryStream.ToArray())).Result)
+        /// <summary>
+        /// Prepares the <see cref="RequestEnvelope"/> to be sent with <see cref="_httpClient"/>.
+        /// </summary>
+        /// <param name="requestEnvelope">The <see cref="RequestEnvelope"/> that will be send.</param>
+        /// <returns><see cref="StreamContent"/> to be sent with <see cref="_httpClient"/>.</returns>
+        private ByteArrayContent PrepareRequestEnvelope(RequestEnvelope requestEnvelope)
+        {
+            var messageBytes = requestEnvelope.ToByteArray();
+
+            // TODO: Compression?
+
+            return new ByteArrayContent(messageBytes);
+        }
+
+        public ByteString SendRemoteProcedureCall(RequestType requestType)
+        {
+            return SendRemoteProcedureCall(new Request
+            {
+                RequestType = requestType
+            });
+        }
+
+        public ByteString SendRemoteProcedureCall(Request request)
+        {
+            var requestEnvelope = GetRequestEnvelope(request);
+
+            using (var requestData = PrepareRequestEnvelope(requestEnvelope))
+            {
+                using (var response = _httpClient.PostAsync(_requestUrl ?? Constants.ApiUrl, requestData).Result)
                 {
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        if (Configuration.Debug)
+                            Log.Debug(response.Content.ReadAsStringAsync().Result);
+
+                        throw new Exception("Received a non-success HTTP status code from the RPC server, see the console for the response.");
+                    }
+
                     var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
                     var responseEnvelope = ResponseEnvelope.Parser.ParseFrom(responseBytes);
 
-                    if (_authTicket == null && responseEnvelope.AuthTicket != null)
-                        _authTicket = responseEnvelope.AuthTicket;
-
-                    Log.Debug($"Received {responseBytes.Length} bytes.");
-
-                    // Problems:
-                    // 5 Payloads are received but only the first one (request) is made available.
-                    // Fix the other 4.
-                    // Also assign to property with a private set and public get.
-
-                    // 0 = request
-                    // 1 = GetHatchedEggs
-                    // 2 = GetInventory
-                    // 3 = CheckAwardedBadges
-                    // 4 = DownloadSettings
-                    
-                    if (responseEnvelope.Returns.Count == 5)
+                    switch (responseEnvelope.StatusCode)
                     {
-                        var hatchedEggs = GetHatchedEggsResponse.Parser.ParseFrom(responseEnvelope.Returns[1]);
-                        var getInventory = GetInventoryResponse.Parser.ParseFrom(responseEnvelope.Returns[2]);
-                        var checkAwardedBadges = CheckAwardedBadgesResponse.Parser.ParseFrom(responseEnvelope.Returns[3]);
-                        var downloadSettingsResponse = DownloadSettingsResponse.Parser.ParseFrom(responseEnvelope.Returns[4]);
+                        case 52: // Rate limit?
+                            Log.Info($"We are sending requests too fast, sleeping for {Configuration.RateLimitTimeout} milliseconds.");
 
-                        // Used to verify that data is being received correctly.
-//                        Log.Debug($"\tGetHatchedEggs Size: {responseEnvelope.Returns[1].Length}");
-//                        Log.Debug($"\tGetInventory Size: {responseEnvelope.Returns[2].Length}");
-//                        Log.Debug($"\tCheckAwardedBadges Size: {responseEnvelope.Returns[3].Length}");
-//                        Log.Debug($"\tDownloadSettings Size: {responseEnvelope.Returns[4].Length}");
+                            Thread.Sleep(Configuration.RateLimitTimeout);
 
-                        if (downloadSettingsResponse.Settings != null)
-                        {
-                            if (_poClient.GlobalSettings == null || _settingsHash != downloadSettingsResponse.Hash)
+                            return SendRemoteProcedureCall(request);
+
+                        case 53: // New RPC url
+                            if (Regex.IsMatch(responseEnvelope.ApiUrl, "pgorelease\\.nianticlabs\\.com\\/plfe\\/\\d+"))
                             {
-                                _settingsHash = downloadSettingsResponse.Hash;
-                                _poClient.GlobalSettings = downloadSettingsResponse.Settings;
-                            }
-                            else
-                            {
-                                _poClient.GlobalSettings = downloadSettingsResponse.Settings;
-                            }
-                        }
+                                _requestUrl = $"https://{responseEnvelope.ApiUrl}/rpc";
 
-                        if (getInventory.Success)
-                        {
-                            if (getInventory.InventoryDelta.NewTimestampMs > _lastInventoryTimestamp)
-                            {
-                                // Inventory has been updated, fire an event or whatever.
-
-                                _poClient.Inventory = getInventory.InventoryDelta;
-                                _lastInventoryTimestamp = getInventory.InventoryDelta.NewTimestampMs;
+                                return SendRemoteProcedureCall(request);
                             }
-                        }
+
+                            throw new Exception($"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
+
+                        case 102: // Invalid auth
+                            if (Configuration.Debug)
+                                Log.Debug("Received StatusCode 102, reauthenticating.");
+
+                            _session.AccessToken.Expire();
+                            _session.Reauthenticate();
+                            return SendRemoteProcedureCall(request);
+
+                        default:
+                            Log.Info($"Unknown status code: {responseEnvelope.StatusCode}");
+                            break;
                     }
 
-                    return responseEnvelope;
+                    LastRpcRequest = DateTime.UtcNow;
+
+                    if (Configuration.Debug)
+                        Log.Debug($"Sent RPC Request: '{request.RequestType}'");
+
+                    if (request.RequestType == RequestType.GetMapObjects)
+                    {
+                        LastRpcMapObjectsRequest = LastRpcRequest;
+                        LastGeoCoordinateMapObjectsRequest = _session.Player.Coordinate;
+                    }
+
+                    if (responseEnvelope.AuthTicket != null)
+                    {
+                        _session.AccessToken.AuthTicket = responseEnvelope.AuthTicket;
+
+                        if(Configuration.Debug)
+                            Log.Debug("Received a new AuthTicket from Pokémon!");
+                    }
+
+                    return HandleResponseEnvelope(responseEnvelope);
                 }
             }
         }
 
-        internal void Heartbeat()
+        /// <summary>
+        /// Responsible for handling the received <see cref="ResponseEnvelope"/>.
+        /// </summary>
+        /// <param name="responseEnvelope">The <see cref="ResponseEnvelope"/> received from <see cref="SendRemoteProcedureCall(Request)"/>.</param>
+        /// <returns>Returns the <see cref="ByteString"/> response of the <see cref="Request"/>.</returns>
+        private ByteString HandleResponseEnvelope(ResponseEnvelope responseEnvelope)
         {
-            _poClient.MapObjects = GetMapObjects();
+            if(responseEnvelope.Returns.Count != 5)
+                throw new Exception($"There were only {responseEnvelope.Returns.Count} responses, we expected 5.");
+
+            // Take requested response and remove from returns.
+            var requestResponse = responseEnvelope.Returns[0];
+            responseEnvelope.Returns.RemoveAt(0);
+
+            // Handle the default responses.
+            HandleDefaultResponses(responseEnvelope.Returns);
+
+            return requestResponse;
         }
+
+        /// <summary>
+        /// Handles the default heartbeat responses.
+        /// </summary>
+        /// <param name="returns">The payload of the <see cref="ResponseEnvelope"/>.</param>
+        private void HandleDefaultResponses(RepeatedField<ByteString> returns)
+        {
+            var responseCount = 0;
+
+            foreach (var bytes in returns)
+            {
+                switch (responseCount)
+                {
+                    case 0: // Get_Hatched_Eggs
+                        var hatchedEggs = GetHatchedEggsResponse.Parser.ParseFrom(bytes);
+
+                        if (hatchedEggs.Success)
+                        {
+                            // TODO: Throw event, wrap in an object.
+                        }
+                        break;
+
+                    case 1: // Get_Inventory
+                        var inventory = GetInventoryResponse.Parser.ParseFrom(bytes);
+
+                        if (inventory.Success)
+                        {
+                            if (inventory.InventoryDelta.NewTimestampMs > _session.Player.Inventory.LastInventoryTimestampMs)
+                            {
+                                _session.Player.Inventory.LastInventoryTimestampMs = inventory.InventoryDelta.NewTimestampMs;
+
+                                if (inventory.InventoryDelta != null &&
+                                    inventory.InventoryDelta.InventoryItems.Count != 0)
+                                    _session.Player.Inventory.InventoryItems = inventory.InventoryDelta.InventoryItems;
+                            }
+                        }
+                        break;
+
+                    case 2: // Check_Awarded_Badges
+                        var awardedBadges = CheckAwardedBadgesResponse.Parser.ParseFrom(bytes);
+
+                        if (awardedBadges.Success)
+                        {
+                            // TODO: Throw event, wrap in an object.
+                        }
+                        break;
+
+                    case 3: // Download_Settings
+                        var downloadSettings = DownloadSettingsResponse.Parser.ParseFrom(bytes);
+
+                        if (downloadSettings.Error == "")
+                        {
+                            if (downloadSettings.Settings == null)
+                                continue;
+
+                            if (_session.GlobalSettings == null || _session.GlobalSettingsHash != downloadSettings.Hash)
+                            {
+                                _session.GlobalSettingsHash = downloadSettings.Hash;
+                                _session.GlobalSettings = downloadSettings.Settings;
+                            }
+                            else
+                            {
+                                _session.GlobalSettings = downloadSettings.Settings;
+                            }
+                        }
+                        else
+                        {
+                            if(Configuration.Debug)
+                                Log.Debug($"DownloadSettingsResponse.Error: '{downloadSettings.Error}'");
+                        }
+                        break;
+
+                    default:
+                        throw new Exception($"Unknown response appeared..? {responseCount}");
+                }
+
+                responseCount++;
+            }
+        }
+
     }
 }

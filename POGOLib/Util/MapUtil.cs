@@ -3,7 +3,7 @@ using Google.Common.Geometry;
 
 namespace POGOLib.Util
 {
-    internal class MapUtil
+    internal static class MapUtil
     {
 
         public static ulong[] GetCellIdsForLatLong(double latitude, double longitude)

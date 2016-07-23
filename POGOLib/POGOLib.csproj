@@ -35,7 +35,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Protobuf.3.0.0-beta3\lib\dotnet\Google.Protobuf.dll</HintPath>
+      <HintPath>..\packages\Google.Protobuf.3.0.0-beta4\lib\net45\Google.Protobuf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GPSOAuthSharp, Version=0.0.5.0, Culture=neutral, processorArchitecture=MSIL">
@@ -56,6 +56,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,92 +65,38 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Net\Data\GpsData.cs" />
-    <Compile Include="Net\Data\SaveData.cs" />
-    <Compile Include="Net\PoClient.cs" />
-    <Compile Include="Net\Data\AuthData.cs" />
-    <Compile Include="Net\Data\Login\LoginData.cs" />
+    <Compile Include="Net\Authentication\Data\AccessToken.cs" />
+    <Compile Include="Net\Authentication\Data\LoginData.cs" />
+    <Compile Include="Net\Authentication\Login.cs" />
     <Compile Include="Net\RpcClient.cs" />
-    <Compile Include="POGOProtos\Data\CaptureScore.cs" />
-    <Compile Include="POGOProtos\Data\PokedexEntry.cs" />
-    <Compile Include="POGOProtos\Data\Pokemon.cs" />
-    <Compile Include="POGOProtos\Enums\ActivityType.cs" />
-    <Compile Include="POGOProtos\Enums\BadgeType.cs" />
-    <Compile Include="POGOProtos\Enums\Gender.cs" />
-    <Compile Include="POGOProtos\Enums\PokemonType.cs" />
-    <Compile Include="POGOProtos\Enums\TeamColor.cs" />
-    <Compile Include="POGOProtos\Inventory\AppliedItem.cs" />
-    <Compile Include="POGOProtos\Inventory\AppliedItems.cs" />
-    <Compile Include="POGOProtos\Inventory\EggIncubator.cs" />
-    <Compile Include="POGOProtos\Inventory\EggIncubators.cs" />
-    <Compile Include="POGOProtos\Inventory\EggIncubatorType.cs" />
-    <Compile Include="POGOProtos\Inventory\InventoryDelta.cs" />
-    <Compile Include="POGOProtos\Inventory\InventoryItem.cs" />
-    <Compile Include="POGOProtos\Inventory\InventoryItemData.cs" />
-    <Compile Include="POGOProtos\Inventory\InventoryUpgrade.cs" />
-    <Compile Include="POGOProtos\Inventory\InventoryUpgrades.cs" />
-    <Compile Include="POGOProtos\Inventory\InventoryUpgradeType.cs" />
-    <Compile Include="POGOProtos\Inventory\Item.cs" />
-    <Compile Include="POGOProtos\Inventory\ItemType.cs" />
-    <Compile Include="POGOProtos\Inventory\ItemTypeCategory.cs" />
-    <Compile Include="POGOProtos\Inventory\PokemonFamily.cs" />
-    <Compile Include="POGOProtos\Inventory\PokemonFamilyId.cs" />
-    <Compile Include="POGOProtos\LocalPlayer.cs" />
-    <Compile Include="POGOProtos\Map\Fort\FortData.cs" />
-    <Compile Include="POGOProtos\Map\Fort\FortLureInfo.cs" />
-    <Compile Include="POGOProtos\Map\Fort\FortModifier.cs" />
-    <Compile Include="POGOProtos\Map\Fort\FortRenderingType.cs" />
-    <Compile Include="POGOProtos\Map\Fort\FortSponsor.cs" />
-    <Compile Include="POGOProtos\Map\Fort\FortSummary.cs" />
-    <Compile Include="POGOProtos\Map\Fort\FortType.cs" />
-    <Compile Include="POGOProtos\Map\MapCell.cs" />
-    <Compile Include="POGOProtos\Map\MapObjectsStatus.cs" />
-    <Compile Include="POGOProtos\Map\Pokemon\MapPokemon.cs" />
-    <Compile Include="POGOProtos\Map\Pokemon\NearbyPokemon.cs" />
-    <Compile Include="POGOProtos\Map\Pokemon\WildPokemon.cs" />
-    <Compile Include="POGOProtos\Map\SpawnPoint.cs" />
-    <Compile Include="POGOProtos\Networking\Envelopes.cs" />
-    <Compile Include="POGOProtos\Networking\Requests\Messages\CatchPokemonMessage.cs" />
-    <Compile Include="POGOProtos\Networking\Requests\Messages\CheckAwardedBadgesMessage.cs" />
-    <Compile Include="POGOProtos\Networking\Requests\Messages\DownloadSettingsMessage.cs" />
-    <Compile Include="POGOProtos\Networking\Requests\Messages\FortDetailsMessage.cs" />
-    <Compile Include="POGOProtos\Networking\Requests\Messages\FortSearchMessage.cs" />
-    <Compile Include="POGOProtos\Networking\Requests\Messages\GetHatchedEggsMessage.cs" />
-    <Compile Include="POGOProtos\Networking\Requests\Messages\GetInventoryMessage.cs" />
-    <Compile Include="POGOProtos\Networking\Requests\Messages\GetMapObjectsMessage.cs" />
-    <Compile Include="POGOProtos\Networking\Requests\Messages\GetPlayerMessage.cs" />
-    <Compile Include="POGOProtos\Networking\Requests\Request.cs" />
-    <Compile Include="POGOProtos\Networking\Requests\RequestType.cs" />
-    <Compile Include="POGOProtos\Networking\Responses\CatchPokemonResponse.cs" />
-    <Compile Include="POGOProtos\Networking\Responses\CheckAwardedBadgesResponse.cs" />
-    <Compile Include="POGOProtos\Networking\Responses\DownloadSettingsResponse.cs" />
-    <Compile Include="POGOProtos\Networking\Responses\FortDetailsResponse.cs" />
-    <Compile Include="POGOProtos\Networking\Responses\FortSearchResponse.cs" />
-    <Compile Include="POGOProtos\Networking\Responses\GetHatchedEggsResponse.cs" />
-    <Compile Include="POGOProtos\Networking\Responses\GetInventoryResponse.cs" />
-    <Compile Include="POGOProtos\Networking\Responses\GetMapObjectsResponse.cs" />
-    <Compile Include="POGOProtos\Networking\Responses\GetPlayerResponse.cs" />
-    <Compile Include="POGOProtos\Player\AvatarDetails.cs" />
-    <Compile Include="POGOProtos\Player\ContactSettings.cs" />
-    <Compile Include="POGOProtos\Player\Currency.cs" />
-    <Compile Include="POGOProtos\Player\DailyBonus.cs" />
-    <Compile Include="POGOProtos\Player\EquippedBadge.cs" />
-    <Compile Include="POGOProtos\Player\PlayerCamera.cs" />
-    <Compile Include="POGOProtos\Player\PlayerCurrency.cs" />
-    <Compile Include="POGOProtos\Player\PlayerStats.cs" />
-    <Compile Include="POGOProtos\Settings\DownloadSettingsAction.cs" />
-    <Compile Include="POGOProtos\Settings\Fort.cs" />
-    <Compile Include="POGOProtos\Settings\GlobalSettings.cs" />
-    <Compile Include="POGOProtos\Settings\Inventory.cs" />
-    <Compile Include="POGOProtos\Settings\Level.cs" />
-    <Compile Include="POGOProtos\Settings\Map.cs" />
-    <Compile Include="Pokemon\LoginProvider.cs" />
+    <Compile Include="Net\Session.cs" />
+    <Compile Include="POGOProtos\POGOProtosDataLogs.cs" />
+    <Compile Include="Pokemon\HeartbeatDispatcher.cs" />
+    <Compile Include="POGOProtos\POGOProtosData.cs" />
+    <Compile Include="POGOProtos\POGOProtosDataBattle.cs" />
+    <Compile Include="POGOProtos\POGOProtosDataCapture.cs" />
+    <Compile Include="POGOProtos\POGOProtosDataGym.cs" />
+    <Compile Include="POGOProtos\POGOProtosDataPlayer.cs" />
+    <Compile Include="POGOProtos\POGOProtosEnums.cs" />
+    <Compile Include="POGOProtos\POGOProtosInventory.cs" />
+    <Compile Include="POGOProtos\POGOProtosMap.cs" />
+    <Compile Include="POGOProtos\POGOProtosMapFort.cs" />
+    <Compile Include="POGOProtos\POGOProtosMapPokemon.cs" />
+    <Compile Include="POGOProtos\POGOProtosNetworkingEnvelopes.cs" />
+    <Compile Include="POGOProtos\POGOProtosNetworkingRequests.cs" />
+    <Compile Include="POGOProtos\POGOProtosNetworkingRequestsMessages.cs" />
+    <Compile Include="POGOProtos\POGOProtosNetworkingResponses.cs" />
+    <Compile Include="POGOProtos\POGOProtosSettings.cs" />
+    <Compile Include="POGOProtos\POGOProtosSettingsMaster.cs" />
+    <Compile Include="POGOProtos\POGOProtosSettingsMasterItem.cs" />
+    <Compile Include="POGOProtos\POGOProtosSettingsMasterPokemon.cs" />
+    <Compile Include="Pokemon\Data\LoginProvider.cs" />
+    <Compile Include="Pokemon\Inventory.cs" />
+    <Compile Include="Pokemon\Map.cs" />
+    <Compile Include="Pokemon\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Test.cs" />
-    <Compile Include="Util\ByteUtil.cs" />
-    <Compile Include="Util\ConsoleUtil.cs" />
-    <Compile Include="Util\HashUtil.cs" />
     <Compile Include="Util\MapUtil.cs" />
     <Compile Include="Util\TimeUtil.cs" />
   </ItemGroup>
