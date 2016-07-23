@@ -131,33 +131,44 @@ namespace POGOLib.Net
         /// <returns></returns>
         private IEnumerable<Request> GetDefaultRequests()
         {
-            return new[]
-            {
-                new Request
+            List<Request> request = new List<Request>();
+            request.Add(new Request
                 {
                     RequestType = RequestType.GetHatchedEggs
-                },
-                new Request
+                });
+            request.Add(new Request
                 {
                     RequestType = RequestType.GetInventory,
                     RequestMessage = new GetInventoryMessage
                     {
-                       LastTimestampMs = _session.Player.Inventory.LastInventoryTimestampMs
+                        LastTimestampMs = _session.Player.Inventory.LastInventoryTimestampMs
                     }.ToByteString()
-                },
-                new Request
+                });
+            request.Add(new Request
                 {
                     RequestType = RequestType.CheckAwardedBadges
-                },
-                new Request
+                });
+
+            if (_session.GlobalSettingsHash == null || _session.GlobalSettingsHash.Length == 0)
+            {
+                request.Add(new Request
+                {
+                    RequestType = RequestType.DownloadSettings,
+                });
+            }
+            else
+            {
+                request.Add(new Request
                 {
                     RequestType = RequestType.DownloadSettings,
                     RequestMessage = new DownloadSettingsMessage
                     {
-                        Hash = "4a2e9bc330dae60e7b74fc85b98868ab4700802e"
+                        Hash = _session.GlobalSettingsHash
                     }.ToByteString()
-                }
-            };
+                });
+            }
+
+            return request;
         }
 
         /// <summary>
