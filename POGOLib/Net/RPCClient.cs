@@ -67,7 +67,7 @@ namespace POGOLib.Net
         internal GeoCoordinate LastGeoCoordinateMapObjectsRequest { get; private set; } = new GeoCoordinate();
 
         /// <summary>
-        /// Sends all requests which the (android-) sends on startup
+        /// Sends all requests which the (android-)client sends on startup
         /// </summary>
         internal bool Startup()
         {
