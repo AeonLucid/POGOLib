@@ -1,0 +1,27 @@
+version: 0.1.{build}
+
+branches:
+  only:
+  - master
+  
+assembly_info:
+  patch: true
+  file: AssemblyInfo.*
+  assembly_version: "{version}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
+
+configuration: Release
+  
+before_build:
+- cmd: nuget restore
+
+build:
+  project: POGOLib\POGOLib.csproj
+  publish_nuget: true
+  verbosity: minimal
+  
+artifacts:
+  - path: POGOLib\bin\Release\POGOLib.dll
+    name: POGOLib.dll
+  - path: '**\*.nupkg'
