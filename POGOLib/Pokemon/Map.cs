@@ -6,6 +6,7 @@ using Google.Protobuf.Collections;
 using POGOLib.Net;
 using POGOProtos.Map;
 using POGOProtos.Map.Fort;
+using POGOProtos.Map.Pokemon;
 
 namespace POGOLib.Pokemon
 {
@@ -41,12 +42,42 @@ namespace POGOLib.Pokemon
         
         public List<FortData> GetFortsSortedByDistance(Func<FortData, bool> filter = null)
         {
+            // We haven't got any MapObjects yet
+            if (Cells == null)
+                return null;
+
             var forts = Cells.SelectMany(f => f.Forts);
 
             if (filter != null)
                 forts = forts.Where(filter);
 
             var sorted = forts.ToList();
+            sorted.Sort((f1, f2) =>
+            {
+                var f1Coordinate = new GeoCoordinate(f1.Latitude, f1.Longitude);
+                var f2Coordinate = new GeoCoordinate(f2.Latitude, f2.Longitude);
+
+                var distance1 = f1Coordinate.GetDistanceTo(_session.Player.Coordinate);
+                var distance2 = f2Coordinate.GetDistanceTo(_session.Player.Coordinate);
+
+                return distance1.CompareTo(distance2);
+            });
+
+            return sorted;
+        }
+
+        public List<MapPokemon> GetPokemonSortedByDistance(Func<MapPokemon, bool> filter = null)
+        {
+            // We haven't got any MapObjects yet
+            if (Cells == null)
+                return null;
+
+            var pokemon = Cells.SelectMany(f => f.CatchablePokemons);
+
+            if (filter != null)
+                pokemon = pokemon.Where(filter);
+
+            var sorted = pokemon.ToList();
             sorted.Sort((f1, f2) =>
             {
                 var f1Coordinate = new GeoCoordinate(f1.Latitude, f1.Longitude);
