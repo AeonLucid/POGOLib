@@ -67,6 +67,58 @@ namespace POGOLib.Net
         internal GeoCoordinate LastGeoCoordinateMapObjectsRequest { get; private set; } = new GeoCoordinate();
 
         /// <summary>
+        /// Sends all requests which the (android-)client sends on startup
+        /// </summary>
+        internal bool Startup()
+        {
+            try
+            {
+                ByteString response;
+                // Send GetPlayer to check if we're connected and authenticated
+                GetPlayerResponse playerResponse = null;
+                do
+                {
+                    response = SendRemoteProcedureCall(new Request
+                    {
+                        RequestType = RequestType.GetPlayer
+                    });
+                    playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
+                    if (!playerResponse.Success)
+                        Thread.Sleep(1000);
+                }
+                while (!playerResponse.Success);
+
+                // Get DownloadRemoteConfig
+                response = SendRemoteProcedureCall(new Request
+                {
+                    RequestType = RequestType.DownloadRemoteConfigVersion,
+                    RequestMessage = new DownloadRemoteConfigVersionMessage
+                    {
+                        Platform = POGOProtos.Enums.Platform.Android,
+                        AppVersion = 2903
+                    }.ToByteString()
+                });
+
+                // GetAssetDigest
+                response = SendRemoteProcedureCall(new Request
+                {
+                    RequestType = RequestType.GetAssetDigest,
+                    RequestMessage = new GetAssetDigestMessage
+                    {
+                        Platform = POGOProtos.Enums.Platform.Android,
+                        AppVersion = 2903
+                    }.ToByteString()
+                });
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// It is not recommended to call this. Map objects will update automatically and fire the <see cref="Map.Update"/> event.
         /// </summary>
         public void RefreshMapObjects()
@@ -131,33 +183,56 @@ namespace POGOLib.Net
         /// <returns></returns>
         private IEnumerable<Request> GetDefaultRequests()
         {
-            return new[]
-            {
-                new Request
+            List<Request> request = new List<Request>();
+            request.Add(new Request
                 {
                     RequestType = RequestType.GetHatchedEggs
-                },
-                new Request
+                });
+            request.Add(new Request
                 {
                     RequestType = RequestType.GetInventory,
                     RequestMessage = new GetInventoryMessage
                     {
-                       LastTimestampMs = _session.Player.Inventory.LastInventoryTimestampMs
+                        LastTimestampMs = _session.Player.Inventory.LastInventoryTimestampMs
                     }.ToByteString()
-                },
-                new Request
+                });
+            request.Add(new Request
                 {
                     RequestType = RequestType.CheckAwardedBadges
-                },
-                new Request
+                });
+
+            if (_session.GlobalSettingsHash == null || _session.GlobalSettingsHash.Length == 0)
+            {
+                request.Add(new Request
+                {
+                    RequestType = RequestType.DownloadSettings,
+                });
+            }
+            else
+            {
+                request.Add(new Request
                 {
                     RequestType = RequestType.DownloadSettings,
                     RequestMessage = new DownloadSettingsMessage
                     {
-                        Hash = "4a2e9bc330dae60e7b74fc85b98868ab4700802e"
+                        Hash = _session.GlobalSettingsHash
                     }.ToByteString()
-                }
-            };
+                });
+            }
+
+
+            //If Incense is active we add this:
+            //request.Add(new Request
+            //{
+            //    RequestType = RequestType.GetIncensePokemon,
+            //    RequestMessage = new GetIncensePokemonMessage
+            //    {
+            //        PlayerLatitude = _session.Player.Coordinate.Latitude,
+            //        PlayerLongitude = _session.Player.Coordinate.Longitude
+            //    }.ToByteString()
+            //});
+
+            return request;
         }
 
         /// <summary>
@@ -383,6 +458,9 @@ namespace POGOLib.Net
                             {
                                 _session.GlobalSettings = downloadSettings.Settings;
                             }
+
+                            _session.Player.Inventory.BaseBagItems = _session.GlobalSettings.InventorySettings.BaseBagItems;
+                            _session.Player.Inventory.BasePokemon = _session.GlobalSettings.InventorySettings.BasePokemon;
                         }
                         else
                         {

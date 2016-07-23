@@ -22,10 +22,6 @@ namespace POGOLib.Pokemon
         internal HeartbeatDispatcher(Session session)
         {
             _session = session;
-            new Thread(CheckDispatch)
-            {
-                IsBackground = true
-            }.Start();
         }
 
         /// <summary>
@@ -67,7 +63,7 @@ namespace POGOLib.Pokemon
                         else if (metersMoved >= minDistance)
                         {
                             if (Configuration.Debug)
-                                Log.Debug("Refreshing MapObjects, reason: 'metersMoved >= maxDistance'.");
+                                Log.Debug("Refreshing MapObjects, reason: 'metersMoved >= minDistance'.");
 
                             canRefresh = true;
                         }
@@ -83,7 +79,15 @@ namespace POGOLib.Pokemon
                 Thread.Sleep(1000);
             }
         }
-        
+
+        internal void StartDispatcher()
+        {
+            new Thread(CheckDispatch)
+            {
+                IsBackground = true
+            }.Start();
+        }
+
         private void Dispatch()
         {
             _session.RpcClient.RefreshMapObjects();
