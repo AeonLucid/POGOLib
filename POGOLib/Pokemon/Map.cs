@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+#if MONO
+using GeoCoordinatePortable;
+#else
 using System.Device.Location;
+#endif
 using System.Linq;
 using Google.Protobuf.Collections;
 using POGOLib.Net;

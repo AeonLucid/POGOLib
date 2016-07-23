@@ -1,5 +1,9 @@
 ﻿using System;
+#if MONO
+using GeoCoordinatePortable;
+#else
 using System.Device.Location;
+#endif
 using System.Linq;
 using POGOProtos.Data.Player;
 

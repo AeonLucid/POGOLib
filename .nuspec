@@ -12,6 +12,6 @@
     <tags>pokemon go api library</tags>
   </metadata>
   <files>
-     <file src="POGOLib\bin\Release\POGOLib.dll" target="net46" />
+     <file src="POGOLib\bin\Release\POGOLib.dll" target="net45" />
   </files>
 </package>
