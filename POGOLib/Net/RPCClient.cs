@@ -67,9 +67,9 @@ namespace POGOLib.Net
         internal GeoCoordinate LastGeoCoordinateMapObjectsRequest { get; private set; } = new GeoCoordinate();
 
         /// <summary>
-        /// It is not recommended to call this. Map objects will update automatically and fire the <see cref="Map.Update"/> event.
+        /// Sends all requests which the (android-)client sends on startup
         /// </summary>
-        public bool Startup()
+        internal bool Startup()
         {
             try
             {
@@ -109,16 +109,6 @@ namespace POGOLib.Net
                         AppVersion = 2903
                     }.ToByteString()
                 });
-
-                // LevelUp Rewards
-                response = SendRemoteProcedureCall(new Request
-                {
-                    RequestType = RequestType.LevelUpRewards,
-                    RequestMessage = new LevelUpRewardsMessage
-                    {
-                        Level = _session.Player.Stats.Level
-                    }.ToByteString()
-                });  
             }
             catch (Exception)
             {
