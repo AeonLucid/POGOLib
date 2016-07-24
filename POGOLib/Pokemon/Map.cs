@@ -6,6 +6,7 @@ using Google.Protobuf.Collections;
 using POGOLib.Net;
 using POGOProtos.Map;
 using POGOProtos.Map.Fort;
+using POGOProtos.Map.Pokemon;
 
 namespace POGOLib.Pokemon
 {
