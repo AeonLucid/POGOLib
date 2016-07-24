@@ -23,20 +23,21 @@ namespace POGOProtos.Networking.Requests.Messages {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Ci1QT0dPUHJvdG9zLk5ldHdvcmtpbmcuUmVxdWVzdHMuTWVzc2FnZXMucHJv",
-            "dG8SJ1BPR09Qcm90b3MuTmV0d29ya2luZy5SZXF1ZXN0cy5NZXNzYWdlcxoa",
-            "UE9HT1Byb3Rvcy5JbnZlbnRvcnkucHJvdG8aHFBPR09Qcm90b3MuRGF0YS5C",
-            "YXR0bGUucHJvdG8aFlBPR09Qcm90b3MuRW51bXMucHJvdG8aHFBPR09Qcm90",
-            "b3MuRGF0YS5QbGF5ZXIucHJvdG8ikQEKFkFkZEZvcnRNb2RpZmllck1lc3Nh",
-            "Z2USMwoNbW9kaWZpZXJfdHlwZRgBIAEoDjIcLlBPR09Qcm90b3MuSW52ZW50",
-            "b3J5Lkl0ZW1JZBIPCgdmb3J0X2lkGAIgASgJEhcKD3BsYXllcl9sYXRpdHVk",
-            "ZRgDIAEoARIYChBwbGF5ZXJfbG9uZ2l0dWRlGAQgASgBIuwBChBBdHRhY2tH",
-            "eW1NZXNzYWdlEg4KBmd5bV9pZBgBIAEoCRIRCgliYXR0bGVfaWQYAiABKAkS",
-            "PAoOYXR0YWNrX2FjdGlvbnMYAyADKAsyJC5QT0dPUHJvdG9zLkRhdGEuQmF0",
-            "dGxlLkJhdHRsZUFjdGlvbhJEChZsYXN0X3JldHJpZXZlZF9hY3Rpb25zGAQg",
-            "ASgLMiQuUE9HT1Byb3Rvcy5EYXRhLkJhdHRsZS5CYXR0bGVBY3Rpb24SFwoP",
-            "cGxheWVyX2xhdGl0dWRlGAUgASgBEhgKEHBsYXllcl9sb25naXR1ZGUYBiAB",
-            "KAEixQEKE0NhdGNoUG9rZW1vbk1lc3NhZ2USFAoMZW5jb3VudGVyX2lkGAEg",
-            "ASgGEhAKCHBva2ViYWxsGAIgASgFEh8KF25vcm1hbGl6ZWRfcmV0aWNsZV9z",
+            "dG8SJ1BPR09Qcm90b3MuTmV0d29ya2luZy5SZXF1ZXN0cy5NZXNzYWdlcxof",
+            "UE9HT1Byb3Rvcy5JbnZlbnRvcnkuSXRlbS5wcm90bxocUE9HT1Byb3Rvcy5E",
+            "YXRhLkJhdHRsZS5wcm90bxoWUE9HT1Byb3Rvcy5FbnVtcy5wcm90bxocUE9H",
+            "T1Byb3Rvcy5EYXRhLlBsYXllci5wcm90byKWAQoWQWRkRm9ydE1vZGlmaWVy",
+            "TWVzc2FnZRI4Cg1tb2RpZmllcl90eXBlGAEgASgOMiEuUE9HT1Byb3Rvcy5J",
+            "bnZlbnRvcnkuSXRlbS5JdGVtSWQSDwoHZm9ydF9pZBgCIAEoCRIXCg9wbGF5",
+            "ZXJfbGF0aXR1ZGUYAyABKAESGAoQcGxheWVyX2xvbmdpdHVkZRgEIAEoASLs",
+            "AQoQQXR0YWNrR3ltTWVzc2FnZRIOCgZneW1faWQYASABKAkSEQoJYmF0dGxl",
+            "X2lkGAIgASgJEjwKDmF0dGFja19hY3Rpb25zGAMgAygLMiQuUE9HT1Byb3Rv",
+            "cy5EYXRhLkJhdHRsZS5CYXR0bGVBY3Rpb24SRAoWbGFzdF9yZXRyaWV2ZWRf",
+            "YWN0aW9ucxgEIAEoCzIkLlBPR09Qcm90b3MuRGF0YS5CYXR0bGUuQmF0dGxl",
+            "QWN0aW9uEhcKD3BsYXllcl9sYXRpdHVkZRgFIAEoARIYChBwbGF5ZXJfbG9u",
+            "Z2l0dWRlGAYgASgBIugBChNDYXRjaFBva2Vtb25NZXNzYWdlEhQKDGVuY291",
+            "bnRlcl9pZBgBIAEoBhIzCghwb2tlYmFsbBgCIAEoDjIhLlBPR09Qcm90b3Mu",
+            "SW52ZW50b3J5Lkl0ZW0uSXRlbUlkEh8KF25vcm1hbGl6ZWRfcmV0aWNsZV9z",
             "aXplGAMgASgBEhgKEHNwYXduX3BvaW50X2d1aWQYBCABKAkSEwoLaGl0X3Bv",
             "a2Vtb24YBSABKAgSFQoNc3Bpbl9tb2RpZmllchgGIAEoARIfChdub3JtYWxp",
             "emVkX2hpdF9wb3NpdGlvbhgHIAEoASIbChlDaGVja0F3YXJkZWRCYWRnZXNN",
@@ -92,40 +93,41 @@ namespace POGOProtos.Networking.Requests.Messages {
             "ASADKA4yHy5QT0dPUHJvdG9zLkVudW1zLlR1dG9yaWFsU3RhdGUSHQoVc2Vu",
             "ZF9tYXJrZXRpbmdfZW1haWxzGAIgASgIEh8KF3NlbmRfcHVzaF9ub3RpZmlj",
             "YXRpb25zGAMgASgIIj4KFk5pY2tuYW1lUG9rZW1vbk1lc3NhZ2USEgoKcG9r",
-            "ZW1vbl9pZBgBIAEoBBIQCghuaWNrbmFtZRgCIAEoCSI6ChNQbGF5ZXJVcGRh",
+            "ZW1vbl9pZBgBIAEoBhIQCghuaWNrbmFtZRgCIAEoCSI6ChNQbGF5ZXJVcGRh",
             "dGVNZXNzYWdlEhAKCGxhdGl0dWRlGAEgASgBEhEKCWxvbmdpdHVkZRgCIAEo",
-            "ASJbChtSZWN5Y2xlSW52ZW50b3J5SXRlbU1lc3NhZ2USLQoHaXRlbV9pZBgB",
-            "IAEoDjIcLlBPR09Qcm90b3MuSW52ZW50b3J5Lkl0ZW1JZBINCgVjb3VudBgC",
-            "IAEoBSIrChVSZWxlYXNlUG9rZW1vbk1lc3NhZ2USEgoKcG9rZW1vbl9pZBgB",
-            "IAEoBiJPChBTZXRBdmF0YXJNZXNzYWdlEjsKDXBsYXllcl9hdmF0YXIYAiAB",
-            "KAsyJC5QT0dPUHJvdG9zLkRhdGEuUGxheWVyLlBsYXllckF2YXRhciJeChlT",
-            "ZXRDb250YWN0U2V0dGluZ3NNZXNzYWdlEkEKEGNvbnRhY3Rfc2V0dGluZ3MY",
-            "ASABKAsyJy5QT0dPUHJvdG9zLkRhdGEuUGxheWVyLkNvbnRhY3RTZXR0aW5n",
-            "cyJEChlTZXRGYXZvcml0ZVBva2Vtb25NZXNzYWdlEhIKCnBva2Vtb25faWQY",
-            "ASABKAQSEwoLaXNfZmF2b3JpdGUYAiABKAgiQQoUU2V0UGxheWVyVGVhbU1l",
-            "c3NhZ2USKQoEdGVhbRgBIAEoDjIbLlBPR09Qcm90b3MuRW51bXMuVGVhbUNv",
-            "bG9yIhcKFVNmaWRhQWN0aW9uTG9nTWVzc2FnZSKXAQoVU3RhcnRHeW1CYXR0",
-            "bGVNZXNzYWdlEg4KBmd5bV9pZBgBIAEoCRIdChVhdHRhY2tpbmdfcG9rZW1v",
-            "bl9pZHMYAiADKAYSHAoUZGVmZW5kaW5nX3Bva2Vtb25faWQYAyABKAQSFwoP",
-            "cGxheWVyX2xhdGl0dWRlGAQgASgBEhgKEHBsYXllcl9sb25naXR1ZGUYBSAB",
-            "KAEiKwoVVXBncmFkZVBva2Vtb25NZXNzYWdlEhIKCnBva2Vtb25faWQYASAB",
-            "KAQiRwoRVXNlSW5jZW5zZU1lc3NhZ2USMgoMaW5jZW5zZV90eXBlGAEgASgO",
-            "MhwuUE9HT1Byb3Rvcy5JbnZlbnRvcnkuSXRlbUlkInYKFVVzZUl0ZW1DYXB0",
-            "dXJlTWVzc2FnZRItCgdpdGVtX2lkGAEgASgOMhwuUE9HT1Byb3Rvcy5JbnZl",
-            "bnRvcnkuSXRlbUlkEhQKDGVuY291bnRlcl9pZBgCIAEoBhIYChBzcGF3bl9w",
-            "b2ludF9ndWlkGAMgASgJIkEKGlVzZUl0ZW1FZ2dJbmN1YmF0b3JNZXNzYWdl",
-            "Eg8KB2l0ZW1faWQYASABKAkSEgoKcG9rZW1vbl9pZBgCIAEoBCKFAQoRVXNl",
-            "SXRlbUd5bU1lc3NhZ2USLQoHaXRlbV9pZBgBIAEoDjIcLlBPR09Qcm90b3Mu",
-            "SW52ZW50b3J5Lkl0ZW1JZBIOCgZneW1faWQYAiABKAkSFwoPcGxheWVyX2xh",
-            "dGl0dWRlGAMgASgBEhgKEHBsYXllcl9sb25naXR1ZGUYBCABKAEiWQoUVXNl",
-            "SXRlbVBvdGlvbk1lc3NhZ2USLQoHaXRlbV9pZBgBIAEoDjIcLlBPR09Qcm90",
-            "b3MuSW52ZW50b3J5Lkl0ZW1JZBISCgpwb2tlbW9uX2lkGAIgASgEIlkKFFVz",
-            "ZUl0ZW1SZXZpdmVNZXNzYWdlEi0KB2l0ZW1faWQYASABKA4yHC5QT0dPUHJv",
-            "dG9zLkludmVudG9yeS5JdGVtSWQSEgoKcG9rZW1vbl9pZBgCIAEoBCJGChVV",
-            "c2VJdGVtWHBCb29zdE1lc3NhZ2USLQoHaXRlbV9pZBgBIAEoDjIcLlBPR09Q",
-            "cm90b3MuSW52ZW50b3J5Lkl0ZW1JZFAAUAFQAlADYgZwcm90bzM="));
+            "ASJgChtSZWN5Y2xlSW52ZW50b3J5SXRlbU1lc3NhZ2USMgoHaXRlbV9pZBgB",
+            "IAEoDjIhLlBPR09Qcm90b3MuSW52ZW50b3J5Lkl0ZW0uSXRlbUlkEg0KBWNv",
+            "dW50GAIgASgFIisKFVJlbGVhc2VQb2tlbW9uTWVzc2FnZRISCgpwb2tlbW9u",
+            "X2lkGAEgASgGIk8KEFNldEF2YXRhck1lc3NhZ2USOwoNcGxheWVyX2F2YXRh",
+            "chgCIAEoCzIkLlBPR09Qcm90b3MuRGF0YS5QbGF5ZXIuUGxheWVyQXZhdGFy",
+            "Il4KGVNldENvbnRhY3RTZXR0aW5nc01lc3NhZ2USQQoQY29udGFjdF9zZXR0",
+            "aW5ncxgBIAEoCzInLlBPR09Qcm90b3MuRGF0YS5QbGF5ZXIuQ29udGFjdFNl",
+            "dHRpbmdzIkQKGVNldEZhdm9yaXRlUG9rZW1vbk1lc3NhZ2USEgoKcG9rZW1v",
+            "bl9pZBgBIAEoBBITCgtpc19mYXZvcml0ZRgCIAEoCCJBChRTZXRQbGF5ZXJU",
+            "ZWFtTWVzc2FnZRIpCgR0ZWFtGAEgASgOMhsuUE9HT1Byb3Rvcy5FbnVtcy5U",
+            "ZWFtQ29sb3IiFwoVU2ZpZGFBY3Rpb25Mb2dNZXNzYWdlIpcBChVTdGFydEd5",
+            "bUJhdHRsZU1lc3NhZ2USDgoGZ3ltX2lkGAEgASgJEh0KFWF0dGFja2luZ19w",
+            "b2tlbW9uX2lkcxgCIAMoBhIcChRkZWZlbmRpbmdfcG9rZW1vbl9pZBgDIAEo",
+            "BBIXCg9wbGF5ZXJfbGF0aXR1ZGUYBCABKAESGAoQcGxheWVyX2xvbmdpdHVk",
+            "ZRgFIAEoASIrChVVcGdyYWRlUG9rZW1vbk1lc3NhZ2USEgoKcG9rZW1vbl9p",
+            "ZBgBIAEoBCJMChFVc2VJbmNlbnNlTWVzc2FnZRI3CgxpbmNlbnNlX3R5cGUY",
+            "ASABKA4yIS5QT0dPUHJvdG9zLkludmVudG9yeS5JdGVtLkl0ZW1JZCJ7ChVV",
+            "c2VJdGVtQ2FwdHVyZU1lc3NhZ2USMgoHaXRlbV9pZBgBIAEoDjIhLlBPR09Q",
+            "cm90b3MuSW52ZW50b3J5Lkl0ZW0uSXRlbUlkEhQKDGVuY291bnRlcl9pZBgC",
+            "IAEoBhIYChBzcGF3bl9wb2ludF9ndWlkGAMgASgJIkEKGlVzZUl0ZW1FZ2dJ",
+            "bmN1YmF0b3JNZXNzYWdlEg8KB2l0ZW1faWQYASABKAkSEgoKcG9rZW1vbl9p",
+            "ZBgCIAEoBCKKAQoRVXNlSXRlbUd5bU1lc3NhZ2USMgoHaXRlbV9pZBgBIAEo",
+            "DjIhLlBPR09Qcm90b3MuSW52ZW50b3J5Lkl0ZW0uSXRlbUlkEg4KBmd5bV9p",
+            "ZBgCIAEoCRIXCg9wbGF5ZXJfbGF0aXR1ZGUYAyABKAESGAoQcGxheWVyX2xv",
+            "bmdpdHVkZRgEIAEoASJeChRVc2VJdGVtUG90aW9uTWVzc2FnZRIyCgdpdGVt",
+            "X2lkGAEgASgOMiEuUE9HT1Byb3Rvcy5JbnZlbnRvcnkuSXRlbS5JdGVtSWQS",
+            "EgoKcG9rZW1vbl9pZBgCIAEoBCJeChRVc2VJdGVtUmV2aXZlTWVzc2FnZRIy",
+            "CgdpdGVtX2lkGAEgASgOMiEuUE9HT1Byb3Rvcy5JbnZlbnRvcnkuSXRlbS5J",
+            "dGVtSWQSEgoKcG9rZW1vbl9pZBgCIAEoBCJLChVVc2VJdGVtWHBCb29zdE1l",
+            "c3NhZ2USMgoHaXRlbV9pZBgBIAEoDjIhLlBPR09Qcm90b3MuSW52ZW50b3J5",
+            "Lkl0ZW0uSXRlbUlkUABQAVACUANiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOProtos.Inventory.POGOProtosInventoryReflection.Descriptor, global::POGOProtos.Data.Battle.POGOProtosDataBattleReflection.Descriptor, global::POGOProtos.Enums.POGOProtosEnumsReflection.Descriptor, global::POGOProtos.Data.Player.POGOProtosDataPlayerReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::POGOProtos.Inventory.Item.POGOProtosInventoryItemReflection.Descriptor, global::POGOProtos.Data.Battle.POGOProtosDataBattleReflection.Descriptor, global::POGOProtos.Enums.POGOProtosEnumsReflection.Descriptor, global::POGOProtos.Data.Player.POGOProtosDataPlayerReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Networking.Requests.Messages.AddFortModifierMessage), global::POGOProtos.Networking.Requests.Messages.AddFortModifierMessage.Parser, new[]{ "ModifierType", "FortId", "PlayerLatitude", "PlayerLongitude" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Networking.Requests.Messages.AttackGymMessage), global::POGOProtos.Networking.Requests.Messages.AttackGymMessage.Parser, new[]{ "GymId", "BattleId", "AttackActions", "LastRetrievedActions", "PlayerLatitude", "PlayerLongitude" }, null, null, null),
@@ -222,9 +224,9 @@ namespace POGOProtos.Networking.Requests.Messages {
 
     /// <summary>Field number for the "modifier_type" field.</summary>
     public const int ModifierTypeFieldNumber = 1;
-    private global::POGOProtos.Inventory.ItemId modifierType_ = 0;
+    private global::POGOProtos.Inventory.Item.ItemId modifierType_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemId ModifierType {
+    public global::POGOProtos.Inventory.Item.ItemId ModifierType {
       get { return modifierType_; }
       set {
         modifierType_ = value;
@@ -365,7 +367,7 @@ namespace POGOProtos.Networking.Requests.Messages {
             input.SkipLastField();
             break;
           case 8: {
-            modifierType_ = (global::POGOProtos.Inventory.ItemId) input.ReadEnum();
+            modifierType_ = (global::POGOProtos.Inventory.Item.ItemId) input.ReadEnum();
             break;
           }
           case 18: {
@@ -692,9 +694,9 @@ namespace POGOProtos.Networking.Requests.Messages {
 
     /// <summary>Field number for the "pokeball" field.</summary>
     public const int PokeballFieldNumber = 2;
-    private int pokeball_;
+    private global::POGOProtos.Inventory.Item.ItemId pokeball_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Pokeball {
+    public global::POGOProtos.Inventory.Item.ItemId Pokeball {
       get { return pokeball_; }
       set {
         pokeball_ = value;
@@ -805,7 +807,7 @@ namespace POGOProtos.Networking.Requests.Messages {
       }
       if (Pokeball != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(Pokeball);
+        output.WriteEnum((int) Pokeball);
       }
       if (NormalizedReticleSize != 0D) {
         output.WriteRawTag(25);
@@ -836,7 +838,7 @@ namespace POGOProtos.Networking.Requests.Messages {
         size += 1 + 8;
       }
       if (Pokeball != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Pokeball);
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Pokeball);
       }
       if (NormalizedReticleSize != 0D) {
         size += 1 + 8;
@@ -897,7 +899,7 @@ namespace POGOProtos.Networking.Requests.Messages {
             break;
           }
           case 16: {
-            Pokeball = input.ReadInt32();
+            pokeball_ = (global::POGOProtos.Inventory.Item.ItemId) input.ReadEnum();
             break;
           }
           case 25: {
@@ -5480,8 +5482,8 @@ namespace POGOProtos.Networking.Requests.Messages {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (PokemonId != 0UL) {
-        output.WriteRawTag(8);
-        output.WriteUInt64(PokemonId);
+        output.WriteRawTag(9);
+        output.WriteFixed64(PokemonId);
       }
       if (Nickname.Length != 0) {
         output.WriteRawTag(18);
@@ -5493,7 +5495,7 @@ namespace POGOProtos.Networking.Requests.Messages {
     public int CalculateSize() {
       int size = 0;
       if (PokemonId != 0UL) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(PokemonId);
+        size += 1 + 8;
       }
       if (Nickname.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Nickname);
@@ -5522,8 +5524,8 @@ namespace POGOProtos.Networking.Requests.Messages {
           default:
             input.SkipLastField();
             break;
-          case 8: {
-            PokemonId = input.ReadUInt64();
+          case 9: {
+            PokemonId = input.ReadFixed64();
             break;
           }
           case 18: {
@@ -5716,9 +5718,9 @@ namespace POGOProtos.Networking.Requests.Messages {
 
     /// <summary>Field number for the "item_id" field.</summary>
     public const int ItemIdFieldNumber = 1;
-    private global::POGOProtos.Inventory.ItemId itemId_ = 0;
+    private global::POGOProtos.Inventory.Item.ItemId itemId_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemId ItemId {
+    public global::POGOProtos.Inventory.Item.ItemId ItemId {
       get { return itemId_; }
       set {
         itemId_ = value;
@@ -5813,7 +5815,7 @@ namespace POGOProtos.Networking.Requests.Messages {
             input.SkipLastField();
             break;
           case 8: {
-            itemId_ = (global::POGOProtos.Inventory.ItemId) input.ReadEnum();
+            itemId_ = (global::POGOProtos.Inventory.Item.ItemId) input.ReadEnum();
             break;
           }
           case 16: {
@@ -6916,9 +6918,9 @@ namespace POGOProtos.Networking.Requests.Messages {
 
     /// <summary>Field number for the "incense_type" field.</summary>
     public const int IncenseTypeFieldNumber = 1;
-    private global::POGOProtos.Inventory.ItemId incenseType_ = 0;
+    private global::POGOProtos.Inventory.Item.ItemId incenseType_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemId IncenseType {
+    public global::POGOProtos.Inventory.Item.ItemId IncenseType {
       get { return incenseType_; }
       set {
         incenseType_ = value;
@@ -6990,7 +6992,7 @@ namespace POGOProtos.Networking.Requests.Messages {
             input.SkipLastField();
             break;
           case 8: {
-            incenseType_ = (global::POGOProtos.Inventory.ItemId) input.ReadEnum();
+            incenseType_ = (global::POGOProtos.Inventory.Item.ItemId) input.ReadEnum();
             break;
           }
         }
@@ -7035,9 +7037,9 @@ namespace POGOProtos.Networking.Requests.Messages {
 
     /// <summary>Field number for the "item_id" field.</summary>
     public const int ItemIdFieldNumber = 1;
-    private global::POGOProtos.Inventory.ItemId itemId_ = 0;
+    private global::POGOProtos.Inventory.Item.ItemId itemId_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemId ItemId {
+    public global::POGOProtos.Inventory.Item.ItemId ItemId {
       get { return itemId_; }
       set {
         itemId_ = value;
@@ -7155,7 +7157,7 @@ namespace POGOProtos.Networking.Requests.Messages {
             input.SkipLastField();
             break;
           case 8: {
-            itemId_ = (global::POGOProtos.Inventory.ItemId) input.ReadEnum();
+            itemId_ = (global::POGOProtos.Inventory.Item.ItemId) input.ReadEnum();
             break;
           }
           case 17: {
@@ -7354,9 +7356,9 @@ namespace POGOProtos.Networking.Requests.Messages {
 
     /// <summary>Field number for the "item_id" field.</summary>
     public const int ItemIdFieldNumber = 1;
-    private global::POGOProtos.Inventory.ItemId itemId_ = 0;
+    private global::POGOProtos.Inventory.Item.ItemId itemId_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemId ItemId {
+    public global::POGOProtos.Inventory.Item.ItemId ItemId {
       get { return itemId_; }
       set {
         itemId_ = value;
@@ -7497,7 +7499,7 @@ namespace POGOProtos.Networking.Requests.Messages {
             input.SkipLastField();
             break;
           case 8: {
-            itemId_ = (global::POGOProtos.Inventory.ItemId) input.ReadEnum();
+            itemId_ = (global::POGOProtos.Inventory.Item.ItemId) input.ReadEnum();
             break;
           }
           case 18: {
@@ -7553,9 +7555,9 @@ namespace POGOProtos.Networking.Requests.Messages {
 
     /// <summary>Field number for the "item_id" field.</summary>
     public const int ItemIdFieldNumber = 1;
-    private global::POGOProtos.Inventory.ItemId itemId_ = 0;
+    private global::POGOProtos.Inventory.Item.ItemId itemId_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemId ItemId {
+    public global::POGOProtos.Inventory.Item.ItemId ItemId {
       get { return itemId_; }
       set {
         itemId_ = value;
@@ -7650,7 +7652,7 @@ namespace POGOProtos.Networking.Requests.Messages {
             input.SkipLastField();
             break;
           case 8: {
-            itemId_ = (global::POGOProtos.Inventory.ItemId) input.ReadEnum();
+            itemId_ = (global::POGOProtos.Inventory.Item.ItemId) input.ReadEnum();
             break;
           }
           case 16: {
@@ -7698,9 +7700,9 @@ namespace POGOProtos.Networking.Requests.Messages {
 
     /// <summary>Field number for the "item_id" field.</summary>
     public const int ItemIdFieldNumber = 1;
-    private global::POGOProtos.Inventory.ItemId itemId_ = 0;
+    private global::POGOProtos.Inventory.Item.ItemId itemId_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemId ItemId {
+    public global::POGOProtos.Inventory.Item.ItemId ItemId {
       get { return itemId_; }
       set {
         itemId_ = value;
@@ -7795,7 +7797,7 @@ namespace POGOProtos.Networking.Requests.Messages {
             input.SkipLastField();
             break;
           case 8: {
-            itemId_ = (global::POGOProtos.Inventory.ItemId) input.ReadEnum();
+            itemId_ = (global::POGOProtos.Inventory.Item.ItemId) input.ReadEnum();
             break;
           }
           case 16: {
@@ -7842,9 +7844,9 @@ namespace POGOProtos.Networking.Requests.Messages {
 
     /// <summary>Field number for the "item_id" field.</summary>
     public const int ItemIdFieldNumber = 1;
-    private global::POGOProtos.Inventory.ItemId itemId_ = 0;
+    private global::POGOProtos.Inventory.Item.ItemId itemId_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemId ItemId {
+    public global::POGOProtos.Inventory.Item.ItemId ItemId {
       get { return itemId_; }
       set {
         itemId_ = value;
@@ -7916,7 +7918,7 @@ namespace POGOProtos.Networking.Requests.Messages {
             input.SkipLastField();
             break;
           case 8: {
-            itemId_ = (global::POGOProtos.Inventory.ItemId) input.ReadEnum();
+            itemId_ = (global::POGOProtos.Inventory.Item.ItemId) input.ReadEnum();
             break;
           }
         }

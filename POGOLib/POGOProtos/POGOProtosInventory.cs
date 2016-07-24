@@ -23,81 +23,56 @@ namespace POGOProtos.Inventory {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChpQT0dPUHJvdG9zLkludmVudG9yeS5wcm90bxIUUE9HT1Byb3Rvcy5JbnZl",
-            "bnRvcnkaFVBPR09Qcm90b3MuRGF0YS5wcm90bxocUE9HT1Byb3Rvcy5EYXRh",
-            "LlBsYXllci5wcm90bxoWUE9HT1Byb3Rvcy5FbnVtcy5wcm90byKWAQoLQXBw",
-            "bGllZEl0ZW0SLQoHaXRlbV9pZBgBIAEoDjIcLlBPR09Qcm90b3MuSW52ZW50",
-            "b3J5Lkl0ZW1JZBIxCglpdGVtX3R5cGUYAiABKA4yHi5QT0dPUHJvdG9zLklu",
-            "dmVudG9yeS5JdGVtVHlwZRIRCglleHBpcmVfbXMYAyABKAMSEgoKYXBwbGll",
-            "ZF9tcxgEIAEoAyI/CgxBcHBsaWVkSXRlbXMSLwoEaXRlbRgEIAMoCzIhLlBP",
-            "R09Qcm90b3MuSW52ZW50b3J5LkFwcGxpZWRJdGVtIugBCgxFZ2dJbmN1YmF0",
-            "b3ISCgoCaWQYASABKAkSLQoHaXRlbV9pZBgCIAEoDjIcLlBPR09Qcm90b3Mu",
-            "SW52ZW50b3J5Lkl0ZW1JZBI+Cg5pbmN1YmF0b3JfdHlwZRgDIAEoDjImLlBP",
-            "R09Qcm90b3MuSW52ZW50b3J5LkVnZ0luY3ViYXRvclR5cGUSFgoOdXNlc19y",
-            "ZW1haW5pbmcYBCABKAUSEgoKcG9rZW1vbl9pZBgFIAEoBBIXCg9zdGFydF9r",
-            "bV93YWxrZWQYBiABKAESGAoQdGFyZ2V0X2ttX3dhbGtlZBgHIAEoASJKCg1F",
-            "Z2dJbmN1YmF0b3JzEjkKDWVnZ19pbmN1YmF0b3IYASADKAsyIi5QT0dPUHJv",
-            "dG9zLkludmVudG9yeS5FZ2dJbmN1YmF0b3IihwEKDkludmVudG9yeURlbHRh",
-            "Eh0KFW9yaWdpbmFsX3RpbWVzdGFtcF9tcxgBIAEoAxIYChBuZXdfdGltZXN0",
-            "YW1wX21zGAIgASgDEjwKD2ludmVudG9yeV9pdGVtcxgDIAMoCzIjLlBPR09Q",
-            "cm90b3MuSW52ZW50b3J5LkludmVudG9yeUl0ZW0ijgEKDUludmVudG9yeUl0",
-            "ZW0SHQoVbW9kaWZpZWRfdGltZXN0YW1wX21zGAEgASgDEhgKEGRlbGV0ZWRf",
-            "aXRlbV9rZXkYAiABKAMSRAoTaW52ZW50b3J5X2l0ZW1fZGF0YRgDIAEoCzIn",
-            "LlBPR09Qcm90b3MuSW52ZW50b3J5LkludmVudG9yeUl0ZW1EYXRhItoEChFJ",
-            "bnZlbnRvcnlJdGVtRGF0YRIyCgxwb2tlbW9uX2RhdGEYASABKAsyHC5QT0dP",
-            "UHJvdG9zLkRhdGEuUG9rZW1vbkRhdGESKAoEaXRlbRgCIAEoCzIaLlBPR09Q",
-            "cm90b3MuSW52ZW50b3J5Lkl0ZW0SNAoNcG9rZWRleF9lbnRyeRgDIAEoCzId",
-            "LlBPR09Qcm90b3MuRGF0YS5Qb2tlZGV4RW50cnkSOQoMcGxheWVyX3N0YXRz",
-            "GAQgASgLMiMuUE9HT1Byb3Rvcy5EYXRhLlBsYXllci5QbGF5ZXJTdGF0cxI/",
-            "Cg9wbGF5ZXJfY3VycmVuY3kYBSABKAsyJi5QT0dPUHJvdG9zLkRhdGEuUGxh",
-            "eWVyLlBsYXllckN1cnJlbmN5EjsKDXBsYXllcl9jYW1lcmEYBiABKAsyJC5Q",
-            "T0dPUHJvdG9zLkRhdGEuUGxheWVyLlBsYXllckNhbWVyYRJDChJpbnZlbnRv",
-            "cnlfdXBncmFkZXMYByABKAsyJy5QT0dPUHJvdG9zLkludmVudG9yeS5JbnZl",
-            "bnRvcnlVcGdyYWRlcxI5Cg1hcHBsaWVkX2l0ZW1zGAggASgLMiIuUE9HT1By",
-            "b3Rvcy5JbnZlbnRvcnkuQXBwbGllZEl0ZW1zEjsKDmVnZ19pbmN1YmF0b3Jz",
-            "GAkgASgLMiMuUE9HT1Byb3Rvcy5JbnZlbnRvcnkuRWdnSW5jdWJhdG9ycxI7",
-            "Cg5wb2tlbW9uX2ZhbWlseRgKIAEoCzIjLlBPR09Qcm90b3MuSW52ZW50b3J5",
-            "LlBva2Vtb25GYW1pbHkinwEKEEludmVudG9yeVVwZ3JhZGUSLQoHaXRlbV9p",
-            "ZBgBIAEoDjIcLlBPR09Qcm90b3MuSW52ZW50b3J5Lkl0ZW1JZBJACgx1cGdy",
-            "YWRlX3R5cGUYAiABKA4yKi5QT0dPUHJvdG9zLkludmVudG9yeS5JbnZlbnRv",
-            "cnlVcGdyYWRlVHlwZRIaChJhZGRpdGlvbmFsX3N0b3JhZ2UYAyABKAUiVwoR",
-            "SW52ZW50b3J5VXBncmFkZXMSQgoSaW52ZW50b3J5X3VwZ3JhZGVzGAEgAygL",
-            "MiYuUE9HT1Byb3Rvcy5JbnZlbnRvcnkuSW52ZW50b3J5VXBncmFkZSJUCgRJ",
-            "dGVtEi0KB2l0ZW1faWQYASABKA4yHC5QT0dPUHJvdG9zLkludmVudG9yeS5J",
-            "dGVtSWQSDQoFY291bnQYAiABKAUSDgoGdW5zZWVuGAMgASgIIk4KCUl0ZW1B",
-            "d2FyZBItCgdpdGVtX2lkGAEgASgOMhwuUE9HT1Byb3Rvcy5JbnZlbnRvcnku",
-            "SXRlbUlkEhIKCml0ZW1fY291bnQYAiABKAUiVAoNUG9rZW1vbkZhbWlseRI0",
-            "CglmYW1pbHlfaWQYASABKA4yIS5QT0dPUHJvdG9zLkVudW1zLlBva2Vtb25G",
-            "YW1pbHlJZBINCgVjYW5keRgCIAEoBSo/ChBFZ2dJbmN1YmF0b3JUeXBlEhMK",
-            "D0lOQ1VCQVRPUl9VTlNFVBAAEhYKEklOQ1VCQVRPUl9ESVNUQU5DRRABKmIK",
-            "FEludmVudG9yeVVwZ3JhZGVUeXBlEhEKDVVQR1JBREVfVU5TRVQQABIZChVJ",
-            "TkNSRUFTRV9JVEVNX1NUT1JBR0UQARIcChhJTkNSRUFTRV9QT0tFTU9OX1NU",
-            "T1JBR0UQAirHBQoGSXRlbUlkEhAKDElURU1fVU5LTk9XThAAEhIKDklURU1f",
-            "UE9LRV9CQUxMEAESEwoPSVRFTV9HUkVBVF9CQUxMEAISEwoPSVRFTV9VTFRS",
-            "QV9CQUxMEAMSFAoQSVRFTV9NQVNURVJfQkFMTBAEEg8KC0lURU1fUE9USU9O",
-            "EGUSFQoRSVRFTV9TVVBFUl9QT1RJT04QZhIVChFJVEVNX0hZUEVSX1BPVElP",
-            "ThBnEhMKD0lURU1fTUFYX1BPVElPThBoEhAKC0lURU1fUkVWSVZFEMkBEhQK",
-            "D0lURU1fTUFYX1JFVklWRRDKARITCg5JVEVNX0xVQ0tZX0VHRxCtAhIaChVJ",
-            "VEVNX0lOQ0VOU0VfT1JESU5BUlkQkQMSFwoSSVRFTV9JTkNFTlNFX1NQSUNZ",
-            "EJIDEhYKEUlURU1fSU5DRU5TRV9DT09MEJMDEhgKE0lURU1fSU5DRU5TRV9G",
-            "TE9SQUwQlAMSEwoOSVRFTV9UUk9ZX0RJU0sQ9QMSEgoNSVRFTV9YX0FUVEFD",
-            "SxDaBBITCg5JVEVNX1hfREVGRU5TRRDbBBITCg5JVEVNX1hfTUlSQUNMRRDc",
-            "BBIUCg9JVEVNX1JBWlpfQkVSUlkQvQUSFAoPSVRFTV9CTFVLX0JFUlJZEL4F",
-            "EhUKEElURU1fTkFOQUJfQkVSUlkQvwUSFQoQSVRFTV9XRVBBUl9CRVJSWRDA",
-            "BRIVChBJVEVNX1BJTkFQX0JFUlJZEMEFEhgKE0lURU1fU1BFQ0lBTF9DQU1F",
-            "UkEQoQYSIwoeSVRFTV9JTkNVQkFUT1JfQkFTSUNfVU5MSU1JVEVEEIUHEhkK",
-            "FElURU1fSU5DVUJBVE9SX0JBU0lDEIYHEiEKHElURU1fUE9LRU1PTl9TVE9S",
-            "QUdFX1VQR1JBREUQ6QcSHgoZSVRFTV9JVEVNX1NUT1JBR0VfVVBHUkFERRDq",
-            "ByqyAgoISXRlbVR5cGUSEgoOSVRFTV9UWVBFX05PTkUQABIWChJJVEVNX1RZ",
-            "UEVfUE9LRUJBTEwQARIUChBJVEVNX1RZUEVfUE9USU9OEAISFAoQSVRFTV9U",
-            "WVBFX1JFVklWRRADEhEKDUlURU1fVFlQRV9NQVAQBBIUChBJVEVNX1RZUEVf",
-            "QkFUVExFEAUSEgoOSVRFTV9UWVBFX0ZPT0QQBhIUChBJVEVNX1RZUEVfQ0FN",
-            "RVJBEAcSEgoOSVRFTV9UWVBFX0RJU0sQCBIXChNJVEVNX1RZUEVfSU5DVUJB",
-            "VE9SEAkSFQoRSVRFTV9UWVBFX0lOQ0VOU0UQChIWChJJVEVNX1RZUEVfWFBf",
-            "Qk9PU1QQCxIfChtJVEVNX1RZUEVfSU5WRU5UT1JZX1VQR1JBREUQDFAAUAFQ",
-            "AmIGcHJvdG8z"));
+            "bnRvcnkaH1BPR09Qcm90b3MuSW52ZW50b3J5Lkl0ZW0ucHJvdG8aFVBPR09Q",
+            "cm90b3MuRGF0YS5wcm90bxocUE9HT1Byb3Rvcy5EYXRhLlBsYXllci5wcm90",
+            "bxoWUE9HT1Byb3Rvcy5FbnVtcy5wcm90byKgAQoLQXBwbGllZEl0ZW0SMgoH",
+            "aXRlbV9pZBgBIAEoDjIhLlBPR09Qcm90b3MuSW52ZW50b3J5Lkl0ZW0uSXRl",
+            "bUlkEjYKCWl0ZW1fdHlwZRgCIAEoDjIjLlBPR09Qcm90b3MuSW52ZW50b3J5",
+            "Lkl0ZW0uSXRlbVR5cGUSEQoJZXhwaXJlX21zGAMgASgDEhIKCmFwcGxpZWRf",
+            "bXMYBCABKAMiPwoMQXBwbGllZEl0ZW1zEi8KBGl0ZW0YBCADKAsyIS5QT0dP",
+            "UHJvdG9zLkludmVudG9yeS5BcHBsaWVkSXRlbSLtAQoMRWdnSW5jdWJhdG9y",
+            "EgoKAmlkGAEgASgJEjIKB2l0ZW1faWQYAiABKA4yIS5QT0dPUHJvdG9zLklu",
+            "dmVudG9yeS5JdGVtLkl0ZW1JZBI+Cg5pbmN1YmF0b3JfdHlwZRgDIAEoDjIm",
+            "LlBPR09Qcm90b3MuSW52ZW50b3J5LkVnZ0luY3ViYXRvclR5cGUSFgoOdXNl",
+            "c19yZW1haW5pbmcYBCABKAUSEgoKcG9rZW1vbl9pZBgFIAEoBBIXCg9zdGFy",
+            "dF9rbV93YWxrZWQYBiABKAESGAoQdGFyZ2V0X2ttX3dhbGtlZBgHIAEoASJK",
+            "Cg1FZ2dJbmN1YmF0b3JzEjkKDWVnZ19pbmN1YmF0b3IYASADKAsyIi5QT0dP",
+            "UHJvdG9zLkludmVudG9yeS5FZ2dJbmN1YmF0b3IihwEKDkludmVudG9yeURl",
+            "bHRhEh0KFW9yaWdpbmFsX3RpbWVzdGFtcF9tcxgBIAEoAxIYChBuZXdfdGlt",
+            "ZXN0YW1wX21zGAIgASgDEjwKD2ludmVudG9yeV9pdGVtcxgDIAMoCzIjLlBP",
+            "R09Qcm90b3MuSW52ZW50b3J5LkludmVudG9yeUl0ZW0ijgEKDUludmVudG9y",
+            "eUl0ZW0SHQoVbW9kaWZpZWRfdGltZXN0YW1wX21zGAEgASgDEhgKEGRlbGV0",
+            "ZWRfaXRlbV9rZXkYAiABKAMSRAoTaW52ZW50b3J5X2l0ZW1fZGF0YRgDIAEo",
+            "CzInLlBPR09Qcm90b3MuSW52ZW50b3J5LkludmVudG9yeUl0ZW1EYXRhIuME",
+            "ChFJbnZlbnRvcnlJdGVtRGF0YRIyCgxwb2tlbW9uX2RhdGEYASABKAsyHC5Q",
+            "T0dPUHJvdG9zLkRhdGEuUG9rZW1vbkRhdGESMQoEaXRlbRgCIAEoCzIjLlBP",
+            "R09Qcm90b3MuSW52ZW50b3J5Lkl0ZW0uSXRlbURhdGESNAoNcG9rZWRleF9l",
+            "bnRyeRgDIAEoCzIdLlBPR09Qcm90b3MuRGF0YS5Qb2tlZGV4RW50cnkSOQoM",
+            "cGxheWVyX3N0YXRzGAQgASgLMiMuUE9HT1Byb3Rvcy5EYXRhLlBsYXllci5Q",
+            "bGF5ZXJTdGF0cxI/Cg9wbGF5ZXJfY3VycmVuY3kYBSABKAsyJi5QT0dPUHJv",
+            "dG9zLkRhdGEuUGxheWVyLlBsYXllckN1cnJlbmN5EjsKDXBsYXllcl9jYW1l",
+            "cmEYBiABKAsyJC5QT0dPUHJvdG9zLkRhdGEuUGxheWVyLlBsYXllckNhbWVy",
+            "YRJDChJpbnZlbnRvcnlfdXBncmFkZXMYByABKAsyJy5QT0dPUHJvdG9zLklu",
+            "dmVudG9yeS5JbnZlbnRvcnlVcGdyYWRlcxI5Cg1hcHBsaWVkX2l0ZW1zGAgg",
+            "ASgLMiIuUE9HT1Byb3Rvcy5JbnZlbnRvcnkuQXBwbGllZEl0ZW1zEjsKDmVn",
+            "Z19pbmN1YmF0b3JzGAkgASgLMiMuUE9HT1Byb3Rvcy5JbnZlbnRvcnkuRWdn",
+            "SW5jdWJhdG9ycxI7Cg5wb2tlbW9uX2ZhbWlseRgKIAEoCzIjLlBPR09Qcm90",
+            "b3MuSW52ZW50b3J5LlBva2Vtb25GYW1pbHkipAEKEEludmVudG9yeVVwZ3Jh",
+            "ZGUSMgoHaXRlbV9pZBgBIAEoDjIhLlBPR09Qcm90b3MuSW52ZW50b3J5Lkl0",
+            "ZW0uSXRlbUlkEkAKDHVwZ3JhZGVfdHlwZRgCIAEoDjIqLlBPR09Qcm90b3Mu",
+            "SW52ZW50b3J5LkludmVudG9yeVVwZ3JhZGVUeXBlEhoKEmFkZGl0aW9uYWxf",
+            "c3RvcmFnZRgDIAEoBSJXChFJbnZlbnRvcnlVcGdyYWRlcxJCChJpbnZlbnRv",
+            "cnlfdXBncmFkZXMYASADKAsyJi5QT0dPUHJvdG9zLkludmVudG9yeS5JbnZl",
+            "bnRvcnlVcGdyYWRlIlQKDVBva2Vtb25GYW1pbHkSNAoJZmFtaWx5X2lkGAEg",
+            "ASgOMiEuUE9HT1Byb3Rvcy5FbnVtcy5Qb2tlbW9uRmFtaWx5SWQSDQoFY2Fu",
+            "ZHkYAiABKAUqPwoQRWdnSW5jdWJhdG9yVHlwZRITCg9JTkNVQkFUT1JfVU5T",
+            "RVQQABIWChJJTkNVQkFUT1JfRElTVEFOQ0UQASpiChRJbnZlbnRvcnlVcGdy",
+            "YWRlVHlwZRIRCg1VUEdSQURFX1VOU0VUEAASGQoVSU5DUkVBU0VfSVRFTV9T",
+            "VE9SQUdFEAESHAoYSU5DUkVBU0VfUE9LRU1PTl9TVE9SQUdFEAJQAFABUAJQ",
+            "A2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOProtos.Data.POGOProtosDataReflection.Descriptor, global::POGOProtos.Data.Player.POGOProtosDataPlayerReflection.Descriptor, global::POGOProtos.Enums.POGOProtosEnumsReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::POGOProtos.Inventory.EggIncubatorType), typeof(global::POGOProtos.Inventory.InventoryUpgradeType), typeof(global::POGOProtos.Inventory.ItemId), typeof(global::POGOProtos.Inventory.ItemType), }, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::FileDescriptor[] { global::POGOProtos.Inventory.Item.POGOProtosInventoryItemReflection.Descriptor, global::POGOProtos.Data.POGOProtosDataReflection.Descriptor, global::POGOProtos.Data.Player.POGOProtosDataPlayerReflection.Descriptor, global::POGOProtos.Enums.POGOProtosEnumsReflection.Descriptor, },
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::POGOProtos.Inventory.EggIncubatorType), typeof(global::POGOProtos.Inventory.InventoryUpgradeType), }, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Inventory.AppliedItem), global::POGOProtos.Inventory.AppliedItem.Parser, new[]{ "ItemId", "ItemType", "ExpireMs", "AppliedMs" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Inventory.AppliedItems), global::POGOProtos.Inventory.AppliedItems.Parser, new[]{ "Item" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Inventory.EggIncubator), global::POGOProtos.Inventory.EggIncubator.Parser, new[]{ "Id", "ItemId", "IncubatorType", "UsesRemaining", "PokemonId", "StartKmWalked", "TargetKmWalked" }, null, null, null),
@@ -107,8 +82,6 @@ namespace POGOProtos.Inventory {
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Inventory.InventoryItemData), global::POGOProtos.Inventory.InventoryItemData.Parser, new[]{ "PokemonData", "Item", "PokedexEntry", "PlayerStats", "PlayerCurrency", "PlayerCamera", "InventoryUpgrades", "AppliedItems", "EggIncubators", "PokemonFamily" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Inventory.InventoryUpgrade), global::POGOProtos.Inventory.InventoryUpgrade.Parser, new[]{ "ItemId", "UpgradeType", "AdditionalStorage" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Inventory.InventoryUpgrades), global::POGOProtos.Inventory.InventoryUpgrades.Parser, new[]{ "InventoryUpgrades_" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Inventory.Item), global::POGOProtos.Inventory.Item.Parser, new[]{ "ItemId", "Count", "Unseen" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Inventory.ItemAward), global::POGOProtos.Inventory.ItemAward.Parser, new[]{ "ItemId", "ItemCount" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Inventory.PokemonFamily), global::POGOProtos.Inventory.PokemonFamily.Parser, new[]{ "FamilyId", "Candy" }, null, null, null)
           }));
     }
@@ -125,55 +98,6 @@ namespace POGOProtos.Inventory {
     [pbr::OriginalName("UPGRADE_UNSET")] UpgradeUnset = 0,
     [pbr::OriginalName("INCREASE_ITEM_STORAGE")] IncreaseItemStorage = 1,
     [pbr::OriginalName("INCREASE_POKEMON_STORAGE")] IncreasePokemonStorage = 2,
-  }
-
-  public enum ItemId {
-    [pbr::OriginalName("ITEM_UNKNOWN")] ItemUnknown = 0,
-    [pbr::OriginalName("ITEM_POKE_BALL")] ItemPokeBall = 1,
-    [pbr::OriginalName("ITEM_GREAT_BALL")] ItemGreatBall = 2,
-    [pbr::OriginalName("ITEM_ULTRA_BALL")] ItemUltraBall = 3,
-    [pbr::OriginalName("ITEM_MASTER_BALL")] ItemMasterBall = 4,
-    [pbr::OriginalName("ITEM_POTION")] ItemPotion = 101,
-    [pbr::OriginalName("ITEM_SUPER_POTION")] ItemSuperPotion = 102,
-    [pbr::OriginalName("ITEM_HYPER_POTION")] ItemHyperPotion = 103,
-    [pbr::OriginalName("ITEM_MAX_POTION")] ItemMaxPotion = 104,
-    [pbr::OriginalName("ITEM_REVIVE")] ItemRevive = 201,
-    [pbr::OriginalName("ITEM_MAX_REVIVE")] ItemMaxRevive = 202,
-    [pbr::OriginalName("ITEM_LUCKY_EGG")] ItemLuckyEgg = 301,
-    [pbr::OriginalName("ITEM_INCENSE_ORDINARY")] ItemIncenseOrdinary = 401,
-    [pbr::OriginalName("ITEM_INCENSE_SPICY")] ItemIncenseSpicy = 402,
-    [pbr::OriginalName("ITEM_INCENSE_COOL")] ItemIncenseCool = 403,
-    [pbr::OriginalName("ITEM_INCENSE_FLORAL")] ItemIncenseFloral = 404,
-    [pbr::OriginalName("ITEM_TROY_DISK")] ItemTroyDisk = 501,
-    [pbr::OriginalName("ITEM_X_ATTACK")] ItemXAttack = 602,
-    [pbr::OriginalName("ITEM_X_DEFENSE")] ItemXDefense = 603,
-    [pbr::OriginalName("ITEM_X_MIRACLE")] ItemXMiracle = 604,
-    [pbr::OriginalName("ITEM_RAZZ_BERRY")] ItemRazzBerry = 701,
-    [pbr::OriginalName("ITEM_BLUK_BERRY")] ItemBlukBerry = 702,
-    [pbr::OriginalName("ITEM_NANAB_BERRY")] ItemNanabBerry = 703,
-    [pbr::OriginalName("ITEM_WEPAR_BERRY")] ItemWeparBerry = 704,
-    [pbr::OriginalName("ITEM_PINAP_BERRY")] ItemPinapBerry = 705,
-    [pbr::OriginalName("ITEM_SPECIAL_CAMERA")] ItemSpecialCamera = 801,
-    [pbr::OriginalName("ITEM_INCUBATOR_BASIC_UNLIMITED")] ItemIncubatorBasicUnlimited = 901,
-    [pbr::OriginalName("ITEM_INCUBATOR_BASIC")] ItemIncubatorBasic = 902,
-    [pbr::OriginalName("ITEM_POKEMON_STORAGE_UPGRADE")] ItemPokemonStorageUpgrade = 1001,
-    [pbr::OriginalName("ITEM_ITEM_STORAGE_UPGRADE")] ItemItemStorageUpgrade = 1002,
-  }
-
-  public enum ItemType {
-    [pbr::OriginalName("ITEM_TYPE_NONE")] None = 0,
-    [pbr::OriginalName("ITEM_TYPE_POKEBALL")] Pokeball = 1,
-    [pbr::OriginalName("ITEM_TYPE_POTION")] Potion = 2,
-    [pbr::OriginalName("ITEM_TYPE_REVIVE")] Revive = 3,
-    [pbr::OriginalName("ITEM_TYPE_MAP")] Map = 4,
-    [pbr::OriginalName("ITEM_TYPE_BATTLE")] Battle = 5,
-    [pbr::OriginalName("ITEM_TYPE_FOOD")] Food = 6,
-    [pbr::OriginalName("ITEM_TYPE_CAMERA")] Camera = 7,
-    [pbr::OriginalName("ITEM_TYPE_DISK")] Disk = 8,
-    [pbr::OriginalName("ITEM_TYPE_INCUBATOR")] Incubator = 9,
-    [pbr::OriginalName("ITEM_TYPE_INCENSE")] Incense = 10,
-    [pbr::OriginalName("ITEM_TYPE_XP_BOOST")] XpBoost = 11,
-    [pbr::OriginalName("ITEM_TYPE_INVENTORY_UPGRADE")] InventoryUpgrade = 12,
   }
 
   #endregion
@@ -216,9 +140,9 @@ namespace POGOProtos.Inventory {
 
     /// <summary>Field number for the "item_id" field.</summary>
     public const int ItemIdFieldNumber = 1;
-    private global::POGOProtos.Inventory.ItemId itemId_ = 0;
+    private global::POGOProtos.Inventory.Item.ItemId itemId_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemId ItemId {
+    public global::POGOProtos.Inventory.Item.ItemId ItemId {
       get { return itemId_; }
       set {
         itemId_ = value;
@@ -227,9 +151,9 @@ namespace POGOProtos.Inventory {
 
     /// <summary>Field number for the "item_type" field.</summary>
     public const int ItemTypeFieldNumber = 2;
-    private global::POGOProtos.Inventory.ItemType itemType_ = 0;
+    private global::POGOProtos.Inventory.Item.ItemType itemType_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemType ItemType {
+    public global::POGOProtos.Inventory.Item.ItemType ItemType {
       get { return itemType_; }
       set {
         itemType_ = value;
@@ -359,11 +283,11 @@ namespace POGOProtos.Inventory {
             input.SkipLastField();
             break;
           case 8: {
-            itemId_ = (global::POGOProtos.Inventory.ItemId) input.ReadEnum();
+            itemId_ = (global::POGOProtos.Inventory.Item.ItemId) input.ReadEnum();
             break;
           }
           case 16: {
-            itemType_ = (global::POGOProtos.Inventory.ItemType) input.ReadEnum();
+            itemType_ = (global::POGOProtos.Inventory.Item.ItemType) input.ReadEnum();
             break;
           }
           case 24: {
@@ -540,9 +464,9 @@ namespace POGOProtos.Inventory {
 
     /// <summary>Field number for the "item_id" field.</summary>
     public const int ItemIdFieldNumber = 2;
-    private global::POGOProtos.Inventory.ItemId itemId_ = 0;
+    private global::POGOProtos.Inventory.Item.ItemId itemId_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemId ItemId {
+    public global::POGOProtos.Inventory.Item.ItemId ItemId {
       get { return itemId_; }
       set {
         itemId_ = value;
@@ -748,7 +672,7 @@ namespace POGOProtos.Inventory {
             break;
           }
           case 16: {
-            itemId_ = (global::POGOProtos.Inventory.ItemId) input.ReadEnum();
+            itemId_ = (global::POGOProtos.Inventory.Item.ItemId) input.ReadEnum();
             break;
           }
           case 24: {
@@ -1284,9 +1208,9 @@ namespace POGOProtos.Inventory {
 
     /// <summary>Field number for the "item" field.</summary>
     public const int ItemFieldNumber = 2;
-    private global::POGOProtos.Inventory.Item item_;
+    private global::POGOProtos.Inventory.Item.ItemData item_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.Item Item {
+    public global::POGOProtos.Inventory.Item.ItemData Item {
       get { return item_; }
       set {
         item_ = value;
@@ -1521,7 +1445,7 @@ namespace POGOProtos.Inventory {
       }
       if (other.item_ != null) {
         if (item_ == null) {
-          item_ = new global::POGOProtos.Inventory.Item();
+          item_ = new global::POGOProtos.Inventory.Item.ItemData();
         }
         Item.MergeFrom(other.Item);
       }
@@ -1592,7 +1516,7 @@ namespace POGOProtos.Inventory {
           }
           case 18: {
             if (item_ == null) {
-              item_ = new global::POGOProtos.Inventory.Item();
+              item_ = new global::POGOProtos.Inventory.Item.ItemData();
             }
             input.ReadMessage(item_);
             break;
@@ -1695,9 +1619,9 @@ namespace POGOProtos.Inventory {
 
     /// <summary>Field number for the "item_id" field.</summary>
     public const int ItemIdFieldNumber = 1;
-    private global::POGOProtos.Inventory.ItemId itemId_ = 0;
+    private global::POGOProtos.Inventory.Item.ItemId itemId_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemId ItemId {
+    public global::POGOProtos.Inventory.Item.ItemId ItemId {
       get { return itemId_; }
       set {
         itemId_ = value;
@@ -1815,7 +1739,7 @@ namespace POGOProtos.Inventory {
             input.SkipLastField();
             break;
           case 8: {
-            itemId_ = (global::POGOProtos.Inventory.ItemId) input.ReadEnum();
+            itemId_ = (global::POGOProtos.Inventory.Item.ItemId) input.ReadEnum();
             break;
           }
           case 16: {
@@ -1941,324 +1865,6 @@ namespace POGOProtos.Inventory {
 
   }
 
-  public sealed partial class Item : pb::IMessage<Item> {
-    private static readonly pb::MessageParser<Item> _parser = new pb::MessageParser<Item>(() => new Item());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<Item> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::POGOProtos.Inventory.POGOProtosInventoryReflection.Descriptor.MessageTypes[9]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Item() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Item(Item other) : this() {
-      itemId_ = other.itemId_;
-      count_ = other.count_;
-      unseen_ = other.unseen_;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public Item Clone() {
-      return new Item(this);
-    }
-
-    /// <summary>Field number for the "item_id" field.</summary>
-    public const int ItemIdFieldNumber = 1;
-    private global::POGOProtos.Inventory.ItemId itemId_ = 0;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemId ItemId {
-      get { return itemId_; }
-      set {
-        itemId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "count" field.</summary>
-    public const int CountFieldNumber = 2;
-    private int count_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Count {
-      get { return count_; }
-      set {
-        count_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "unseen" field.</summary>
-    public const int UnseenFieldNumber = 3;
-    private bool unseen_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Unseen {
-      get { return unseen_; }
-      set {
-        unseen_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as Item);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(Item other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (ItemId != other.ItemId) return false;
-      if (Count != other.Count) return false;
-      if (Unseen != other.Unseen) return false;
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (ItemId != 0) hash ^= ItemId.GetHashCode();
-      if (Count != 0) hash ^= Count.GetHashCode();
-      if (Unseen != false) hash ^= Unseen.GetHashCode();
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (ItemId != 0) {
-        output.WriteRawTag(8);
-        output.WriteEnum((int) ItemId);
-      }
-      if (Count != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(Count);
-      }
-      if (Unseen != false) {
-        output.WriteRawTag(24);
-        output.WriteBool(Unseen);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (ItemId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ItemId);
-      }
-      if (Count != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Count);
-      }
-      if (Unseen != false) {
-        size += 1 + 1;
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(Item other) {
-      if (other == null) {
-        return;
-      }
-      if (other.ItemId != 0) {
-        ItemId = other.ItemId;
-      }
-      if (other.Count != 0) {
-        Count = other.Count;
-      }
-      if (other.Unseen != false) {
-        Unseen = other.Unseen;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
-          case 8: {
-            itemId_ = (global::POGOProtos.Inventory.ItemId) input.ReadEnum();
-            break;
-          }
-          case 16: {
-            Count = input.ReadInt32();
-            break;
-          }
-          case 24: {
-            Unseen = input.ReadBool();
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
-  public sealed partial class ItemAward : pb::IMessage<ItemAward> {
-    private static readonly pb::MessageParser<ItemAward> _parser = new pb::MessageParser<ItemAward>(() => new ItemAward());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<ItemAward> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::POGOProtos.Inventory.POGOProtosInventoryReflection.Descriptor.MessageTypes[10]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ItemAward() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ItemAward(ItemAward other) : this() {
-      itemId_ = other.itemId_;
-      itemCount_ = other.itemCount_;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ItemAward Clone() {
-      return new ItemAward(this);
-    }
-
-    /// <summary>Field number for the "item_id" field.</summary>
-    public const int ItemIdFieldNumber = 1;
-    private global::POGOProtos.Inventory.ItemId itemId_ = 0;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemId ItemId {
-      get { return itemId_; }
-      set {
-        itemId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "item_count" field.</summary>
-    public const int ItemCountFieldNumber = 2;
-    private int itemCount_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int ItemCount {
-      get { return itemCount_; }
-      set {
-        itemCount_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as ItemAward);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(ItemAward other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (ItemId != other.ItemId) return false;
-      if (ItemCount != other.ItemCount) return false;
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (ItemId != 0) hash ^= ItemId.GetHashCode();
-      if (ItemCount != 0) hash ^= ItemCount.GetHashCode();
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (ItemId != 0) {
-        output.WriteRawTag(8);
-        output.WriteEnum((int) ItemId);
-      }
-      if (ItemCount != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(ItemCount);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (ItemId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ItemId);
-      }
-      if (ItemCount != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemCount);
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(ItemAward other) {
-      if (other == null) {
-        return;
-      }
-      if (other.ItemId != 0) {
-        ItemId = other.ItemId;
-      }
-      if (other.ItemCount != 0) {
-        ItemCount = other.ItemCount;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
-          case 8: {
-            itemId_ = (global::POGOProtos.Inventory.ItemId) input.ReadEnum();
-            break;
-          }
-          case 16: {
-            ItemCount = input.ReadInt32();
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
   public sealed partial class PokemonFamily : pb::IMessage<PokemonFamily> {
     private static readonly pb::MessageParser<PokemonFamily> _parser = new pb::MessageParser<PokemonFamily>(() => new PokemonFamily());
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2266,7 +1872,7 @@ namespace POGOProtos.Inventory {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::POGOProtos.Inventory.POGOProtosInventoryReflection.Descriptor.MessageTypes[11]; }
+      get { return global::POGOProtos.Inventory.POGOProtosInventoryReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

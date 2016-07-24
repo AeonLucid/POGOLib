@@ -23,24 +23,25 @@ namespace POGOProtos.Data.Logs {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChpQT0dPUHJvdG9zLkRhdGEuTG9ncy5wcm90bxIUUE9HT1Byb3Rvcy5EYXRh",
-            "LkxvZ3MaFlBPR09Qcm90b3MuRW51bXMucHJvdG8aGlBPR09Qcm90b3MuSW52",
-            "ZW50b3J5LnByb3RvIsUBCg5BY3Rpb25Mb2dFbnRyeRIUCgx0aW1lc3RhbXBf",
-            "bXMYASABKAMSDQoFc2ZpZGEYAiABKAgSQwoNY2F0Y2hfcG9rZW1vbhgDIAEo",
-            "CzIqLlBPR09Qcm90b3MuRGF0YS5Mb2dzLkNhdGNoUG9rZW1vbkxvZ0VudHJ5",
-            "SAASPwoLZm9ydF9zZWFyY2gYBCABKAsyKC5QT0dPUHJvdG9zLkRhdGEuTG9n",
-            "cy5Gb3J0U2VhcmNoTG9nRW50cnlIAEIICgZBY3Rpb24i9wEKFENhdGNoUG9r",
-            "ZW1vbkxvZ0VudHJ5EkEKBnJlc3VsdBgBIAEoDjIxLlBPR09Qcm90b3MuRGF0",
-            "YS5Mb2dzLkNhdGNoUG9rZW1vbkxvZ0VudHJ5LlJlc3VsdBIvCgpwb2tlbW9u",
-            "X2lkGAIgASgOMhsuUE9HT1Byb3Rvcy5FbnVtcy5Qb2tlbW9uSWQSFQoNY29t",
-            "YmF0X3BvaW50cxgDIAEoBRIXCg9wb2tlbW9uX2RhdGFfaWQYBCABKAQiOwoG",
-            "UmVzdWx0EgkKBVVOU0VUEAASFAoQUE9LRU1PTl9DQVBUVVJFRBABEhAKDFBP",
-            "S0VNT05fRkxFRBACIsEBChJGb3J0U2VhcmNoTG9nRW50cnkSPwoGcmVzdWx0",
-            "GAEgASgOMi8uUE9HT1Byb3Rvcy5EYXRhLkxvZ3MuRm9ydFNlYXJjaExvZ0Vu",
-            "dHJ5LlJlc3VsdBIPCgdmb3J0X2lkGAIgASgJEikKBWl0ZW1zGAMgAygLMhou",
-            "UE9HT1Byb3Rvcy5JbnZlbnRvcnkuSXRlbRIMCgRlZ2dzGAQgASgFIiAKBlJl",
-            "c3VsdBIJCgVVTlNFVBAAEgsKB1NVQ0NFU1MQAVAAUAFiBnByb3RvMw=="));
+            "LkxvZ3MaFlBPR09Qcm90b3MuRW51bXMucHJvdG8aH1BPR09Qcm90b3MuSW52",
+            "ZW50b3J5Lkl0ZW0ucHJvdG8ixQEKDkFjdGlvbkxvZ0VudHJ5EhQKDHRpbWVz",
+            "dGFtcF9tcxgBIAEoAxINCgVzZmlkYRgCIAEoCBJDCg1jYXRjaF9wb2tlbW9u",
+            "GAMgASgLMiouUE9HT1Byb3Rvcy5EYXRhLkxvZ3MuQ2F0Y2hQb2tlbW9uTG9n",
+            "RW50cnlIABI/Cgtmb3J0X3NlYXJjaBgEIAEoCzIoLlBPR09Qcm90b3MuRGF0",
+            "YS5Mb2dzLkZvcnRTZWFyY2hMb2dFbnRyeUgAQggKBkFjdGlvbiL3AQoUQ2F0",
+            "Y2hQb2tlbW9uTG9nRW50cnkSQQoGcmVzdWx0GAEgASgOMjEuUE9HT1Byb3Rv",
+            "cy5EYXRhLkxvZ3MuQ2F0Y2hQb2tlbW9uTG9nRW50cnkuUmVzdWx0Ei8KCnBv",
+            "a2Vtb25faWQYAiABKA4yGy5QT0dPUHJvdG9zLkVudW1zLlBva2Vtb25JZBIV",
+            "Cg1jb21iYXRfcG9pbnRzGAMgASgFEhcKD3Bva2Vtb25fZGF0YV9pZBgEIAEo",
+            "BCI7CgZSZXN1bHQSCQoFVU5TRVQQABIUChBQT0tFTU9OX0NBUFRVUkVEEAES",
+            "EAoMUE9LRU1PTl9GTEVEEAIiygEKEkZvcnRTZWFyY2hMb2dFbnRyeRI/CgZy",
+            "ZXN1bHQYASABKA4yLy5QT0dPUHJvdG9zLkRhdGEuTG9ncy5Gb3J0U2VhcmNo",
+            "TG9nRW50cnkuUmVzdWx0Eg8KB2ZvcnRfaWQYAiABKAkSMgoFaXRlbXMYAyAD",
+            "KAsyIy5QT0dPUHJvdG9zLkludmVudG9yeS5JdGVtLkl0ZW1EYXRhEgwKBGVn",
+            "Z3MYBCABKAUiIAoGUmVzdWx0EgkKBVVOU0VUEAASCwoHU1VDQ0VTUxABUABQ",
+            "AWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOProtos.Enums.POGOProtosEnumsReflection.Descriptor, global::POGOProtos.Inventory.POGOProtosInventoryReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::POGOProtos.Enums.POGOProtosEnumsReflection.Descriptor, global::POGOProtos.Inventory.Item.POGOProtosInventoryItemReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Data.Logs.ActionLogEntry), global::POGOProtos.Data.Logs.ActionLogEntry.Parser, new[]{ "TimestampMs", "Sfida", "CatchPokemon", "FortSearch" }, new[]{ "Action" }, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Data.Logs.CatchPokemonLogEntry), global::POGOProtos.Data.Logs.CatchPokemonLogEntry.Parser, new[]{ "Result", "PokemonId", "CombatPoints", "PokemonDataId" }, null, new[]{ typeof(global::POGOProtos.Data.Logs.CatchPokemonLogEntry.Types.Result) }, null),
@@ -566,11 +567,11 @@ namespace POGOProtos.Data.Logs {
 
     /// <summary>Field number for the "items" field.</summary>
     public const int ItemsFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::POGOProtos.Inventory.Item> _repeated_items_codec
-        = pb::FieldCodec.ForMessage(26, global::POGOProtos.Inventory.Item.Parser);
-    private readonly pbc::RepeatedField<global::POGOProtos.Inventory.Item> items_ = new pbc::RepeatedField<global::POGOProtos.Inventory.Item>();
+    private static readonly pb::FieldCodec<global::POGOProtos.Inventory.Item.ItemData> _repeated_items_codec
+        = pb::FieldCodec.ForMessage(26, global::POGOProtos.Inventory.Item.ItemData.Parser);
+    private readonly pbc::RepeatedField<global::POGOProtos.Inventory.Item.ItemData> items_ = new pbc::RepeatedField<global::POGOProtos.Inventory.Item.ItemData>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::POGOProtos.Inventory.Item> Items {
+    public pbc::RepeatedField<global::POGOProtos.Inventory.Item.ItemData> Items {
       get { return items_; }
     }
 

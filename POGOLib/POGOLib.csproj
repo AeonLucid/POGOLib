@@ -73,6 +73,7 @@
     <Compile Include="Net\RpcClient.cs" />
     <Compile Include="Net\Session.cs" />
     <Compile Include="POGOProtos\POGOProtosDataLogs.cs" />
+    <Compile Include="POGOProtos\POGOProtosInventoryItem.cs" />
     <Compile Include="Pokemon\HeartbeatDispatcher.cs" />
     <Compile Include="POGOProtos\POGOProtosData.cs" />
     <Compile Include="POGOProtos\POGOProtosDataBattle.cs" />

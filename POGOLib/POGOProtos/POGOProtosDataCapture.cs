@@ -23,16 +23,16 @@ namespace POGOProtos.Data.Capture {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Ch1QT0dPUHJvdG9zLkRhdGEuQ2FwdHVyZS5wcm90bxIXUE9HT1Byb3Rvcy5E",
-            "YXRhLkNhcHR1cmUaFlBPR09Qcm90b3MuRW51bXMucHJvdG8aGlBPR09Qcm90",
-            "b3MuSW52ZW50b3J5LnByb3RvInIKDENhcHR1cmVBd2FyZBI1Cg1hY3Rpdml0",
-            "eV90eXBlGAEgAygOMh4uUE9HT1Byb3Rvcy5FbnVtcy5BY3Rpdml0eVR5cGUS",
-            "CgoCeHAYAiADKAUSDQoFY2FuZHkYAyADKAUSEAoIc3RhcmR1c3QYBCADKAUi",
-            "iAEKEkNhcHR1cmVQcm9iYWJpbGl0eRIzCg1wb2tlYmFsbF90eXBlGAEgAygO",
-            "MhwuUE9HT1Byb3Rvcy5JbnZlbnRvcnkuSXRlbUlkEhsKE2NhcHR1cmVfcHJv",
-            "YmFiaWxpdHkYAiADKAISIAoYcmV0aWNsZV9kaWZmaWN1bHR5X3NjYWxlGAwg",
-            "ASgBUABQAWIGcHJvdG8z"));
+            "YXRhLkNhcHR1cmUaFlBPR09Qcm90b3MuRW51bXMucHJvdG8aH1BPR09Qcm90",
+            "b3MuSW52ZW50b3J5Lkl0ZW0ucHJvdG8icgoMQ2FwdHVyZUF3YXJkEjUKDWFj",
+            "dGl2aXR5X3R5cGUYASADKA4yHi5QT0dPUHJvdG9zLkVudW1zLkFjdGl2aXR5",
+            "VHlwZRIKCgJ4cBgCIAMoBRINCgVjYW5keRgDIAMoBRIQCghzdGFyZHVzdBgE",
+            "IAMoBSKNAQoSQ2FwdHVyZVByb2JhYmlsaXR5EjgKDXBva2ViYWxsX3R5cGUY",
+            "ASADKA4yIS5QT0dPUHJvdG9zLkludmVudG9yeS5JdGVtLkl0ZW1JZBIbChNj",
+            "YXB0dXJlX3Byb2JhYmlsaXR5GAIgAygCEiAKGHJldGljbGVfZGlmZmljdWx0",
+            "eV9zY2FsZRgMIAEoAVAAUAFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOProtos.Enums.POGOProtosEnumsReflection.Descriptor, global::POGOProtos.Inventory.POGOProtosInventoryReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::POGOProtos.Enums.POGOProtosEnumsReflection.Descriptor, global::POGOProtos.Inventory.Item.POGOProtosInventoryItemReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Data.Capture.CaptureAward), global::POGOProtos.Data.Capture.CaptureAward.Parser, new[]{ "ActivityType", "Xp", "Candy", "Stardust" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Data.Capture.CaptureProbability), global::POGOProtos.Data.Capture.CaptureProbability.Parser, new[]{ "PokeballType", "CaptureProbability_", "ReticleDifficultyScale" }, null, null, null)
@@ -251,11 +251,11 @@ namespace POGOProtos.Data.Capture {
 
     /// <summary>Field number for the "pokeball_type" field.</summary>
     public const int PokeballTypeFieldNumber = 1;
-    private static readonly pb::FieldCodec<global::POGOProtos.Inventory.ItemId> _repeated_pokeballType_codec
-        = pb::FieldCodec.ForEnum(10, x => (int) x, x => (global::POGOProtos.Inventory.ItemId) x);
-    private readonly pbc::RepeatedField<global::POGOProtos.Inventory.ItemId> pokeballType_ = new pbc::RepeatedField<global::POGOProtos.Inventory.ItemId>();
+    private static readonly pb::FieldCodec<global::POGOProtos.Inventory.Item.ItemId> _repeated_pokeballType_codec
+        = pb::FieldCodec.ForEnum(10, x => (int) x, x => (global::POGOProtos.Inventory.Item.ItemId) x);
+    private readonly pbc::RepeatedField<global::POGOProtos.Inventory.Item.ItemId> pokeballType_ = new pbc::RepeatedField<global::POGOProtos.Inventory.Item.ItemId>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::POGOProtos.Inventory.ItemId> PokeballType {
+    public pbc::RepeatedField<global::POGOProtos.Inventory.Item.ItemId> PokeballType {
       get { return pokeballType_; }
     }
 
