@@ -39,6 +39,82 @@ namespace POGOLib.Pokemon
             }
         }
         
+        public List<SpawnPoint> GetSpawnPointsSortedByDistance(Func<SpawnPoint, bool> filter = null)
+        {
+            var spawnPoints = Cells.SelectMany(f => f.SpawnPoints);
+
+            if (filter != null)
+                spawnPoints = spawnPoints.Where(filter);
+
+            var sorted = spawnPoints.ToList();
+            sorted.Sort((p1, p2) =>
+            {
+                var p1Coordinate = new GeoCoordinate(p1.Latitude, p1.Longitude);
+                var p2Coordinate = new GeoCoordinate(p2.Latitude, p2.Longitude);
+
+                var distance1 = p1Coordinate.GetDistanceTo(_session.Player.Coordinate);
+                var distance2 = p2Coordinate.GetDistanceTo(_session.Player.Coordinate);
+
+                return distance1.CompareTo(distance2);
+            });
+
+            return sorted;
+        }
+
+        public List<NearbyPokemon> GetNearbyPokemons(Func<NearbyPokemon, bool> filter = null)
+        {
+            var NearbyPokemon = Cells.SelectMany(f => f.NearbyPokemons);
+
+            if (filter != null)
+                NearbyPokemon = NearbyPokemon.Where(filter);
+
+            return NearbyPokemon.ToList();
+        }
+
+        public List<MapPokemon> GetCatchablePokemonsSortedByDistance(Func<MapPokemon, bool> filter = null)
+        {
+            var CatchablePokemon = Cells.SelectMany(f => f.CatchablePokemons);
+
+            if (filter != null)
+                CatchablePokemon = CatchablePokemon.Where(filter);
+
+            var sorted = CatchablePokemon.ToList();
+            sorted.Sort((p1, p2) =>
+            {
+                var p1Coordinate = new GeoCoordinate(p1.Latitude, p1.Longitude);
+                var p2Coordinate = new GeoCoordinate(p2.Latitude, p2.Longitude);
+
+                var distance1 = p1Coordinate.GetDistanceTo(_session.Player.Coordinate);
+                var distance2 = p2Coordinate.GetDistanceTo(_session.Player.Coordinate);
+
+                return distance1.CompareTo(distance2);
+            });
+
+            return sorted;
+        }
+
+        public List<WildPokemon> GetWildPokemonsSortedByDistance(Func<WildPokemon, bool> filter = null)
+        {
+            var WildPokemon = Cells.SelectMany(f => f.WildPokemons);
+
+            if (filter != null)
+                WildPokemon = WildPokemon.Where(filter);
+
+            var sorted = WildPokemon.ToList();
+            sorted.Sort((p1, p2) =>
+            {
+                var p1Coordinate = new GeoCoordinate(p1.Latitude, p1.Longitude);
+                var p2Coordinate = new GeoCoordinate(p2.Latitude, p2.Longitude);
+
+                var distance1 = p1Coordinate.GetDistanceTo(_session.Player.Coordinate);
+                var distance2 = p2Coordinate.GetDistanceTo(_session.Player.Coordinate);
+
+                return distance1.CompareTo(distance2);
+            });
+
+            return sorted;
+        }
+        
         public List<FortData> GetFortsSortedByDistance(Func<FortData, bool> filter = null)
         {
             var forts = Cells.SelectMany(f => f.Forts);
