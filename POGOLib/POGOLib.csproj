@@ -96,6 +96,7 @@
     <Compile Include="Pokemon\Inventory.cs" />
     <Compile Include="Pokemon\Map.cs" />
     <Compile Include="Pokemon\Player.cs" />
+    <Compile Include="Pokemon\PokemonFamilyMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\MapUtil.cs" />
     <Compile Include="Util\TimeUtil.cs" />
