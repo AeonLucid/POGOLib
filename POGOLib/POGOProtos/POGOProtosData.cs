@@ -24,48 +24,50 @@ namespace POGOProtos.Data {
           string.Concat(
             "ChVQT0dPUHJvdG9zLkRhdGEucHJvdG8SD1BPR09Qcm90b3MuRGF0YRoWUE9H",
             "T1Byb3Rvcy5FbnVtcy5wcm90bxocUE9HT1Byb3Rvcy5EYXRhLlBsYXllci5w",
-            "cm90byJ3ChBBc3NldERpZ2VzdEVudHJ5EhAKCGFzc2V0X2lkGAEgASgJEhMK",
-            "C2J1bmRsZV9uYW1lGAIgASgJEg8KB3ZlcnNpb24YAyABKAMSEAoIY2hlY2tz",
-            "dW0YBCABKA0SDAoEc2l6ZRgFIAEoBRILCgNrZXkYBiABKAwiUQoQRG93bmxv",
-            "YWRVcmxFbnRyeRIQCghhc3NldF9pZBgBIAEoCRILCgN1cmwYAiABKAkSDAoE",
-            "c2l6ZRgDIAEoBRIQCghjaGVja3N1bRgEIAEoDSKLAQoLUGxheWVyQmFkZ2US",
-            "LwoKYmFkZ2VfdHlwZRgBIAEoDjIbLlBPR09Qcm90b3MuRW51bXMuQmFkZ2VU",
-            "eXBlEgwKBHJhbmsYAiABKAUSEwoLc3RhcnRfdmFsdWUYAyABKAUSEQoJZW5k",
-            "X3ZhbHVlGAQgASgFEhUKDWN1cnJlbnRfdmFsdWUYBSABKAEi5gMKClBsYXll",
-            "ckRhdGESHQoVY3JlYXRpb25fdGltZXN0YW1wX21zGAEgASgDEhAKCHVzZXJu",
-            "YW1lGAIgASgJEgwKBHRlYW0YBSABKAUSOwoOdHV0b3JpYWxfc3RhdGUYByAD",
-            "KA4yHy5QT0dPUHJvdG9zLkVudW1zLlR1dG9yaWFsU3RhdGVCAhABEjQKBmF2",
-            "YXRhchgIIAEoCzIkLlBPR09Qcm90b3MuRGF0YS5QbGF5ZXIuUGxheWVyQXZh",
-            "dGFyEhsKE21heF9wb2tlbW9uX3N0b3JhZ2UYCSABKAUSGAoQbWF4X2l0ZW1f",
-            "c3RvcmFnZRgKIAEoBRI3CgtkYWlseV9ib251cxgLIAEoCzIiLlBPR09Qcm90",
-            "b3MuRGF0YS5QbGF5ZXIuRGFpbHlCb251cxI9Cg5lcXVpcHBlZF9iYWRnZRgM",
-            "IAEoCzIlLlBPR09Qcm90b3MuRGF0YS5QbGF5ZXIuRXF1aXBwZWRCYWRnZRJB",
-            "ChBjb250YWN0X3NldHRpbmdzGA0gASgLMicuUE9HT1Byb3Rvcy5EYXRhLlBs",
-            "YXllci5Db250YWN0U2V0dGluZ3MSNAoKY3VycmVuY2llcxgOIAMoCzIgLlBP",
-            "R09Qcm90b3MuRGF0YS5QbGF5ZXIuQ3VycmVuY3kirAEKDFBva2VkZXhFbnRy",
-            "eRIvCgpwb2tlbW9uX2lkGAEgASgOMhsuUE9HT1Byb3Rvcy5FbnVtcy5Qb2tl",
-            "bW9uSWQSGQoRdGltZXNfZW5jb3VudGVyZWQYAiABKAUSFgoOdGltZXNfY2Fw",
-            "dHVyZWQYAyABKAUSHgoWZXZvbHV0aW9uX3N0b25lX3BpZWNlcxgEIAEoBRIY",
-            "ChBldm9sdXRpb25fc3RvbmVzGAUgASgFIvUFCgtQb2tlbW9uRGF0YRIKCgJp",
-            "ZBgBIAEoBhIvCgpwb2tlbW9uX2lkGAIgASgOMhsuUE9HT1Byb3Rvcy5FbnVt",
-            "cy5Qb2tlbW9uSWQSCgoCY3AYAyABKAUSDwoHc3RhbWluYRgEIAEoBRITCgtz",
-            "dGFtaW5hX21heBgFIAEoBRItCgZtb3ZlXzEYBiABKA4yHS5QT0dPUHJvdG9z",
-            "LkVudW1zLlBva2Vtb25Nb3ZlEi0KBm1vdmVfMhgHIAEoDjIdLlBPR09Qcm90",
-            "b3MuRW51bXMuUG9rZW1vbk1vdmUSGAoQZGVwbG95ZWRfZm9ydF9pZBgIIAEo",
-            "BRISCgpvd25lcl9uYW1lGAkgASgJEg4KBmlzX2VnZxgKIAEoCBIcChRlZ2df",
-            "a21fd2Fsa2VkX3RhcmdldBgLIAEoARIbChNlZ2dfa21fd2Fsa2VkX3N0YXJ0",
-            "GAwgASgBEg4KBm9yaWdpbhgOIAEoBRIQCghoZWlnaHRfbRgPIAEoAhIRCgl3",
-            "ZWlnaHRfa2cYECABKAISGQoRaW5kaXZpZHVhbF9hdHRhY2sYESABKAUSGgoS",
-            "aW5kaXZpZHVhbF9kZWZlbnNlGBIgASgFEhoKEmluZGl2aWR1YWxfc3RhbWlu",
-            "YRgTIAEoBRIVCg1jcF9tdWx0aXBsaWVyGBQgASgCEhAKCHBva2ViYWxsGBUg",
-            "ASgFEhgKEGNhcHR1cmVkX2NlbGxfaWQYFiABKAQSGAoQYmF0dGxlc19hdHRh",
-            "Y2tlZBgXIAEoBRIYChBiYXR0bGVzX2RlZmVuZGVkGBggASgFEhgKEGVnZ19p",
-            "bmN1YmF0b3JfaWQYGSABKAkSGAoQY3JlYXRpb25fdGltZV9tcxgaIAEoBBIU",
-            "CgxudW1fdXBncmFkZXMYGyABKAUSIAoYYWRkaXRpb25hbF9jcF9tdWx0aXBs",
-            "aWVyGBwgASgCEhAKCGZhdm9yaXRlGB0gASgFEhAKCG5pY2tuYW1lGB4gASgJ",
-            "EhEKCWZyb21fZm9ydBgfIAEoBVAAUAFiBnByb3RvMw=="));
+            "cm90bxofUE9HT1Byb3Rvcy5JbnZlbnRvcnkuSXRlbS5wcm90byJ3ChBBc3Nl",
+            "dERpZ2VzdEVudHJ5EhAKCGFzc2V0X2lkGAEgASgJEhMKC2J1bmRsZV9uYW1l",
+            "GAIgASgJEg8KB3ZlcnNpb24YAyABKAMSEAoIY2hlY2tzdW0YBCABKA0SDAoE",
+            "c2l6ZRgFIAEoBRILCgNrZXkYBiABKAwiUQoQRG93bmxvYWRVcmxFbnRyeRIQ",
+            "Cghhc3NldF9pZBgBIAEoCRILCgN1cmwYAiABKAkSDAoEc2l6ZRgDIAEoBRIQ",
+            "CghjaGVja3N1bRgEIAEoDSKLAQoLUGxheWVyQmFkZ2USLwoKYmFkZ2VfdHlw",
+            "ZRgBIAEoDjIbLlBPR09Qcm90b3MuRW51bXMuQmFkZ2VUeXBlEgwKBHJhbmsY",
+            "AiABKAUSEwoLc3RhcnRfdmFsdWUYAyABKAUSEQoJZW5kX3ZhbHVlGAQgASgF",
+            "EhUKDWN1cnJlbnRfdmFsdWUYBSABKAEi5gMKClBsYXllckRhdGESHQoVY3Jl",
+            "YXRpb25fdGltZXN0YW1wX21zGAEgASgDEhAKCHVzZXJuYW1lGAIgASgJEgwK",
+            "BHRlYW0YBSABKAUSOwoOdHV0b3JpYWxfc3RhdGUYByADKA4yHy5QT0dPUHJv",
+            "dG9zLkVudW1zLlR1dG9yaWFsU3RhdGVCAhABEjQKBmF2YXRhchgIIAEoCzIk",
+            "LlBPR09Qcm90b3MuRGF0YS5QbGF5ZXIuUGxheWVyQXZhdGFyEhsKE21heF9w",
+            "b2tlbW9uX3N0b3JhZ2UYCSABKAUSGAoQbWF4X2l0ZW1fc3RvcmFnZRgKIAEo",
+            "BRI3CgtkYWlseV9ib251cxgLIAEoCzIiLlBPR09Qcm90b3MuRGF0YS5QbGF5",
+            "ZXIuRGFpbHlCb251cxI9Cg5lcXVpcHBlZF9iYWRnZRgMIAEoCzIlLlBPR09Q",
+            "cm90b3MuRGF0YS5QbGF5ZXIuRXF1aXBwZWRCYWRnZRJBChBjb250YWN0X3Nl",
+            "dHRpbmdzGA0gASgLMicuUE9HT1Byb3Rvcy5EYXRhLlBsYXllci5Db250YWN0",
+            "U2V0dGluZ3MSNAoKY3VycmVuY2llcxgOIAMoCzIgLlBPR09Qcm90b3MuRGF0",
+            "YS5QbGF5ZXIuQ3VycmVuY3kirAEKDFBva2VkZXhFbnRyeRIvCgpwb2tlbW9u",
+            "X2lkGAEgASgOMhsuUE9HT1Byb3Rvcy5FbnVtcy5Qb2tlbW9uSWQSGQoRdGlt",
+            "ZXNfZW5jb3VudGVyZWQYAiABKAUSFgoOdGltZXNfY2FwdHVyZWQYAyABKAUS",
+            "HgoWZXZvbHV0aW9uX3N0b25lX3BpZWNlcxgEIAEoBRIYChBldm9sdXRpb25f",
+            "c3RvbmVzGAUgASgFIpgGCgtQb2tlbW9uRGF0YRIKCgJpZBgBIAEoBhIvCgpw",
+            "b2tlbW9uX2lkGAIgASgOMhsuUE9HT1Byb3Rvcy5FbnVtcy5Qb2tlbW9uSWQS",
+            "CgoCY3AYAyABKAUSDwoHc3RhbWluYRgEIAEoBRITCgtzdGFtaW5hX21heBgF",
+            "IAEoBRItCgZtb3ZlXzEYBiABKA4yHS5QT0dPUHJvdG9zLkVudW1zLlBva2Vt",
+            "b25Nb3ZlEi0KBm1vdmVfMhgHIAEoDjIdLlBPR09Qcm90b3MuRW51bXMuUG9r",
+            "ZW1vbk1vdmUSGAoQZGVwbG95ZWRfZm9ydF9pZBgIIAEoBRISCgpvd25lcl9u",
+            "YW1lGAkgASgJEg4KBmlzX2VnZxgKIAEoCBIcChRlZ2dfa21fd2Fsa2VkX3Rh",
+            "cmdldBgLIAEoARIbChNlZ2dfa21fd2Fsa2VkX3N0YXJ0GAwgASgBEg4KBm9y",
+            "aWdpbhgOIAEoBRIQCghoZWlnaHRfbRgPIAEoAhIRCgl3ZWlnaHRfa2cYECAB",
+            "KAISGQoRaW5kaXZpZHVhbF9hdHRhY2sYESABKAUSGgoSaW5kaXZpZHVhbF9k",
+            "ZWZlbnNlGBIgASgFEhoKEmluZGl2aWR1YWxfc3RhbWluYRgTIAEoBRIVCg1j",
+            "cF9tdWx0aXBsaWVyGBQgASgCEjMKCHBva2ViYWxsGBUgASgOMiEuUE9HT1By",
+            "b3Rvcy5JbnZlbnRvcnkuSXRlbS5JdGVtSWQSGAoQY2FwdHVyZWRfY2VsbF9p",
+            "ZBgWIAEoBBIYChBiYXR0bGVzX2F0dGFja2VkGBcgASgFEhgKEGJhdHRsZXNf",
+            "ZGVmZW5kZWQYGCABKAUSGAoQZWdnX2luY3ViYXRvcl9pZBgZIAEoCRIYChBj",
+            "cmVhdGlvbl90aW1lX21zGBogASgEEhQKDG51bV91cGdyYWRlcxgbIAEoBRIg",
+            "ChhhZGRpdGlvbmFsX2NwX211bHRpcGxpZXIYHCABKAISEAoIZmF2b3JpdGUY",
+            "HSABKAUSEAoIbmlja25hbWUYHiABKAkSEQoJZnJvbV9mb3J0GB8gASgFUABQ",
+            "AVACYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOProtos.Enums.POGOProtosEnumsReflection.Descriptor, global::POGOProtos.Data.Player.POGOProtosDataPlayerReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::POGOProtos.Enums.POGOProtosEnumsReflection.Descriptor, global::POGOProtos.Data.Player.POGOProtosDataPlayerReflection.Descriptor, global::POGOProtos.Inventory.Item.POGOProtosInventoryItemReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Data.AssetDigestEntry), global::POGOProtos.Data.AssetDigestEntry.Parser, new[]{ "AssetId", "BundleName", "Version", "Checksum", "Size", "Key" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Data.DownloadUrlEntry), global::POGOProtos.Data.DownloadUrlEntry.Parser, new[]{ "AssetId", "Url", "Size", "Checksum" }, null, null, null),
@@ -1673,9 +1675,9 @@ namespace POGOProtos.Data {
 
     /// <summary>Field number for the "pokeball" field.</summary>
     public const int PokeballFieldNumber = 21;
-    private int pokeball_;
+    private global::POGOProtos.Inventory.Item.ItemId pokeball_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Pokeball {
+    public global::POGOProtos.Inventory.Item.ItemId Pokeball {
       get { return pokeball_; }
       set {
         pokeball_ = value;
@@ -1959,7 +1961,7 @@ namespace POGOProtos.Data {
       }
       if (Pokeball != 0) {
         output.WriteRawTag(168, 1);
-        output.WriteInt32(Pokeball);
+        output.WriteEnum((int) Pokeball);
       }
       if (CapturedCellId != 0UL) {
         output.WriteRawTag(176, 1);
@@ -2064,7 +2066,7 @@ namespace POGOProtos.Data {
         size += 2 + 4;
       }
       if (Pokeball != 0) {
-        size += 2 + pb::CodedOutputStream.ComputeInt32Size(Pokeball);
+        size += 2 + pb::CodedOutputStream.ComputeEnumSize((int) Pokeball);
       }
       if (CapturedCellId != 0UL) {
         size += 2 + pb::CodedOutputStream.ComputeUInt64Size(CapturedCellId);
@@ -2281,7 +2283,7 @@ namespace POGOProtos.Data {
             break;
           }
           case 168: {
-            Pokeball = input.ReadInt32();
+            pokeball_ = (global::POGOProtos.Inventory.Item.ItemId) input.ReadEnum();
             break;
           }
           case 176: {

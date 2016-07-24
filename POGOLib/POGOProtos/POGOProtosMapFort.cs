@@ -23,35 +23,35 @@ namespace POGOProtos.Map.Fort {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChlQT0dPUHJvdG9zLk1hcC5Gb3J0LnByb3RvEhNQT0dPUHJvdG9zLk1hcC5G",
-            "b3J0GhZQT0dPUHJvdG9zLkVudW1zLnByb3RvGhpQT0dPUHJvdG9zLkludmVu",
-            "dG9yeS5wcm90byK7BAoIRm9ydERhdGESCgoCaWQYASABKAkSIgoabGFzdF9t",
-            "b2RpZmllZF90aW1lc3RhbXBfbXMYAiABKAMSEAoIbGF0aXR1ZGUYAyABKAES",
-            "EQoJbG9uZ2l0dWRlGAQgASgBEg8KB2VuYWJsZWQYCCABKAgSKwoEdHlwZRgJ",
-            "IAEoDjIdLlBPR09Qcm90b3MuTWFwLkZvcnQuRm9ydFR5cGUSMgoNb3duZWRf",
-            "YnlfdGVhbRgFIAEoDjIbLlBPR09Qcm90b3MuRW51bXMuVGVhbUNvbG9yEjUK",
-            "EGd1YXJkX3Bva2Vtb25faWQYBiABKA4yGy5QT0dPUHJvdG9zLkVudW1zLlBv",
-            "a2Vtb25JZBIYChBndWFyZF9wb2tlbW9uX2NwGAcgASgFEhIKCmd5bV9wb2lu",
-            "dHMYCiABKAMSFAoMaXNfaW5fYmF0dGxlGAsgASgIEiYKHmNvb2xkb3duX2Nv",
-            "bXBsZXRlX3RpbWVzdGFtcF9tcxgOIAEoAxIxCgdzcG9uc29yGA8gASgOMiAu",
-            "UE9HT1Byb3Rvcy5NYXAuRm9ydC5Gb3J0U3BvbnNvchI+Cg5yZW5kZXJpbmdf",
-            "dHlwZRgQIAEoDjImLlBPR09Qcm90b3MuTWFwLkZvcnQuRm9ydFJlbmRlcmlu",
-            "Z1R5cGUSHAoUYWN0aXZlX2ZvcnRfbW9kaWZpZXIYDCABKAwSNAoJbHVyZV9p",
-            "bmZvGA0gASgLMiEuUE9HT1Byb3Rvcy5NYXAuRm9ydC5Gb3J0THVyZUluZm8i",
-            "kAEKDEZvcnRMdXJlSW5mbxIPCgdmb3J0X2lkGAEgASgJEhQKDGVuY291bnRl",
-            "cl9pZBgCIAEoBhI2ChFhY3RpdmVfcG9rZW1vbl9pZBgDIAEoDjIbLlBPR09Q",
-            "cm90b3MuRW51bXMuUG9rZW1vbklkEiEKGWx1cmVfZXhwaXJlc190aW1lc3Rh",
-            "bXBfbXMYBCABKAMigAEKDEZvcnRNb2RpZmllchItCgdpdGVtX2lkGAEgASgO",
-            "MhwuUE9HT1Byb3Rvcy5JbnZlbnRvcnkuSXRlbUlkEh8KF2V4cGlyYXRpb25f",
-            "dGltZXN0YW1wX21zGAIgASgDEiAKGGRlcGxveWVyX3BsYXllcl9jb2RlbmFt",
-            "ZRgDIAEoCSJvCgtGb3J0U3VtbWFyeRIXCg9mb3J0X3N1bW1hcnlfaWQYASAB",
-            "KAUSIgoabGFzdF9tb2RpZmllZF90aW1lc3RhbXBfbXMYAiABKAUSEAoIbGF0",
-            "aXR1ZGUYAyABKAUSEQoJbG9uZ2l0dWRlGAQgASgFKjMKEUZvcnRSZW5kZXJp",
-            "bmdUeXBlEgsKB0RFRkFVTFQQABIRCg1JTlRFUk5BTF9URVNUEAEqQgoLRm9y",
-            "dFNwb25zb3ISEQoNVU5TRVRfU1BPTlNPUhAAEg0KCU1DRE9OQUxEUxABEhEK",
-            "DVBPS0VNT05fU1RPUkUQAiojCghGb3J0VHlwZRIHCgNHWU0QABIOCgpDSEVD",
-            "S1BPSU5UEAFQAFABYgZwcm90bzM="));
+            "b3J0GhZQT0dPUHJvdG9zLkVudW1zLnByb3RvGh9QT0dPUHJvdG9zLkludmVu",
+            "dG9yeS5JdGVtLnByb3RvIrsECghGb3J0RGF0YRIKCgJpZBgBIAEoCRIiChps",
+            "YXN0X21vZGlmaWVkX3RpbWVzdGFtcF9tcxgCIAEoAxIQCghsYXRpdHVkZRgD",
+            "IAEoARIRCglsb25naXR1ZGUYBCABKAESDwoHZW5hYmxlZBgIIAEoCBIrCgR0",
+            "eXBlGAkgASgOMh0uUE9HT1Byb3Rvcy5NYXAuRm9ydC5Gb3J0VHlwZRIyCg1v",
+            "d25lZF9ieV90ZWFtGAUgASgOMhsuUE9HT1Byb3Rvcy5FbnVtcy5UZWFtQ29s",
+            "b3ISNQoQZ3VhcmRfcG9rZW1vbl9pZBgGIAEoDjIbLlBPR09Qcm90b3MuRW51",
+            "bXMuUG9rZW1vbklkEhgKEGd1YXJkX3Bva2Vtb25fY3AYByABKAUSEgoKZ3lt",
+            "X3BvaW50cxgKIAEoAxIUCgxpc19pbl9iYXR0bGUYCyABKAgSJgoeY29vbGRv",
+            "d25fY29tcGxldGVfdGltZXN0YW1wX21zGA4gASgDEjEKB3Nwb25zb3IYDyAB",
+            "KA4yIC5QT0dPUHJvdG9zLk1hcC5Gb3J0LkZvcnRTcG9uc29yEj4KDnJlbmRl",
+            "cmluZ190eXBlGBAgASgOMiYuUE9HT1Byb3Rvcy5NYXAuRm9ydC5Gb3J0UmVu",
+            "ZGVyaW5nVHlwZRIcChRhY3RpdmVfZm9ydF9tb2RpZmllchgMIAEoDBI0Cgls",
+            "dXJlX2luZm8YDSABKAsyIS5QT0dPUHJvdG9zLk1hcC5Gb3J0LkZvcnRMdXJl",
+            "SW5mbyKQAQoMRm9ydEx1cmVJbmZvEg8KB2ZvcnRfaWQYASABKAkSFAoMZW5j",
+            "b3VudGVyX2lkGAIgASgGEjYKEWFjdGl2ZV9wb2tlbW9uX2lkGAMgASgOMhsu",
+            "UE9HT1Byb3Rvcy5FbnVtcy5Qb2tlbW9uSWQSIQoZbHVyZV9leHBpcmVzX3Rp",
+            "bWVzdGFtcF9tcxgEIAEoAyKFAQoMRm9ydE1vZGlmaWVyEjIKB2l0ZW1faWQY",
+            "ASABKA4yIS5QT0dPUHJvdG9zLkludmVudG9yeS5JdGVtLkl0ZW1JZBIfChdl",
+            "eHBpcmF0aW9uX3RpbWVzdGFtcF9tcxgCIAEoAxIgChhkZXBsb3llcl9wbGF5",
+            "ZXJfY29kZW5hbWUYAyABKAkibwoLRm9ydFN1bW1hcnkSFwoPZm9ydF9zdW1t",
+            "YXJ5X2lkGAEgASgFEiIKGmxhc3RfbW9kaWZpZWRfdGltZXN0YW1wX21zGAIg",
+            "ASgFEhAKCGxhdGl0dWRlGAMgASgFEhEKCWxvbmdpdHVkZRgEIAEoBSozChFG",
+            "b3J0UmVuZGVyaW5nVHlwZRILCgdERUZBVUxUEAASEQoNSU5URVJOQUxfVEVT",
+            "VBABKkIKC0ZvcnRTcG9uc29yEhEKDVVOU0VUX1NQT05TT1IQABINCglNQ0RP",
+            "TkFMRFMQARIRCg1QT0tFTU9OX1NUT1JFEAIqIwoIRm9ydFR5cGUSBwoDR1lN",
+            "EAASDgoKQ0hFQ0tQT0lOVBABUABQAWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOProtos.Enums.POGOProtosEnumsReflection.Descriptor, global::POGOProtos.Inventory.POGOProtosInventoryReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::POGOProtos.Enums.POGOProtosEnumsReflection.Descriptor, global::POGOProtos.Inventory.Item.POGOProtosInventoryItemReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::POGOProtos.Map.Fort.FortRenderingType), typeof(global::POGOProtos.Map.Fort.FortSponsor), typeof(global::POGOProtos.Map.Fort.FortType), }, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Map.Fort.FortData), global::POGOProtos.Map.Fort.FortData.Parser, new[]{ "Id", "LastModifiedTimestampMs", "Latitude", "Longitude", "Enabled", "Type", "OwnedByTeam", "GuardPokemonId", "GuardPokemonCp", "GymPoints", "IsInBattle", "CooldownCompleteTimestampMs", "Sponsor", "RenderingType", "ActiveFortModifier", "LureInfo" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Map.Fort.FortLureInfo), global::POGOProtos.Map.Fort.FortLureInfo.Parser, new[]{ "FortId", "EncounterId", "ActivePokemonId", "LureExpiresTimestampMs" }, null, null, null),
@@ -880,9 +880,9 @@ namespace POGOProtos.Map.Fort {
 
     /// <summary>Field number for the "item_id" field.</summary>
     public const int ItemIdFieldNumber = 1;
-    private global::POGOProtos.Inventory.ItemId itemId_ = 0;
+    private global::POGOProtos.Inventory.Item.ItemId itemId_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::POGOProtos.Inventory.ItemId ItemId {
+    public global::POGOProtos.Inventory.Item.ItemId ItemId {
       get { return itemId_; }
       set {
         itemId_ = value;
@@ -1000,7 +1000,7 @@ namespace POGOProtos.Map.Fort {
             input.SkipLastField();
             break;
           case 8: {
-            itemId_ = (global::POGOProtos.Inventory.ItemId) input.ReadEnum();
+            itemId_ = (global::POGOProtos.Inventory.Item.ItemId) input.ReadEnum();
             break;
           }
           case 16: {
