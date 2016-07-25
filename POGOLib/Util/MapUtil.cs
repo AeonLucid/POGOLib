@@ -5,7 +5,6 @@ namespace POGOLib.Util
 {
     internal static class MapUtil
     {
-
         public static ulong[] GetCellIdsForLatLong(double latitude, double longitude)
         {
             var latLong = S2LatLng.FromDegrees(latitude, longitude);
@@ -29,6 +28,5 @@ namespace POGOLib.Util
 
             return cellIds.ToArray();
         }
-
     }
 }
