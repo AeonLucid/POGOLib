@@ -14,34 +14,33 @@ using POGOLib.Util;
 namespace POGOLib.Net.Authentication
 {
     /// <summary>
-    /// Responsible for Authenticating and Re-authenticating the user.
+    ///     Responsible for Authenticating and Re-authenticating the user.
     /// </summary>
     public static class Login
     {
-
-        private static readonly ILog Log = LogManager.GetLogger(typeof(Login));
+        private static readonly ILog Log = LogManager.GetLogger(typeof (Login));
 
         /// <summary>
-        /// Login with a stored <see cref="AccessToken"/>.
+        ///     Login with a stored <see cref="AccessToken" />.
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="password">The password is needed for reauthentication.</param>
         /// <param name="initialLatitude">The initial latitude you will spawn at after logging into PokémonGo.</param>
         /// <param name="initialLongitude">The initial longitude you will spawn at after logging into PokémonGo.</param>
         /// <returns></returns>
-        public static Session GetSession(AccessToken accessToken, string password, double initialLatitude, double initialLongitude)
+        public static Session GetSession(AccessToken accessToken, string password, double initialLatitude,
+            double initialLongitude)
         {
             if (accessToken.IsExpired)
+            {
                 throw new Exception("AccessToken is expired.");
-
-            if (Configuration.Debug)
-                Log.Debug("Authenticated from cache.");
-
+            }
+            Log.Debug("Authenticated from cache.");
             return new Session(accessToken, password, new GeoCoordinate(initialLatitude, initialLongitude));
         }
 
         /// <summary>
-        /// Login through OAuth with PTC / Google.
+        ///     Login through OAuth with PTC / Google.
         /// </summary>
         /// <param name="username">Your username.</param>
         /// <param name="password">Your password.</param>
@@ -49,7 +48,8 @@ namespace POGOLib.Net.Authentication
         /// <param name="initialLatitude">The initial latitude you will spawn at after logging into PokémonGo.</param>
         /// <param name="initialLongitude">The initial longitude you will spawn at after logging into PokémonGo.</param>
         /// <returns></returns>
-        public static Session GetSession(string username, string password, LoginProvider loginProvider, double initialLatitude, double initialLongitude)
+        public static Session GetSession(string username, string password, LoginProvider loginProvider,
+            double initialLatitude, double initialLongitude)
         {
             AccessToken accessToken;
 
@@ -75,22 +75,26 @@ namespace POGOLib.Net.Authentication
             var masterLoginResponse = googleClient.PerformMasterLogin();
 
             if (masterLoginResponse.ContainsKey("Error"))
+            {
                 throw new Exception($"Google returned an error message: '{masterLoginResponse["Error"]}'");
-
+            }
             if (!masterLoginResponse.ContainsKey("Token"))
+            {
                 throw new Exception("Token was missing from master login response.");
-
-            var oauthResponse = googleClient.PerformOAuth(masterLoginResponse["Token"], Constants.GoogleAuthService, Constants.GoogleAuthApp, Constants.GoogleAuthClientSig);
-
+            }
+            var oauthResponse = googleClient.PerformOAuth(masterLoginResponse["Token"], Constants.GoogleAuthService,
+                Constants.GoogleAuthApp, Constants.GoogleAuthClientSig);
             if (!oauthResponse.ContainsKey("Auth"))
+            {
                 throw new Exception("Auth token was missing from oauth login response.");
-
-            if (Configuration.Debug)
-                Log.Debug("Authenticated through Google.");
-
+            }
+            Log.Debug("Authenticated through Google.");
             return new AccessToken
             {
-                Username = email, Token = oauthResponse["Auth"], Expiry = TimeUtil.GetDateTimeFromSeconds(int.Parse(oauthResponse["Expiry"])), LoginProvider = LoginProvider.GoogleAuth
+                Username = email,
+                Token = oauthResponse["Auth"],
+                Expiry = TimeUtil.GetDateTimeFromSeconds(int.Parse(oauthResponse["Expiry"])),
+                LoginProvider = LoginProvider.GoogleAuth
             };
         }
 
@@ -100,58 +104,57 @@ namespace POGOLib.Net.Authentication
             using (var httpClientHandler = new HttpClientHandler())
             {
                 httpClientHandler.AllowAutoRedirect = false;
-
                 using (var httpClient = new HttpClient(httpClientHandler))
                 {
                     httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.LoginUserAgent);
-
                     var loginData = GetLoginData(httpClient);
                     var ticket = PostLogin(httpClient, username, password, loginData);
                     var accessToken = PostLoginOauth(httpClient, ticket);
                     accessToken.Username = username;
-
-                    if (Configuration.Debug)
-                        Log.Debug("Authenticated through PTC.");
-
+                    Log.Debug("Authenticated through PTC.");
                     return accessToken;
                 }
             }
         }
 
         /// <summary>
-        /// Responsible for retrieving login parameters for <see cref="PostLogin"/>.
+        ///     Responsible for retrieving login parameters for <see cref="PostLogin" />.
         /// </summary>
-        /// <param name="httpClient">An initialized <see cref="HttpClient"/></param>
-        /// <returns><see cref="LoginData"/> for <see cref="PostLogin"/>.</returns>
+        /// <param name="httpClient">An initialized <see cref="HttpClient" /></param>
+        /// <returns><see cref="LoginData" /> for <see cref="PostLogin" />.</returns>
         private static LoginData GetLoginData(HttpClient httpClient)
         {
             var loginDataResponse = httpClient.GetAsync(Constants.LoginUrl).Result;
-            var loginData = JsonConvert.DeserializeObject<LoginData>(loginDataResponse.Content.ReadAsStringAsync().Result);
-
+            var loginData =
+                JsonConvert.DeserializeObject<LoginData>(loginDataResponse.Content.ReadAsStringAsync().Result);
             return loginData;
         }
 
         /// <summary>
-        /// Responsible for submitting the login request.
+        ///     Responsible for submitting the login request.
         /// </summary>
         /// <param name="httpClient"></param>
         /// <param name="username">The user's PTC username.</param>
         /// <param name="password">The user's PTC password.</param>
-        /// <param name="loginData"><see cref="LoginData"/> taken from PTC website using <see cref="GetLoginData"/>.</param>
+        /// <param name="loginData"><see cref="LoginData" /> taken from PTC website using <see cref="GetLoginData" />.</param>
         /// <returns></returns>
         private static string PostLogin(HttpClient httpClient, string username, string password, LoginData loginData)
         {
-            var loginResponse = httpClient.PostAsync(Constants.LoginUrl, new FormUrlEncodedContent(new Dictionary<string, string>
-            {
-                {"lt", loginData.Lt}, {"execution", loginData.Execution}, {"_eventId", "submit"}, {"username", username}, {"password", password}
-            })).Result;
+            var loginResponse =
+                httpClient.PostAsync(Constants.LoginUrl, new FormUrlEncodedContent(new Dictionary<string, string>
+                {
+                    {"lt", loginData.Lt},
+                    {"execution", loginData.Execution},
+                    {"_eventId", "submit"},
+                    {"username", username},
+                    {"password", password}
+                })).Result;
 
             var loginResponseDataRaw = loginResponse.Content.ReadAsStringAsync().Result;
             if (!loginResponseDataRaw.Contains("{"))
             {
                 var locationQuery = loginResponse.Headers.Location.Query;
                 var ticketStartPosition = locationQuery.IndexOf("=", StringComparison.Ordinal) + 1;
-
                 return locationQuery.Substring(ticketStartPosition, locationQuery.Length - ticketStartPosition);
             }
 
@@ -162,32 +165,36 @@ namespace POGOLib.Net.Authentication
         }
 
         /// <summary>
-        /// Responsible for finishing the oauth login request.
+        ///     Responsible for finishing the oauth login request.
         /// </summary>
         /// <param name="httpClient"></param>
         /// <param name="ticket"></param>
         /// <returns></returns>
         private static AccessToken PostLoginOauth(HttpClient httpClient, string ticket)
         {
-            var loginResponse = httpClient.PostAsync(Constants.LoginOauthUrl, new FormUrlEncodedContent(new Dictionary<string, string>
-            {
-                {"client_id", "mobile-app_pokemon-go"},
-                { "redirect_uri", "https://www.nianticlabs.com/pokemongo/error"},
-                { "client_secret", "w8ScCUXJQc6kXKw8FiOhd8Fixzht18Dq3PEVkUCP5ZPxtgyWsbTvWHFLm2wNY0JR"},
-                { "grant_type", "refresh_token"},
-                { "code", ticket}
-            })).Result;
+            var loginResponse =
+                httpClient.PostAsync(Constants.LoginOauthUrl, new FormUrlEncodedContent(new Dictionary<string, string>
+                {
+                    {"client_id", "mobile-app_pokemon-go"},
+                    {"redirect_uri", "https://www.nianticlabs.com/pokemongo/error"},
+                    {"client_secret", "w8ScCUXJQc6kXKw8FiOhd8Fixzht18Dq3PEVkUCP5ZPxtgyWsbTvWHFLm2wNY0JR"},
+                    {"grant_type", "refresh_token"},
+                    {"code", ticket}
+                })).Result;
 
             var loginResponseDataRaw = loginResponse.Content.ReadAsStringAsync().Result;
 
-            var oAuthData = Regex.Match(loginResponseDataRaw, "access_token=(?<accessToken>.*?)&expires=(?<expires>\\d+)");
-
+            var oAuthData = Regex.Match(loginResponseDataRaw,
+                "access_token=(?<accessToken>.*?)&expires=(?<expires>\\d+)");
             if (!oAuthData.Success)
+            {
                 throw new Exception($"Couldn't verify the OAuth login response data '{loginResponseDataRaw}'.");
-
+            }
             return new AccessToken
             {
-                Token = oAuthData.Groups["accessToken"].Value, Expiry = DateTime.UtcNow.AddSeconds(int.Parse(oAuthData.Groups["expires"].Value)), LoginProvider = LoginProvider.PokemonTrainerClub
+                Token = oAuthData.Groups["accessToken"].Value,
+                Expiry = DateTime.UtcNow.AddSeconds(int.Parse(oAuthData.Groups["expires"].Value)),
+                LoginProvider = LoginProvider.PokemonTrainerClub
             };
         }
     }

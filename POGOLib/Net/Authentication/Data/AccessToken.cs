@@ -7,7 +7,6 @@ namespace POGOLib.Net.Authentication.Data
 {
     public class AccessToken
     {
-
         [JsonIgnore]
         public string Uid => $"{Username}-{LoginProvider}";
 

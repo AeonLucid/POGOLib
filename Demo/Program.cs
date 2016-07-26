@@ -1,15 +1,13 @@
 ﻿using System;
 using System.IO;
+using CommandLine;
 using Google.Protobuf;
 using log4net;
 using Newtonsoft.Json;
-using POGOLib;
 using POGOLib.Net;
 using POGOLib.Net.Authentication;
 using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon.Data;
-using POGOLib.Util;
-using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
@@ -18,11 +16,10 @@ namespace Demo
 {
     public class Program
     {
-
-        private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
+        private static readonly ILog Log = LogManager.GetLogger(typeof (Program));
 
         /// <summary>
-        /// This is just a demo application to test out the library / show a bit how it works.
+        ///     This is just a demo application to test out the library / show a bit how it works.
         /// </summary>
         /// <param name="args"></param>
         public static void Main(string[] args)
@@ -32,20 +29,22 @@ namespace Demo
             Console.Title = "POGO Demo";
 
             var arguments = new Arguments();
-            if (CommandLine.Parser.Default.ParseArguments(args, arguments))
+            if (Parser.Default.ParseArguments(args, arguments))
             {
-                Configuration.Debug = arguments.Debug;
-
                 var latitude = 51.507351; // Somewhere in London
                 var longitude = -0.127758;
-                var session = GetSession(arguments.Username, arguments.Password, arguments.LoginProvider, latitude, longitude, true);
+                var session = GetSession(arguments.Username, arguments.Password, arguments.LoginProvider, latitude,
+                    longitude, true);
 
                 SaveAccessToken(session.AccessToken);
 
                 session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
                 session.Player.Inventory.Update += InventoryOnUpdate;
                 session.Map.Update += MapOnUpdate;
-                
+
+                // Send initial requests and start HeartbeatDispatcher
+                session.Startup();
+
                 var fortDetailsBytes = session.RpcClient.SendRemoteProcedureCall(new Request
                 {
                     RequestType = RequestType.FortDetails,
@@ -57,16 +56,16 @@ namespace Demo
                     }.ToByteString()
                 });
                 var fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(fortDetailsBytes);
-                    
+
                 Console.WriteLine(JsonConvert.SerializeObject(fortDetailsResponse, Formatting.Indented));
             }
-            
+
             HandleCommands();
         }
 
         private static void SessionOnAccessTokenUpdated(object sender, EventArgs eventArgs)
         {
-            var session = (Session)sender;
+            var session = (Session) sender;
 
             SaveAccessToken(session.AccessToken);
 
@@ -86,7 +85,7 @@ namespace Demo
         private static void SaveAccessToken(AccessToken accessToken)
         {
             var fileName = Path.Combine(Environment.CurrentDirectory, "cache", $"{accessToken.Uid}.json");
-            
+
             File.WriteAllText(fileName, JsonConvert.SerializeObject(accessToken, Formatting.Indented));
         }
 
@@ -110,15 +109,16 @@ namespace Demo
         }
 
         /// <summary>
-        /// Login to PokémonGo and return an authenticated <see cref="Session"/>.
+        ///     Login to PokémonGo and return an authenticated <see cref="Session" />.
         /// </summary>
         /// <param name="username">The username of your PTC / Google account.</param>
         /// <param name="password">The password of your PTC / Google account.</param>
         /// <param name="loginProviderStr">Must be 'PTC' or 'Google'.</param>
         /// <param name="initLat">The initial latitude.</param>
         /// <param name="initLong">The initial longitude.</param>
-        /// <param name="mayCache">Can we cache the <see cref="AccessToken"/> to a local file?</param>
-        private static Session GetSession(string username, string password, string loginProviderStr, double initLat, double initLong, bool mayCache = false)
+        /// <param name="mayCache">Can we cache the <see cref="AccessToken" /> to a local file?</param>
+        private static Session GetSession(string username, string password, string loginProviderStr, double initLat,
+            double initLong, bool mayCache = false)
         {
             var loginProvider = ResolveLoginProvider(loginProviderStr);
             var cacheDir = Path.Combine(Environment.CurrentDirectory, "cache");
