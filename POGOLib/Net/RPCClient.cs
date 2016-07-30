@@ -94,6 +94,8 @@ namespace POGOLib.Net
                     }
                 } while (!playerResponse.Success);
 
+				_session.Player.Data = playerResponse.PlayerData;
+				
                 // Get DownloadRemoteConfig
                 var remoteConfigResponse = SendRemoteProcedureCall(new Request
                 {

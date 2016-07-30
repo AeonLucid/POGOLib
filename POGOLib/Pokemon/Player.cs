@@ -39,6 +39,8 @@ namespace POGOLib.Pokemon
         ///     Gets the <see cref="Stats" /> of the beautiful <see cref="Inventory" /> object by PokémonGo.
         /// </summary>
         public PlayerStats Stats { get; private set; }
+		
+		public PlayerData Data { get; set; }
 
         /// <summary>
         ///     Sets the <see cref="GeoCoordinate" /> of the <see cref="Player" />.
