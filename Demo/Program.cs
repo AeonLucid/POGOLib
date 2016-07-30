@@ -7,12 +7,12 @@ using Newtonsoft.Json;
 using POGOLib.Net;
 using POGOLib.Net.Authentication;
 using POGOLib.Net.Authentication.Data;
+using POGOLib.Pokemon;
 using POGOLib.Pokemon.Data;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using Splat;
-using System.Diagnostics;
 
 namespace Demo
 {
@@ -27,6 +27,8 @@ namespace Demo
         public static void Main(string[] args)
         {
             Splat.Log4Net.Helpers.UseLog4Net();
+
+            Locator.CurrentMutable.RegisterLazySingleton(() => new FileTemplateStorage(), typeof(ITemplateStorage));
 
             Log.Info("Booting up.");
             Log.Info("Type 'q', 'quit' or 'exit' to exit.");

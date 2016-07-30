@@ -1,23 +1,33 @@
 ﻿using System;
-using System.Configuration;
-using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using POGOProtos.Data;
 using POGOProtos.Networking.Responses;
+using Splat;
 
 namespace POGOLib.Pokemon
 {
     public class Templates
     {
+        private const string assetDigestKey = "asset-digests";
+        private const string itemTemplatesKey = "items";
+
+        private ITemplateStorage _templateStorage;
+
         private GetAssetDigestResponse _assetDigestResponse;
         private DownloadItemTemplatesResponse _itemTemplatesResponse;
 
         public Templates()
         {
-            _assetDigestResponse = LoadAssetDigest();
-            _itemTemplatesResponse = LoadItemTemplates();
+            _templateStorage = Locator.Current.GetService<ITemplateStorage>();
+        }
+
+        public async Task LoadExisting()
+        {
+            _assetDigestResponse = await LoadAssetDigest();
+            _itemTemplatesResponse = await LoadItemTemplates();
         }
 
         public RepeatedField<AssetDigestEntry> AssetDigests => _assetDigestResponse?.Digest;
@@ -25,41 +35,30 @@ namespace POGOLib.Pokemon
         public RepeatedField<DownloadItemTemplatesResponse.Types.ItemTemplate> ItemTemplates
             => _itemTemplatesResponse?.ItemTemplates;
 
-        public string AssetDigestFile
-            =>
-                Path.Combine(Environment.CurrentDirectory,
-                    ConfigurationManager.AppSettings["POGOLib.Templates.Directory"] ?? string.Empty,
-                    "templates.asset-digests.dat");
 
-        public string ItemTemplatesFile
-            =>
-                Path.Combine(Environment.CurrentDirectory,
-                    ConfigurationManager.AppSettings["POGOLib.Templates.Directory"] ?? string.Empty,
-                    "templates.items.dat");
-
-        public void SetAssetDigests(GetAssetDigestResponse assetDigestResponse)
+        public async void SetAssetDigests(GetAssetDigestResponse assetDigestResponse)
         {
             if (_assetDigestResponse == null || assetDigestResponse.TimestampMs > _assetDigestResponse.TimestampMs)
             {
                 _assetDigestResponse = assetDigestResponse;
-                SaveTemplate(AssetDigestFile, _assetDigestResponse.ToByteString().ToByteArray());
+                await _templateStorage.SaveTemplateAsync(assetDigestKey, _assetDigestResponse.ToByteString().ToByteArray());
             }
         }
 
-        public void SetItemTemplates(DownloadItemTemplatesResponse itemTemplatesResponse)
+        public async void SetItemTemplates(DownloadItemTemplatesResponse itemTemplatesResponse)
         {
             if (_itemTemplatesResponse == null || itemTemplatesResponse.TimestampMs > _itemTemplatesResponse.TimestampMs)
             {
                 _itemTemplatesResponse = itemTemplatesResponse;
-                SaveTemplate(ItemTemplatesFile, _itemTemplatesResponse.ToByteString().ToByteArray());
+                await _templateStorage.SaveTemplateAsync(itemTemplatesKey, _itemTemplatesResponse.ToByteString().ToByteArray());
             }
         }
 
-        private GetAssetDigestResponse LoadAssetDigest()
+        private async Task<GetAssetDigestResponse> LoadAssetDigest()
         {
-            if (File.Exists(AssetDigestFile))
+            if (_templateStorage.TemplateExists(assetDigestKey))
             {
-                var bytes = File.ReadAllBytes(AssetDigestFile);
+                var bytes = await _templateStorage.LoadTemplateAsync(assetDigestKey);
                 if (bytes.Any())
                 {
                     return GetAssetDigestResponse.Parser.ParseFrom(bytes);
@@ -68,30 +67,17 @@ namespace POGOLib.Pokemon
             return null;
         }
 
-        private DownloadItemTemplatesResponse LoadItemTemplates()
+        private async Task<DownloadItemTemplatesResponse> LoadItemTemplates()
         {
-            if (File.Exists(ItemTemplatesFile))
+            if (_templateStorage.TemplateExists(itemTemplatesKey))
             {
-                var bytes = File.ReadAllBytes(ItemTemplatesFile);
+                var bytes = await _templateStorage.LoadTemplateAsync(itemTemplatesKey);
                 if (bytes.Any())
                 {
                     return DownloadItemTemplatesResponse.Parser.ParseFrom(bytes);
                 }
             }
             return null;
-        }
-
-        private void SaveTemplate(string file, byte[] data)
-        {
-            var directory = Path.GetDirectoryName(file);
-            if (!string.IsNullOrEmpty(directory))
-            {
-                if (!Directory.Exists(directory))
-                {
-                    Directory.CreateDirectory(directory);
-                }
-            }
-            File.WriteAllBytes(file, data);
         }
     }
 }

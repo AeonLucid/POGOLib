@@ -82,7 +82,7 @@ namespace POGOLib.Net
                 GetPlayerResponse playerResponse;
                 do
                 {
-                    response = await SendRemoteProcedureCall(new Request
+                    var response = await SendRemoteProcedureCall(new Request
                     {
                         RequestType = RequestType.GetPlayer
                     });
@@ -93,8 +93,8 @@ namespace POGOLib.Net
                     }
                 } while (!playerResponse.Success);
 
-				_session.Player.Data = playerResponse.PlayerData;
-				
+                _session.Player.Data = playerResponse.PlayerData;
+
                 // Get DownloadRemoteConfig
                 var remoteConfigResponse = await SendRemoteProcedureCall(new Request
                 {
@@ -107,11 +107,11 @@ namespace POGOLib.Net
                 });
                 var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
 
-                var timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds();
+                var timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds();
                 if (_session.Templates.AssetDigests == null || remoteConfigParsed.AssetDigestTimestampMs > timestamp)
                 {
                     // GetAssetDigest
-                    var assetDigestResponse = SendRemoteProcedureCall(new Request
+                    var assetDigestResponse = await SendRemoteProcedureCall(new Request
                     {
                         RequestType = RequestType.GetAssetDigest,
                         RequestMessage = new GetAssetDigestMessage
@@ -126,7 +126,7 @@ namespace POGOLib.Net
                 if (_session.Templates.ItemTemplates == null || remoteConfigParsed.ItemTemplatesTimestampMs > timestamp)
                 {
                     // DownloadItemTemplates
-                    var itemTemplateResponse = SendRemoteProcedureCall(new Request
+                    var itemTemplateResponse = await SendRemoteProcedureCall(new Request
                     {
                         RequestType = RequestType.DownloadItemTemplates
                     });

@@ -88,6 +88,7 @@ namespace POGOLib.Net
             {
                 return false;
             }
+            await Templates.LoadExisting();
             _heartbeat.StartDispatcher();
             return true;
         }
@@ -131,7 +132,7 @@ namespace POGOLib.Net
                     {
                         if (accessToken == null)
                         {
-                            var sleepSeconds = Math.Min(60, ++tries*5);
+                            var sleepSeconds = Math.Min(60, ++tries * 5);
                             Log.Error($"Reauthentication failed, trying again in {sleepSeconds} seconds.");
                             await Task.Delay(sleepSeconds * 1000);
                         }
