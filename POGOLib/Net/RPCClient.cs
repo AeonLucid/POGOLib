@@ -4,12 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
-using System.Threading;
+using System.Threading.Tasks;
 using GeoCoordinatePortable;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
-using log4net;
-using POGOLib.Pokemon;
 using POGOLib.Pokemon.Data;
 using POGOLib.Util;
 using POGOProtos.Enums;
@@ -18,12 +16,13 @@ using POGOProtos.Networking.Envelopes;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
+using Splat;
 
 namespace POGOLib.Net
 {
     public class RpcClient : IDisposable
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof (RpcClient));
+        private static readonly IFullLogger Log = LogHost.Default;
 
         /// <summary>
         ///     The <see cref="HttpClient" /> used for communication with PokémonGo.
@@ -57,7 +56,7 @@ namespace POGOLib.Net
             _httpClient = new HttpClient(httpClientHandler);
             _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.ApiUserAgent);
             _httpClient.DefaultRequestHeaders.ExpectContinue = false;
-            _requestId = (ulong) new Random().Next(100000000, 999999999);
+            _requestId = (ulong)new Random().Next(100000000, 999999999);
         }
 
         internal DateTime LastRpcRequest { get; private set; }
@@ -75,7 +74,7 @@ namespace POGOLib.Net
         /// <summary>
         ///     Sends all requests which the (android-)client sends on startup
         /// </summary>
-        internal bool Startup()
+        internal async Task<bool> Startup()
         {
             try
             {
@@ -83,21 +82,21 @@ namespace POGOLib.Net
                 GetPlayerResponse playerResponse;
                 do
                 {
-                    var response = SendRemoteProcedureCall(new Request
+                    var response = await SendRemoteProcedureCall(new Request
                     {
                         RequestType = RequestType.GetPlayer
                     });
                     playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
                     if (!playerResponse.Success)
                     {
-                        Thread.Sleep(1000);
+                        await Task.Delay(1000);
                     }
                 } while (!playerResponse.Success);
 
-				_session.Player.Data = playerResponse.PlayerData;
-				
+                _session.Player.Data = playerResponse.PlayerData;
+
                 // Get DownloadRemoteConfig
-                var remoteConfigResponse = SendRemoteProcedureCall(new Request
+                var remoteConfigResponse = await SendRemoteProcedureCall(new Request
                 {
                     RequestType = RequestType.DownloadRemoteConfigVersion,
                     RequestMessage = new DownloadRemoteConfigVersionMessage
@@ -108,11 +107,11 @@ namespace POGOLib.Net
                 });
                 var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
 
-                var timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds();
+                var timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds();
                 if (_session.Templates.AssetDigests == null || remoteConfigParsed.AssetDigestTimestampMs > timestamp)
                 {
                     // GetAssetDigest
-                    var assetDigestResponse = SendRemoteProcedureCall(new Request
+                    var assetDigestResponse = await SendRemoteProcedureCall(new Request
                     {
                         RequestType = RequestType.GetAssetDigest,
                         RequestMessage = new GetAssetDigestMessage
@@ -127,7 +126,7 @@ namespace POGOLib.Net
                 if (_session.Templates.ItemTemplates == null || remoteConfigParsed.ItemTemplatesTimestampMs > timestamp)
                 {
                     // DownloadItemTemplates
-                    var itemTemplateResponse = SendRemoteProcedureCall(new Request
+                    var itemTemplateResponse = await SendRemoteProcedureCall(new Request
                     {
                         RequestType = RequestType.DownloadItemTemplates
                     });
@@ -147,7 +146,7 @@ namespace POGOLib.Net
         ///     It is not recommended to call this. Map objects will update automatically and fire the <see cref="Map.Update" />
         ///     event.
         /// </summary>
-        public void RefreshMapObjects()
+        public async void RefreshMapObjects()
         {
             var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude,
                 _session.Player.Coordinate.Longitude);
@@ -158,7 +157,7 @@ namespace POGOLib.Net
                 sinceTimeMs.Add(0);
             }
 
-            var response = SendRemoteProcedureCall(new Request
+            var response = await SendRemoteProcedureCall(new Request
             {
                 RequestType = RequestType.GetMapObjects,
                 RequestMessage = new GetMapObjectsMessage
@@ -279,7 +278,7 @@ namespace POGOLib.Net
                 Longitude = _session.Player.Coordinate.Longitude,
                 Altitude = _session.Player.Coordinate.Altitude,
                 Unknown12 = 123, // TODO: Figure this out.
-                Requests = {GetDefaultRequests()}
+                Requests = { GetDefaultRequests() }
             };
 
             if (_session.AccessToken.AuthTicket == null || _session.AccessToken.IsExpired)
@@ -322,7 +321,7 @@ namespace POGOLib.Net
             return new ByteArrayContent(messageBytes);
         }
 
-        public ByteString SendRemoteProcedureCall(RequestType requestType)
+        public Task<ByteString> SendRemoteProcedureCall(RequestType requestType)
         {
             return SendRemoteProcedureCall(new Request
             {
@@ -330,22 +329,22 @@ namespace POGOLib.Net
             });
         }
 
-        public ByteString SendRemoteProcedureCall(Request request)
+        public async Task<ByteString> SendRemoteProcedureCall(Request request)
         {
             var requestEnvelope = GetRequestEnvelope(request);
 
             using (var requestData = PrepareRequestEnvelope(requestEnvelope))
             {
-                using (var response = _httpClient.PostAsync(_requestUrl ?? Constants.ApiUrl, requestData).Result)
+                using (var response = await _httpClient.PostAsync(_requestUrl ?? Constants.ApiUrl, requestData))
                 {
                     if (!response.IsSuccessStatusCode)
                     {
-                        Log.Debug(response.Content.ReadAsStringAsync().Result);
+                        Log.Debug(await response.Content.ReadAsStringAsync());
                         throw new Exception(
                             "Received a non-success HTTP status code from the RPC server, see the console for the response.");
                     }
 
-                    var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
+                    var responseBytes = await response.Content.ReadAsByteArrayAsync();
                     var responseEnvelope = ResponseEnvelope.Parser.ParseFrom(responseBytes);
 
                     switch (responseEnvelope.StatusCode)
@@ -353,14 +352,14 @@ namespace POGOLib.Net
                         case 52: // Rate limit?
                             Log.Info(
                                 $"We are sending requests too fast, sleeping for {Configuration.RateLimitTimeout} milliseconds.");
-                            Thread.Sleep(Configuration.RateLimitTimeout);
-                            return SendRemoteProcedureCall(request);
+                            await Task.Delay(Configuration.RateLimitTimeout);
+                            return await SendRemoteProcedureCall(request);
 
                         case 53: // New RPC url
                             if (Regex.IsMatch(responseEnvelope.ApiUrl, "pgorelease\\.nianticlabs\\.com\\/plfe\\/\\d+"))
                             {
                                 _requestUrl = $"https://{responseEnvelope.ApiUrl}/rpc";
-                                return SendRemoteProcedureCall(request);
+                                return await SendRemoteProcedureCall(request);
                             }
                             throw new Exception(
                                 $"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
@@ -369,7 +368,7 @@ namespace POGOLib.Net
                             Log.Debug("Received StatusCode 102, reauthenticating.");
                             _session.AccessToken.Expire();
                             _session.Reauthenticate();
-                            return SendRemoteProcedureCall(request);
+                            return await SendRemoteProcedureCall(request);
 
                         default:
                             Log.Info($"Unknown status code: {responseEnvelope.StatusCode}");

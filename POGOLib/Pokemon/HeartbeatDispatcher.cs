@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Threading;
-using log4net;
+using System.Threading.Tasks;
 using POGOLib.Net;
+using Splat;
 
 namespace POGOLib.Pokemon
 {
     internal class HeartbeatDispatcher
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof (HeartbeatDispatcher));
+        private static readonly IFullLogger Log = LogHost.Default;
 
         /// <summary>
         ///     The authenticated <see cref="Session" />.
@@ -27,7 +27,7 @@ namespace POGOLib.Pokemon
         /// <summary>
         ///     Checks every second if we need to update.
         /// </summary>
-        private void CheckDispatch()
+        private async void CheckDispatch()
         {
             while (_keepHeartbeating)
             {
@@ -68,17 +68,16 @@ namespace POGOLib.Pokemon
                 {
                     Dispatch();
                 }
-                Thread.Sleep(1000);
+
+                await Task.Delay(1000);
             }
         }
 
         internal void StartDispatcher()
         {
             _keepHeartbeating = true;
-            new Thread(CheckDispatch)
-            {
-                IsBackground = true
-            }.Start();
+            
+            CheckDispatch();
         }
 
         internal void StopDispatcher()
