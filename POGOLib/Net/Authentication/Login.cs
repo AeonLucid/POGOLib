@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using DankMemes.GPSOAuthSharp;
-using GeoCoordinatePortable;
-using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon.Data;
 using POGOLib.Util;
+using Splat;
 
 namespace POGOLib.Net.Authentication
 {
@@ -18,7 +18,7 @@ namespace POGOLib.Net.Authentication
     /// </summary>
     public static class Login
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof (Login));
+        private static readonly IFullLogger Log = LogHost.Default;
 
         /// <summary>
         ///     Login with a stored <see cref="AccessToken" />.
@@ -48,7 +48,7 @@ namespace POGOLib.Net.Authentication
         /// <param name="initialLatitude">The initial latitude you will spawn at after logging into PokémonGo.</param>
         /// <param name="initialLongitude">The initial longitude you will spawn at after logging into PokémonGo.</param>
         /// <returns></returns>
-        public static Session GetSession(string username, string password, LoginProvider loginProvider,
+        public static async Task<Session> GetSession(string username, string password, LoginProvider loginProvider,
             double initialLatitude, double initialLongitude)
         {
             AccessToken accessToken;
@@ -59,7 +59,7 @@ namespace POGOLib.Net.Authentication
                     accessToken = WithGoogle(username, password);
                     break;
                 case LoginProvider.PokemonTrainerClub:
-                    accessToken = WithPokemonTrainerClub(username, password);
+                    accessToken = await WithPokemonTrainerClub(username, password);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(loginProvider), loginProvider, null);
@@ -99,7 +99,7 @@ namespace POGOLib.Net.Authentication
         }
 
         /// Authenticate the user through PTC.
-        internal static AccessToken WithPokemonTrainerClub(string username, string password)
+        internal static async Task<AccessToken> WithPokemonTrainerClub(string username, string password)
         {
             using (var httpClientHandler = new HttpClientHandler())
             {
@@ -107,9 +107,9 @@ namespace POGOLib.Net.Authentication
                 using (var httpClient = new HttpClient(httpClientHandler))
                 {
                     httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.LoginUserAgent);
-                    var loginData = GetLoginData(httpClient);
-                    var ticket = PostLogin(httpClient, username, password, loginData);
-                    var accessToken = PostLoginOauth(httpClient, ticket);
+                    var loginData = await GetLoginData(httpClient);
+                    var ticket = await PostLogin(httpClient, username, password, loginData);
+                    var accessToken = await PostLoginOauth(httpClient, ticket);
                     accessToken.Username = username;
                     Log.Debug("Authenticated through PTC.");
                     return accessToken;
@@ -122,11 +122,11 @@ namespace POGOLib.Net.Authentication
         /// </summary>
         /// <param name="httpClient">An initialized <see cref="HttpClient" /></param>
         /// <returns><see cref="LoginData" /> for <see cref="PostLogin" />.</returns>
-        private static LoginData GetLoginData(HttpClient httpClient)
+        private static async Task<LoginData> GetLoginData(HttpClient httpClient)
         {
-            var loginDataResponse = httpClient.GetAsync(Constants.LoginUrl).Result;
+            var loginDataResponse = await httpClient.GetAsync(Constants.LoginUrl);
             var loginData =
-                JsonConvert.DeserializeObject<LoginData>(loginDataResponse.Content.ReadAsStringAsync().Result);
+                JsonConvert.DeserializeObject<LoginData>(await loginDataResponse.Content.ReadAsStringAsync());
             return loginData;
         }
 
@@ -138,19 +138,19 @@ namespace POGOLib.Net.Authentication
         /// <param name="password">The user's PTC password.</param>
         /// <param name="loginData"><see cref="LoginData" /> taken from PTC website using <see cref="GetLoginData" />.</param>
         /// <returns></returns>
-        private static string PostLogin(HttpClient httpClient, string username, string password, LoginData loginData)
+        private static async Task<string> PostLogin(HttpClient httpClient, string username, string password, LoginData loginData)
         {
             var loginResponse =
-                httpClient.PostAsync(Constants.LoginUrl, new FormUrlEncodedContent(new Dictionary<string, string>
+                await httpClient.PostAsync(Constants.LoginUrl, new FormUrlEncodedContent(new Dictionary<string, string>
                 {
                     {"lt", loginData.Lt},
                     {"execution", loginData.Execution},
                     {"_eventId", "submit"},
                     {"username", username},
                     {"password", password}
-                })).Result;
+                }));
 
-            var loginResponseDataRaw = loginResponse.Content.ReadAsStringAsync().Result;
+            var loginResponseDataRaw = await loginResponse.Content.ReadAsStringAsync();
             if (!loginResponseDataRaw.Contains("{"))
             {
                 var locationQuery = loginResponse.Headers.Location.Query;
@@ -159,7 +159,7 @@ namespace POGOLib.Net.Authentication
             }
 
             var loginResponseData = JObject.Parse(loginResponseDataRaw);
-            var loginResponseErrors = (JArray) loginResponseData["errors"];
+            var loginResponseErrors = (JArray)loginResponseData["errors"];
 
             throw new Exception($"Pokemon Trainer Club gave error(s): '{string.Join(",", loginResponseErrors)}'");
         }
@@ -170,19 +170,19 @@ namespace POGOLib.Net.Authentication
         /// <param name="httpClient"></param>
         /// <param name="ticket"></param>
         /// <returns></returns>
-        private static AccessToken PostLoginOauth(HttpClient httpClient, string ticket)
+        private static async Task<AccessToken> PostLoginOauth(HttpClient httpClient, string ticket)
         {
             var loginResponse =
-                httpClient.PostAsync(Constants.LoginOauthUrl, new FormUrlEncodedContent(new Dictionary<string, string>
+                await httpClient.PostAsync(Constants.LoginOauthUrl, new FormUrlEncodedContent(new Dictionary<string, string>
                 {
                     {"client_id", "mobile-app_pokemon-go"},
                     {"redirect_uri", "https://www.nianticlabs.com/pokemongo/error"},
                     {"client_secret", "w8ScCUXJQc6kXKw8FiOhd8Fixzht18Dq3PEVkUCP5ZPxtgyWsbTvWHFLm2wNY0JR"},
                     {"grant_type", "refresh_token"},
                     {"code", ticket}
-                })).Result;
+                }));
 
-            var loginResponseDataRaw = loginResponse.Content.ReadAsStringAsync().Result;
+            var loginResponseDataRaw = await loginResponse.Content.ReadAsStringAsync();
 
             var oAuthData = Regex.Match(loginResponseDataRaw,
                 "access_token=(?<accessToken>.*?)&expires=(?<expires>\\d+)");

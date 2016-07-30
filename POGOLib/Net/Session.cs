@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading;
-using GeoCoordinatePortable;
-using log4net;
+using System.Threading.Tasks;
 using POGOLib.Net.Authentication;
 using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon;
 using POGOLib.Pokemon.Data;
 using POGOProtos.Settings;
+using Splat;
 
 namespace POGOLib.Net
 {
@@ -16,7 +16,7 @@ namespace POGOLib.Net
     /// </summary>
     public class Session : IDisposable
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof (Session));
+        private static readonly IFullLogger Log = LogHost.Default;
 
         /// <summary>
         ///     This is the <see cref="HeartbeatDispatcher" /> which is responsible for retrieving events and updating gps
@@ -81,9 +81,9 @@ namespace POGOLib.Net
             GC.SuppressFinalize(this);
         }
 
-        public bool Startup()
+        public async Task<bool> Startup()
         {
-            if (!RpcClient.Startup())
+            if (!await RpcClient.Startup())
             {
                 return false;
             }
@@ -99,7 +99,7 @@ namespace POGOLib.Net
         /// <summary>
         ///     Ensures the <see cref="Session" /> gets reauthenticated, no matter how long it takes.
         /// </summary>
-        internal void Reauthenticate()
+        internal async void Reauthenticate()
         {
             ReauthenticateMutex.WaitOne();
             if (AccessToken.IsExpired)
@@ -113,7 +113,7 @@ namespace POGOLib.Net
                         switch (AccessToken.LoginProvider)
                         {
                             case LoginProvider.PokemonTrainerClub:
-                                accessToken = Login.WithPokemonTrainerClub(AccessToken.Username, Password);
+                                accessToken = await Login.WithPokemonTrainerClub(AccessToken.Username, Password);
                                 break;
                             case LoginProvider.GoogleAuth:
                                 accessToken = Login.WithGoogle(AccessToken.Username, Password);
@@ -132,7 +132,7 @@ namespace POGOLib.Net
                         {
                             var sleepSeconds = Math.Min(60, ++tries*5);
                             Log.Error($"Reauthentication failed, trying again in {sleepSeconds} seconds.");
-                            Thread.Sleep(sleepSeconds*1000);
+                            await Task.Delay(sleepSeconds * 1000);
                         }
                     }
                 }
