@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Device.Location;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using DankMemes.GPSOAuthSharp;
+using GeoCoordinatePortable;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

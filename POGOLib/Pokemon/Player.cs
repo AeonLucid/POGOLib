@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Device.Location;
 using System.Linq;
+using GeoCoordinatePortable;
 using POGOProtos.Data.Player;
 
 namespace POGOLib.Pokemon
@@ -65,7 +65,9 @@ namespace POGOLib.Pokemon
 
         private void InventoryOnUpdate(object sender, EventArgs eventArgs)
         {
-            var stats = Inventory?.InventoryItems?.FirstOrDefault()?.InventoryItemData?.PlayerStats;
+            var stats =
+                Inventory.InventoryItems.FirstOrDefault(i => i?.InventoryItemData?.PlayerStats != null)?
+                    .InventoryItemData?.PlayerStats;
             if (stats != null)
             {
                 Stats = stats;

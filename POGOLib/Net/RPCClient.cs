@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Device.Location;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
+using GeoCoordinatePortable;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using log4net;
@@ -20,7 +21,7 @@ using POGOProtos.Networking.Responses;
 
 namespace POGOLib.Net
 {
-    public class RpcClient
+    public class RpcClient : IDisposable
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof (RpcClient));
 
@@ -65,6 +66,12 @@ namespace POGOLib.Net
 
         internal GeoCoordinate LastGeoCoordinateMapObjectsRequest { get; private set; } = new GeoCoordinate();
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         /// <summary>
         ///     Sends all requests which the (android-)client sends on startup
         /// </summary>
@@ -72,23 +79,23 @@ namespace POGOLib.Net
         {
             try
             {
-                ByteString response;
                 // Send GetPlayer to check if we're connected and authenticated
                 GetPlayerResponse playerResponse;
                 do
                 {
-                    response = SendRemoteProcedureCall(new Request
+                    var response = SendRemoteProcedureCall(new Request
                     {
                         RequestType = RequestType.GetPlayer
                     });
                     playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
                     if (!playerResponse.Success)
+                    {
                         Thread.Sleep(1000);
+                    }
                 } while (!playerResponse.Success);
 
                 // Get DownloadRemoteConfig
-                // ReSharper disable once RedundantAssignment
-                response = SendRemoteProcedureCall(new Request
+                var remoteConfigResponse = SendRemoteProcedureCall(new Request
                 {
                     RequestType = RequestType.DownloadRemoteConfigVersion,
                     RequestMessage = new DownloadRemoteConfigVersionMessage
@@ -97,18 +104,34 @@ namespace POGOLib.Net
                         AppVersion = 2903
                     }.ToByteString()
                 });
+                var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
 
-                // GetAssetDigest
-                // ReSharper disable once RedundantAssignment
-                response = SendRemoteProcedureCall(new Request
+                var timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds();
+                if (_session.Templates.AssetDigests == null || remoteConfigParsed.AssetDigestTimestampMs > timestamp)
                 {
-                    RequestType = RequestType.GetAssetDigest,
-                    RequestMessage = new GetAssetDigestMessage
+                    // GetAssetDigest
+                    var assetDigestResponse = SendRemoteProcedureCall(new Request
                     {
-                        Platform = Platform.Android,
-                        AppVersion = 2903
-                    }.ToByteString()
-                });
+                        RequestType = RequestType.GetAssetDigest,
+                        RequestMessage = new GetAssetDigestMessage
+                        {
+                            Platform = Platform.Android,
+                            AppVersion = 2903
+                        }.ToByteString()
+                    });
+                    _session.Templates.SetAssetDigests(GetAssetDigestResponse.Parser.ParseFrom(assetDigestResponse));
+                }
+
+                if (_session.Templates.ItemTemplates == null || remoteConfigParsed.ItemTemplatesTimestampMs > timestamp)
+                {
+                    // DownloadItemTemplates
+                    var itemTemplateResponse = SendRemoteProcedureCall(new Request
+                    {
+                        RequestType = RequestType.DownloadItemTemplates
+                    });
+                    _session.Templates.SetItemTemplates(
+                        DownloadItemTemplatesResponse.Parser.ParseFrom(itemTemplateResponse));
+                }
             }
             catch (Exception)
             {
@@ -363,7 +386,7 @@ namespace POGOLib.Net
                         _session.AccessToken.AuthTicket = responseEnvelope.AuthTicket;
                         Log.Debug("Received a new AuthTicket from Pokémon!");
                     }
-                    return HandleResponseEnvelope(responseEnvelope);
+                    return HandleResponseEnvelope(request, responseEnvelope);
                 }
             }
         }
@@ -371,12 +394,13 @@ namespace POGOLib.Net
         /// <summary>
         ///     Responsible for handling the received <see cref="ResponseEnvelope" />.
         /// </summary>
+        /// <param name="request"></param>
         /// <param name="responseEnvelope">
         ///     The <see cref="ResponseEnvelope" /> received from
         ///     <see cref="SendRemoteProcedureCall(Request)" />.
         /// </param>
         /// <returns>Returns the <see cref="ByteString" /> response of the <see cref="Request" />.</returns>
-        private ByteString HandleResponseEnvelope(ResponseEnvelope responseEnvelope)
+        private ByteString HandleResponseEnvelope(Request request, ResponseEnvelope responseEnvelope)
         {
             if (responseEnvelope.Returns.Count != 5)
             {
@@ -390,7 +414,45 @@ namespace POGOLib.Net
             // Handle the default responses.
             HandleDefaultResponses(responseEnvelope.Returns);
 
+            // Handle responses which affect the inventory
+            HandleInventoryResponses(request, requestResponse);
+
             return requestResponse;
+        }
+
+        private void HandleInventoryResponses(Request request, ByteString requestResponse)
+        {
+            ulong pokemonId = 0;
+            switch (request.RequestType)
+            {
+                case RequestType.ReleasePokemon:
+                    var releaseResponse = ReleasePokemonResponse.Parser.ParseFrom(requestResponse);
+                    if (releaseResponse.Result == ReleasePokemonResponse.Types.Result.Success ||
+                        releaseResponse.Result == ReleasePokemonResponse.Types.Result.Failed)
+                    {
+                        var releaseMessage = ReleasePokemonMessage.Parser.ParseFrom(request.RequestMessage);
+                        pokemonId = releaseMessage.PokemonId;
+                    }
+                    break;
+
+                case RequestType.EvolvePokemon:
+                    var evolveResponse = EvolvePokemonResponse.Parser.ParseFrom(requestResponse);
+                    if (evolveResponse.Result == EvolvePokemonResponse.Types.Result.Success ||
+                        evolveResponse.Result == EvolvePokemonResponse.Types.Result.FailedPokemonMissing)
+                    {
+                        var releaseMessage = ReleasePokemonMessage.Parser.ParseFrom(request.RequestMessage);
+                        pokemonId = releaseMessage.PokemonId;
+                    }
+                    break;
+            }
+            if (pokemonId > 0)
+            {
+                var pokemons = _session.Player.Inventory.InventoryItems.Where(
+                    i =>
+                        i?.InventoryItemData?.PokemonData != null &&
+                        i.InventoryItemData.PokemonData.Id.Equals(pokemonId));
+                _session.Player.Inventory.RemoveInventoryItems(pokemons);
+            }
         }
 
         /// <summary>
@@ -422,7 +484,7 @@ namespace POGOLib.Net
                                 _session.Player.Inventory.LastInventoryTimestampMs =
                                     inventory.InventoryDelta.NewTimestampMs;
                                 if (inventory.InventoryDelta != null &&
-                                    inventory.InventoryDelta.InventoryItems.Count != 0)
+                                    inventory.InventoryDelta.InventoryItems.Count > 0)
                                 {
                                     _session.Player.Inventory.UpdateInventoryItems(inventory.InventoryDelta);
                                 }
@@ -467,6 +529,14 @@ namespace POGOLib.Net
                 }
 
                 responseCount++;
+            }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _httpClient?.Dispose();
             }
         }
     }
