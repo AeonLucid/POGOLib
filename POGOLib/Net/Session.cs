@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using GeoCoordinatePortable;
 using POGOLib.Net.Authentication;
 using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon;

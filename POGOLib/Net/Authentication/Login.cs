@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DankMemes.GPSOAuthSharp;
+using GeoCoordinatePortable;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using POGOLib.Net.Authentication.Data;
