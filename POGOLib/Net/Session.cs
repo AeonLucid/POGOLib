@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Device.Location;
 using System.Threading;
+using GeoCoordinatePortable;
 using log4net;
 using POGOLib.Net.Authentication;
 using POGOLib.Net.Authentication.Data;
@@ -14,7 +14,7 @@ namespace POGOLib.Net
     ///     This is an authenticated <see cref="Session" /> with PokémonGo that handles everything between the developer and
     ///     PokémonGo.
     /// </summary>
-    public class Session
+    public class Session : IDisposable
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof (Session));
 
@@ -36,9 +36,12 @@ namespace POGOLib.Net
             Password = password;
             Player = new Player(geoCoordinate);
             Map = new Map();
+            Templates = new Templates();
             RpcClient = new RpcClient(this);
             _heartbeat = new HeartbeatDispatcher(this);
         }
+
+        public Templates Templates { get; }
 
         /// <summary>
         ///     Gets the <see cref="AccessToken" /> of the <see cref="Session" />.
@@ -72,6 +75,12 @@ namespace POGOLib.Net
 
         private Mutex ReauthenticateMutex { get; } = new Mutex();
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         public bool Startup()
         {
             if (!RpcClient.Startup())
@@ -80,6 +89,11 @@ namespace POGOLib.Net
             }
             _heartbeat.StartDispatcher();
             return true;
+        }
+
+        public void Shutdown()
+        {
+            _heartbeat.StopDispatcher();
         }
 
         /// <summary>
@@ -116,12 +130,7 @@ namespace POGOLib.Net
                     {
                         if (accessToken == null)
                         {
-                            var sleepSeconds = ++tries*5;
-                            // Max is a minute.
-                            if (sleepSeconds > 60)
-                            {
-                                sleepSeconds = 60;
-                            }
+                            var sleepSeconds = Math.Min(60, ++tries*5);
                             Log.Error($"Reauthentication failed, trying again in {sleepSeconds} seconds.");
                             Thread.Sleep(sleepSeconds*1000);
                         }
@@ -139,5 +148,14 @@ namespace POGOLib.Net
         }
 
         public event EventHandler<EventArgs> AccessTokenUpdated;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                ReauthenticateMutex?.Dispose();
+                RpcClient?.Dispose();
+            }
+        }
     }
 }

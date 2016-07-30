@@ -10,14 +10,14 @@ namespace POGOLib.Pokemon
         private static readonly ILog Log = LogManager.GetLogger(typeof (HeartbeatDispatcher));
 
         /// <summary>
-        ///     Determines whether we can keep heartbeating.
-        /// </summary>
-        private readonly bool _keepHeartbeating = true;
-
-        /// <summary>
         ///     The authenticated <see cref="Session" />.
         /// </summary>
         private readonly Session _session;
+
+        /// <summary>
+        ///     Determines whether we can keep heartbeating.
+        /// </summary>
+        private bool _keepHeartbeating = true;
 
         internal HeartbeatDispatcher(Session session)
         {
@@ -74,10 +74,16 @@ namespace POGOLib.Pokemon
 
         internal void StartDispatcher()
         {
+            _keepHeartbeating = true;
             new Thread(CheckDispatch)
             {
                 IsBackground = true
             }.Start();
+        }
+
+        internal void StopDispatcher()
+        {
+            _keepHeartbeating = false;
         }
 
         private void Dispatch()
