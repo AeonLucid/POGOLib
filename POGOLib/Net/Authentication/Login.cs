@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text.RegularExpressions;
-using DankMemes.GPSOAuthSharp;
+﻿using DankMemes.GPSOAuthSharp;
 using GeoCoordinatePortable;
 using log4net;
 using Newtonsoft.Json;
@@ -10,6 +6,10 @@ using Newtonsoft.Json.Linq;
 using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon.Data;
 using POGOLib.Util;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text.RegularExpressions;
 
 namespace POGOLib.Net.Authentication
 {
@@ -18,7 +18,7 @@ namespace POGOLib.Net.Authentication
     /// </summary>
     public static class Login
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof (Login));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(Login));
 
         /// <summary>
         ///     Login with a stored <see cref="AccessToken" />.
@@ -29,14 +29,14 @@ namespace POGOLib.Net.Authentication
         /// <param name="initialLongitude">The initial longitude you will spawn at after logging into PokémonGo.</param>
         /// <returns></returns>
         public static Session GetSession(AccessToken accessToken, string password, double initialLatitude,
-            double initialLongitude)
+            double initialLongitude, DeviceSettings deviceSettings)
         {
             if (accessToken.IsExpired)
             {
                 throw new Exception("AccessToken is expired.");
             }
             Log.Debug("Authenticated from cache.");
-            return new Session(accessToken, password, new GeoCoordinate(initialLatitude, initialLongitude));
+            return new Session(accessToken, password, new GeoCoordinate(initialLatitude, initialLongitude, 12), deviceSettings);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace POGOLib.Net.Authentication
         /// <param name="initialLongitude">The initial longitude you will spawn at after logging into PokémonGo.</param>
         /// <returns></returns>
         public static Session GetSession(string username, string password, LoginProvider loginProvider,
-            double initialLatitude, double initialLongitude)
+            double initialLatitude, double initialLongitude, DeviceSettings deviceSettings)
         {
             AccessToken accessToken;
 
@@ -58,14 +58,16 @@ namespace POGOLib.Net.Authentication
                 case LoginProvider.GoogleAuth:
                     accessToken = WithGoogle(username, password);
                     break;
+
                 case LoginProvider.PokemonTrainerClub:
                     accessToken = WithPokemonTrainerClub(username, password);
                     break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(loginProvider), loginProvider, null);
             }
 
-            return new Session(accessToken, password, new GeoCoordinate(initialLatitude, initialLongitude));
+            return new Session(accessToken, password, new GeoCoordinate(initialLatitude, initialLongitude, 12), deviceSettings);
         }
 
         /// Authenticate the user through Google.
@@ -159,7 +161,7 @@ namespace POGOLib.Net.Authentication
             }
 
             var loginResponseData = JObject.Parse(loginResponseDataRaw);
-            var loginResponseErrors = (JArray) loginResponseData["errors"];
+            var loginResponseErrors = (JArray)loginResponseData["errors"];
 
             throw new Exception($"Pokemon Trainer Club gave error(s): '{string.Join(",", loginResponseErrors)}'");
         }

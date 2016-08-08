@@ -1,12 +1,12 @@
-﻿using System;
-using System.Threading;
-using GeoCoordinatePortable;
+﻿using GeoCoordinatePortable;
 using log4net;
 using POGOLib.Net.Authentication;
 using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon;
 using POGOLib.Pokemon.Data;
 using POGOProtos.Settings;
+using System;
+using System.Threading;
 
 namespace POGOLib.Net
 {
@@ -16,7 +16,7 @@ namespace POGOLib.Net
     /// </summary>
     public class Session : IDisposable
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof (Session));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(Session));
 
         /// <summary>
         ///     This is the <see cref="HeartbeatDispatcher" /> which is responsible for retrieving events and updating gps
@@ -30,14 +30,14 @@ namespace POGOLib.Net
         /// </summary>
         public readonly RpcClient RpcClient;
 
-        internal Session(AccessToken accessToken, string password, GeoCoordinate geoCoordinate)
+        internal Session(AccessToken accessToken, string password, GeoCoordinate geoCoordinate, DeviceSettings deviceSettings)
         {
             AccessToken = accessToken;
             Password = password;
             Player = new Player(geoCoordinate);
             Map = new Map();
             Templates = new Templates();
-            RpcClient = new RpcClient(this);
+            RpcClient = new RpcClient(this, deviceSettings);
             _heartbeat = new HeartbeatDispatcher(this);
         }
 
@@ -115,9 +115,11 @@ namespace POGOLib.Net
                             case LoginProvider.PokemonTrainerClub:
                                 accessToken = Login.WithPokemonTrainerClub(AccessToken.Username, Password);
                                 break;
+
                             case LoginProvider.GoogleAuth:
                                 accessToken = Login.WithGoogle(AccessToken.Username, Password);
                                 break;
+
                             default:
                                 throw new ArgumentOutOfRangeException();
                         }
@@ -130,9 +132,9 @@ namespace POGOLib.Net
                     {
                         if (accessToken == null)
                         {
-                            var sleepSeconds = Math.Min(60, ++tries*5);
+                            var sleepSeconds = Math.Min(60, ++tries * 5);
                             Log.Error($"Reauthentication failed, trying again in {sleepSeconds} seconds.");
-                            Thread.Sleep(sleepSeconds*1000);
+                            Thread.Sleep(sleepSeconds * 1000);
                         }
                     }
                 }

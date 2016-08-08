@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
-using GeoCoordinatePortable;
+﻿using GeoCoordinatePortable;
 using POGOProtos.Data;
 using POGOProtos.Data.Player;
+using System;
+using System.Linq;
 
 namespace POGOLib.Pokemon
 {
@@ -40,8 +40,8 @@ namespace POGOLib.Pokemon
         ///     Gets the <see cref="Stats" /> of the beautiful <see cref="Inventory" /> object by PokémonGo.
         /// </summary>
         public PlayerStats Stats { get; private set; }
-		
-		public PlayerData Data { get; set; }
+
+        public PlayerData Data { get; set; }
 
         /// <summary>
         ///     Sets the <see cref="GeoCoordinate" /> of the <see cref="Player" />.
@@ -49,7 +49,7 @@ namespace POGOLib.Pokemon
         /// <param name="latitude">The latitude of your location.</param>
         /// <param name="longitude">The longitude of your location.</param>
         /// <param name="altitude">The altitude of your location.</param>
-        public void SetCoordinates(double latitude, double longitude, double altitude = 100)
+        public void SetCoordinates(double latitude, double longitude, double altitude = 12)
         {
             Coordinate = new GeoCoordinate(latitude, longitude, altitude);
         }
