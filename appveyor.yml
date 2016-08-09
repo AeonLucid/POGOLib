@@ -13,16 +13,17 @@ assembly_info:
 
 configuration: Release
   
-before_build:
-- cmd: nuget restore
+#before_build:
+#- cmd: nuget restore
 
 build:
-  project: POGOLib\POGOLib.csproj
+#  project: POGOLib\POGOLib.csproj
   publish_nuget: true
+  include_nuget_references: true
   verbosity: minimal
   
-artifacts:
-  - path: POGOProtos\bin\Release\POGOProtos.dll
-    name: POGOProtos.dll
-  - path: POGOLib\bin\Release\POGOLib.dll
-    name: POGOLib.dll
+#artifacts:
+#  - path: POGOProtos\bin\Release\POGOProtos.dll
+#    name: POGOProtos.dll
+#  - path: POGOLib\bin\Release\POGOLib.dll
+#    name: POGOLib.dll
