@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>POGOLib</id>
-    <version>$version$</version>
+    <id>$id$</id>
+    <version>$version$-alpha</version>
+    <title>$title$</title>
     <authors>AeonLucid (@aeonlucid)</authors>
-    <licenseUrl>https://github.com/AeonLucid/POGOLib/blob/master/LICENSE</licenseUrl>
+    <owners>AeonLucid (@aeonlucid)</owners>
+    <licenseUrl>https://github.com/AeonLucid/POGOLib/blob/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/AeonLucid/POGOLib</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>POGOLib is written in C# and aims to be a community-driven PokémonGo API.</description>
@@ -12,6 +14,6 @@
     <tags>pokemon go api library</tags>
   </metadata>
   <files>
-     <file src="POGOLib\bin\Release\POGOLib.dll" target="net46" />
+    <file src="bin\$configuration$\POGOProtos.dll" target="lib\net45" />
   </files>
 </package>
