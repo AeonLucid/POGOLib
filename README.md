@@ -19,15 +19,18 @@ You can view an example of how I implemented this in the [demo](https://github.c
 
 When PokémonGo tells POGOLib that the authentication token is no longer valid, we try to re-authenticate. This happens on intervals of 5, 10, 15, 20, 30... 60 (max) seconds. It keeps trying to re-authenticate. All other remote procedure calls that tried to request data will be stopped and continue when the session has re-authenticated. It will be like nothing happened.
 
-When the session has successful re-authenticated, we fire an event. You can subscribe to receive a notification.
+When the session has successful re-authenticated, we fire an event. You can subscribe to the event to receive a notification.
 
 ```csharp
 var session = Login.GetSession("username", "password", LoginProvider.PokemonTrainerClub, 51.507351, -0.127758);
+
 session.AccessTokenUpdated += (sender, eventArgs) =>
 {
 	// Save to file.. 
 	// session.AccessToken
 };
+
+session.Startup();
 ```
 
 ## Heartbeats
@@ -40,10 +43,11 @@ The heartbeat is checks every second if:
 
 If one of these is true, an heartbeat will be sent. This automatically fetches the map data surrounding your current position, your inventory data and the game settings.
 
-If you want to receive a notification when these update, you can subscribe to following events.
+If you want to receive a notification when these update, you can subscribe to the following events.
 
 ```csharp
 var session = Login.GetSession("username", "password", LoginProvider.PokemonTrainerClub, 51.507351, -0.127758);
+
 session.Player.Inventory.Update += (sender, eventArgs) =>
 {
 	// Access updated inventory: session.Player.Inventory
@@ -54,7 +58,11 @@ session.Map.Update += (sender, eventArgs) =>
 	// Access updated map: session.Map
 	Console.WriteLine("Map was updated.");
 };
+
+session.Startup();
 ```
+
+*Make sure you start the session **after** subscribing to the events.*
 
 ## Custom crafted requests
 
@@ -69,6 +77,8 @@ You can send a request and parse the response like this.
 
 ```csharp
 var session = Login.GetSession("username", "password", LoginProvider.PokemonTrainerClub, 51.507351, -0.127758);
+session.Startup();
+
 var fortDetailsBytes = session.RpcClient.SendRemoteProcedureCall(new Request
 {
 	RequestType = RequestType.FortDetails,
@@ -118,7 +128,8 @@ This example logs in, retrieves nearby pokestops, checks if you have already sea
 
 ```csharp
 var session = Login.GetSession("username", "password", LoginProvider.PokemonTrainerClub, 51.507351, -0.127758);
-				
+session.Startup();
+
 Console.WriteLine($"I have caught {session.Player.Stats.PokemonsCaptured} Pokémon.");
 Console.WriteLine($"I have visisted {session.Player.Stats.PokeStopVisits} pokestops.");
 
