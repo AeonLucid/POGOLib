@@ -90,6 +90,7 @@
     <Compile Include="Pokemon\Player.cs" />
     <Compile Include="Pokemon\Templates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\CryptUtil.cs" />
     <Compile Include="Util\Devices\Device.cs" />
     <Compile Include="Util\Devices\DeviceInfo.cs" />
     <Compile Include="Util\MapUtil.cs" />
@@ -105,14 +106,6 @@
       <Project>{9e24cf28-ee86-44dc-b2cd-2cfa731a78aa}</Project>
       <Name>POGOProtos</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Libraries\Encrypt_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Libraries\Encrypt_x86.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

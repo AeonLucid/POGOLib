@@ -3,10 +3,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Google.Protobuf;
-using Google.Protobuf.Collections;
 using POGOLib.Util;
 using POGOProtos.Networking.Envelopes;
-using POGOProtos.Networking.Requests;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 namespace POGOLib.Net
@@ -121,7 +119,7 @@ namespace POGOLib.Net
                 RequestType = 6,
                 Unknown2 = new Unknown6.Types.Unknown2
                 {
-                    EncryptedSignature = ByteString.CopyFrom(Encrypt(signature.ToByteArray()))
+                    EncryptedSignature = ByteString.CopyFrom(CryptUtil.Encrypt(signature.ToByteArray(), new byte[32]))
                 }
             };
 
@@ -136,43 +134,6 @@ namespace POGOLib.Net
             var randomizedDelay = new Random().NextDouble() * (randomMax - randomMin) + randomMin; ;
             return randomizedDelay; ;
         }
-
-        private byte[] Encrypt(byte[] bytes)
-        {
-            var outputLength = 32 + bytes.Length + (256 - (bytes.Length % 256));
-            var ptr = Marshal.AllocHGlobal(outputLength);
-            var ptrOutput = Marshal.AllocHGlobal(outputLength);
-            FillMemory(ptr, (uint)outputLength, 0);
-            FillMemory(ptrOutput, (uint)outputLength, 0);
-            Marshal.Copy(bytes, 0, ptr, bytes.Length);
-            try
-            {
-                int outputSize = outputLength;
-
-                // Results in "An attempt was made to load a program with an incorrect format."
-                //                if(_is64Bit)
-                //                    EncryptNative_x64(ptr, bytes.Length, new byte[32], 32, ptrOutput, out outputSize);
-                //                else
-
-                EncryptNative_x86(ptr, bytes.Length, new byte[32], 32, ptrOutput, out outputSize);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            var output = new byte[outputLength];
-            Marshal.Copy(ptrOutput, output, 0, outputLength);
-            return output;
-        }
-
-        [DllImport("Libraries/Encrypt_x86.dll", EntryPoint = "encrypt", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void EncryptNative_x86(IntPtr arr, int length, byte[] iv, int ivsize, IntPtr output, out int outputSize);
-
-        [DllImport("Libraries/Encrypt_x64.dll", EntryPoint = "encrypt", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void EncryptNative_x64(IntPtr arr, int length, byte[] iv, int ivsize, IntPtr output, out int outputSize);
-
-        [DllImport("kernel32.dll", EntryPoint = "RtlFillMemory", SetLastError = false)]
-        private static extern void FillMemory(IntPtr destination, uint length, byte fill);
 
     }
 }
