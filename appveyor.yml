@@ -16,8 +16,9 @@ build:
   include_nuget_references: true
   verbosity: minimal
   
-#artifacts:
-#  - path: POGOProtos\bin\Release\POGOProtos.dll
-#    name: POGOProtos.dll
-#  - path: POGOLib\bin\Release\POGOLib.dll
-#    name: POGOLib.dll
+deploy:
+  - provider: NuGet
+    api_key:
+      secure: Y/AgjrCeBdDo/UpZoyVLIV61fC3YNdmAgMQ1yHE6lMxs0ArlO5NDCmu2cUpcXR/Y
+    on:
+      branch: master
