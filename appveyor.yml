@@ -22,5 +22,7 @@ build:
   verbosity: minimal
   
 artifacts:
+  - path: POGOProtos\bin\Release\POGOProtos.dll
+    name: POGOProtos.dll
   - path: POGOLib\bin\Release\POGOLib.dll
     name: POGOLib.dll
