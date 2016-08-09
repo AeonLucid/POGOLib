@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Demo\Demo.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POGOLib", "POGOLib\POGOLib.csproj", "{3BA89DFB-A162-420A-9DED-DAA211E52AD2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POGOProtos", "POGOProtos\POGOProtos.csproj", "{9E24CF28-EE86-44DC-B2CD-2CFA731A78AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3BA89DFB-A162-420A-9DED-DAA211E52AD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BA89DFB-A162-420A-9DED-DAA211E52AD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BA89DFB-A162-420A-9DED-DAA211E52AD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E24CF28-EE86-44DC-B2CD-2CFA731A78AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E24CF28-EE86-44DC-B2CD-2CFA731A78AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E24CF28-EE86-44DC-B2CD-2CFA731A78AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E24CF28-EE86-44DC-B2CD-2CFA731A78AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

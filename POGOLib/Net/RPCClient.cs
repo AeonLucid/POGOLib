@@ -9,7 +9,6 @@ using GeoCoordinatePortable;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using log4net;
-using POGOLib.Pokemon;
 using POGOLib.Pokemon.Data;
 using POGOLib.Util;
 using POGOProtos.Enums;
@@ -36,6 +35,11 @@ namespace POGOLib.Net
         private readonly Session _session;
 
         /// <summary>
+        ///     The class responsible for all encryption / signing regarding <see cref="RpcClient"/>.
+        /// </summary>
+        private readonly RpcEncryption _rpcEncryption;
+
+        /// <summary>
         ///     The current 'unique' request id we are at.
         /// </summary>
         private ulong _requestId;
@@ -48,6 +52,7 @@ namespace POGOLib.Net
         internal RpcClient(Session session)
         {
             _session = session;
+            _rpcEncryption = new RpcEncryption(session);
 
             var httpClientHandler = new HttpClientHandler
             {
@@ -55,7 +60,7 @@ namespace POGOLib.Net
             };
 
             _httpClient = new HttpClient(httpClientHandler);
-            _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.ApiUserAgent);
+            _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(_session.Device.UserAgent);
             _httpClient.DefaultRequestHeaders.ExpectContinue = false;
             _requestId = (ulong) new Random().Next(100000000, 999999999);
         }
@@ -65,12 +70,6 @@ namespace POGOLib.Net
         internal DateTime LastRpcMapObjectsRequest { get; private set; }
 
         internal GeoCoordinate LastGeoCoordinateMapObjectsRequest { get; private set; } = new GeoCoordinate();
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
 
         /// <summary>
         ///     Sends all requests which the (android-)client sends on startup
@@ -144,8 +143,7 @@ namespace POGOLib.Net
         }
 
         /// <summary>
-        ///     It is not recommended to call this. Map objects will update automatically and fire the <see cref="Map.Update" />
-        ///     event.
+        ///     It is not recommended to call this. Map objects will update automatically and fire the map update event.
         /// </summary>
         public void RefreshMapObjects()
         {
@@ -181,6 +179,8 @@ namespace POGOLib.Net
             if (mapObjects.Status == MapObjectsStatus.Success)
             {
                 Log.Debug($"Received '{mapObjects.MapCells.Count}' map cells.");
+                Log.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.CatchablePokemons).Count()}' pokemons.");
+                Log.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.Forts).Count()}' forts.");
                 if (mapObjects.MapCells.Count == 0)
                 {
                     Log.Error("We received 0 map cells, are your GPS coordinates correct?");
@@ -281,6 +281,7 @@ namespace POGOLib.Net
                 Unknown12 = 123, // TODO: Figure this out.
                 Requests = {GetDefaultRequests()}
             };
+            requestEnvelope.Requests.Insert(0, request);
 
             if (_session.AccessToken.AuthTicket == null || _session.AccessToken.IsExpired)
             {
@@ -301,9 +302,8 @@ namespace POGOLib.Net
             else
             {
                 requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
+                requestEnvelope.Unknown6 = _rpcEncryption.GenerateSignature(requestEnvelope.Requests);
             }
-
-            requestEnvelope.Requests.Insert(0, request);
 
             return requestEnvelope;
         }
@@ -350,10 +350,14 @@ namespace POGOLib.Net
 
                     switch (responseEnvelope.StatusCode)
                     {
-                        case 52: // Rate limit?
-                            Log.Info(
-                                $"We are sending requests too fast, sleeping for {Configuration.RateLimitTimeout} milliseconds.");
-                            Thread.Sleep(Configuration.RateLimitTimeout);
+                        case 1:
+                            // Success!?
+                            break;
+
+                        case 52: // Slow servers? TODO: Throttling (?)
+                            Log.Warn(
+                                $"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
+                            Thread.Sleep(Configuration.SlowServerTimeout);
                             return SendRemoteProcedureCall(request);
 
                         case 53: // New RPC url
@@ -532,6 +536,12 @@ namespace POGOLib.Net
 
                 responseCount++;
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)

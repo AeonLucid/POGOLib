@@ -6,6 +6,7 @@ using POGOLib.Net.Authentication;
 using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon;
 using POGOLib.Pokemon.Data;
+using POGOLib.Util.Devices;
 using POGOProtos.Settings;
 
 namespace POGOLib.Net
@@ -30,10 +31,13 @@ namespace POGOLib.Net
         /// </summary>
         public readonly RpcClient RpcClient;
 
-        internal Session(AccessToken accessToken, string password, GeoCoordinate geoCoordinate)
+        internal Session(AccessToken accessToken, string password, GeoCoordinate geoCoordinate, Device device = null)
         {
+            if (device == null) device = DeviceInfo.GetDeviceByName("nexus5");
+
             AccessToken = accessToken;
             Password = password;
+            Device = device;
             Player = new Player(geoCoordinate);
             Map = new Map();
             Templates = new Templates();
@@ -52,6 +56,11 @@ namespace POGOLib.Net
         ///     Gets the <see cref="Password" /> of the <see cref="Session" />.
         /// </summary>
         internal string Password { get; }
+
+        /// <summary>
+        ///     Gets the <see cref="Device"/> of the <see cref="Session"/>. The <see cref="RpcClient"/> will try to act like this <see cref="Device"/>.
+        /// </summary>
+        public Device Device { get; private set; }
 
         /// <summary>
         ///     Gets the <see cref="Player" /> of the <see cref="Session" />.

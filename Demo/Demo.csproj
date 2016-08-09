@@ -50,7 +50,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="POGOProtos">
-      <HintPath>..\POGOLib\bin\Debug\POGOProtos.dll</HintPath>
+      <HintPath>..\POGOProtos\bin\Debug\POGOProtos.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
