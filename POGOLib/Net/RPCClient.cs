@@ -290,7 +290,9 @@ namespace POGOLib.Net
                 Requests = { GetDefaultRequests() }
             };
 
-            if (_session.AccessToken.AuthTicket == null || _session.AccessToken.IsExpired)
+			requestEnvelope.Requests.Insert(0, request);
+
+			if (_session.AccessToken.AuthTicket == null || _session.AccessToken.IsExpired)
             {
                 if (_session.AccessToken.IsExpired)
                 {
@@ -312,7 +314,7 @@ namespace POGOLib.Net
                 requestEnvelope.Unknown6 = GenerateSignature(requestEnvelope.Requests);
             }
 
-            requestEnvelope.Requests.Insert(0, request);
+            //requestEnvelope.Requests.Insert(0, request);
 
             return requestEnvelope;
         }
