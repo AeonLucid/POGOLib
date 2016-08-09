@@ -1,15 +1,12 @@
-version: 0.1.{build}
-
 branches:
   only:
   - master
-  
+
+nuget:
+  disable_publish_on_pr: tru  
+
 assembly_info:
-  patch: true
-  file: AssemblyInfo.*
-  assembly_version: "{version}"
-  assembly_file_version: "{version}"
-  assembly_informational_version: "{version}"
+  patch: false
 
 configuration: Release
   
