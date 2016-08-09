@@ -39,7 +39,7 @@ namespace POGOLib.Net
             Password = password;
             Device = device;
             Player = new Player(geoCoordinate);
-            Map = new Map();
+            Map = new Map(this);
             Templates = new Templates();
             RpcClient = new RpcClient(this);
             _heartbeat = new HeartbeatDispatcher(this);
