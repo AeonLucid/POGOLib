@@ -13,7 +13,4 @@
     <copyright>Copyright 2016 AeonLucid</copyright>
     <tags>pokemon go api library</tags>
   </metadata>
-  <files>
-    <file src="bin\$configuration$\POGOProtos.dll" target="lib\net45" />
-  </files>
 </package>
