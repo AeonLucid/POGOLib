@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using CommandLine;
+﻿using CommandLine;
 using Google.Protobuf;
 using log4net;
 using Newtonsoft.Json;
@@ -11,12 +9,15 @@ using POGOLib.Pokemon.Data;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace Demo
 {
     public class Program
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof (Program));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
 
         /// <summary>
         ///     This is just a demo application to test out the library / show a bit how it works.
@@ -28,44 +29,48 @@ namespace Demo
             Log.Info("Type 'q', 'quit' or 'exit' to exit.");
             Console.Title = "POGO Demo";
 
-            var arguments = new Arguments();
-            if (Parser.Default.ParseArguments(args, arguments))
-            {
-                var latitude = 51.507351; // Somewhere in London
-                var longitude = -0.127758;
-                var session = GetSession(arguments.Username, arguments.Password, arguments.LoginProvider, latitude,
-                    longitude, true);
+            var user = "user";
+            var password = "password";
+            var provider = "Google"; //"PTC"
 
-                SaveAccessToken(session.AccessToken);
+            //var arguments = new Arguments();
+            //if (Parser.Default.ParseArguments(args, arguments))
+            //{
+            var latitude = 37.808673;
+            var longitude = -122.409950;
+            var session = GetSession(user, password, provider, latitude,
+                longitude, true, DeviceSettings.FromPresets("galaxy6"));
 
-                session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
-                session.Player.Inventory.Update += InventoryOnUpdate;
-                session.Map.Update += MapOnUpdate;
+            SaveAccessToken(session.AccessToken);
 
-                // Send initial requests and start HeartbeatDispatcher
-                session.Startup();
+            session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
+            session.Player.Inventory.Update += InventoryOnUpdate;
+            session.Map.Update += MapOnUpdate;
 
-                var fortDetailsBytes = session.RpcClient.SendRemoteProcedureCall(new Request
-                {
-                    RequestType = RequestType.FortDetails,
-                    RequestMessage = new FortDetailsMessage
-                    {
-                        FortId = "e4a5b5a63cf34100bd620c598597f21c.12",
-                        Latitude = 51.507335,
-                        Longitude = -0.127689
-                    }.ToByteString()
-                });
-                var fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(fortDetailsBytes);
+            // Send initial requests and start HeartbeatDispatcher
+            session.Startup();
 
-                Console.WriteLine(JsonConvert.SerializeObject(fortDetailsResponse, Formatting.Indented));
-            }
+            //var fortDetailsBytes = session.RpcClient.SendRemoteProcedureCall(new Request
+            //{
+            //    RequestType = RequestType.FortDetails,
+            //    RequestMessage = new FortDetailsMessage
+            //    {
+            //        FortId = "e4a5b5a63cf34100bd620c598597f21c.12",
+            //        Latitude = 51.507335,
+            //        Longitude = -0.127689
+            //    }.ToByteString()
+            //});
+            //var fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(fortDetailsBytes);
+
+            //Console.WriteLine(JsonConvert.SerializeObject(fortDetailsResponse, Formatting.Indented));
+            //}
 
             HandleCommands();
         }
 
         private static void SessionOnAccessTokenUpdated(object sender, EventArgs eventArgs)
         {
-            var session = (Session) sender;
+            var session = (Session)sender;
 
             SaveAccessToken(session.AccessToken);
 
@@ -118,11 +123,13 @@ namespace Demo
         /// <param name="initLong">The initial longitude.</param>
         /// <param name="mayCache">Can we cache the <see cref="AccessToken" /> to a local file?</param>
         private static Session GetSession(string username, string password, string loginProviderStr, double initLat,
-            double initLong, bool mayCache = false)
+            double initLong, bool mayCache = false, DeviceSettings deviceSettings = null)
         {
             var loginProvider = ResolveLoginProvider(loginProviderStr);
             var cacheDir = Path.Combine(Environment.CurrentDirectory, "cache");
             var fileName = Path.Combine(cacheDir, $"{username}-{loginProvider}.json");
+
+            deviceSettings = deviceSettings ?? DeviceSettings.FromPresets(DeviceInfoHelper.DeviceInfoSets.Keys.First());
 
             if (mayCache)
             {
@@ -134,11 +141,11 @@ namespace Demo
                     var accessToken = JsonConvert.DeserializeObject<AccessToken>(File.ReadAllText(fileName));
 
                     if (!accessToken.IsExpired)
-                        return Login.GetSession(accessToken, password, initLat, initLong);
+                        return Login.GetSession(accessToken, password, initLat, initLong, deviceSettings);
                 }
             }
 
-            var session = Login.GetSession(username, password, loginProvider, initLat, initLong);
+            var session = Login.GetSession(username, password, loginProvider, initLat, initLong, deviceSettings);
 
             if (mayCache)
                 SaveAccessToken(session.AccessToken);
@@ -152,8 +159,10 @@ namespace Demo
             {
                 case "PTC":
                     return LoginProvider.PokemonTrainerClub;
+
                 case "Google":
                     return LoginProvider.GoogleAuth;
+
                 default:
                     throw new Exception($"The login method '{loginProvider}' is not supported.");
             }

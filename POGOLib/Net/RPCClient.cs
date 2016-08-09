@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text.RegularExpressions;
-using System.Threading;
-using GeoCoordinatePortable;
+﻿using GeoCoordinatePortable;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using log4net;
@@ -18,12 +11,23 @@ using POGOProtos.Networking.Envelopes;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace POGOLib.Net
 {
     public class RpcClient : IDisposable
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof (RpcClient));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(RpcClient));
+
+        static private readonly Stopwatch _internalWatch = new Stopwatch();
 
         /// <summary>
         ///     The <see cref="HttpClient" /> used for communication with PokémonGo.
@@ -45,9 +49,12 @@ namespace POGOLib.Net
         /// </summary>
         private string _requestUrl;
 
-        internal RpcClient(Session session)
+        private DeviceSettings _deviceSettings;
+
+        internal RpcClient(Session session, DeviceSettings deviceSettings)
         {
             _session = session;
+            _deviceSettings = deviceSettings;
 
             var httpClientHandler = new HttpClientHandler
             {
@@ -57,7 +64,7 @@ namespace POGOLib.Net
             _httpClient = new HttpClient(httpClientHandler);
             _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.ApiUserAgent);
             _httpClient.DefaultRequestHeaders.ExpectContinue = false;
-            _requestId = (ulong) new Random().Next(100000000, 999999999);
+            _requestId = (ulong)new Random().Next(100000000, 999999999);
         }
 
         internal DateTime LastRpcRequest { get; private set; }
@@ -94,8 +101,8 @@ namespace POGOLib.Net
                     }
                 } while (!playerResponse.Success);
 
-				_session.Player.Data = playerResponse.PlayerData;
-				
+                _session.Player.Data = playerResponse.PlayerData;
+
                 // Get DownloadRemoteConfig
                 var remoteConfigResponse = SendRemoteProcedureCall(new Request
                 {
@@ -108,7 +115,7 @@ namespace POGOLib.Net
                 });
                 var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
 
-                var timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds();
+                var timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds();
                 if (_session.Templates.AssetDigests == null || remoteConfigParsed.AssetDigestTimestampMs > timestamp)
                 {
                     // GetAssetDigest
@@ -181,6 +188,8 @@ namespace POGOLib.Net
             if (mapObjects.Status == MapObjectsStatus.Success)
             {
                 Log.Debug($"Received '{mapObjects.MapCells.Count}' map cells.");
+                Log.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.CatchablePokemons).Count()}' pokemons.");
+                Log.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.Forts).Count()}' forts.");
                 if (mapObjects.MapCells.Count == 0)
                 {
                     Log.Error("We received 0 map cells, are your GPS coordinates correct?");
@@ -249,7 +258,6 @@ namespace POGOLib.Net
                 });
             }
 
-
             //If Incense is active we add this:
             //request.Add(new Request
             //{
@@ -279,10 +287,12 @@ namespace POGOLib.Net
                 Longitude = _session.Player.Coordinate.Longitude,
                 Altitude = _session.Player.Coordinate.Altitude,
                 Unknown12 = 123, // TODO: Figure this out.
-                Requests = {GetDefaultRequests()}
+                Requests = { GetDefaultRequests() }
             };
 
-            if (_session.AccessToken.AuthTicket == null || _session.AccessToken.IsExpired)
+			requestEnvelope.Requests.Insert(0, request);
+
+			if (_session.AccessToken.AuthTicket == null || _session.AccessToken.IsExpired)
             {
                 if (_session.AccessToken.IsExpired)
                 {
@@ -301,9 +311,10 @@ namespace POGOLib.Net
             else
             {
                 requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
+                requestEnvelope.Unknown6 = GenerateSignature(requestEnvelope.Requests);
             }
 
-            requestEnvelope.Requests.Insert(0, request);
+            //requestEnvelope.Requests.Insert(0, request);
 
             return requestEnvelope;
         }
@@ -532,6 +543,125 @@ namespace POGOLib.Net
 
                 responseCount++;
             }
+        }
+
+        public POGOProtos.Networking.Envelopes.Unknown6 GenerateSignature(IEnumerable<IMessage> requests)
+        {
+            var sig = new POGOProtos.Networking.Signature();
+            sig.TimestampSinceStart = (ulong)_internalWatch.ElapsedMilliseconds;
+            sig.Timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds();
+            sig.SensorInfo = new POGOProtos.Networking.Signature.Types.SensorInfo()
+            {
+                AccelNormalizedZ = GenRandom(9.8),
+                AccelNormalizedX = GenRandom(0.02),
+                AccelNormalizedY = GenRandom(0.3),
+                TimestampSnapshot = (ulong)_internalWatch.ElapsedMilliseconds - 230,
+                MagnetometerX = GenRandom(012271042913198471),
+                MagnetometerY = GenRandom(-0.015570580959320068),
+                MagnetometerZ = GenRandom(0.010850906372070313),
+                AngleNormalizedX = GenRandom(17.950439453125),
+                AngleNormalizedY = GenRandom(-23.36273193359375),
+                AngleNormalizedZ = GenRandom(-48.8250732421875),
+                AccelRawX = GenRandom(-0.0120010357350111),
+                AccelRawY = GenRandom(-0.04214850440621376),
+                AccelRawZ = GenRandom(0.94571763277053833),
+                GyroscopeRawX = GenRandom(7.62939453125e-005),
+                GyroscopeRawY = GenRandom(-0.00054931640625),
+                GyroscopeRawZ = GenRandom(0.0024566650390625),
+                AccelerometerAxes = 3
+            };
+            sig.DeviceInfo = new POGOProtos.Networking.Signature.Types.DeviceInfo()
+            {
+                DeviceId = _deviceSettings.DeviceId,
+                AndroidBoardName = _deviceSettings.AndroidBoardName,
+                AndroidBootloader = _deviceSettings.AndroidBootloader,
+                DeviceBrand = _deviceSettings.DeviceBrand,
+                DeviceModel = _deviceSettings.DeviceModel,
+                DeviceModelIdentifier = _deviceSettings.DeviceModelIdentifier,
+                DeviceModelBoot = _deviceSettings.DeviceModelBoot,
+                HardwareManufacturer = _deviceSettings.HardwareManufacturer,
+                HardwareModel = _deviceSettings.HardwareModel,
+                FirmwareBrand = _deviceSettings.FirmwareBrand,
+                FirmwareTags = _deviceSettings.FirmwareTags,
+                FirmwareType = _deviceSettings.FirmwareType,
+                FirmwareFingerprint = _deviceSettings.FirmwareFingerprint
+            };
+            sig.LocationFix.Add(new POGOProtos.Networking.Signature.Types.LocationFix()
+            {
+                Provider = "network",
+
+                //Unk4 = 120,
+                Latitude = (float)_session.Player.Coordinate.Latitude,
+                Longitude = (float)_session.Player.Coordinate.Longitude,
+                Altitude = (float)_session.Player.Coordinate.Altitude,
+                TimestampSinceStart = (ulong)_internalWatch.ElapsedMilliseconds - 200,
+                Floor = 3,
+                LocationType = 1
+            });
+
+            //Compute 10
+            var x = new System.Data.HashFunction.xxHash(32, 0x1B845238);
+            var firstHash = BitConverter.ToUInt32(x.ComputeHash(_session.AccessToken.AuthTicket.ToByteArray()), 0);
+            x = new System.Data.HashFunction.xxHash(32, firstHash);
+            var locationBytes = BitConverter.GetBytes(_session.Player.Coordinate.Latitude).Reverse()
+                .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Longitude).Reverse())
+                .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Altitude).Reverse()).ToArray();
+            sig.LocationHash1 = BitConverter.ToUInt32(x.ComputeHash(locationBytes), 0);
+            //Compute 20
+            x = new System.Data.HashFunction.xxHash(32, 0x1B845238);
+            sig.LocationHash2 = BitConverter.ToUInt32(x.ComputeHash(locationBytes), 0);
+            //Compute 24
+            x = new System.Data.HashFunction.xxHash(64, 0x1B845238);
+            var seed = BitConverter.ToUInt64(x.ComputeHash(_session.AccessToken.AuthTicket.ToByteArray()), 0);
+            x = new System.Data.HashFunction.xxHash(64, seed);
+            foreach (var req in requests)
+                sig.RequestHash.Add(BitConverter.ToUInt64(x.ComputeHash(req.ToByteArray()), 0));
+
+            //static for now
+            sig.Unk22 = ByteString.CopyFrom(new byte[16] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F });
+
+            Unknown6 val = new Unknown6();
+            val.RequestType = 6;
+            val.Unknown2 = new Unknown6.Types.Unknown2();
+            val.Unknown2.Unknown1 = ByteString.CopyFrom(Encrypt(sig.ToByteArray()));
+            return val;
+        }
+
+        private byte[] Encrypt(byte[] bytes)
+        {
+            var outputLength = 32 + bytes.Length + (256 - (bytes.Length % 256));
+            var ptr = Marshal.AllocHGlobal(outputLength);
+            var ptrOutput = Marshal.AllocHGlobal(outputLength);
+            FillMemory(ptr, (uint)outputLength, 0);
+            FillMemory(ptrOutput, (uint)outputLength, 0);
+            Marshal.Copy(bytes, 0, ptr, bytes.Length);
+            try
+            {
+                int outputSize = outputLength;
+                EncryptNative(ptr, bytes.Length, new byte[32], 32, ptrOutput, out outputSize);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            var output = new byte[outputLength];
+            Marshal.Copy(ptrOutput, output, 0, outputLength);
+            return output;
+        }
+
+        [DllImport("binaries/encrypt.dll", EntryPoint = "encrypt", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        static extern private void EncryptNative(IntPtr arr, int length, byte[] iv, int ivsize, IntPtr output, out int outputSize);
+
+        [DllImport("kernel32.dll", EntryPoint = "RtlFillMemory", SetLastError = false)]
+        private static extern void FillMemory(IntPtr destination, uint length, byte fill);
+
+        public static double GenRandom(double num)
+        {
+            var randomFactor = 0.3f;
+            var randomMin = (num * (1 - randomFactor));
+            var randomMax = (num * (1 + randomFactor));
+            var randomizedDelay = new Random().NextDouble() * (randomMax - randomMin) + randomMin; ;
+            return randomizedDelay; ;
         }
 
         protected virtual void Dispose(bool disposing)
