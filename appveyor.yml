@@ -13,8 +13,8 @@ assembly_info:
 
 configuration: Release
   
-#before_build:
-#- cmd: nuget restore
+before_build:
+  - cmd: nuget restore
 
 build:
 #  project: POGOLib\POGOLib.csproj
