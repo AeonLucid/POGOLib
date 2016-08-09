@@ -35,7 +35,7 @@ namespace POGOLib.Net
         /// </summary>
         /// <param name="requests">The requests of the <see cref="RequestEnvelope"/>.</param>
         /// <returns>The encrypted <see cref="Unknown6"/> (Signature).</returns>
-        internal Unknown6 GenerateSignature(RepeatedField<Request> requests)
+        internal Unknown6 GenerateSignature(RequestEnvelope requestEnvelope)
         {
             var signature = new Signature
             {
@@ -94,8 +94,10 @@ namespace POGOLib.Net
             };
 
             //Compute 10
+            var serializedTicket = requestEnvelope.AuthTicket != null ? requestEnvelope.AuthTicket.ToByteArray() : requestEnvelope.AuthInfo.ToByteArray();
+
             var x = new System.Data.HashFunction.xxHash(32, 0x1B845238);
-            var firstHash = BitConverter.ToUInt32(x.ComputeHash(_session.AccessToken.AuthTicket.ToByteArray()), 0);
+            var firstHash = BitConverter.ToUInt32(x.ComputeHash(serializedTicket), 0);
             x = new System.Data.HashFunction.xxHash(32, firstHash);
             var locationBytes = BitConverter.GetBytes(_session.Player.Coordinate.Latitude).Reverse()
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Longitude).Reverse())
@@ -106,9 +108,9 @@ namespace POGOLib.Net
             signature.LocationHash2 = BitConverter.ToUInt32(x.ComputeHash(locationBytes), 0);
             //Compute 24
             x = new System.Data.HashFunction.xxHash(64, 0x1B845238);
-            var seed = BitConverter.ToUInt64(x.ComputeHash(_session.AccessToken.AuthTicket.ToByteArray()), 0);
+            var seed = BitConverter.ToUInt64(x.ComputeHash(serializedTicket), 0);
             x = new System.Data.HashFunction.xxHash(64, seed);
-            foreach (var req in requests)
+            foreach (var req in requestEnvelope.Requests)
                 signature.RequestHash.Add(BitConverter.ToUInt64(x.ComputeHash(req.ToByteArray()), 0));
 
             //static for now

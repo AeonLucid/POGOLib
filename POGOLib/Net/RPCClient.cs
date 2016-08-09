@@ -289,6 +289,7 @@ namespace POGOLib.Net
                 {
                     _session.Reauthenticate();
                 }
+
                 requestEnvelope.AuthInfo = new RequestEnvelope.Types.AuthInfo
                 {
                     Provider = _session.AccessToken.LoginProvider == LoginProvider.PokemonTrainerClub ? "ptc" : "google",
@@ -302,8 +303,9 @@ namespace POGOLib.Net
             else
             {
                 requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
-                requestEnvelope.Unknown6 = _rpcEncryption.GenerateSignature(requestEnvelope.Requests);
             }
+
+            requestEnvelope.Unknown6 = _rpcEncryption.GenerateSignature(requestEnvelope);
 
             return requestEnvelope;
         }
