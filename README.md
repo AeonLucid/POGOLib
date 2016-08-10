@@ -1,4 +1,4 @@
-POGOLib [![AppVeyor](https://img.shields.io/appveyor/ci/AeonLucid/pogolib.svg)](AppVeyor) [![NuGet Pre Release](https://img.shields.io/nuget/vpre/POGOLib.Official.svg?maxAge=2592000)](NuGet)
+POGOLib [![AppVeyor](https://img.shields.io/appveyor/ci/AeonLucid/pogolib.svg?maxAge=2592000)](https://ci.appveyor.com/project/AeonLucid/pogolib) [![NuGet Pre Release](https://img.shields.io/nuget/vpre/POGOLib.Official.svg?maxAge=2592000)](https://www.nuget.org/packages/POGOLib.Official)
 ===================
 
 POGOLib is written in C# and aims to be a community-driven PokémonGo API. Feel free to submit pull requests.
@@ -183,15 +183,6 @@ foreach (var fortData in session.Map.GetFortsSortedByDistance(f => f.Type == For
 	}
 }
 ```
-
-# Libraries
-These libraries are used and should be installed automatically through NuGet:
-
- - [Google Protocol Buffers C# 3.0.0-beta4](https://www.nuget.org/packages/Google.Protobuf) (For communicating with PokémonGo)
- - [Newtonsoft.Json 9.0.1](https://www.nuget.org/packages/newtonsoft.json/) (For the PTC login flow and savedata)
- - [log4net [1.2.15] 2.0.5](https://www.nuget.org/packages/log4net/) (For debug logging)
- - [S2 Geometry Library 1.0.1](https://www.nuget.org/packages/S2Geometry/1.0.1) (For calculating the necessary cell IDs)
- - [GPSOAuthSharp 0.0.5](https://www.nuget.org/packages/GPSOAuthSharp) (For Google authentication)
  
 # Build
 In order to build POGOLib you need to have two things installed:
