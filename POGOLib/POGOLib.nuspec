@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>POGOLib</id>
+    <id>POGOLib.Official</id>
     <version>$version$-alpha</version>
     <title>$title$</title>
     <authors>AeonLucid (@aeonlucid)</authors>
