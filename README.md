@@ -1,4 +1,4 @@
-POGOLib [![AppVeyor](https://img.shields.io/appveyor/ci/AeonLucid/pogolib.svg)](AppVeyor) [![NuGet Pre Release](https://img.shields.io/nuget/vpre/POGOLib.Official.svg?maxAge=2592000)](NuGet)
+POGOLib [![AppVeyor](https://img.shields.io/appveyor/ci/AeonLucid/pogolib.svg?maxAge=2592000)](https://ci.appveyor.com/project/AeonLucid/pogolib) [![NuGet Pre Release](https://img.shields.io/nuget/vpre/POGOLib.Official.svg?maxAge=2592000)](https://www.nuget.org/packages/POGOLib.Official)
 ===================
 
 POGOLib is written in C# and aims to be a community-driven PokémonGo API. Feel free to submit pull requests.
