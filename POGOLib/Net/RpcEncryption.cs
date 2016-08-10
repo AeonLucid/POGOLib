@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Google.Protobuf;
 using POGOLib.Util;
+using POGOLib.Util.Encryption;
 using POGOProtos.Networking.Envelopes;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 
@@ -21,11 +21,14 @@ namespace POGOLib.Net
 
         private readonly bool _is64Bit;
 
+        private readonly Random _random;
+
         internal RpcEncryption(Session session)
         {
             _session = session;
             _internalStopwatch = new Stopwatch();
             _is64Bit = Environment.Is64BitOperatingSystem;
+            _random = new Random();
         }
 
         /// <summary>
@@ -91,39 +94,47 @@ namespace POGOLib.Net
                 }
             };
 
-            //Compute 10
+            // Compute 10
             var serializedTicket = requestEnvelope.AuthTicket != null ? requestEnvelope.AuthTicket.ToByteArray() : requestEnvelope.AuthInfo.ToByteArray();
-
-            var x = new System.Data.HashFunction.xxHash(32, 0x1B845238);
-            var firstHash = BitConverter.ToUInt32(x.ComputeHash(serializedTicket), 0);
-            x = new System.Data.HashFunction.xxHash(32, firstHash);
+            var firstHash = CalculateHash32(serializedTicket, 0x1B845238);
             var locationBytes = BitConverter.GetBytes(_session.Player.Coordinate.Latitude).Reverse()
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Longitude).Reverse())
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Altitude).Reverse()).ToArray();
-            signature.LocationHash1 = BitConverter.ToUInt32(x.ComputeHash(locationBytes), 0);
-            //Compute 20
-            x = new System.Data.HashFunction.xxHash(32, 0x1B845238);
-            signature.LocationHash2 = BitConverter.ToUInt32(x.ComputeHash(locationBytes), 0);
-            //Compute 24
-            x = new System.Data.HashFunction.xxHash(64, 0x1B845238);
-            var seed = BitConverter.ToUInt64(x.ComputeHash(serializedTicket), 0);
-            x = new System.Data.HashFunction.xxHash(64, seed);
+            signature.LocationHash1 = CalculateHash32(locationBytes, firstHash);
+            // Compute 20
+            signature.LocationHash2 = CalculateHash32(locationBytes, 0x1B845238);
+            // Compute 24
+            var seed = xxHash64.CalculateHash(serializedTicket, serializedTicket.Length, 0x1B845238);
             foreach (var req in requestEnvelope.Requests)
-                signature.RequestHash.Add(BitConverter.ToUInt64(x.ComputeHash(req.ToByteArray()), 0));
+            {
+                var reqBytes = req.ToByteArray();
+                signature.RequestHash.Add(xxHash64.CalculateHash(reqBytes, reqBytes.Length, seed));
+            }
 
             //static for now
-            signature.Unknown22 = ByteString.CopyFrom(new byte[16] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F });
+            signature.Unknown22 = ByteString.CopyFrom(0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
+
+            var iv = new byte[32];
+            _random.NextBytes(iv);
 
             var encryptedSignature = new Unknown6
             {
                 RequestType = 6,
                 Unknown2 = new Unknown6.Types.Unknown2
                 {
-                    EncryptedSignature = ByteString.CopyFrom(CryptUtil.Encrypt(signature.ToByteArray(), new byte[32]))
+                    EncryptedSignature = ByteString.CopyFrom(CryptUtil.Encrypt(signature.ToByteArray(), iv))
                 }
             };
 
             return encryptedSignature;
+        }
+
+        private uint CalculateHash32(byte[] bytes, uint seed)
+        {
+            var xxHash = new xxHash32();
+            xxHash.Init(seed);
+            xxHash.Update(bytes, bytes.Length);
+            return xxHash.Digest();
         }
 
         private double Randomize(double num)
