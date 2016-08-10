@@ -1,9 +1,19 @@
-POGOLib
+POGOLib [![AppVeyor](https://img.shields.io/appveyor/ci/AeonLucid/pogolib.svg)](AppVeyor) [![NuGet Pre Release](https://img.shields.io/nuget/vpre/POGOLib.Official.svg?maxAge=2592000)](NuGet)
 ===================
 
 POGOLib is written in C# and aims to be a community-driven PokémonGo API. Feel free to submit pull requests.
 
 The library is a bit low-level now but the goal is to provide a high-level library while also allowing low-level request crafting.
+
+# Installation
+
+## NuGet
+
+### Console
+Run `Install-Package POGOLib.Official -Pre`  in `Tools > NuGet Package Manager > Package Manager Console` .
+
+### Package Browser
+Right click your project in Visual Studio, click `Manage NuGet Packages..`, make sure `Browse` is pressed and **Include prereleases is checked**. Search for `POGOLib.Official` and press `Install`.
 
 # Features
 
