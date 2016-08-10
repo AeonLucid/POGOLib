@@ -2,8 +2,8 @@
 using System.IO;
 using CommandLine;
 using Google.Protobuf;
-using log4net;
 using Newtonsoft.Json;
+using POGOLib.Logging;
 using POGOLib.Net;
 using POGOLib.Net.Authentication;
 using POGOLib.Net.Authentication.Data;
@@ -16,16 +16,15 @@ namespace Demo
 {
     public class Program
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof (Program));
-
+        
         /// <summary>
         ///     This is just a demo application to test out the library / show a bit how it works.
         /// </summary>
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            Log.Info("Booting up.");
-            Log.Info("Type 'q', 'quit' or 'exit' to exit.");
+            Logger.Info("Booting up.");
+            Logger.Info("Type 'q', 'quit' or 'exit' to exit.");
             Console.Title = "POGO Demo";
 
             var arguments = new Arguments();
@@ -69,17 +68,17 @@ namespace Demo
 
             SaveAccessToken(session.AccessToken);
 
-            Log.Info("Saved access token to file.");
+            Logger.Info("Saved access token to file.");
         }
 
         private static void InventoryOnUpdate(object sender, EventArgs eventArgs)
         {
-            Log.Info("Inventory was updated.");
+            Logger.Info("Inventory was updated.");
         }
 
         private static void MapOnUpdate(object sender, EventArgs eventArgs)
         {
-            Log.Info("Map was updated.");
+            Logger.Info("Map was updated.");
         }
 
         private static void SaveAccessToken(AccessToken accessToken)

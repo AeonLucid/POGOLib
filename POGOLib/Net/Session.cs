@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using GeoCoordinatePortable;
-using log4net;
+using POGOLib.Logging;
 using POGOLib.Net.Authentication;
 using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon;
@@ -17,8 +17,7 @@ namespace POGOLib.Net
     /// </summary>
     public class Session : IDisposable
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof (Session));
-
+        
         /// <summary>
         ///     This is the <see cref="HeartbeatDispatcher" /> which is responsible for retrieving events and updating gps
         ///     location.
@@ -133,14 +132,14 @@ namespace POGOLib.Net
                     }
                     catch (Exception exception)
                     {
-                        Log.Error("Reauthenticate exception was catched: ", exception);
+                        Logger.Error($"Reauthenticate exception was catched: {exception}");
                     }
                     finally
                     {
                         if (accessToken == null)
                         {
                             var sleepSeconds = Math.Min(60, ++tries*5);
-                            Log.Error($"Reauthentication failed, trying again in {sleepSeconds} seconds.");
+                            Logger.Error($"Reauthentication failed, trying again in {sleepSeconds} seconds.");
                             Thread.Sleep(sleepSeconds*1000);
                         }
                     }

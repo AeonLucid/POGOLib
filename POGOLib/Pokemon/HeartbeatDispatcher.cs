@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Threading;
-using log4net;
+using POGOLib.Logging;
 using POGOLib.Net;
 
 namespace POGOLib.Pokemon
 {
     internal class HeartbeatDispatcher
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof (HeartbeatDispatcher));
-
+        
         /// <summary>
         ///     The authenticated <see cref="Session" />.
         /// </summary>
@@ -42,7 +41,7 @@ namespace POGOLib.Pokemon
 
                     if (lastGeoCoordinate.IsUnknown)
                     {
-                        Log.Debug("Refreshing MapObjects, reason: 'lastGeoCoordinate.IsUnknown'.");
+                        Logger.Debug("Refreshing MapObjects, reason: 'lastGeoCoordinate.IsUnknown'.");
                         canRefresh = true;
                     }
                     else if (secondsSinceLast >= minSeconds)
@@ -50,12 +49,12 @@ namespace POGOLib.Pokemon
                         var metersMoved = _session.Player.Coordinate.GetDistanceTo(lastGeoCoordinate);
                         if (secondsSinceLast >= maxSeconds)
                         {
-                            Log.Debug($"Refreshing MapObjects, reason: 'secondsSinceLast({secondsSinceLast}) >= maxSeconds({maxSeconds})'.");
+                            Logger.Debug($"Refreshing MapObjects, reason: 'secondsSinceLast({secondsSinceLast}) >= maxSeconds({maxSeconds})'.");
                             canRefresh = true;
                         }
                         else if (metersMoved >= minDistance)
                         {
-                            Log.Debug($"Refreshing MapObjects, reason: 'metersMoved({metersMoved}) >= minDistance({minDistance})'.");
+                            Logger.Debug($"Refreshing MapObjects, reason: 'metersMoved({metersMoved}) >= minDistance({minDistance})'.");
                             canRefresh = true;
                         }
                     }

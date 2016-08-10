@@ -4,9 +4,9 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using DankMemes.GPSOAuthSharp;
 using GeoCoordinatePortable;
-using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using POGOLib.Logging;
 using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon.Data;
 using POGOLib.Util;
@@ -18,7 +18,6 @@ namespace POGOLib.Net.Authentication
     /// </summary>
     public static class Login
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof (Login));
 
         /// <summary>
         ///     Login with a stored <see cref="AccessToken" />.
@@ -35,7 +34,7 @@ namespace POGOLib.Net.Authentication
             {
                 throw new Exception("AccessToken is expired.");
             }
-            Log.Debug("Authenticated from cache.");
+            Logger.Debug("Authenticated from cache.");
             return new Session(accessToken, password, new GeoCoordinate(initialLatitude, initialLongitude));
         }
 
@@ -88,7 +87,7 @@ namespace POGOLib.Net.Authentication
             {
                 throw new Exception("Auth token was missing from oauth login response.");
             }
-            Log.Debug("Authenticated through Google.");
+            Logger.Debug("Authenticated through Google.");
             return new AccessToken
             {
                 Username = email,
@@ -111,7 +110,7 @@ namespace POGOLib.Net.Authentication
                     var ticket = PostLogin(httpClient, username, password, loginData);
                     var accessToken = PostLoginOauth(httpClient, ticket);
                     accessToken.Username = username;
-                    Log.Debug("Authenticated through PTC.");
+                    Logger.Debug("Authenticated through PTC.");
                     return accessToken;
                 }
             }

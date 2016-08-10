@@ -8,7 +8,7 @@ using System.Threading;
 using GeoCoordinatePortable;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
-using log4net;
+using POGOLib.Logging;
 using POGOLib.Pokemon.Data;
 using POGOLib.Util;
 using POGOProtos.Enums;
@@ -22,7 +22,6 @@ namespace POGOLib.Net
 {
     public class RpcClient : IDisposable
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof (RpcClient));
 
         /// <summary>
         ///     The <see cref="HttpClient" /> used for communication with PokémonGo.
@@ -178,19 +177,19 @@ namespace POGOLib.Net
 
             if (mapObjects.Status == MapObjectsStatus.Success)
             {
-                Log.Debug($"Received '{mapObjects.MapCells.Count}' map cells.");
-                Log.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.CatchablePokemons).Count()}' pokemons.");
-                Log.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.Forts).Count()}' forts.");
+                Logger.Debug($"Received '{mapObjects.MapCells.Count}' map cells.");
+                Logger.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.CatchablePokemons).Count()}' pokemons.");
+                Logger.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.Forts).Count()}' forts.");
                 if (mapObjects.MapCells.Count == 0)
                 {
-                    Log.Error("We received 0 map cells, are your GPS coordinates correct?");
+                    Logger.Error("We received 0 map cells, are your GPS coordinates correct?");
                     return;
                 }
                 _session.Map.Cells = mapObjects.MapCells;
             }
             else
             {
-                Log.Error($"GetMapObjects status is: '{mapObjects.Status}'.");
+                Logger.Error($"GetMapObjects status is: '{mapObjects.Status}'.");
             }
         }
 
@@ -342,7 +341,7 @@ namespace POGOLib.Net
                 {
                     if (!response.IsSuccessStatusCode)
                     {
-                        Log.Debug(response.Content.ReadAsStringAsync().Result);
+                        Logger.Debug(response.Content.ReadAsStringAsync().Result);
                         throw new Exception(
                             "Received a non-success HTTP status code from the RPC server, see the console for the response.");
                     }
@@ -357,7 +356,7 @@ namespace POGOLib.Net
                             break;
 
                         case 52: // Slow servers? TODO: Throttling (?)
-                            Log.Warn(
+                            Logger.Warn(
                                 $"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
                             Thread.Sleep(Configuration.SlowServerTimeout);
                             return SendRemoteProcedureCall(request);
@@ -372,18 +371,18 @@ namespace POGOLib.Net
                                 $"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
 
                         case 102: // Invalid auth
-                            Log.Debug("Received StatusCode 102, reauthenticating.");
+                            Logger.Debug("Received StatusCode 102, reauthenticating.");
                             _session.AccessToken.Expire();
                             _session.Reauthenticate();
                             return SendRemoteProcedureCall(request);
 
                         default:
-                            Log.Info($"Unknown status code: {responseEnvelope.StatusCode}");
+                            Logger.Info($"Unknown status code: {responseEnvelope.StatusCode}");
                             break;
                     }
 
                     LastRpcRequest = DateTime.UtcNow;
-                    Log.Debug($"Sent RPC Request: '{request.RequestType}'");
+                    Logger.Debug($"Sent RPC Request: '{request.RequestType}'");
                     if (request.RequestType == RequestType.GetMapObjects)
                     {
                         LastRpcMapObjectsRequest = LastRpcRequest;
@@ -392,7 +391,7 @@ namespace POGOLib.Net
                     if (responseEnvelope.AuthTicket != null)
                     {
                         _session.AccessToken.AuthTicket = responseEnvelope.AuthTicket;
-                        Log.Debug("Received a new AuthTicket from Pokémon!");
+                        Logger.Debug("Received a new AuthTicket from Pokémon!");
                     }
                     return HandleResponseEnvelope(request, responseEnvelope);
                 }
@@ -528,7 +527,7 @@ namespace POGOLib.Net
                         }
                         else
                         {
-                            Log.Debug($"DownloadSettingsResponse.Error: '{downloadSettings.Error}'");
+                            Logger.Debug($"DownloadSettingsResponse.Error: '{downloadSettings.Error}'");
                         }
                         break;
 
