@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("POGOLib")]
+[assembly: AssemblyTitle("POGOLib.Official")]
 [assembly: AssemblyDescription("A community driven PokémonGo API Library written in C#.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("AeonLucid")]
-[assembly: AssemblyProduct("POGOLib")]
+[assembly: AssemblyProduct("POGOLib.Official")]
 [assembly: AssemblyCopyright("Copyright © AeonLucid 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
