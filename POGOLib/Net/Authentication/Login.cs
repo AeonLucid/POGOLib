@@ -10,6 +10,7 @@ using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon.Data;
 using POGOLib.Util;
 using System.Threading.Tasks;
+using DankMemes.GPSOAuthSharp;
 
 namespace POGOLib.Net.Authentication
 {
@@ -70,7 +71,7 @@ namespace POGOLib.Net.Authentication
         /// Authenticate the user through Google.
         internal static async Task<AccessToken> WithGoogle(string email, string password)
         {
-            var googleClient = new GooglePlayServicesAuth(email, password);
+            var googleClient = new GPSOAuthClient(email, password);
             var masterLoginResponse = await googleClient.PerformMasterLogin();
 
             if (masterLoginResponse.ContainsKey("Error"))

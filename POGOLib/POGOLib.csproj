@@ -312,6 +312,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GPSOAuthSharp\GPSOAuthSharp\GPSOAuthSharp.csproj">
+      <Project>{56b7f94a-c12e-4476-8e83-f972c946c056}</Project>
+      <Name>GPSOAuthSharp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\pokemongo-encrypt-sharp\PokemonGoEncryptSharp\PokemonGoEncryptSharp\PokemonGoEncryptSharp.csproj">
       <Project>{902b446c-0fed-4d82-a467-d9d8d454c110}</Project>
       <Name>PokemonGoEncryptSharp</Name>
