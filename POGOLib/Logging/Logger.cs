@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 
 namespace POGOLib.Logging
 {
+    public delegate void LogOutputDelegate(LogLevel logLevel, string message);
+
     public static class Logger
     {
 
@@ -30,26 +33,20 @@ namespace POGOLib.Logging
             Output(LogLevel.Error, message);
         }
 
+        static ConcurrentBag<LogOutputDelegate> _logOutputs = new ConcurrentBag<LogOutputDelegate>();
+
+        public static void RegisterLogOutput(LogOutputDelegate logOutput)
+        {
+            _logOutputs.Add(logOutput);
+        }
+
         private static void Output(LogLevel logLevel, string message)
         {
-            if (logLevel < LoggerConfiguration.MinimumLogLevel) return;
-
-            var foregroundColor = LoggerConfiguration.DefaultForegroundColor;
-            var backgroundColor = LoggerConfiguration.DefaultBackgroundColor;
-            var timestamp = DateTime.Now.ToString("HH:mm:ss");
-
-            if (LoggerConfiguration.LogLevelColors.ContainsKey(logLevel))
+            foreach(var outputPutter in _logOutputs)
             {
-                var colors = LoggerConfiguration.LogLevelColors[logLevel];
-
-                foregroundColor = colors.ForegroundColor;
-                backgroundColor = colors.BackgroundColor;
+                outputPutter(logLevel, message);
             }
 
-            Console.ForegroundColor = foregroundColor;
-            Console.BackgroundColor = backgroundColor;
-            Console.WriteLine($"{timestamp,-10}{logLevel,-8}{message}");
-            Console.ResetColor();
         }
 
     }
