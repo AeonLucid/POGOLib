@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arguments.cs" />
+    <Compile Include="LoggerConfiguration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ConsoleUtil.cs" />
@@ -60,7 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\POGOLib\POGOLib.csproj">
-      <Project>{3ba89dfb-a162-420a-9ded-daa211e52ad2}</Project>
+      <Project>{AE7C8436-EAB8-407C-83CF-D9EA62F1C781}</Project>
       <Name>POGOLib</Name>
     </ProjectReference>
   </ItemGroup>

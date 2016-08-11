@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using POGOProtos.Data;
 using POGOProtos.Networking.Responses;
+using PCLStorage;
 
 namespace POGOLib.Pokemon
 {
@@ -25,17 +25,9 @@ namespace POGOLib.Pokemon
         public RepeatedField<DownloadItemTemplatesResponse.Types.ItemTemplate> ItemTemplates
             => _itemTemplatesResponse?.ItemTemplates;
 
-        public string AssetDigestFile
-            =>
-                Path.Combine(Environment.CurrentDirectory,
-                    ConfigurationManager.AppSettings["POGOLib.Templates.Directory"] ?? string.Empty,
-                    "templates.asset-digests.dat");
+        public string AssetDigestFile => Path.Combine(FileSystem.Current.LocalStorage.Path, "templates.asset-digests.dat");
 
-        public string ItemTemplatesFile
-            =>
-                Path.Combine(Environment.CurrentDirectory,
-                    ConfigurationManager.AppSettings["POGOLib.Templates.Directory"] ?? string.Empty,
-                    "templates.items.dat");
+        public string ItemTemplatesFile => Path.Combine(FileSystem.Current.LocalStorage.Path, "templates.items.dat");
 
         public void SetAssetDigests(GetAssetDigestResponse assetDigestResponse)
         {
@@ -57,9 +49,10 @@ namespace POGOLib.Pokemon
 
         private GetAssetDigestResponse LoadAssetDigest()
         {
-            if (File.Exists(AssetDigestFile))
+            if (FileSystem.Current.LocalStorage.CheckExistsAsync(AssetDigestFile).Result == ExistenceCheckResult.FileExists)
             {
-                var bytes = File.ReadAllBytes(AssetDigestFile);
+                var file = FileSystem.Current.LocalStorage.GetFileAsync(AssetDigestFile).Result.OpenAsync(FileAccess.Read).Result;
+                var bytes = new BinaryReader(file).ReadBytes((int)file.Length);
                 if (bytes.Any())
                 {
                     return GetAssetDigestResponse.Parser.ParseFrom(bytes);
@@ -70,9 +63,10 @@ namespace POGOLib.Pokemon
 
         private DownloadItemTemplatesResponse LoadItemTemplates()
         {
-            if (File.Exists(ItemTemplatesFile))
+            if (FileSystem.Current.LocalStorage.CheckExistsAsync(ItemTemplatesFile).Result == ExistenceCheckResult.FileExists)
             {
-                var bytes = File.ReadAllBytes(ItemTemplatesFile);
+                var file = FileSystem.Current.LocalStorage.GetFileAsync(ItemTemplatesFile).Result.OpenAsync(FileAccess.Read).Result;
+                var bytes = new BinaryReader(file).ReadBytes((int)file.Length);
                 if (bytes.Any())
                 {
                     return DownloadItemTemplatesResponse.Parser.ParseFrom(bytes);
@@ -86,12 +80,13 @@ namespace POGOLib.Pokemon
             var directory = Path.GetDirectoryName(file);
             if (!string.IsNullOrEmpty(directory))
             {
-                if (!Directory.Exists(directory))
+                if (FileSystem.Current.LocalStorage.CheckExistsAsync(directory).Result == ExistenceCheckResult.NotFound)
                 {
-                    Directory.CreateDirectory(directory);
+                    FileSystem.Current.LocalStorage.CreateFolderAsync(directory, CreationCollisionOption.OpenIfExists).Wait();
                 }
             }
-            File.WriteAllBytes(file, data);
+            var fileOpen = FileSystem.Current.LocalStorage.CreateFileAsync(file, CreationCollisionOption.ReplaceExisting).Result;
+            fileOpen.OpenAsync(FileAccess.ReadAndWrite).Result.Write(data, 0, data.Length);
         }
     }
 }

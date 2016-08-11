@@ -2,6 +2,7 @@
 using System.Threading;
 using POGOLib.Logging;
 using POGOLib.Net;
+using System.Threading.Tasks;
 
 namespace POGOLib.Pokemon
 {
@@ -16,7 +17,7 @@ namespace POGOLib.Pokemon
         /// <summary>
         ///     Determines whether we can keep heartbeating.
         /// </summary>
-        private bool _keepHeartbeating = true;
+        private CancellationTokenSource _heartbeatCancellation;
 
         internal HeartbeatDispatcher(Session session)
         {
@@ -26,9 +27,9 @@ namespace POGOLib.Pokemon
         /// <summary>
         ///     Checks every second if we need to update.
         /// </summary>
-        private void CheckDispatch()
+        private async Task CheckDispatch()
         {
-            while (_keepHeartbeating)
+            while (!_heartbeatCancellation.IsCancellationRequested)
             {
                 var canRefresh = false;
                 if (_session.GlobalSettings != null)
@@ -65,29 +66,37 @@ namespace POGOLib.Pokemon
                 }
                 if (canRefresh)
                 {
-                    Dispatch();
+                    await Dispatch();
                 }
-                Thread.Sleep(1000);
+                try
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(1000), _heartbeatCancellation.Token);
+                }
+                // cancelled
+                catch (OperationCanceledException)
+                {
+                    return;
+                }
             }
         }
 
         internal void StartDispatcher()
         {
-            _keepHeartbeating = true;
-            new Thread(CheckDispatch)
-            {
-                IsBackground = true
-            }.Start();
+            _heartbeatCancellation = new CancellationTokenSource();
+
+            #pragma warning disable CS4014 // yep - we are intentially doing a fire-and-forget task in a void
+            CheckDispatch();
+            #pragma warning restore CS4014
         }
 
         internal void StopDispatcher()
         {
-            _keepHeartbeating = false;
+            _heartbeatCancellation?.Cancel();
         }
 
-        private void Dispatch()
+        private async Task Dispatch()
         {
-            _session.RpcClient.RefreshMapObjects();
+            await _session.RpcClient.RefreshMapObjects();
         }
     }
 }

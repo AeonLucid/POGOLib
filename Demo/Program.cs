@@ -11,6 +11,7 @@ using POGOLib.Pokemon.Data;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
+using System.Threading.Tasks;
 
 namespace Demo
 {
@@ -21,8 +22,34 @@ namespace Demo
         ///     This is just a demo application to test out the library / show a bit how it works.
         /// </summary>
         /// <param name="args"></param>
-        public static void Main(string[] args)
+        public static  void Main(string[] args)
         {
+            Run(args).GetAwaiter().GetResult();
+        }
+
+        private static async Task Run(string[] args)
+        {
+            Logger.RegisterLogOutput((logLevel, message) => {
+                if (logLevel < LoggerConfiguration.MinimumLogLevel) return;
+
+                var foregroundColor = LoggerConfiguration.DefaultForegroundColor;
+                var backgroundColor = LoggerConfiguration.DefaultBackgroundColor;
+                var timestamp = DateTime.Now.ToString("HH:mm:ss");
+
+                if (LoggerConfiguration.LogLevelColors.ContainsKey(logLevel))
+                {
+                    var colors = LoggerConfiguration.LogLevelColors[logLevel];
+
+                    foregroundColor = colors.ForegroundColor;
+                    backgroundColor = colors.BackgroundColor;
+                }
+
+                Console.ForegroundColor = foregroundColor;
+                Console.BackgroundColor = backgroundColor;
+                Console.WriteLine($"{timestamp,-10}{logLevel,-8}{message}");
+                Console.ResetColor();
+            });
+
             Logger.Info("Booting up.");
             Logger.Info("Type 'q', 'quit' or 'exit' to exit.");
             Console.Title = "POGO Demo";
@@ -32,7 +59,7 @@ namespace Demo
             {
                 var latitude = 51.507351; // Somewhere in London
                 var longitude = -0.127758;
-                var session = GetSession(arguments.Username, arguments.Password, arguments.LoginProvider, latitude,
+                var session = await GetSession(arguments.Username, arguments.Password, arguments.LoginProvider, latitude,
                     longitude, true);
 
                 SaveAccessToken(session.AccessToken);
@@ -42,9 +69,9 @@ namespace Demo
                 session.Map.Update += MapOnUpdate;
 
                 // Send initial requests and start HeartbeatDispatcher
-                session.Startup();
+                await session.Startup();
 
-                var fortDetailsBytes = session.RpcClient.SendRemoteProcedureCall(new Request
+                var fortDetailsBytes = await session.RpcClient.SendRemoteProcedureCall(new Request
                 {
                     RequestType = RequestType.FortDetails,
                     RequestMessage = new FortDetailsMessage
@@ -116,7 +143,7 @@ namespace Demo
         /// <param name="initLat">The initial latitude.</param>
         /// <param name="initLong">The initial longitude.</param>
         /// <param name="mayCache">Can we cache the <see cref="AccessToken" /> to a local file?</param>
-        private static Session GetSession(string username, string password, string loginProviderStr, double initLat,
+        private static async Task<Session> GetSession(string username, string password, string loginProviderStr, double initLat,
             double initLong, bool mayCache = false)
         {
             var loginProvider = ResolveLoginProvider(loginProviderStr);
@@ -137,7 +164,7 @@ namespace Demo
                 }
             }
 
-            var session = Login.GetSession(username, password, loginProvider, initLat, initLong);
+            var session = await Login.GetSession(username, password, loginProvider, initLat, initLong);
 
             if (mayCache)
                 SaveAccessToken(session.AccessToken);

@@ -1,8 +1,18 @@
-﻿using System;
+﻿using POGOLib.Logging;
+using System;
 using System.Collections.Generic;
 
-namespace POGOLib.Logging
+namespace Demo
 {
+    public class LogColor
+    {
+
+        internal ConsoleColor ForegroundColor { get; set; }
+
+        internal ConsoleColor BackgroundColor { get; set; }
+
+    }
+
     /// <summary>
     /// This class contains the configuration for the POGOLib logger.
     /// </summary>
