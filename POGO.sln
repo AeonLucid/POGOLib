@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonGoEncryptSharp", "su
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "S2Geometry", "submodules\s2-geometry-library-csharp\S2Geometry\S2Geometry.csproj", "{5E82F402-F876-4A29-B59E-1BA21591A44A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "submodules", "submodules", "{729360F1-255F-4E75-BA0D-656B99E98772}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -128,5 +130,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{56B7F94A-C12E-4476-8E83-F972C946C056} = {729360F1-255F-4E75-BA0D-656B99E98772}
+		{902B446C-0FED-4D82-A467-D9D8D454C110} = {729360F1-255F-4E75-BA0D-656B99E98772}
+		{5E82F402-F876-4A29-B59E-1BA21591A44A} = {729360F1-255F-4E75-BA0D-656B99E98772}
 	EndGlobalSection
 EndGlobal
