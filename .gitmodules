@@ -1,9 +1,12 @@
-[submodule "s2-geometry-library-csharp"]
-	path = s2-geometry-library-csharp
+[submodule "submodules/s2-geometry-library-csharp"]
+	path = submodules/s2-geometry-library-csharp
 	url = https://github.com/zone117x/s2-geometry-library-csharp.git
-[submodule "pokemongo-encrypt-sharp"]
-	path = pokemongo-encrypt-sharp
+	branch = master
+[submodule "submodules/pokemongo-encrypt-sharp"]
+	path = submodules/pokemongo-encrypt-sharp
 	url = https://github.com/zone117x/pokemongo-encrypt-sharp.git
-[submodule "GPSOAuthSharp"]
-	path = GPSOAuthSharp
+	branch = master
+[submodule "submodules/GPSOAuthSharp"]
+	path = submodules/GPSOAuthSharp
 	url = https://github.com/zone117x/GPSOAuthSharp.git
+	branch = master

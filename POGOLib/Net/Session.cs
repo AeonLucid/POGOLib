@@ -34,6 +34,9 @@ namespace POGOLib.Net
 
         readonly static string[] VALID_LOGIN_PROVIDERS = new [] { "ptc", "google" };
 
+        /// <summary>
+        ///     Stores data like assets and item templates. Defaults to an in-memory cache, but can be implemented as writing to disk by the platform
+        /// </summary>
         public IDataCache DataCache { get; set; } = new MemoryDataCache();
 
         internal Session(ILoginProvider loginProvider, AccessToken accessToken, string password, GeoCoordinate geoCoordinate, Device device = null)

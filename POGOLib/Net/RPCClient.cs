@@ -121,6 +121,10 @@ namespace POGOLib.Net
             var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
             var timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds();
 
+            // TODO: the timestamp comparisons seem to be used for determining if the stored data is invalid and needs refreshed,
+            //       however, looking at this code I'm not sure it's implemented correctly - or if these refactors still match the behavior of
+            //       the previous code... same concern with the next method GetItemTemplates()..
+
             var cachedMsg = _session.DataCache.GetCachedAssetDigest();
             if (cachedMsg != null && remoteConfigParsed.AssetDigestTimestampMs <= timestamp)
             {

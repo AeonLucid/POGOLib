@@ -35,13 +35,13 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\GPSOAuthSharp\GPSOAuthSharp\GPSOAuthSharp.csproj">
-      <Project>{56B7F94A-C12E-4476-8E83-F972C946C056}</Project>
-      <Name>GPSOAuthSharp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\POGOLib\POGOLib.csproj">
       <Project>{ae7c8436-eab8-407c-83cf-d9ea62f1c781}</Project>
       <Name>POGOLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\submodules\GPSOAuthSharp\GPSOAuthSharp\GPSOAuthSharp.csproj">
+      <Project>{56b7f94a-c12e-4476-8e83-f972c946c056}</Project>
+      <Name>GPSOAuthSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

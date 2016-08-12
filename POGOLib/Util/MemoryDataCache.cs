@@ -12,11 +12,6 @@ namespace POGOLib.Util
     {
         Dictionary<string, IMessage> _cachedData = new Dictionary<string, IMessage>();
 
-        public bool HasData(string fileName)
-        {
-            return _cachedData.ContainsKey(fileName);
-        }
-
         public void SaveDate(string fileName, IMessage msg)
         {
             _cachedData[fileName] = msg;

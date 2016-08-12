@@ -302,11 +302,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\pokemongo-encrypt-sharp\PokemonGoEncryptSharp\PokemonGoEncryptSharp\PokemonGoEncryptSharp.csproj">
+    <ProjectReference Include="..\submodules\pokemongo-encrypt-sharp\PokemonGoEncryptSharp\PokemonGoEncryptSharp\PokemonGoEncryptSharp.csproj">
       <Project>{902b446c-0fed-4d82-a467-d9d8d454c110}</Project>
       <Name>PokemonGoEncryptSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\s2-geometry-library-csharp\S2Geometry\S2Geometry.csproj">
+    <ProjectReference Include="..\submodules\s2-geometry-library-csharp\S2Geometry\S2Geometry.csproj">
       <Project>{5e82f402-f876-4a29-b59e-1ba21591a44a}</Project>
       <Name>S2Geometry</Name>
     </ProjectReference>
