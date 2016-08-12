@@ -278,7 +278,6 @@
     <Compile Include="Util\Devices\DeviceInfo.cs" />
     <Compile Include="Util\Encryption\xxHash32.cs" />
     <Compile Include="Util\Encryption\xxHash64.cs" />
-    <Compile Include="Util\GooglePlayServicesAuth.cs" />
     <Compile Include="Util\MapUtil.cs" />
     <Compile Include="Util\TimeUtil.cs" />
   </ItemGroup>

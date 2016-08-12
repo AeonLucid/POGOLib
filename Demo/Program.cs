@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using CommandLine;
-using Google.Protobuf;
 using Newtonsoft.Json;
 using POGOLib.Logging;
 using POGOLib.Net;
@@ -12,6 +11,7 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using System.Threading.Tasks;
+using Google.Protobuf;
 
 namespace Demo
 {
