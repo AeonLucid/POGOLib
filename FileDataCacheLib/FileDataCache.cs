@@ -1,16 +1,11 @@
 ﻿using Google.Protobuf;
 using POGOLib.Util;
-using POGOProtos.Networking.Responses;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileDataCacheLib
 {
-    public class FileDateCache : IDataCache
+    public class FileDataCache : IDataCache
     {
         public string AssetDigestFile => Path.Combine(Environment.CurrentDirectory, "templates.asset-digests.dat");
 

@@ -31,6 +31,7 @@ namespace Demo
 
         private static async Task Run(string[] args)
         {
+            // Configure Logger
             Logger.RegisterLogOutput((logLevel, message) => {
                 if (logLevel < LoggerConfiguration.MinimumLogLevel) return;
 
@@ -52,6 +53,7 @@ namespace Demo
                 Console.ResetColor();
             });
 
+            // Initiate console
             Logger.Info("Booting up.");
             Logger.Info("Type 'q', 'quit' or 'exit' to exit.");
             Console.Title = "POGO Demo";
@@ -76,7 +78,7 @@ namespace Demo
 
                 SaveAccessToken(session.AccessToken);
 
-                session.DataCache = new FileDateCache();
+                session.DataCache = new FileDataCache();
                 session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
                 session.Player.Inventory.Update += InventoryOnUpdate;
                 session.Map.Update += MapOnUpdate;

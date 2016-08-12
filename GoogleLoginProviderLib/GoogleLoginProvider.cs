@@ -5,9 +5,6 @@ using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon;
 using POGOLib.Util;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GoogleLoginProviderLib
