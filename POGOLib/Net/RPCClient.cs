@@ -93,6 +93,8 @@ namespace POGOLib.Net
                 } while (!playerResponse.Success);
 
 				_session.Player.Data = playerResponse.PlayerData;
+		
+		Thread.Sleep(500);
 				
                 // Get DownloadRemoteConfig
                 var remoteConfigResponse = SendRemoteProcedureCall(new Request
@@ -121,6 +123,8 @@ namespace POGOLib.Net
                     });
                     _session.Templates.SetAssetDigests(GetAssetDigestResponse.Parser.ParseFrom(assetDigestResponse));
                 }
+                
+                Thread.Sleep(500);
 
                 if (_session.Templates.ItemTemplates == null || remoteConfigParsed.ItemTemplatesTimestampMs > timestamp)
                 {
@@ -154,6 +158,8 @@ namespace POGOLib.Net
             {
                 sinceTimeMs.Add(0);
             }
+            
+            Thread.Sleep(500);
 
             var response = SendRemoteProcedureCall(new Request
             {
