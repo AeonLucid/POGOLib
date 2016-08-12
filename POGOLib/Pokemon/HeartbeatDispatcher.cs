@@ -19,6 +19,8 @@ namespace POGOLib.Pokemon
         /// </summary>
         private CancellationTokenSource _heartbeatCancellation;
 
+        private Task _heartbeatTask;
+
         internal HeartbeatDispatcher(Session session)
         {
             _session = session;
@@ -82,16 +84,18 @@ namespace POGOLib.Pokemon
 
         internal void StartDispatcher()
         {
+            if (_heartbeatTask != null)
+            {
+                throw new Exception("Heartbeat task already running");
+            }
             _heartbeatCancellation = new CancellationTokenSource();
-
-            #pragma warning disable CS4014 // yep - we are intentially doing a fire-and-forget task in a void
-            CheckDispatch();
-            #pragma warning restore CS4014
+            _heartbeatTask = CheckDispatch();
         }
 
         internal void StopDispatcher()
         {
             _heartbeatCancellation?.Cancel();
+            _heartbeatTask = null;
         }
 
         private async Task Dispatch()

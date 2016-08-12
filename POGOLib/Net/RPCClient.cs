@@ -9,7 +9,6 @@ using GeoCoordinatePortable;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using POGOLib.Logging;
-using POGOLib.Pokemon.Data;
 using POGOLib.Util;
 using POGOProtos.Enums;
 using POGOProtos.Map;
@@ -94,45 +93,7 @@ namespace POGOLib.Net
                 } while (!playerResponse.Success);
 
 				_session.Player.Data = playerResponse.PlayerData;
-				
-                // Get DownloadRemoteConfig
-                var remoteConfigResponse = await SendRemoteProcedureCall(new Request
-                {
-                    RequestType = RequestType.DownloadRemoteConfigVersion,
-                    RequestMessage = new DownloadRemoteConfigVersionMessage
-                    {
-                        Platform = Platform.Android,
-                        AppVersion = 2903
-                    }.ToByteString()
-                });
-                var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
 
-                var timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds();
-                if (_session.Templates.AssetDigests == null || remoteConfigParsed.AssetDigestTimestampMs > timestamp)
-                {
-                    // GetAssetDigest
-                    var assetDigestResponse = await SendRemoteProcedureCall(new Request
-                    {
-                        RequestType = RequestType.GetAssetDigest,
-                        RequestMessage = new GetAssetDigestMessage
-                        {
-                            Platform = Platform.Android,
-                            AppVersion = 2903
-                        }.ToByteString()
-                    });
-                    _session.Templates.SetAssetDigests(GetAssetDigestResponse.Parser.ParseFrom(assetDigestResponse));
-                }
-
-                if (_session.Templates.ItemTemplates == null || remoteConfigParsed.ItemTemplatesTimestampMs > timestamp)
-                {
-                    // DownloadItemTemplates
-                    var itemTemplateResponse = await SendRemoteProcedureCall(new Request
-                    {
-                        RequestType = RequestType.DownloadItemTemplates
-                    });
-                    _session.Templates.SetItemTemplates(
-                        DownloadItemTemplatesResponse.Parser.ParseFrom(itemTemplateResponse));
-                }
             }
             catch (Exception)
             {
@@ -140,6 +101,81 @@ namespace POGOLib.Net
             }
 
             return true;
+        }
+
+        public async Task<GetAssetDigestResponse> GetAssets()
+        {
+            // check if template cache has been set
+
+            // Get DownloadRemoteConfig
+            var remoteConfigResponse = await SendRemoteProcedureCall(new Request
+            {
+                RequestType = RequestType.DownloadRemoteConfigVersion,
+                RequestMessage = new DownloadRemoteConfigVersionMessage
+                {
+                    Platform = Platform.Android,
+                    AppVersion = 2903
+                }.ToByteString()
+            });
+
+            var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
+            var timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds();
+
+            var cachedMsg = _session.DataCache.GetCachedAssetDigest();
+            if (cachedMsg != null && remoteConfigParsed.AssetDigestTimestampMs <= timestamp)
+            {
+                return cachedMsg;
+            }
+            else
+            {
+                // GetAssetDigest
+                var assetDigestResponse = await SendRemoteProcedureCall(new Request
+                {
+                    RequestType = RequestType.GetAssetDigest,
+                    RequestMessage = new GetAssetDigestMessage
+                    {
+                        Platform = Platform.Android,
+                        AppVersion = 2903
+                    }.ToByteString()
+                });
+                var msg = GetAssetDigestResponse.Parser.ParseFrom(assetDigestResponse);
+                _session.DataCache.SaveDate(DataCacheExtensions.AssetDigestFile, msg);
+                return msg;
+            }
+        }
+        
+        public async Task<DownloadItemTemplatesResponse> GetItemTemplates()
+        {
+            // Get DownloadRemoteConfig
+            var remoteConfigResponse = await SendRemoteProcedureCall(new Request
+            {
+                RequestType = RequestType.DownloadRemoteConfigVersion,
+                RequestMessage = new DownloadRemoteConfigVersionMessage
+                {
+                    Platform = Platform.Android,
+                    AppVersion = 2903
+                }.ToByteString()
+            });
+
+            var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
+            var timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds();
+
+            var cachedMsg = _session.DataCache.GetCachedItemTemplates();
+            if (cachedMsg != null && remoteConfigParsed.AssetDigestTimestampMs <= timestamp)
+            {
+                return cachedMsg;
+            }
+            else
+            {
+                // GetAssetDigest
+                var itemTemplateResponse = await SendRemoteProcedureCall(new Request
+                {
+                    RequestType = RequestType.DownloadItemTemplates
+                });
+                var msg = DownloadItemTemplatesResponse.Parser.ParseFrom(itemTemplateResponse);
+                _session.DataCache.SaveDate(DataCacheExtensions.ItemTemplatesFile, msg);
+                return msg;
+            }
         }
 
         /// <summary>
@@ -292,7 +328,7 @@ namespace POGOLib.Net
 
                 requestEnvelope.AuthInfo = new RequestEnvelope.Types.AuthInfo
                 {
-                    Provider = _session.AccessToken.LoginProvider == LoginProvider.PokemonTrainerClub ? "ptc" : "google",
+                    Provider = _session.AccessToken.ProviderID,
                     Token = new RequestEnvelope.Types.AuthInfo.Types.JWT
                     {
                         Contents = _session.AccessToken.Token,

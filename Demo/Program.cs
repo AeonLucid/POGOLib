@@ -6,12 +6,14 @@ using POGOLib.Logging;
 using POGOLib.Net;
 using POGOLib.Net.Authentication;
 using POGOLib.Net.Authentication.Data;
-using POGOLib.Pokemon.Data;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using System.Threading.Tasks;
 using Google.Protobuf;
+using POGOLib.Pokemon;
+using GoogleLoginProviderLib;
+using FileDataCacheLib;
 
 namespace Demo
 {
@@ -55,15 +57,26 @@ namespace Demo
             Console.Title = "POGO Demo";
 
             var arguments = new Arguments();
+
             if (Parser.Default.ParseArguments(args, arguments))
             {
+                ILoginProvider loginProvider;
+
+                if (arguments.LoginProvider == "google")
+                    loginProvider = new GoogleLoginProvider();
+                else if (arguments.LoginProvider == "ptc")
+                    loginProvider = new PtcLoginProvider();
+                else
+                    throw new ArgumentException("Login provider must be either \"google\" or \"ptc\"");
+
                 var latitude = 51.507351; // Somewhere in London
                 var longitude = -0.127758;
-                var session = await GetSession(arguments.Username, arguments.Password, arguments.LoginProvider, latitude,
+                var session = await GetSession(loginProvider, arguments.Username, arguments.Password, latitude,
                     longitude, true);
 
                 SaveAccessToken(session.AccessToken);
 
+                session.DataCache = new FileDateCache();
                 session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
                 session.Player.Inventory.Update += InventoryOnUpdate;
                 session.Map.Update += MapOnUpdate;
@@ -143,10 +156,9 @@ namespace Demo
         /// <param name="initLat">The initial latitude.</param>
         /// <param name="initLong">The initial longitude.</param>
         /// <param name="mayCache">Can we cache the <see cref="AccessToken" /> to a local file?</param>
-        private static async Task<Session> GetSession(string username, string password, string loginProviderStr, double initLat,
+        private static async Task<Session> GetSession(ILoginProvider loginProvider, string username, string password, double initLat,
             double initLong, bool mayCache = false)
         {
-            var loginProvider = ResolveLoginProvider(loginProviderStr);
             var cacheDir = Path.Combine(Environment.CurrentDirectory, "cache");
             var fileName = Path.Combine(cacheDir, $"{username}-{loginProvider}.json");
 
@@ -160,11 +172,11 @@ namespace Demo
                     var accessToken = JsonConvert.DeserializeObject<AccessToken>(File.ReadAllText(fileName));
 
                     if (!accessToken.IsExpired)
-                        return Login.GetSession(accessToken, password, initLat, initLong);
+                        return Login.GetSession(loginProvider, accessToken, password, initLat, initLong);
                 }
             }
 
-            var session = await Login.GetSession(username, password, loginProvider, initLat, initLong);
+            var session = await Login.GetSession(loginProvider, username, password, initLat, initLong);
 
             if (mayCache)
                 SaveAccessToken(session.AccessToken);
@@ -172,17 +184,5 @@ namespace Demo
             return session;
         }
 
-        private static LoginProvider ResolveLoginProvider(string loginProvider)
-        {
-            switch (loginProvider)
-            {
-                case "PTC":
-                    return LoginProvider.PokemonTrainerClub;
-                case "Google":
-                    return LoginProvider.GoogleAuth;
-                default:
-                    throw new Exception($"The login method '{loginProvider}' is not supported.");
-            }
-        }
     }
 }

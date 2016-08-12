@@ -1,6 +1,6 @@
 ﻿namespace POGOLib
 {
-    internal static class Constants
+    public static class Constants
     {
         public const string ApiUrl = "https://pgorelease.nianticlabs.com/plfe/rpc";
 

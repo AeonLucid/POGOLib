@@ -5,10 +5,11 @@ using POGOLib.Logging;
 using POGOLib.Net.Authentication;
 using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon;
-using POGOLib.Pokemon.Data;
 using POGOLib.Util.Devices;
 using POGOProtos.Settings;
 using System.Threading.Tasks;
+using System.Linq;
+using POGOLib.Util;
 
 namespace POGOLib.Net
 {
@@ -31,26 +32,38 @@ namespace POGOLib.Net
         /// </summary>
         public readonly RpcClient RpcClient;
 
-        internal Session(AccessToken accessToken, string password, GeoCoordinate geoCoordinate, Device device = null)
-        {
-            if (device == null) device = DeviceInfo.GetDeviceByName("nexus5");
+        readonly static string[] VALID_LOGIN_PROVIDERS = new [] { "ptc", "google" };
 
+        public IDataCache DataCache { get; set; } = new MemoryDataCache();
+
+        internal Session(ILoginProvider loginProvider, AccessToken accessToken, string password, GeoCoordinate geoCoordinate, Device device = null)
+        {
+            if (!VALID_LOGIN_PROVIDERS.Contains(loginProvider.ProviderID))
+            {
+                throw new ArgumentException("LoginProvider ID must be one of the following: " + string.Join(", ", VALID_LOGIN_PROVIDERS));
+            }
+
+            if (device == null) device = DeviceInfo.GetDeviceByName("nexus5");
+            LoginProvider = loginProvider;
             AccessToken = accessToken;
             Password = password;
             Device = device;
             Player = new Player(geoCoordinate);
             Map = new Map(this);
-            Templates = new Templates();
             RpcClient = new RpcClient(this);
             _heartbeat = new HeartbeatDispatcher(this);
         }
 
-        public Templates Templates { get; }
+        //public Templates Templates { get; private set; }
+
+        // throw new Exception($"{nameof(TemplateDataCache)} must be set before {nameof(Startup)} is called to use {nameof(Templates)}");
 
         /// <summary>
         ///     Gets the <see cref="AccessToken" /> of the <see cref="Session" />.
         /// </summary>
         public AccessToken AccessToken { get; private set; }
+
+        public ILoginProvider LoginProvider { get; private set; }
 
         /// <summary>
         ///     Gets the <see cref="Password" /> of the <see cref="Session" />.
@@ -119,17 +132,7 @@ namespace POGOLib.Net
                 {
                     try
                     {
-                        switch (AccessToken.LoginProvider)
-                        {
-                            case LoginProvider.PokemonTrainerClub:
-                                accessToken = await Login.WithPokemonTrainerClub(AccessToken.Username, Password);
-                                break;
-                            case LoginProvider.GoogleAuth:
-                                accessToken = await Login.WithGoogle(AccessToken.Username, Password);
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
+                        accessToken = await LoginProvider.GetAccessToken(AccessToken.Username, Password);
                     }
                     catch (Exception exception)
                     {
