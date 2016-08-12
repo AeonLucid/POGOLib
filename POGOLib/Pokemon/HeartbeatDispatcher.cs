@@ -29,7 +29,7 @@ namespace POGOLib.Pokemon
         /// <summary>
         ///     Checks every second if we need to update.
         /// </summary>
-        private async Task CheckDispatch()
+        private async Task CheckDispatch(TaskCompletionSource<bool> firstRefreshCompleted)
         {
             while (!_heartbeatCancellation.IsCancellationRequested)
             {
@@ -70,6 +70,11 @@ namespace POGOLib.Pokemon
                 {
                     await Dispatch();
                 }
+
+                // after first dispatch, signal as complete
+                firstRefreshCompleted?.TrySetResult(true);
+                firstRefreshCompleted = null;
+
                 try
                 {
                     await Task.Delay(TimeSpan.FromMilliseconds(1000), _heartbeatCancellation.Token);
@@ -82,14 +87,18 @@ namespace POGOLib.Pokemon
             }
         }
 
-        internal void StartDispatcher()
+        internal async Task StartDispatcher()
         {
             if (_heartbeatTask != null)
             {
                 throw new Exception("Heartbeat task already running");
             }
+            var firstRefreshCompleted = new TaskCompletionSource<bool>();
             _heartbeatCancellation = new CancellationTokenSource();
-            _heartbeatTask = CheckDispatch();
+            _heartbeatTask = CheckDispatch(firstRefreshCompleted);
+
+            // wait for first heartbeat to complete
+            await firstRefreshCompleted.Task;
         }
 
         internal void StopDispatcher()

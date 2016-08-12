@@ -112,7 +112,7 @@ namespace POGOLib.Net
             {
                 return false;
             }
-            _heartbeat.StartDispatcher();
+            await _heartbeat.StartDispatcher();
             return true;
         }
 
