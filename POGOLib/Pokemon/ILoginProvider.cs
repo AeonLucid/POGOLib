@@ -5,7 +5,11 @@ namespace POGOLib.Pokemon
 {
     public interface ILoginProvider
     {
+        /// <summary>
+        /// Only used for informational purposes. Could be an email, username, etc
+        /// </summary>
+        string UserID { get; }
         string ProviderID { get; }
-        Task<AccessToken> GetAccessToken(string username, string password);
+        Task<AccessToken> GetAccessToken();
     }
 }
