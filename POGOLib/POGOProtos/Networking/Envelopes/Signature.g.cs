@@ -82,10 +82,10 @@ namespace POGOProtos.Networking.Envelopes {
 
   }
   #region Messages
-  public sealed partial class Signature : pb::IMessage<Signature> {
-    private static readonly pb::MessageParser<Signature> _parser = new pb::MessageParser<Signature>(() => new Signature());
+  public sealed partial class Signature : Google.Protobuf.IMessage<Signature> {
+    private static readonly Google.Protobuf.MessageParser<Signature> _parser = new Google.Protobuf.MessageParser<Signature>(() => new Signature());
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<Signature> Parser { get { return _parser; } }
+    public static Google.Protobuf.MessageParser<Signature> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -93,7 +93,7 @@ namespace POGOProtos.Networking.Envelopes {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
+    pbr::MessageDescriptor Google.Protobuf.IMessage.Descriptor {
       get { return Descriptor; }
     }
 
@@ -140,8 +140,8 @@ namespace POGOProtos.Networking.Envelopes {
 
     /// <summary>Field number for the "location_fix" field.</summary>
     public const int LocationFixFieldNumber = 4;
-    private static readonly pb::FieldCodec<global::POGOProtos.Networking.Envelopes.Signature.Types.LocationFix> _repeated_locationFix_codec
-        = pb::FieldCodec.ForMessage(34, global::POGOProtos.Networking.Envelopes.Signature.Types.LocationFix.Parser);
+    private static readonly Google.Protobuf.FieldCodec<global::POGOProtos.Networking.Envelopes.Signature.Types.LocationFix> _repeated_locationFix_codec
+        = Google.Protobuf.FieldCodec.ForMessage(34, global::POGOProtos.Networking.Envelopes.Signature.Types.LocationFix.Parser);
     private readonly pbc::RepeatedField<global::POGOProtos.Networking.Envelopes.Signature.Types.LocationFix> locationFix_ = new pbc::RepeatedField<global::POGOProtos.Networking.Envelopes.Signature.Types.LocationFix>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::POGOProtos.Networking.Envelopes.Signature.Types.LocationFix> LocationFix {
@@ -222,15 +222,15 @@ namespace POGOProtos.Networking.Envelopes {
 
     /// <summary>Field number for the "unknown22" field.</summary>
     public const int Unknown22FieldNumber = 22;
-    private pb::ByteString unknown22_ = pb::ByteString.Empty;
+    private Google.Protobuf.ByteString unknown22_ = Google.Protobuf.ByteString.Empty;
     /// <summary>
     ///  possibly replay check. Generation unknown but pointed to by 0001B8614
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pb::ByteString Unknown22 {
+    public Google.Protobuf.ByteString Unknown22 {
       get { return unknown22_; }
       set {
-        unknown22_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        unknown22_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -250,8 +250,8 @@ namespace POGOProtos.Networking.Envelopes {
 
     /// <summary>Field number for the "request_hash" field.</summary>
     public const int RequestHashFieldNumber = 24;
-    private static readonly pb::FieldCodec<ulong> _repeated_requestHash_codec
-        = pb::FieldCodec.ForUInt64(194);
+    private static readonly Google.Protobuf.FieldCodec<ulong> _repeated_requestHash_codec
+        = Google.Protobuf.FieldCodec.ForUInt64(194);
     private readonly pbc::RepeatedField<ulong> requestHash_ = new pbc::RepeatedField<ulong>();
     /// <summary>
     ///  hashes of each request message in a hashArray - xxhash64
@@ -307,11 +307,11 @@ namespace POGOProtos.Networking.Envelopes {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
+      return Google.Protobuf.JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
+    public void WriteTo(Google.Protobuf.CodedOutputStream output) {
       if (TimestampSinceStart != 0UL) {
         output.WriteRawTag(16);
         output.WriteUInt64(TimestampSinceStart);
@@ -356,32 +356,32 @@ namespace POGOProtos.Networking.Envelopes {
     public int CalculateSize() {
       int size = 0;
       if (TimestampSinceStart != 0UL) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(TimestampSinceStart);
+        size += 1 + Google.Protobuf.CodedOutputStream.ComputeUInt64Size(TimestampSinceStart);
       }
       size += locationFix_.CalculateSize(_repeated_locationFix_codec);
       if (gpsInfo_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GpsInfo);
+        size += 1 + Google.Protobuf.CodedOutputStream.ComputeMessageSize(GpsInfo);
       }
       if (sensorInfo_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(SensorInfo);
+        size += 1 + Google.Protobuf.CodedOutputStream.ComputeMessageSize(SensorInfo);
       }
       if (deviceInfo_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(DeviceInfo);
+        size += 1 + Google.Protobuf.CodedOutputStream.ComputeMessageSize(DeviceInfo);
       }
       if (activityStatus_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ActivityStatus);
+        size += 1 + Google.Protobuf.CodedOutputStream.ComputeMessageSize(ActivityStatus);
       }
       if (LocationHash1 != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(LocationHash1);
+        size += 1 + Google.Protobuf.CodedOutputStream.ComputeUInt32Size(LocationHash1);
       }
       if (LocationHash2 != 0) {
-        size += 2 + pb::CodedOutputStream.ComputeUInt32Size(LocationHash2);
+        size += 2 + Google.Protobuf.CodedOutputStream.ComputeUInt32Size(LocationHash2);
       }
       if (Unknown22.Length != 0) {
-        size += 2 + pb::CodedOutputStream.ComputeBytesSize(Unknown22);
+        size += 2 + Google.Protobuf.CodedOutputStream.ComputeBytesSize(Unknown22);
       }
       if (Timestamp != 0UL) {
-        size += 2 + pb::CodedOutputStream.ComputeUInt64Size(Timestamp);
+        size += 2 + Google.Protobuf.CodedOutputStream.ComputeUInt64Size(Timestamp);
       }
       size += requestHash_.CalculateSize(_repeated_requestHash_codec);
       return size;
@@ -436,7 +436,7 @@ namespace POGOProtos.Networking.Envelopes {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
+    public void MergeFrom(Google.Protobuf.CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
         switch(tag) {
@@ -508,10 +508,10 @@ namespace POGOProtos.Networking.Envelopes {
     /// <summary>Container for nested types declared in the Signature message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static partial class Types {
-      public sealed partial class LocationFix : pb::IMessage<LocationFix> {
-        private static readonly pb::MessageParser<LocationFix> _parser = new pb::MessageParser<LocationFix>(() => new LocationFix());
+      public sealed partial class LocationFix : Google.Protobuf.IMessage<LocationFix> {
+        private static readonly Google.Protobuf.MessageParser<LocationFix> _parser = new Google.Protobuf.MessageParser<LocationFix>(() => new LocationFix());
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pb::MessageParser<LocationFix> Parser { get { return _parser; } }
+        public static Google.Protobuf.MessageParser<LocationFix> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor {
@@ -519,7 +519,7 @@ namespace POGOProtos.Networking.Envelopes {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        pbr::MessageDescriptor pb::IMessage.Descriptor {
+        pbr::MessageDescriptor Google.Protobuf.IMessage.Descriptor {
           get { return Descriptor; }
         }
 
@@ -559,7 +559,7 @@ namespace POGOProtos.Networking.Envelopes {
         public string Provider {
           get { return provider_; }
           set {
-            provider_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            provider_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -726,11 +726,11 @@ namespace POGOProtos.Networking.Envelopes {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override string ToString() {
-          return pb::JsonFormatter.ToDiagnosticString(this);
+          return Google.Protobuf.JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void WriteTo(pb::CodedOutputStream output) {
+        public void WriteTo(Google.Protobuf.CodedOutputStream output) {
           if (Provider.Length != 0) {
             output.WriteRawTag(10);
             output.WriteString(Provider);
@@ -777,10 +777,10 @@ namespace POGOProtos.Networking.Envelopes {
         public int CalculateSize() {
           int size = 0;
           if (Provider.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(Provider);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeStringSize(Provider);
           }
           if (TimestampSinceStart != 0UL) {
-            size += 1 + pb::CodedOutputStream.ComputeUInt64Size(TimestampSinceStart);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeUInt64Size(TimestampSinceStart);
           }
           if (Latitude != 0F) {
             size += 1 + 4;
@@ -798,13 +798,13 @@ namespace POGOProtos.Networking.Envelopes {
             size += 2 + 4;
           }
           if (ProviderStatus != 0UL) {
-            size += 2 + pb::CodedOutputStream.ComputeUInt64Size(ProviderStatus);
+            size += 2 + Google.Protobuf.CodedOutputStream.ComputeUInt64Size(ProviderStatus);
           }
           if (Floor != 0) {
-            size += 2 + pb::CodedOutputStream.ComputeUInt32Size(Floor);
+            size += 2 + Google.Protobuf.CodedOutputStream.ComputeUInt32Size(Floor);
           }
           if (LocationType != 0UL) {
-            size += 2 + pb::CodedOutputStream.ComputeUInt64Size(LocationType);
+            size += 2 + Google.Protobuf.CodedOutputStream.ComputeUInt64Size(LocationType);
           }
           return size;
         }
@@ -847,7 +847,7 @@ namespace POGOProtos.Networking.Envelopes {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(pb::CodedInputStream input) {
+        public void MergeFrom(Google.Protobuf.CodedInputStream input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
             switch(tag) {
@@ -903,10 +903,10 @@ namespace POGOProtos.Networking.Envelopes {
       /// <summary>
       ///  don't really care about this since we're not using it
       /// </summary>
-      public sealed partial class AndroidGpsInfo : pb::IMessage<AndroidGpsInfo> {
-        private static readonly pb::MessageParser<AndroidGpsInfo> _parser = new pb::MessageParser<AndroidGpsInfo>(() => new AndroidGpsInfo());
+      public sealed partial class AndroidGpsInfo : Google.Protobuf.IMessage<AndroidGpsInfo> {
+        private static readonly Google.Protobuf.MessageParser<AndroidGpsInfo> _parser = new Google.Protobuf.MessageParser<AndroidGpsInfo>(() => new AndroidGpsInfo());
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pb::MessageParser<AndroidGpsInfo> Parser { get { return _parser; } }
+        public static Google.Protobuf.MessageParser<AndroidGpsInfo> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor {
@@ -914,7 +914,7 @@ namespace POGOProtos.Networking.Envelopes {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        pbr::MessageDescriptor pb::IMessage.Descriptor {
+        pbr::MessageDescriptor Google.Protobuf.IMessage.Descriptor {
           get { return Descriptor; }
         }
 
@@ -955,8 +955,8 @@ namespace POGOProtos.Networking.Envelopes {
 
         /// <summary>Field number for the "satellites_prn" field.</summary>
         public const int SatellitesPrnFieldNumber = 2;
-        private static readonly pb::FieldCodec<int> _repeated_satellitesPrn_codec
-            = pb::FieldCodec.ForInt32(18);
+        private static readonly Google.Protobuf.FieldCodec<int> _repeated_satellitesPrn_codec
+            = Google.Protobuf.FieldCodec.ForInt32(18);
         private readonly pbc::RepeatedField<int> satellitesPrn_ = new pbc::RepeatedField<int>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pbc::RepeatedField<int> SatellitesPrn {
@@ -965,8 +965,8 @@ namespace POGOProtos.Networking.Envelopes {
 
         /// <summary>Field number for the "snr" field.</summary>
         public const int SnrFieldNumber = 3;
-        private static readonly pb::FieldCodec<float> _repeated_snr_codec
-            = pb::FieldCodec.ForFloat(26);
+        private static readonly Google.Protobuf.FieldCodec<float> _repeated_snr_codec
+            = Google.Protobuf.FieldCodec.ForFloat(26);
         private readonly pbc::RepeatedField<float> snr_ = new pbc::RepeatedField<float>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pbc::RepeatedField<float> Snr {
@@ -975,8 +975,8 @@ namespace POGOProtos.Networking.Envelopes {
 
         /// <summary>Field number for the "azimuth" field.</summary>
         public const int AzimuthFieldNumber = 4;
-        private static readonly pb::FieldCodec<float> _repeated_azimuth_codec
-            = pb::FieldCodec.ForFloat(34);
+        private static readonly Google.Protobuf.FieldCodec<float> _repeated_azimuth_codec
+            = Google.Protobuf.FieldCodec.ForFloat(34);
         private readonly pbc::RepeatedField<float> azimuth_ = new pbc::RepeatedField<float>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pbc::RepeatedField<float> Azimuth {
@@ -985,8 +985,8 @@ namespace POGOProtos.Networking.Envelopes {
 
         /// <summary>Field number for the "elevation" field.</summary>
         public const int ElevationFieldNumber = 5;
-        private static readonly pb::FieldCodec<float> _repeated_elevation_codec
-            = pb::FieldCodec.ForFloat(42);
+        private static readonly Google.Protobuf.FieldCodec<float> _repeated_elevation_codec
+            = Google.Protobuf.FieldCodec.ForFloat(42);
         private readonly pbc::RepeatedField<float> elevation_ = new pbc::RepeatedField<float>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pbc::RepeatedField<float> Elevation {
@@ -995,8 +995,8 @@ namespace POGOProtos.Networking.Envelopes {
 
         /// <summary>Field number for the "has_almanac" field.</summary>
         public const int HasAlmanacFieldNumber = 6;
-        private static readonly pb::FieldCodec<bool> _repeated_hasAlmanac_codec
-            = pb::FieldCodec.ForBool(50);
+        private static readonly Google.Protobuf.FieldCodec<bool> _repeated_hasAlmanac_codec
+            = Google.Protobuf.FieldCodec.ForBool(50);
         private readonly pbc::RepeatedField<bool> hasAlmanac_ = new pbc::RepeatedField<bool>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pbc::RepeatedField<bool> HasAlmanac {
@@ -1005,8 +1005,8 @@ namespace POGOProtos.Networking.Envelopes {
 
         /// <summary>Field number for the "has_ephemeris" field.</summary>
         public const int HasEphemerisFieldNumber = 7;
-        private static readonly pb::FieldCodec<bool> _repeated_hasEphemeris_codec
-            = pb::FieldCodec.ForBool(58);
+        private static readonly Google.Protobuf.FieldCodec<bool> _repeated_hasEphemeris_codec
+            = Google.Protobuf.FieldCodec.ForBool(58);
         private readonly pbc::RepeatedField<bool> hasEphemeris_ = new pbc::RepeatedField<bool>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pbc::RepeatedField<bool> HasEphemeris {
@@ -1015,8 +1015,8 @@ namespace POGOProtos.Networking.Envelopes {
 
         /// <summary>Field number for the "used_in_fix" field.</summary>
         public const int UsedInFixFieldNumber = 8;
-        private static readonly pb::FieldCodec<bool> _repeated_usedInFix_codec
-            = pb::FieldCodec.ForBool(66);
+        private static readonly Google.Protobuf.FieldCodec<bool> _repeated_usedInFix_codec
+            = Google.Protobuf.FieldCodec.ForBool(66);
         private readonly pbc::RepeatedField<bool> usedInFix_ = new pbc::RepeatedField<bool>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pbc::RepeatedField<bool> UsedInFix {
@@ -1063,11 +1063,11 @@ namespace POGOProtos.Networking.Envelopes {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override string ToString() {
-          return pb::JsonFormatter.ToDiagnosticString(this);
+          return Google.Protobuf.JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void WriteTo(pb::CodedOutputStream output) {
+        public void WriteTo(Google.Protobuf.CodedOutputStream output) {
           if (TimeToFix != 0UL) {
             output.WriteRawTag(8);
             output.WriteUInt64(TimeToFix);
@@ -1085,7 +1085,7 @@ namespace POGOProtos.Networking.Envelopes {
         public int CalculateSize() {
           int size = 0;
           if (TimeToFix != 0UL) {
-            size += 1 + pb::CodedOutputStream.ComputeUInt64Size(TimeToFix);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeUInt64Size(TimeToFix);
           }
           size += satellitesPrn_.CalculateSize(_repeated_satellitesPrn_codec);
           size += snr_.CalculateSize(_repeated_snr_codec);
@@ -1115,7 +1115,7 @@ namespace POGOProtos.Networking.Envelopes {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(pb::CodedInputStream input) {
+        public void MergeFrom(Google.Protobuf.CodedInputStream input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
             switch(tag) {
@@ -1167,10 +1167,10 @@ namespace POGOProtos.Networking.Envelopes {
 
       }
 
-      public sealed partial class SensorInfo : pb::IMessage<SensorInfo> {
-        private static readonly pb::MessageParser<SensorInfo> _parser = new pb::MessageParser<SensorInfo>(() => new SensorInfo());
+      public sealed partial class SensorInfo : Google.Protobuf.IMessage<SensorInfo> {
+        private static readonly Google.Protobuf.MessageParser<SensorInfo> _parser = new Google.Protobuf.MessageParser<SensorInfo>(() => new SensorInfo());
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pb::MessageParser<SensorInfo> Parser { get { return _parser; } }
+        public static Google.Protobuf.MessageParser<SensorInfo> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor {
@@ -1178,7 +1178,7 @@ namespace POGOProtos.Networking.Envelopes {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        pbr::MessageDescriptor pb::IMessage.Descriptor {
+        pbr::MessageDescriptor Google.Protobuf.IMessage.Descriptor {
           get { return Descriptor; }
         }
 
@@ -1466,11 +1466,11 @@ namespace POGOProtos.Networking.Envelopes {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override string ToString() {
-          return pb::JsonFormatter.ToDiagnosticString(this);
+          return Google.Protobuf.JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void WriteTo(pb::CodedOutputStream output) {
+        public void WriteTo(Google.Protobuf.CodedOutputStream output) {
           if (TimestampSnapshot != 0UL) {
             output.WriteRawTag(8);
             output.WriteUInt64(TimestampSnapshot);
@@ -1545,7 +1545,7 @@ namespace POGOProtos.Networking.Envelopes {
         public int CalculateSize() {
           int size = 0;
           if (TimestampSnapshot != 0UL) {
-            size += 1 + pb::CodedOutputStream.ComputeUInt64Size(TimestampSnapshot);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeUInt64Size(TimestampSnapshot);
           }
           if (MagnetometerX != 0D) {
             size += 1 + 8;
@@ -1593,7 +1593,7 @@ namespace POGOProtos.Networking.Envelopes {
             size += 2 + 8;
           }
           if (AccelerometerAxes != 0UL) {
-            size += 2 + pb::CodedOutputStream.ComputeUInt64Size(AccelerometerAxes);
+            size += 2 + Google.Protobuf.CodedOutputStream.ComputeUInt64Size(AccelerometerAxes);
           }
           return size;
         }
@@ -1657,7 +1657,7 @@ namespace POGOProtos.Networking.Envelopes {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(pb::CodedInputStream input) {
+        public void MergeFrom(Google.Protobuf.CodedInputStream input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
             switch(tag) {
@@ -1738,10 +1738,10 @@ namespace POGOProtos.Networking.Envelopes {
 
       }
 
-      public sealed partial class DeviceInfo : pb::IMessage<DeviceInfo> {
-        private static readonly pb::MessageParser<DeviceInfo> _parser = new pb::MessageParser<DeviceInfo>(() => new DeviceInfo());
+      public sealed partial class DeviceInfo : Google.Protobuf.IMessage<DeviceInfo> {
+        private static readonly Google.Protobuf.MessageParser<DeviceInfo> _parser = new Google.Protobuf.MessageParser<DeviceInfo>(() => new DeviceInfo());
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pb::MessageParser<DeviceInfo> Parser { get { return _parser; } }
+        public static Google.Protobuf.MessageParser<DeviceInfo> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor {
@@ -1749,7 +1749,7 @@ namespace POGOProtos.Networking.Envelopes {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        pbr::MessageDescriptor pb::IMessage.Descriptor {
+        pbr::MessageDescriptor Google.Protobuf.IMessage.Descriptor {
           get { return Descriptor; }
         }
 
@@ -1792,7 +1792,7 @@ namespace POGOProtos.Networking.Envelopes {
         public string DeviceId {
           get { return deviceId_; }
           set {
-            deviceId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            deviceId_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -1803,7 +1803,7 @@ namespace POGOProtos.Networking.Envelopes {
         public string AndroidBoardName {
           get { return androidBoardName_; }
           set {
-            androidBoardName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            androidBoardName_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -1814,7 +1814,7 @@ namespace POGOProtos.Networking.Envelopes {
         public string AndroidBootloader {
           get { return androidBootloader_; }
           set {
-            androidBootloader_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            androidBootloader_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -1828,7 +1828,7 @@ namespace POGOProtos.Networking.Envelopes {
         public string DeviceBrand {
           get { return deviceBrand_; }
           set {
-            deviceBrand_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            deviceBrand_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -1842,7 +1842,7 @@ namespace POGOProtos.Networking.Envelopes {
         public string DeviceModel {
           get { return deviceModel_; }
           set {
-            deviceModel_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            deviceModel_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -1856,7 +1856,7 @@ namespace POGOProtos.Networking.Envelopes {
         public string DeviceModelIdentifier {
           get { return deviceModelIdentifier_; }
           set {
-            deviceModelIdentifier_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            deviceModelIdentifier_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -1870,7 +1870,7 @@ namespace POGOProtos.Networking.Envelopes {
         public string DeviceModelBoot {
           get { return deviceModelBoot_; }
           set {
-            deviceModelBoot_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            deviceModelBoot_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -1884,7 +1884,7 @@ namespace POGOProtos.Networking.Envelopes {
         public string HardwareManufacturer {
           get { return hardwareManufacturer_; }
           set {
-            hardwareManufacturer_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            hardwareManufacturer_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -1898,7 +1898,7 @@ namespace POGOProtos.Networking.Envelopes {
         public string HardwareModel {
           get { return hardwareModel_; }
           set {
-            hardwareModel_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            hardwareModel_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -1912,7 +1912,7 @@ namespace POGOProtos.Networking.Envelopes {
         public string FirmwareBrand {
           get { return firmwareBrand_; }
           set {
-            firmwareBrand_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            firmwareBrand_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -1926,7 +1926,7 @@ namespace POGOProtos.Networking.Envelopes {
         public string FirmwareTags {
           get { return firmwareTags_; }
           set {
-            firmwareTags_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            firmwareTags_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -1940,7 +1940,7 @@ namespace POGOProtos.Networking.Envelopes {
         public string FirmwareType {
           get { return firmwareType_; }
           set {
-            firmwareType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            firmwareType_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -1954,7 +1954,7 @@ namespace POGOProtos.Networking.Envelopes {
         public string FirmwareFingerprint {
           get { return firmwareFingerprint_; }
           set {
-            firmwareFingerprint_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            firmwareFingerprint_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -2008,11 +2008,11 @@ namespace POGOProtos.Networking.Envelopes {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override string ToString() {
-          return pb::JsonFormatter.ToDiagnosticString(this);
+          return Google.Protobuf.JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void WriteTo(pb::CodedOutputStream output) {
+        public void WriteTo(Google.Protobuf.CodedOutputStream output) {
           if (DeviceId.Length != 0) {
             output.WriteRawTag(10);
             output.WriteString(DeviceId);
@@ -2071,43 +2071,43 @@ namespace POGOProtos.Networking.Envelopes {
         public int CalculateSize() {
           int size = 0;
           if (DeviceId.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(DeviceId);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeStringSize(DeviceId);
           }
           if (AndroidBoardName.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(AndroidBoardName);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeStringSize(AndroidBoardName);
           }
           if (AndroidBootloader.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(AndroidBootloader);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeStringSize(AndroidBootloader);
           }
           if (DeviceBrand.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(DeviceBrand);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeStringSize(DeviceBrand);
           }
           if (DeviceModel.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(DeviceModel);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeStringSize(DeviceModel);
           }
           if (DeviceModelIdentifier.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(DeviceModelIdentifier);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeStringSize(DeviceModelIdentifier);
           }
           if (DeviceModelBoot.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(DeviceModelBoot);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeStringSize(DeviceModelBoot);
           }
           if (HardwareManufacturer.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(HardwareManufacturer);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeStringSize(HardwareManufacturer);
           }
           if (HardwareModel.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(HardwareModel);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeStringSize(HardwareModel);
           }
           if (FirmwareBrand.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(FirmwareBrand);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeStringSize(FirmwareBrand);
           }
           if (FirmwareTags.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(FirmwareTags);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeStringSize(FirmwareTags);
           }
           if (FirmwareType.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(FirmwareType);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeStringSize(FirmwareType);
           }
           if (FirmwareFingerprint.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(FirmwareFingerprint);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeStringSize(FirmwareFingerprint);
           }
           return size;
         }
@@ -2159,7 +2159,7 @@ namespace POGOProtos.Networking.Envelopes {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(pb::CodedInputStream input) {
+        public void MergeFrom(Google.Protobuf.CodedInputStream input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
             switch(tag) {
@@ -2224,10 +2224,10 @@ namespace POGOProtos.Networking.Envelopes {
 
       }
 
-      public sealed partial class ActivityStatus : pb::IMessage<ActivityStatus> {
-        private static readonly pb::MessageParser<ActivityStatus> _parser = new pb::MessageParser<ActivityStatus>(() => new ActivityStatus());
+      public sealed partial class ActivityStatus : Google.Protobuf.IMessage<ActivityStatus> {
+        private static readonly Google.Protobuf.MessageParser<ActivityStatus> _parser = new Google.Protobuf.MessageParser<ActivityStatus>(() => new ActivityStatus());
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pb::MessageParser<ActivityStatus> Parser { get { return _parser; } }
+        public static Google.Protobuf.MessageParser<ActivityStatus> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor {
@@ -2235,7 +2235,7 @@ namespace POGOProtos.Networking.Envelopes {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        pbr::MessageDescriptor pb::IMessage.Descriptor {
+        pbr::MessageDescriptor Google.Protobuf.IMessage.Descriptor {
           get { return Descriptor; }
         }
 
@@ -2357,12 +2357,12 @@ namespace POGOProtos.Networking.Envelopes {
 
         /// <summary>Field number for the "status" field.</summary>
         public const int StatusFieldNumber = 9;
-        private pb::ByteString status_ = pb::ByteString.Empty;
+        private Google.Protobuf.ByteString status_ = Google.Protobuf.ByteString.Empty;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public pb::ByteString Status {
+        public Google.Protobuf.ByteString Status {
           get { return status_; }
           set {
-            status_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            status_ = Google.Protobuf.ProtoPreconditions.CheckNotNull(value, "value");
           }
         }
 
@@ -2408,11 +2408,11 @@ namespace POGOProtos.Networking.Envelopes {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override string ToString() {
-          return pb::JsonFormatter.ToDiagnosticString(this);
+          return Google.Protobuf.JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void WriteTo(pb::CodedOutputStream output) {
+        public void WriteTo(Google.Protobuf.CodedOutputStream output) {
           if (StartTimeMs != 0UL) {
             output.WriteRawTag(8);
             output.WriteUInt64(StartTimeMs);
@@ -2455,7 +2455,7 @@ namespace POGOProtos.Networking.Envelopes {
         public int CalculateSize() {
           int size = 0;
           if (StartTimeMs != 0UL) {
-            size += 1 + pb::CodedOutputStream.ComputeUInt64Size(StartTimeMs);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeUInt64Size(StartTimeMs);
           }
           if (UnknownStatus != false) {
             size += 1 + 1;
@@ -2479,7 +2479,7 @@ namespace POGOProtos.Networking.Envelopes {
             size += 1 + 1;
           }
           if (Status.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeBytesSize(Status);
+            size += 1 + Google.Protobuf.CodedOutputStream.ComputeBytesSize(Status);
           }
           return size;
         }
@@ -2519,7 +2519,7 @@ namespace POGOProtos.Networking.Envelopes {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(pb::CodedInputStream input) {
+        public void MergeFrom(Google.Protobuf.CodedInputStream input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
             switch(tag) {

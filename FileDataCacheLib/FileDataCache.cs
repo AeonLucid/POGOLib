@@ -1,30 +1,29 @@
 ﻿using Google.Protobuf;
 using POGOLib.Util;
-using System;
 using System.IO;
+using System.Threading.Tasks;
+using PCLStorage;
 
 namespace FileDataCacheLib
 {
-    public class FileDataCache : IDataCache
-    {
-        public string AssetDigestFile => Path.Combine(Environment.CurrentDirectory, "templates.asset-digests.dat");
+	public class FileDataCache : IDataCache
+	{
+		public async Task<IMessage<T>> GetCachedData<T>(string fileName) where T : IMessage<T>, new()
+		{
+			var path = Path.Combine(PCLStorage.FileSystem.Current.LocalStorage.Path, fileName);
+			if (await PCLStorage.FileSystem.Current.LocalStorage.CheckExistsAsync(path) == PCLStorage.ExistenceCheckResult.FileExists)
+			{
+				return new MessageParser<T>(() => new T()).ParseFrom(await (await FileSystem.Current.LocalStorage.GetFileAsync(path)).OpenAsync(PCLStorage.FileAccess.Read));
+			}
+			return null;
+		}
 
-        public string ItemTemplatesFile => Path.Combine(Environment.CurrentDirectory, "templates.items.dat");
-
-        public IMessage<T> GetCachedData<T>(string fileName) where T: IMessage<T>, new()
-        {
-            var path = Path.Combine(Environment.CurrentDirectory, fileName);
-            if (File.Exists(path))
-            {
-                return new MessageParser<T>(() => new T()).ParseFrom(File.ReadAllBytes(path));
-            }
-            return null;
-        }
-
-        public void SaveDate(string fileName, IMessage msg)
-        {
-            var path = Path.Combine(Environment.CurrentDirectory, fileName);
-            File.WriteAllBytes(path, msg.ToByteArray());
-        }
-    }
+		public async void SaveData(string fileName, IMessage msg)
+		{
+			var path = Path.Combine(FileSystem.Current.LocalStorage.Path, fileName);
+			var file = await FileSystem.Current.LocalStorage.CreateFileAsync(path, CreationCollisionOption.ReplaceExisting);
+			var stream = await file.OpenAsync(PCLStorage.FileAccess.ReadAndWrite);
+			msg.WriteTo(stream);
+		}
+	}
 }
