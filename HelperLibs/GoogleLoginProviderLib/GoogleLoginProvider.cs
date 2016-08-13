@@ -1,4 +1,4 @@
-﻿using DankMemes.GPSOAuthSharp;
+﻿using GPSOAuthSharp;
 using POGOLib;
 using POGOLib.Logging;
 using POGOLib.Net.Authentication.Data;

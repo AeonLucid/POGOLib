@@ -12,7 +12,7 @@ namespace POGOLib.Util
     {
         Dictionary<string, IMessage> _cachedData = new Dictionary<string, IMessage>();
 
-        public void SaveDate(string fileName, IMessage msg)
+        public void SaveData(string fileName, IMessage msg)
         {
             _cachedData[fileName] = msg;
         }

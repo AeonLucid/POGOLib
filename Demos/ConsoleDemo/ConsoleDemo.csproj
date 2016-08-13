@@ -7,8 +7,8 @@
     <ProjectGuid>{02E1D218-DD9D-4BA2-91F9-0F1D7A59B3CF}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Demo</RootNamespace>
-    <AssemblyName>Demo</AssemblyName>
+    <RootNamespace>ConsoleDemo</RootNamespace>
+    <AssemblyName>ConsoleDemo</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -60,15 +60,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FileDataCacheLib\FileDataCacheLib.csproj">
+    <ProjectReference Include="..\..\HelperLibs\FileDataCacheLib\FileDataCacheLib.csproj">
       <Project>{fc46dabc-7d85-4eb8-9da5-f41a4b1f90cd}</Project>
       <Name>FileDataCacheLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GoogleLoginProviderLib\GoogleLoginProviderLib.csproj">
-      <Project>{4166B3B1-8B04-4C44-BE48-9C962DB51409}</Project>
+    <ProjectReference Include="..\..\HelperLibs\GoogleLoginProviderLib\GoogleLoginProviderLib.csproj">
+      <Project>{4166b3b1-8b04-4c44-be48-9c962db51409}</Project>
       <Name>GoogleLoginProviderLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\POGOLib\POGOLib.csproj">
+    <ProjectReference Include="..\..\POGOLib\POGOLib.csproj">
       <Project>{AE7C8436-EAB8-407C-83CF-D9EA62F1C781}</Project>
       <Name>POGOLib</Name>
     </ProjectReference>

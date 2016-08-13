@@ -11,7 +11,7 @@ namespace POGOLib.Util
     public interface IDataCache
     {
         IMessage<T> GetCachedData<T>(string fileName) where T : IMessage<T>, new();
-        void SaveDate(string fileName, IMessage msg);
+        void SaveData(string fileName, IMessage msg);
     }
 
     public static class DataCacheExtensions
@@ -27,6 +27,11 @@ namespace POGOLib.Util
         public static DownloadItemTemplatesResponse GetCachedItemTemplates(this IDataCache dataCache)
         {
             return dataCache.GetCachedData<DownloadItemTemplatesResponse>(ItemTemplatesFile) as DownloadItemTemplatesResponse;
+        }
+
+        public static IMessage<T> ParseMessageFromBytes<T>(this IDataCache dataCache, byte[] data) where T : IMessage<T>, new()
+        {
+            return new MessageParser<T>(() => new T()).ParseFrom(data);
         }
     }
 }

@@ -143,7 +143,7 @@ namespace POGOLib.Net
                     }.ToByteString()
                 });
                 var msg = GetAssetDigestResponse.Parser.ParseFrom(assetDigestResponse);
-                _session.DataCache.SaveDate(DataCacheExtensions.AssetDigestFile, msg);
+                _session.DataCache.SaveData(DataCacheExtensions.AssetDigestFile, msg);
                 return msg;
             }
         }
@@ -177,7 +177,7 @@ namespace POGOLib.Net
                     RequestType = RequestType.DownloadItemTemplates
                 });
                 var msg = DownloadItemTemplatesResponse.Parser.ParseFrom(itemTemplateResponse);
-                _session.DataCache.SaveDate(DataCacheExtensions.ItemTemplatesFile, msg);
+                _session.DataCache.SaveData(DataCacheExtensions.ItemTemplatesFile, msg);
                 return msg;
             }
         }

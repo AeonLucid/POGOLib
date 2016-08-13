@@ -15,7 +15,7 @@ using POGOLib.Pokemon;
 using GoogleLoginProviderLib;
 using FileDataCacheLib;
 
-namespace Demo
+namespace ConsoleDemo
 {
     public class Program
     {

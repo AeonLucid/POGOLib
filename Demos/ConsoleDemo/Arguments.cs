@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using CommandLine.Text;
 
-namespace Demo
+namespace ConsoleDemo
 {
     internal class Arguments
     {
