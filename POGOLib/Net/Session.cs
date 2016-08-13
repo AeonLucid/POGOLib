@@ -39,7 +39,7 @@ namespace POGOLib.Net
         /// </summary>
         public IDataCache DataCache { get; set; } = new MemoryDataCache();
 
-        internal Session(ILoginProvider loginProvider, AccessToken accessToken, string password, GeoCoordinate geoCoordinate, Device device = null)
+        internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate, Device device = null)
         {
             if (!VALID_LOGIN_PROVIDERS.Contains(loginProvider.ProviderID))
             {
@@ -49,7 +49,6 @@ namespace POGOLib.Net
             if (device == null) device = DeviceInfo.GetDeviceByName("nexus5");
             LoginProvider = loginProvider;
             AccessToken = accessToken;
-            Password = password;
             Device = device;
             Player = new Player(geoCoordinate);
             Map = new Map(this);
@@ -67,11 +66,6 @@ namespace POGOLib.Net
         public AccessToken AccessToken { get; private set; }
 
         public ILoginProvider LoginProvider { get; private set; }
-
-        /// <summary>
-        ///     Gets the <see cref="Password" /> of the <see cref="Session" />.
-        /// </summary>
-        internal string Password { get; }
 
         /// <summary>
         ///     Gets the <see cref="Device"/> of the <see cref="Session"/>. The <see cref="RpcClient"/> will try to act like this <see cref="Device"/>.
@@ -135,7 +129,7 @@ namespace POGOLib.Net
                 {
                     try
                     {
-                        accessToken = await LoginProvider.GetAccessToken(AccessToken.Username, Password);
+                        accessToken = await LoginProvider.GetAccessToken();
                     }
                     catch (Exception exception)
                     {

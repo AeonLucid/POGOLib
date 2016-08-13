@@ -65,16 +65,15 @@ namespace Demo
                 ILoginProvider loginProvider;
 
                 if (arguments.LoginProvider == "google")
-                    loginProvider = new GoogleLoginProvider();
+                    loginProvider = new GoogleLoginProvider(arguments.Username, arguments.Password);
                 else if (arguments.LoginProvider == "ptc")
-                    loginProvider = new PtcLoginProvider();
+                    loginProvider = new PtcLoginProvider(arguments.Username, arguments.Password);
                 else
                     throw new ArgumentException("Login provider must be either \"google\" or \"ptc\"");
 
                 var latitude = 51.507351; // Somewhere in London
                 var longitude = -0.127758;
-                var session = await GetSession(loginProvider, arguments.Username, arguments.Password, latitude,
-                    longitude, true);
+                var session = await GetSession(loginProvider, latitude, longitude, true);
 
                 SaveAccessToken(session.AccessToken);
 
@@ -152,17 +151,15 @@ namespace Demo
         /// <summary>
         ///     Login to PokémonGo and return an authenticated <see cref="Session" />.
         /// </summary>
-        /// <param name="username">The username of your PTC / Google account.</param>
-        /// <param name="password">The password of your PTC / Google account.</param>
-        /// <param name="loginProviderStr">Must be 'PTC' or 'Google'.</param>
+        /// <param name="loginProvider">Provider ID must be 'PTC' or 'Google'.</param>
         /// <param name="initLat">The initial latitude.</param>
         /// <param name="initLong">The initial longitude.</param>
         /// <param name="mayCache">Can we cache the <see cref="AccessToken" /> to a local file?</param>
-        private static async Task<Session> GetSession(ILoginProvider loginProvider, string username, string password, double initLat,
+        private static async Task<Session> GetSession(ILoginProvider loginProvider, double initLat,
             double initLong, bool mayCache = false)
         {
             var cacheDir = Path.Combine(Environment.CurrentDirectory, "cache");
-            var fileName = Path.Combine(cacheDir, $"{username}-{loginProvider}.json");
+            var fileName = Path.Combine(cacheDir, $"{loginProvider.UserID}-{loginProvider}.json");
 
             if (mayCache)
             {
@@ -174,11 +171,11 @@ namespace Demo
                     var accessToken = JsonConvert.DeserializeObject<AccessToken>(File.ReadAllText(fileName));
 
                     if (!accessToken.IsExpired)
-                        return Login.GetSession(loginProvider, accessToken, password, initLat, initLong);
+                        return Login.GetSession(loginProvider, accessToken, initLat, initLong);
                 }
             }
 
-            var session = await Login.GetSession(loginProvider, username, password, initLat, initLong);
+            var session = await Login.GetSession(loginProvider, initLat, initLong);
 
             if (mayCache)
                 SaveAccessToken(session.AccessToken);
