@@ -10,8 +10,8 @@ namespace POGOLib.Util
 {
     public interface IDataCache
     {
-        IMessage<T> GetCachedData<T>(string fileName) where T : IMessage<T>, new();
-        void SaveDate(string fileName, IMessage msg);
+        Task<IMessage<T>> GetCachedData<T>(string fileName) where T : IMessage<T>, new();
+        void SaveData(string fileName, IMessage msg);
     }
 
     public static class DataCacheExtensions
@@ -19,14 +19,14 @@ namespace POGOLib.Util
         public static string AssetDigestFile => "templates.asset-digests.dat";
         public static string ItemTemplatesFile => "templates.items.dat";
 
-        public static GetAssetDigestResponse GetCachedAssetDigest(this IDataCache dataCache)
+        public static async Task<GetAssetDigestResponse> GetCachedAssetDigest(this IDataCache dataCache)
         {
-            return dataCache.GetCachedData<GetAssetDigestResponse>(AssetDigestFile) as GetAssetDigestResponse;
+            return await dataCache.GetCachedData<GetAssetDigestResponse>(AssetDigestFile) as GetAssetDigestResponse;
         }
 
-        public static DownloadItemTemplatesResponse GetCachedItemTemplates(this IDataCache dataCache)
+        public static async Task<DownloadItemTemplatesResponse> GetCachedItemTemplates(this IDataCache dataCache)
         {
-            return dataCache.GetCachedData<DownloadItemTemplatesResponse>(ItemTemplatesFile) as DownloadItemTemplatesResponse;
+            return await dataCache.GetCachedData<DownloadItemTemplatesResponse>(ItemTemplatesFile) as DownloadItemTemplatesResponse;
         }
     }
 }
