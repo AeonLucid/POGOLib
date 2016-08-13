@@ -11,7 +11,7 @@ namespace Demo
         [Option('p', "password", Required = true, HelpText = "The password of your PTC / Google account.")]
         public string Password { get; set; }
 
-        [Option('l', "login", DefaultValue = "PTC", HelpText = "Must be 'PTC' or 'Google'.")]
+        [Option('l', "login", DefaultValue = "ptc", HelpText = "Must be 'ptc' or 'google'.")]
         public string LoginProvider { get; set; }
 
         [Option('d', "debug", DefaultValue = false, HelpText = "For debugging.")]

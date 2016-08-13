@@ -125,7 +125,7 @@ namespace POGOLib.Net
             //       however, looking at this code I'm not sure it's implemented correctly - or if these refactors still match the behavior of
             //       the previous code... same concern with the next method GetItemTemplates()..
 
-            var cachedMsg = _session.DataCache.GetCachedAssetDigest();
+            var cachedMsg = await _session.DataCache.GetCachedAssetDigest();
             if (cachedMsg != null && remoteConfigParsed.AssetDigestTimestampMs <= timestamp)
             {
                 return cachedMsg;
@@ -143,7 +143,7 @@ namespace POGOLib.Net
                     }.ToByteString()
                 });
                 var msg = GetAssetDigestResponse.Parser.ParseFrom(assetDigestResponse);
-                _session.DataCache.SaveDate(DataCacheExtensions.AssetDigestFile, msg);
+                _session.DataCache.SaveData(DataCacheExtensions.AssetDigestFile, msg);
                 return msg;
             }
         }
@@ -164,7 +164,7 @@ namespace POGOLib.Net
             var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
             var timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds();
 
-            var cachedMsg = _session.DataCache.GetCachedItemTemplates();
+            var cachedMsg = await _session.DataCache.GetCachedItemTemplates();
             if (cachedMsg != null && remoteConfigParsed.AssetDigestTimestampMs <= timestamp)
             {
                 return cachedMsg;
@@ -177,7 +177,7 @@ namespace POGOLib.Net
                     RequestType = RequestType.DownloadItemTemplates
                 });
                 var msg = DownloadItemTemplatesResponse.Parser.ParseFrom(itemTemplateResponse);
-                _session.DataCache.SaveDate(DataCacheExtensions.ItemTemplatesFile, msg);
+                _session.DataCache.SaveData(DataCacheExtensions.ItemTemplatesFile, msg);
                 return msg;
             }
         }
