@@ -13,9 +13,20 @@ namespace GoogleLoginProviderLib
     {
         public string ProviderID => "google";
 
-        public async Task<AccessToken> GetAccessToken(string username, string password)
+        public string UserID => _username;
+
+        protected string _username;
+        protected string _password;
+
+        public GoogleLoginProvider(string username, string password)
         {
-            var googleClient = new GPSOAuthClient(username, password);
+            _username = username;
+            _password = password;
+        }
+
+        public async Task<AccessToken> GetAccessToken()
+        {
+            var googleClient = new GPSOAuthClient(_username, _password);
             var masterLoginResponse = await googleClient.PerformMasterLogin();
 
             if (masterLoginResponse.ContainsKey("Error"))
@@ -35,7 +46,7 @@ namespace GoogleLoginProviderLib
             Logger.Debug("Authenticated through Google.");
             return new AccessToken
             {
-                Username = username,
+                Username = _username,
                 Token = oauthResponse["Auth"],
                 Expiry = TimeUtil.GetDateTimeFromSeconds(int.Parse(oauthResponse["Expiry"])),
                 ProviderID = ProviderID

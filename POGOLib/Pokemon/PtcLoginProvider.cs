@@ -16,7 +16,18 @@ namespace POGOLib.Pokemon
     {
         public string ProviderID => "ptc";
 
-        public async Task<AccessToken> GetAccessToken(string username, string password)
+        public string UserID => _username;
+
+        protected string _username;
+        protected string _password;
+
+        public PtcLoginProvider(string username, string password)
+        {
+            _username = username;
+            _password = password;
+        }
+
+        public async Task<AccessToken> GetAccessToken()
         {
             using (var httpClientHandler = new HttpClientHandler())
             {
@@ -25,9 +36,9 @@ namespace POGOLib.Pokemon
                 {
                     httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.LoginUserAgent);
                     var loginData = await GetLoginData(httpClient);
-                    var ticket = await PostLogin(httpClient, username, password, loginData);
+                    var ticket = await PostLogin(httpClient, _username, _password, loginData);
                     var accessToken = await PostLoginOauth(httpClient, ticket);
-                    accessToken.Username = username;
+                    accessToken.Username = _username;
                     Logger.Debug("Authenticated through PTC.");
                     return accessToken;
                 }
