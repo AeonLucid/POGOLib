@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using GeoCoordinatePortable;
 using POGOProtos.Data;
 using POGOProtos.Data.Player;
+using System.Device.Location;
 
 namespace POGOLib.Pokemon
 {

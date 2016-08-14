@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using Google.Protobuf;
@@ -9,6 +8,9 @@ using POGOProtos.Networking.Responses;
 
 namespace POGOLib.Pokemon
 {
+
+    // TODO: Refactor to use no file system
+
     public class Templates
     {
         private GetAssetDigestResponse _assetDigestResponse;
@@ -25,24 +27,24 @@ namespace POGOLib.Pokemon
         public RepeatedField<DownloadItemTemplatesResponse.Types.ItemTemplate> ItemTemplates
             => _itemTemplatesResponse?.ItemTemplates;
 
-        public string AssetDigestFile
-            =>
-                Path.Combine(Environment.CurrentDirectory,
-                    ConfigurationManager.AppSettings["POGOLib.Templates.Directory"] ?? string.Empty,
-                    "templates.asset-digests.dat");
+        //public string AssetDigestFile
+        //    =>
+        //        Path.Combine(Environment.CurrentDirectory,
+        //            ConfigurationManager.AppSettings["POGOLib.Templates.Directory"] ?? string.Empty,
+        //            "templates.asset-digests.dat");
 
-        public string ItemTemplatesFile
-            =>
-                Path.Combine(Environment.CurrentDirectory,
-                    ConfigurationManager.AppSettings["POGOLib.Templates.Directory"] ?? string.Empty,
-                    "templates.items.dat");
+        //public string ItemTemplatesFile
+        //    =>
+        //        Path.Combine(Environment.CurrentDirectory,
+        //            ConfigurationManager.AppSettings["POGOLib.Templates.Directory"] ?? string.Empty,
+        //            "templates.items.dat");
 
         public void SetAssetDigests(GetAssetDigestResponse assetDigestResponse)
         {
             if (_assetDigestResponse == null || assetDigestResponse.TimestampMs > _assetDigestResponse.TimestampMs)
             {
                 _assetDigestResponse = assetDigestResponse;
-                SaveTemplate(AssetDigestFile, _assetDigestResponse.ToByteString().ToByteArray());
+                //SaveTemplate(AssetDigestFile, _assetDigestResponse.ToByteString().ToByteArray());
             }
         }
 
@@ -51,33 +53,33 @@ namespace POGOLib.Pokemon
             if (_itemTemplatesResponse == null || itemTemplatesResponse.TimestampMs > _itemTemplatesResponse.TimestampMs)
             {
                 _itemTemplatesResponse = itemTemplatesResponse;
-                SaveTemplate(ItemTemplatesFile, _itemTemplatesResponse.ToByteString().ToByteArray());
+                //SaveTemplate(ItemTemplatesFile, _itemTemplatesResponse.ToByteString().ToByteArray());
             }
         }
 
         private GetAssetDigestResponse LoadAssetDigest()
         {
-            if (File.Exists(AssetDigestFile))
-            {
-                var bytes = File.ReadAllBytes(AssetDigestFile);
-                if (bytes.Any())
-                {
-                    return GetAssetDigestResponse.Parser.ParseFrom(bytes);
-                }
-            }
+            //if (File.Exists(AssetDigestFile))
+            //{
+            //    var bytes = File.ReadAllBytes(AssetDigestFile);
+            //    if (bytes.Any())
+            //    {
+            //        return GetAssetDigestResponse.Parser.ParseFrom(bytes);
+            //    }
+            //}
             return null;
         }
 
         private DownloadItemTemplatesResponse LoadItemTemplates()
         {
-            if (File.Exists(ItemTemplatesFile))
-            {
-                var bytes = File.ReadAllBytes(ItemTemplatesFile);
-                if (bytes.Any())
-                {
-                    return DownloadItemTemplatesResponse.Parser.ParseFrom(bytes);
-                }
-            }
+            //if (File.Exists(ItemTemplatesFile))
+            //{
+            //    var bytes = File.ReadAllBytes(ItemTemplatesFile);
+            //    if (bytes.Any())
+            //    {
+            //        return DownloadItemTemplatesResponse.Parser.ParseFrom(bytes);
+            //    }
+            //}
             return null;
         }
 

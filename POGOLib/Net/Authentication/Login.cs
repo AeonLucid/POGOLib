@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.RegularExpressions;
-using DankMemes.GPSOAuthSharp;
-using GeoCoordinatePortable;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using POGOLib.Logging;
 using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon.Data;
 using POGOLib.Util;
+using System.Threading.Tasks;
+using System.Device.Location;
 
 namespace POGOLib.Net.Authentication
 {
@@ -47,7 +47,7 @@ namespace POGOLib.Net.Authentication
         /// <param name="initialLatitude">The initial latitude you will spawn at after logging into PokémonGo.</param>
         /// <param name="initialLongitude">The initial longitude you will spawn at after logging into PokémonGo.</param>
         /// <returns></returns>
-        public static Session GetSession(string username, string password, LoginProvider loginProvider,
+        public static async Task<Session> GetSession(string username, string password, LoginProvider loginProvider,
             double initialLatitude, double initialLongitude)
         {
             AccessToken accessToken;
@@ -55,7 +55,7 @@ namespace POGOLib.Net.Authentication
             switch (loginProvider)
             {
                 case LoginProvider.GoogleAuth:
-                    accessToken = WithGoogle(username, password);
+                    accessToken = await WithGoogle(username, password);
                     break;
                 case LoginProvider.PokemonTrainerClub:
                     accessToken = WithPokemonTrainerClub(username, password);
@@ -68,10 +68,10 @@ namespace POGOLib.Net.Authentication
         }
 
         /// Authenticate the user through Google.
-        internal static AccessToken WithGoogle(string email, string password)
+        internal static async Task<AccessToken> WithGoogle(string email, string password)
         {
             var googleClient = new GPSOAuthClient(email, password);
-            var masterLoginResponse = googleClient.PerformMasterLogin();
+            var masterLoginResponse = await googleClient.PerformMasterLogin();
 
             if (masterLoginResponse.ContainsKey("Error"))
             {
@@ -81,7 +81,7 @@ namespace POGOLib.Net.Authentication
             {
                 throw new Exception("Token was missing from master login response.");
             }
-            var oauthResponse = googleClient.PerformOAuth(masterLoginResponse["Token"], Constants.GoogleAuthService,
+            var oauthResponse = await googleClient.PerformOAuth(masterLoginResponse["Token"], Constants.GoogleAuthService,
                 Constants.GoogleAuthApp, Constants.GoogleAuthClientSig);
             if (!oauthResponse.ContainsKey("Auth"))
             {

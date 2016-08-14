@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using GeoCoordinatePortable;
 using POGOLib.Logging;
 using POGOLib.Net.Authentication;
 using POGOLib.Net.Authentication.Data;
@@ -8,6 +7,8 @@ using POGOLib.Pokemon;
 using POGOLib.Pokemon.Data;
 using POGOLib.Util.Devices;
 using POGOProtos.Settings;
+using System.Device.Location;
+using System.Threading.Tasks;
 
 namespace POGOLib.Net
 {
@@ -89,9 +90,9 @@ namespace POGOLib.Net
             GC.SuppressFinalize(this);
         }
 
-        public bool Startup()
+        public async Task<bool> Startup()
         {
-            if (!RpcClient.Startup())
+            if (!(await RpcClient.Startup()))
             {
                 return false;
             }
@@ -107,7 +108,7 @@ namespace POGOLib.Net
         /// <summary>
         ///     Ensures the <see cref="Session" /> gets reauthenticated, no matter how long it takes.
         /// </summary>
-        internal void Reauthenticate()
+        internal async Task Reauthenticate()
         {
             ReauthenticateMutex.WaitOne();
             if (AccessToken.IsExpired)
@@ -124,7 +125,7 @@ namespace POGOLib.Net
                                 accessToken = Login.WithPokemonTrainerClub(AccessToken.Username, Password);
                                 break;
                             case LoginProvider.GoogleAuth:
-                                accessToken = Login.WithGoogle(AccessToken.Username, Password);
+                                accessToken = await Login.WithGoogle(AccessToken.Username, Password);
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -140,7 +141,7 @@ namespace POGOLib.Net
                         {
                             var sleepSeconds = Math.Min(60, ++tries*5);
                             Logger.Error($"Reauthentication failed, trying again in {sleepSeconds} seconds.");
-                            Thread.Sleep(sleepSeconds*1000);
+                            await Task.Delay(sleepSeconds * 1000);
                         }
                     }
                 }

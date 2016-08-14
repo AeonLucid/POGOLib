@@ -19,15 +19,12 @@ namespace POGOLib.Net
 
         private readonly Stopwatch _internalStopwatch;
 
-        private readonly bool _is64Bit;
-
         private readonly Random _random;
 
         internal RpcEncryption(Session session)
         {
             _session = session;
             _internalStopwatch = new Stopwatch();
-            _is64Bit = Environment.Is64BitOperatingSystem;
             _random = new Random();
         }
 
