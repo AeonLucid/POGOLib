@@ -17,6 +17,7 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace POGOLib.Net
 {
@@ -372,9 +373,37 @@ namespace POGOLib.Net
             });
         }
 
-        public async Task<ByteString> SendRemoteProcedureCall(Request request)
-        {
-            var requestEnvelope = await GetRequestEnvelope(request);
+		private static long lastRpc = DateTime.Now.Millisecond;
+		private const int minDiff = 1000;
+		private static bool queueRunning = false;
+		private ConcurrentQueue<Request> queue = new ConcurrentQueue<Request>();
+		private ConcurrentDictionary<Request, ByteString> dict = new ConcurrentDictionary<Request, ByteString>();
+		private static Mutex m = new Mutex();
+		public async Task<ByteString> SendRemoteProcedureCall(Request request)
+		{
+			queue.Enqueue(request);
+			m.WaitOne();
+			Request r;
+			while (queue.TryDequeue(out r))
+			{
+				var diff = Math.Max(0,DateTime.Now.Millisecond - lastRpc);
+				if (diff < minDiff)
+				{
+					await Task.Delay((int)(diff + (int)(new Random().NextDouble() * 2000)));
+				}
+				lastRpc = DateTime.Now.Millisecond;
+				var response = await PerformRemoteProcedureCall(r);
+				dict.GetOrAdd(r, response);
+			}
+			m.ReleaseMutex();
+			ByteString ret;
+			dict.TryRemove(request, out ret);
+			return ret;
+		}
+
+		private async Task<ByteString> PerformRemoteProcedureCall(Request request)
+		{
+			var requestEnvelope = await GetRequestEnvelope(request);
 
             using (var requestData = PrepareRequestEnvelope(requestEnvelope))
             {
