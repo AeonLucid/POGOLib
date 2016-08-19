@@ -373,8 +373,12 @@ namespace POGOLib.Net
             });
         }
 
-		private static long lastRpc = DateTime.Now.Millisecond;
-		private const int minDiff = 1000;
+		public Action<Request> OnStartRPC;
+		public Action<Request> OnEndRPC;
+
+		private static long lastRpc = 0;
+		// Up to 350 seems to cause a server slow-down response; 400 works fine.
+		private const int minDiff = 400;
 		private static bool queueRunning = false;
 		private ConcurrentQueue<Request> queue = new ConcurrentQueue<Request>();
 		private ConcurrentDictionary<Request, ByteString> dict = new ConcurrentDictionary<Request, ByteString>();
@@ -389,7 +393,8 @@ namespace POGOLib.Net
 				var diff = Math.Max(0,DateTime.Now.Millisecond - lastRpc);
 				if (diff < minDiff)
 				{
-					await Task.Delay((int)(diff + (int)(new Random().NextDouble() * 2000)));
+					var delay = (minDiff - diff) + (int)(new Random().NextDouble() * 1000); // Add some randomness
+					await Task.Delay((int)(delay));
 				}
 				lastRpc = DateTime.Now.Millisecond;
 				var response = await PerformRemoteProcedureCall(r);
@@ -403,13 +408,23 @@ namespace POGOLib.Net
 
 		private async Task<ByteString> PerformRemoteProcedureCall(Request request)
 		{
+			if (OnStartRPC != null)
+			{
+				OnStartRPC(request);
+			}
+
 			var requestEnvelope = await GetRequestEnvelope(request);
 
             using (var requestData = PrepareRequestEnvelope(requestEnvelope))
             {
                 using (var response = await _httpClient.PostAsync(_requestUrl ?? Constants.ApiUrl, requestData))
                 {
-                    if (!response.IsSuccessStatusCode)
+					if (OnEndRPC != null)
+					{
+						OnEndRPC(request);
+					}
+
+					if (!response.IsSuccessStatusCode)
                     {
                         Logger.Debug(await response.Content.ReadAsStringAsync());
                         throw new Exception(
