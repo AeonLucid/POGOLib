@@ -379,7 +379,6 @@ namespace POGOLib.Net
 		private static long lastRpc = 0;
 		// Up to 350 seems to cause a server slow-down response; 400 works fine.
 		private const int minDiff = 400;
-		private static bool queueRunning = false;
 		private ConcurrentQueue<Request> queue = new ConcurrentQueue<Request>();
 		private ConcurrentDictionary<Request, ByteString> dict = new ConcurrentDictionary<Request, ByteString>();
 		private static Mutex m = new Mutex();
