@@ -377,8 +377,7 @@ namespace POGOLib.Net
 		public Action<Request> OnEndRPC;
 
 		private static long lastRpc = 0;
-		// Up to 350 seems to cause a server slow-down response; 400 works fine.
-		private const int minDiff = 400;
+		private const int minDiff = 800;
 		private ConcurrentQueue<Request> queue = new ConcurrentQueue<Request>();
 		private ConcurrentDictionary<Request, ByteString> dict = new ConcurrentDictionary<Request, ByteString>();
 		private static Mutex m = new Mutex();
@@ -386,18 +385,26 @@ namespace POGOLib.Net
 		{
 			queue.Enqueue(request);
 			m.WaitOne();
+			if (OnStartRPC != null)
+			{
+				OnStartRPC(request);
+			}
 			Request r;
 			while (queue.TryDequeue(out r))
 			{
 				var diff = Math.Max(0,DateTime.Now.Millisecond - lastRpc);
 				if (diff < minDiff)
 				{
-					var delay = (minDiff - diff) + (int)(new Random().NextDouble() * 1000); // Add some randomness
+					var delay = (minDiff - diff) + (int)(new Random().NextDouble() * 0); // Add some randomness
 					await Task.Delay((int)(delay));
 				}
 				lastRpc = DateTime.Now.Millisecond;
 				var response = await PerformRemoteProcedureCall(r);
 				dict.GetOrAdd(r, response);
+			}
+			if (OnEndRPC != null)
+			{
+				OnEndRPC(request);
 			}
 			m.ReleaseMutex();
 			ByteString ret;
@@ -407,22 +414,12 @@ namespace POGOLib.Net
 
 		private async Task<ByteString> PerformRemoteProcedureCall(Request request)
 		{
-			if (OnStartRPC != null)
-			{
-				OnStartRPC(request);
-			}
-
 			var requestEnvelope = await GetRequestEnvelope(request);
 
             using (var requestData = PrepareRequestEnvelope(requestEnvelope))
             {
                 using (var response = await _httpClient.PostAsync(_requestUrl ?? Constants.ApiUrl, requestData))
                 {
-					if (OnEndRPC != null)
-					{
-						OnEndRPC(request);
-					}
-
 					if (!response.IsSuccessStatusCode)
                     {
                         Logger.Debug(await response.Content.ReadAsStringAsync());
@@ -433,7 +430,7 @@ namespace POGOLib.Net
                     var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
                     var responseEnvelope = ResponseEnvelope.Parser.ParseFrom(responseBytes);
 
-                    switch (responseEnvelope.StatusCode)
+					switch (responseEnvelope.StatusCode)
                     {
                         case 1:
                             // Success!?
