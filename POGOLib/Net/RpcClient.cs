@@ -79,22 +79,43 @@ namespace POGOLib.Net
             try
             {
                 // Send GetPlayer to check if we're connected and authenticated
+				var playerAttempts = 0;
                 GetPlayerResponse playerResponse;
-                do
+				while (true)
                 {
+					if(playerAttempts > 3) { 
+						Logger.Error("No response received, giving up.");
+						return false;
+					}
+
                     var response = SendRemoteProcedureCall(new Request
                     {
                         RequestType = RequestType.GetPlayer
                     });
+						
                     playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
-                    if (!playerResponse.Success)
+					var responseTimer = 0;
+					while (true)
                     {
-                        Thread.Sleep(1000);
+						if(playerResponse.Success) break;
+						if(responseTimer >= Configuration.StartupTimeout) {
+							Logger.Warn("No response to GetPlayer after {0}ms!", Configuration.StartupTimeout);
+							break;
+						}
+                        Thread.Sleep(1);
+						responseTimer++;
                     }
-                } while (!playerResponse.Success);
+					playerAttempts++;
+
+					if(!playerResponse.Success) {
+						Logger.Warn("Trying again...");
+						continue;
+					}
+					break;
+				}
 
 				_session.Player.Data = playerResponse.PlayerData;
-				
+
                 // Get DownloadRemoteConfig
                 var remoteConfigResponse = SendRemoteProcedureCall(new Request
                 {
@@ -108,6 +129,7 @@ namespace POGOLib.Net
                 var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
 
                 var timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds();
+				_session.Templates.LoadTemplates();
                 if (_session.Templates.AssetDigests == null || remoteConfigParsed.AssetDigestTimestampMs > timestamp)
                 {
                     // GetAssetDigest
@@ -322,7 +344,6 @@ namespace POGOLib.Net
             var messageBytes = requestEnvelope.ToByteArray();
 
             // TODO: Compression?
-
             return new ByteArrayContent(messageBytes);
         }
 
@@ -336,6 +357,8 @@ namespace POGOLib.Net
 
         public ByteString SendRemoteProcedureCall(Request request)
         {
+			// Sleep to prevent frequent throttling TODO: add a better call frequency check
+			Thread.Sleep (500);
             var requestEnvelope = GetRequestEnvelope(request);
 
             using (var requestData = PrepareRequestEnvelope(requestEnvelope))
@@ -357,6 +380,16 @@ namespace POGOLib.Net
                         case 1:
                             // Success!?
                             break;
+
+						case 2:
+							// Unknown status code
+						Logger.Warn("Received status code 2 (unknown)");
+							break;
+
+						case 3:
+							// Account banned
+							Logger.Warn("Received status code 3, account possibly permabanned.");
+							break;
 
                         case 52: // Slow servers? TODO: Throttling (?)
 						Logger.Warn("We are sending requests too fast, sleeping for {0} milliseconds.", Configuration.SlowServerTimeout.ToString());

@@ -16,9 +16,13 @@ namespace POGOLib.Pokemon
 
         public Templates()
         {
-            _assetDigestResponse = LoadAssetDigest();
-            _itemTemplatesResponse = LoadItemTemplates();
+			LoadTemplates ();
         }
+
+		public void LoadTemplates() {
+			_assetDigestResponse = LoadAssetDigest();
+			_itemTemplatesResponse = LoadItemTemplates();
+		}
 
 		public RepeatedField<AssetDigestEntry> AssetDigests {
 			get {
