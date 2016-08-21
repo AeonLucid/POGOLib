@@ -86,7 +86,7 @@ namespace POGOLib.Net
                         Latitude = (float)_session.Player.Coordinate.Latitude,
                         Longitude = (float)_session.Player.Coordinate.Longitude,
                         Altitude = (float)_session.Player.Coordinate.Altitude,
-                        TimestampSinceStart = (ulong)_internalStopwatch.ElapsedMilliseconds - 200,
+                        TimestampSnapshot = (ulong)_internalStopwatch.ElapsedMilliseconds - 200,
                         Floor = 3,
                         LocationType = 1
                     }
@@ -111,7 +111,7 @@ namespace POGOLib.Net
             }
 
             //static for now
-            signature.Unknown22 = ByteString.CopyFrom(0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
+            signature.SessionHash = ByteString.CopyFrom(0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
 
             var iv = new byte[32];
             _random.NextBytes(iv);

@@ -300,6 +300,7 @@
     <Compile Include="Util\MapUtil.cs" />
     <Compile Include="Util\TimeUtil.cs" />
     <Compile Include="Util\GeoCoordinatePortable.cs" />
+    <Compile Include="POGOProtos\Settings\GpsSettings.g.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
