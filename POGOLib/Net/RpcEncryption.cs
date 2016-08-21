@@ -5,7 +5,6 @@ using Google.Protobuf;
 using POGOLib.Util;
 using POGOLib.Util.Encryption;
 using POGOProtos.Networking.Envelopes;
-using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 namespace POGOLib.Net
 {
@@ -42,7 +41,7 @@ namespace POGOLib.Net
             {
                 TimestampSinceStart = (ulong) _internalStopwatch.ElapsedMilliseconds,
                 Timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds(),
-                SensorInfo = new SensorInfo()
+				SensorInfo = new Signature.Types.SensorInfo()
                 {
                     AccelNormalizedZ = Randomize(9.8),
                     AccelNormalizedX = Randomize(0.02),
@@ -62,7 +61,7 @@ namespace POGOLib.Net
                     GyroscopeRawZ = Randomize(0.0024566650390625),
                     AccelerometerAxes = 3
                 },
-                DeviceInfo = new DeviceInfo()
+				DeviceInfo = new Signature.Types.DeviceInfo()
                 {
                     DeviceId = _session.Device.DeviceId,
                     AndroidBoardName = _session.Device.AndroidBoardName,
@@ -80,7 +79,7 @@ namespace POGOLib.Net
                 },
                 LocationFix =
                 {
-                    new LocationFix
+					new Signature.Types.LocationFix
                     {
                         Provider = "network",
                         //Unk4 = 120,

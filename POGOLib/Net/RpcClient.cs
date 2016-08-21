@@ -50,6 +50,7 @@ namespace POGOLib.Net
 
         internal RpcClient(Session session)
         {
+			LastGeoCoordinateMapObjectsRequest = new GeoCoordinate ();
             _session = session;
             _rpcEncryption = new RpcEncryption(session);
 
@@ -68,7 +69,7 @@ namespace POGOLib.Net
 
         internal DateTime LastRpcMapObjectsRequest { get; private set; }
 
-        internal GeoCoordinate LastGeoCoordinateMapObjectsRequest { get; private set; } = new GeoCoordinate();
+        internal GeoCoordinate LastGeoCoordinateMapObjectsRequest { get; private set; }
 
         /// <summary>
         ///     Sends all requests which the (android-)client sends on startup
@@ -133,7 +134,7 @@ namespace POGOLib.Net
                         DownloadItemTemplatesResponse.Parser.ParseFrom(itemTemplateResponse));
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -177,10 +178,11 @@ namespace POGOLib.Net
 
             if (mapObjects.Status == MapObjectsStatus.Success)
             {
-                Logger.Debug($"Received '{mapObjects.MapCells.Count}' map cells.");
-                Logger.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.CatchablePokemons).Count()}' pokemons.");
-                Logger.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.Forts).Count()}' forts.");
-                if (mapObjects.MapCells.Count == 0)
+				var recvCell = mapObjects.MapCells.Count;
+				var recvPoke = mapObjects.MapCells.SelectMany (c => c.CatchablePokemons).Count ();
+				var recvFort = mapObjects.MapCells.SelectMany (c => c.Forts).Count ();
+				Logger.Debug (string.Format ("Received {0} map cells, {1} pokemon, {2} forts", recvCell, recvPoke, recvFort));
+				if (mapObjects.MapCells.Count == 0)
                 {
                     Logger.Error("We received 0 map cells, are your GPS coordinates correct?");
                     return;
@@ -189,7 +191,7 @@ namespace POGOLib.Net
             }
             else
             {
-                Logger.Error($"GetMapObjects status is: '{mapObjects.Status}'.");
+				Logger.Error(string.Format("GetMapObjects status is: '{0}'.", mapObjects.Status));
             }
         }
 
@@ -356,19 +358,18 @@ namespace POGOLib.Net
                             break;
 
                         case 52: // Slow servers? TODO: Throttling (?)
-                            Logger.Warn(
-                                $"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
+						Logger.Warn("We are sending requests too fast, sleeping for {0} milliseconds.", Configuration.SlowServerTimeout.ToString());
                             Thread.Sleep(Configuration.SlowServerTimeout);
                             return SendRemoteProcedureCall(request);
 
                         case 53: // New RPC url
                             if (Regex.IsMatch(responseEnvelope.ApiUrl, "pgorelease\\.nianticlabs\\.com\\/plfe\\/\\d+"))
                             {
-                                _requestUrl = $"https://{responseEnvelope.ApiUrl}/rpc";
+							_requestUrl = string.Format("https://{0}/rpc", responseEnvelope.ApiUrl);
                                 return SendRemoteProcedureCall(request);
                             }
                             throw new Exception(
-                                $"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
+							string.Format("Received an incorrect API url: '{0}', status code was: '{1}'.", responseEnvelope.ApiUrl, responseEnvelope.StatusCode));
 
                         case 102: // Invalid auth
                             Logger.Debug("Received StatusCode 102, reauthenticating.");
@@ -377,12 +378,12 @@ namespace POGOLib.Net
                             return SendRemoteProcedureCall(request);
 
                         default:
-                            Logger.Info($"Unknown status code: {responseEnvelope.StatusCode}");
+						Logger.Info("Unknown status code: {0}", responseEnvelope.StatusCode.ToString());
                             break;
                     }
 
                     LastRpcRequest = DateTime.UtcNow;
-                    Logger.Debug($"Sent RPC Request: '{request.RequestType}'");
+					Logger.Debug("Sent RPC Request: '{0}'", request.RequestType.ToString());
                     if (request.RequestType == RequestType.GetMapObjects)
                     {
                         LastRpcMapObjectsRequest = LastRpcRequest;
@@ -411,7 +412,7 @@ namespace POGOLib.Net
         {
             if (responseEnvelope.Returns.Count != 5)
             {
-                throw new Exception($"There were only {responseEnvelope.Returns.Count} responses, we expected 5.");
+				throw new Exception(string.Format("There were only {0} responses, we expected 5.", responseEnvelope.Returns.Count));
             }
 
             // Take requested response and remove from returns.
@@ -455,8 +456,8 @@ namespace POGOLib.Net
             if (pokemonId > 0)
             {
                 var pokemons = _session.Player.Inventory.InventoryItems.Where(
-                    i =>
-                        i?.InventoryItemData?.PokemonData != null &&
+					i => i.InventoryItemData != null &&
+                        i.InventoryItemData.PokemonData != null &&
                         i.InventoryItemData.PokemonData.Id.Equals(pokemonId));
                 _session.Player.Inventory.RemoveInventoryItems(pokemons);
             }
@@ -527,12 +528,12 @@ namespace POGOLib.Net
                         }
                         else
                         {
-                            Logger.Debug($"DownloadSettingsResponse.Error: '{downloadSettings.Error}'");
+						Logger.Debug("DownloadSettingsResponse.Error: '{0}'", downloadSettings.Error);
                         }
                         break;
 
                     default:
-                        throw new Exception($"Unknown response appeared..? {responseCount}");
+					throw new Exception(string.Format("Unknown response appeared..? {0}", responseCount));
                 }
 
                 responseCount++;
@@ -549,7 +550,8 @@ namespace POGOLib.Net
         {
             if (disposing)
             {
-                _httpClient?.Dispose();
+				if(_httpClient != null)
+                	_httpClient.Dispose();
             }
         }
     }

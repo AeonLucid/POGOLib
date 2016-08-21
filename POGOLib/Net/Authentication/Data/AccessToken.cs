@@ -8,7 +8,11 @@ namespace POGOLib.Net.Authentication.Data
     public class AccessToken
     {
         [JsonIgnore]
-        public string Uid => $"{Username}-{LoginProvider}";
+		public string Uid {
+			get {
+				return string.Format ("{0}-{1}", Username, LoginProvider);
+			}
+		}
 
         [JsonProperty("username", Required = Required.Always)]
         public string Username { get; internal set; }
@@ -23,7 +27,11 @@ namespace POGOLib.Net.Authentication.Data
         public LoginProvider LoginProvider { get; internal set; }
 
         [JsonIgnore]
-        public bool IsExpired => DateTime.UtcNow > Expiry;
+		public bool IsExpired {
+			get {
+				return DateTime.UtcNow > Expiry;
+			}
+		}
 
         [JsonIgnore]
         public AuthTicket AuthTicket { get; internal set; }

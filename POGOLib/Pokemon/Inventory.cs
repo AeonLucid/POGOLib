@@ -11,13 +11,17 @@ namespace POGOLib.Pokemon
     /// </summary>
     public class Inventory
     {
+		public Inventory() {
+			InventoryItems = new RepeatedField<InventoryItem>();
+		}
+
         internal long LastInventoryTimestampMs;
 
         /// <summary>
         ///     Gets the last received <see cref="RepeatedField{T}" /> from PokémonGo.<br />
         ///     Only use this if you know what you are doing.
         /// </summary>
-        public RepeatedField<InventoryItem> InventoryItems { get; } = new RepeatedField<InventoryItem>();
+		public RepeatedField<InventoryItem> InventoryItems { get; private set; }
 
         internal void RemoveInventoryItems(IEnumerable<InventoryItem> items)
         {
@@ -25,45 +29,46 @@ namespace POGOLib.Pokemon
             {
                 InventoryItems.Remove(item);
             }
-            Update?.Invoke(this, EventArgs.Empty);
+			if(Update != null)
+            	Update.Invoke(this, EventArgs.Empty);
         }
 
         internal void UpdateInventoryItems(InventoryDelta delta)
         {
-            if (delta?.InventoryItems == null || delta.InventoryItems.All(i => i == null))
+            if (delta != null && delta.InventoryItems == null || delta.InventoryItems.All(i => i == null))
             {
                 return;
             }
             InventoryItems.AddRange(delta.InventoryItems.Where(i => i != null));
             // Only keep the newest ones
-            foreach (var deltaItem in delta.InventoryItems.Where(d => d?.InventoryItemData != null))
+            foreach (var deltaItem in delta.InventoryItems.Where(d => d.InventoryItemData != null))
             {
                 var oldItems = new List<InventoryItem>();
                 if (deltaItem.InventoryItemData.PlayerStats != null)
                 {
                     oldItems.AddRange(
-                        InventoryItems.Where(i => i.InventoryItemData?.PlayerStats != null)
+                        InventoryItems.Where(i => i.InventoryItemData.PlayerStats != null)
                             .OrderByDescending(i => i.ModifiedTimestampMs)
                             .Skip(1));
                 }
                 if (deltaItem.InventoryItemData.PlayerCurrency != null)
                 {
                     oldItems.AddRange(
-                        InventoryItems.Where(i => i.InventoryItemData?.PlayerCurrency != null)
+                        InventoryItems.Where(i => i.InventoryItemData.PlayerCurrency != null)
                             .OrderByDescending(i => i.ModifiedTimestampMs)
                             .Skip(1));
                 }
                 if (deltaItem.InventoryItemData.PlayerCamera != null)
                 {
                     oldItems.AddRange(
-                        InventoryItems.Where(i => i.InventoryItemData?.PlayerCamera != null)
+                        InventoryItems.Where(i => i.InventoryItemData.PlayerCamera != null)
                             .OrderByDescending(i => i.ModifiedTimestampMs)
                             .Skip(1));
                 }
                 if (deltaItem.InventoryItemData.InventoryUpgrades != null)
                 {
                     oldItems.AddRange(
-                        InventoryItems.Where(i => i.InventoryItemData?.InventoryUpgrades != null)
+                        InventoryItems.Where(i => i.InventoryItemData.InventoryUpgrades != null)
                             .OrderByDescending(i => i.ModifiedTimestampMs)
                             .Skip(1));
                 }
@@ -71,8 +76,8 @@ namespace POGOLib.Pokemon
                 {
                     oldItems.AddRange(
                         InventoryItems.Where(
-                            i =>
-                                i.InventoryItemData?.PokedexEntry != null &&
+							i =>i.InventoryItemData != null &&
+                                i.InventoryItemData.PokedexEntry != null &&
                                 i.InventoryItemData.PokedexEntry.PokemonId ==
                                 deltaItem.InventoryItemData.PokedexEntry.PokemonId)
                             .OrderByDescending(i => i.ModifiedTimestampMs)
@@ -82,8 +87,8 @@ namespace POGOLib.Pokemon
                 {
                     oldItems.AddRange(
                         InventoryItems.Where(
-                            i =>
-                                i.InventoryItemData?.Candy != null &&
+							i =>i.InventoryItemData != null &&
+                                i.InventoryItemData.Candy != null &&
                                 i.InventoryItemData.Candy.FamilyId ==
                                 deltaItem.InventoryItemData.Candy.FamilyId)
                             .OrderByDescending(i => i.ModifiedTimestampMs)
@@ -93,8 +98,8 @@ namespace POGOLib.Pokemon
                 {
                     oldItems.AddRange(
                         InventoryItems.Where(
-                            i =>
-                                i.InventoryItemData?.Item != null &&
+							i =>i.InventoryItemData != null &&
+                                i.InventoryItemData.Item != null &&
                                 i.InventoryItemData.Item.ItemId == deltaItem.InventoryItemData.Item.ItemId)
                             .OrderByDescending(i => i.ModifiedTimestampMs)
                             .Skip(1));
@@ -103,8 +108,8 @@ namespace POGOLib.Pokemon
                 {
                     oldItems.AddRange(
                         InventoryItems.Where(
-                            i =>
-                                i.InventoryItemData?.PokemonData != null &&
+							i => i.InventoryItemData != null &&
+                                i.InventoryItemData.PokemonData != null &&
                                 i.InventoryItemData.PokemonData.Id == deltaItem.InventoryItemData.PokemonData.Id)
                             .OrderByDescending(i => i.ModifiedTimestampMs)
                             .Skip(1));
@@ -112,14 +117,14 @@ namespace POGOLib.Pokemon
                 if (deltaItem.InventoryItemData.AppliedItems != null)
                 {
                     oldItems.AddRange(
-                        InventoryItems.Where(i => i.InventoryItemData?.AppliedItems != null)
+                        InventoryItems.Where(i => i.InventoryItemData.AppliedItems != null)
                             .OrderByDescending(i => i.ModifiedTimestampMs)
                             .Skip(1));
                 }
                 if (deltaItem.InventoryItemData.EggIncubators != null)
                 {
                     oldItems.AddRange(
-                        InventoryItems.Where(i => i.InventoryItemData?.EggIncubators != null)
+                        InventoryItems.Where(i => i.InventoryItemData.EggIncubators != null)
                             .OrderByDescending(i => i.ModifiedTimestampMs)
                             .Skip(1));
                 }
@@ -128,7 +133,8 @@ namespace POGOLib.Pokemon
                     InventoryItems.Remove(oldItem);
                 }
             }
-            Update?.Invoke(this, EventArgs.Empty);
+			if(Update != null)
+            	Update.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler<EventArgs> Update;

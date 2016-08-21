@@ -5,29 +5,29 @@ namespace POGOLib.Logging
     public static class Logger
     {
 
-        public static void Debug(string message)
+		public static void Debug(string message, params string[] args)
         {
-            Output(LogLevel.Debug, message);
+			Output(LogLevel.Debug, string.Format(message, args));
         }
 
-        public static void Info(string message)
+		public static void Info(string message, params string[] args)
         {
-            Output(LogLevel.Info, message);
+			Output(LogLevel.Info, string.Format(message, args));
         }
 
-        public static void Notice(string message)
+		public static void Notice(string message, params string[] args)
         {
-            Output(LogLevel.Notice, message);
+			Output(LogLevel.Notice, string.Format(message, args));
         }
 
-        public static void Warn(string message)
+		public static void Warn(string message, params string[] args)
         {
-            Output(LogLevel.Warn, message);
+			Output(LogLevel.Warn, string.Format(message, args));
         }
 
-        public static void Error(string message)
+		public static void Error(string message, params string[] args)
         {
-            Output(LogLevel.Error, message);
+			Output(LogLevel.Error, string.Format(message, args));
         }
 
         private static void Output(LogLevel logLevel, string message)
@@ -48,7 +48,7 @@ namespace POGOLib.Logging
 
             Console.ForegroundColor = foregroundColor;
             Console.BackgroundColor = backgroundColor;
-            Console.WriteLine($"{timestamp,-10}{logLevel,-8}{message}");
+			Console.WriteLine(string.Format("{0,-10}{1,-8}{2}", timestamp, logLevel, message));
             Console.ResetColor();
         }
 
