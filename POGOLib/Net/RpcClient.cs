@@ -136,6 +136,7 @@ namespace POGOLib.Net
             }
             catch (Exception ex)
             {
+				Logger.Error ("RPC Client encountered an exception during startup: {0}", ex.Message);
                 return false;
             }
 
@@ -181,7 +182,7 @@ namespace POGOLib.Net
 				var recvCell = mapObjects.MapCells.Count;
 				var recvPoke = mapObjects.MapCells.SelectMany (c => c.CatchablePokemons).Count ();
 				var recvFort = mapObjects.MapCells.SelectMany (c => c.Forts).Count ();
-				Logger.Debug (string.Format ("Received {0} map cells, {1} pokemon, {2} forts", recvCell, recvPoke, recvFort));
+				Logger.Debug ("Received {0} map cells, {1} pokemon, {2} forts", recvCell.ToString(), recvPoke.ToString(), recvFort.ToString());
 				if (mapObjects.MapCells.Count == 0)
                 {
                     Logger.Error("We received 0 map cells, are your GPS coordinates correct?");
@@ -191,7 +192,7 @@ namespace POGOLib.Net
             }
             else
             {
-				Logger.Error(string.Format("GetMapObjects status is: '{0}'.", mapObjects.Status));
+				Logger.Error("GetMapObjects status is: '{0}'.", mapObjects.Status);
             }
         }
 
