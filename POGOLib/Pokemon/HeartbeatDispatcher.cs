@@ -8,7 +8,7 @@ namespace POGOLib.Pokemon
 {
     internal class HeartbeatDispatcher
     {
-        
+
         /// <summary>
         ///     The authenticated <see cref="Session" />.
         /// </summary>
@@ -40,7 +40,7 @@ namespace POGOLib.Pokemon
                     var maxSeconds = _session.GlobalSettings.MapSettings.GetMapObjectsMaxRefreshSeconds;
                     var minDistance = _session.GlobalSettings.MapSettings.GetMapObjectsMinDistanceMeters;
                     var lastGeoCoordinate = _session.RpcClient.LastGeoCoordinateMapObjectsRequest;
-                    var secondsSinceLast = DateTime.UtcNow.Subtract(_session.RpcClient.LastRpcRequest).Seconds;
+                    var secondsSinceLast = DateTime.UtcNow.Subtract(_session.RpcClient.LastRpcMapObjectsRequest).Seconds;
 
                     if (lastGeoCoordinate.IsUnknown)
                     {
