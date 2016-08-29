@@ -54,7 +54,7 @@ namespace POGOLib.Net
             _session = session;
             _rpcEncryption = new RpcEncryption(session);
 
-            var httpClientHandler = new HttpClientHandler
+			var httpClientHandler = new HttpClientHandler
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             };
@@ -377,39 +377,47 @@ namespace POGOLib.Net
 		public Action<Request> OnEndRPC;
 
 		private static long lastRpc = 0;
-		private const int minDiff = 800;
+		private const int minDiff = 1000;
 		private ConcurrentQueue<Request> queue = new ConcurrentQueue<Request>();
 		private ConcurrentDictionary<Request, ByteString> dict = new ConcurrentDictionary<Request, ByteString>();
-		private static Mutex m = new Mutex();
-		public async Task<ByteString> SendRemoteProcedureCall(Request request)
+		private static Semaphore m = new Semaphore(1, 1);
+		public Task<ByteString> SendRemoteProcedureCall(Request request)
 		{
-			queue.Enqueue(request);
-			m.WaitOne();
-			if (OnStartRPC != null)
+			return Task.Run(async () =>
 			{
-				OnStartRPC(request);
-			}
-			Request r;
-			while (queue.TryDequeue(out r))
-			{
-				var diff = Math.Max(0,DateTime.Now.Millisecond - lastRpc);
-				if (diff < minDiff)
+				queue.Enqueue(request);
+				var count = queue.Count;
+				if (count > 1)
 				{
-					var delay = (minDiff - diff) + (int)(new Random().NextDouble() * 0); // Add some randomness
-					await Task.Delay((int)(delay));
+					int foo = 5;
 				}
-				lastRpc = DateTime.Now.Millisecond;
-				var response = await PerformRemoteProcedureCall(r);
-				dict.GetOrAdd(r, response);
-			}
-			if (OnEndRPC != null)
-			{
-				OnEndRPC(request);
-			}
-			m.ReleaseMutex();
-			ByteString ret;
-			dict.TryRemove(request, out ret);
-			return ret;
+				m.WaitOne();
+				if (OnStartRPC != null)
+				{
+					OnStartRPC(request);
+				}
+				Request r;
+				while (queue.TryDequeue(out r))
+				{
+					var diff = Math.Max(0, DateTime.Now.Millisecond - lastRpc);
+					if (diff < minDiff)
+					{
+						var delay = (minDiff - diff) + (int)(new Random().NextDouble() * 0); // Add some randomness
+						await Task.Delay((int)(delay));
+					}
+					lastRpc = DateTime.Now.Millisecond;
+					var response = await PerformRemoteProcedureCall(r);
+					dict.GetOrAdd(r, response);
+				}
+				if (OnEndRPC != null)
+				{
+					OnEndRPC(request);
+				}
+				m.Release();
+				ByteString ret;
+				dict.TryRemove(request, out ret);
+				return ret;
+			});
 		}
 
 		private async Task<ByteString> PerformRemoteProcedureCall(Request request)
@@ -418,6 +426,7 @@ namespace POGOLib.Net
 
             using (var requestData = PrepareRequestEnvelope(requestEnvelope))
             {
+				
                 using (var response = await _httpClient.PostAsync(_requestUrl ?? Constants.ApiUrl, requestData))
                 {
 					if (!response.IsSuccessStatusCode)
@@ -440,13 +449,13 @@ namespace POGOLib.Net
                             Logger.Warn(
                                 $"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
                             await Task.Delay(TimeSpan.FromMilliseconds(Configuration.SlowServerTimeout));
-                            return await SendRemoteProcedureCall(request);
+                            return await PerformRemoteProcedureCall(request);
 
                         case 53: // New RPC url
                             if (Regex.IsMatch(responseEnvelope.ApiUrl, "pgorelease\\.nianticlabs\\.com\\/plfe\\/\\d+"))
                             {
                                 _requestUrl = $"https://{responseEnvelope.ApiUrl}/rpc";
-                                return await SendRemoteProcedureCall(request);
+                                return await PerformRemoteProcedureCall(request);
                             }
                             throw new Exception(
                                 $"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
@@ -455,7 +464,7 @@ namespace POGOLib.Net
                             Logger.Debug("Received StatusCode 102, reauthenticating.");
                             _session.AccessToken.Expire();
                             await _session.Reauthenticate();
-                            return await SendRemoteProcedureCall(request);
+                            return await PerformRemoteProcedureCall(request);
 
                         default:
                             Logger.Info($"Unknown status code: {responseEnvelope.StatusCode}");
