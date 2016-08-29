@@ -91,7 +91,7 @@ namespace POGOLib.Pokemon
             var loginResponseData = JObject.Parse(loginResponseDataRaw);
             var loginResponseErrors = (JArray)loginResponseData["errors"];
 
-            throw new Exception($"Pokemon Trainer Club gave error(s): '{string.Join(",", loginResponseErrors)}'");
+            throw new PTCException(string.Join(" ", loginResponseErrors));
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace POGOLib.Pokemon
                 "access_token=(?<accessToken>.*?)&expires=(?<expires>\\d+)");
             if (!oAuthData.Success)
             {
-                throw new Exception($"Couldn't verify the OAuth login response data '{loginResponseDataRaw}'.");
+                throw new PTCException($"Couldn't verify the OAuth login response data '{loginResponseDataRaw}'.");
             }
             return new AccessToken
             {
@@ -127,5 +127,16 @@ namespace POGOLib.Pokemon
                 ProviderID = ProviderID
             };
         }
-    }
+
+		public class PTCException : Exception
+		{
+			public PTCException(string message) : base(message)
+			{
+			}
+
+			public PTCException(string message, Exception innerException) : base(message, innerException)
+			{
+			}
+		}
+	}
 }
