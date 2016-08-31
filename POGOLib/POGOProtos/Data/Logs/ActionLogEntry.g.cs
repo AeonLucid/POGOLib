@@ -25,16 +25,18 @@ namespace POGOProtos.Data.Logs {
             "CilQT0dPUHJvdG9zL0RhdGEvTG9ncy9BY3Rpb25Mb2dFbnRyeS5wcm90bxIU",
             "UE9HT1Byb3Rvcy5EYXRhLkxvZ3MaL1BPR09Qcm90b3MvRGF0YS9Mb2dzL0Nh",
             "dGNoUG9rZW1vbkxvZ0VudHJ5LnByb3RvGi1QT0dPUHJvdG9zL0RhdGEvTG9n",
-            "cy9Gb3J0U2VhcmNoTG9nRW50cnkucHJvdG8ixQEKDkFjdGlvbkxvZ0VudHJ5",
-            "EhQKDHRpbWVzdGFtcF9tcxgBIAEoAxINCgVzZmlkYRgCIAEoCBJDCg1jYXRj",
-            "aF9wb2tlbW9uGAMgASgLMiouUE9HT1Byb3Rvcy5EYXRhLkxvZ3MuQ2F0Y2hQ",
-            "b2tlbW9uTG9nRW50cnlIABI/Cgtmb3J0X3NlYXJjaBgEIAEoCzIoLlBPR09Q",
-            "cm90b3MuRGF0YS5Mb2dzLkZvcnRTZWFyY2hMb2dFbnRyeUgAQggKBkFjdGlv",
-            "bmIGcHJvdG8z"));
+            "cy9Gb3J0U2VhcmNoTG9nRW50cnkucHJvdG8aL1BPR09Qcm90b3MvRGF0YS9M",
+            "b2dzL0J1ZGR5UG9rZW1vbkxvZ0VudHJ5LnByb3RvIooCCg5BY3Rpb25Mb2dF",
+            "bnRyeRIUCgx0aW1lc3RhbXBfbXMYASABKAMSDQoFc2ZpZGEYAiABKAgSQwoN",
+            "Y2F0Y2hfcG9rZW1vbhgDIAEoCzIqLlBPR09Qcm90b3MuRGF0YS5Mb2dzLkNh",
+            "dGNoUG9rZW1vbkxvZ0VudHJ5SAASPwoLZm9ydF9zZWFyY2gYBCABKAsyKC5Q",
+            "T0dPUHJvdG9zLkRhdGEuTG9ncy5Gb3J0U2VhcmNoTG9nRW50cnlIABJDCg1i",
+            "dWRkeV9wb2tlbW9uGAUgASgLMiouUE9HT1Byb3Rvcy5EYXRhLkxvZ3MuQnVk",
+            "ZHlQb2tlbW9uTG9nRW50cnlIAEIICgZBY3Rpb25iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOProtos.Data.Logs.CatchPokemonLogEntryReflection.Descriptor, global::POGOProtos.Data.Logs.FortSearchLogEntryReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::POGOProtos.Data.Logs.CatchPokemonLogEntryReflection.Descriptor, global::POGOProtos.Data.Logs.FortSearchLogEntryReflection.Descriptor, global::POGOProtos.Data.Logs.BuddyPokemonLogEntryReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Data.Logs.ActionLogEntry), global::POGOProtos.Data.Logs.ActionLogEntry.Parser, new[]{ "TimestampMs", "Sfida", "CatchPokemon", "FortSearch" }, new[]{ "Action" }, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Data.Logs.ActionLogEntry), global::POGOProtos.Data.Logs.ActionLogEntry.Parser, new[]{ "TimestampMs", "Sfida", "CatchPokemon", "FortSearch", "BuddyPokemon" }, new[]{ "Action" }, null, null)
           }));
     }
     #endregion
@@ -73,6 +75,9 @@ namespace POGOProtos.Data.Logs {
           break;
         case ActionOneofCase.FortSearch:
           FortSearch = other.FortSearch.Clone();
+          break;
+        case ActionOneofCase.BuddyPokemon:
+          BuddyPokemon = other.BuddyPokemon.Clone();
           break;
       }
 
@@ -127,12 +132,24 @@ namespace POGOProtos.Data.Logs {
       }
     }
 
+    /// <summary>Field number for the "buddy_pokemon" field.</summary>
+    public const int BuddyPokemonFieldNumber = 5;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::POGOProtos.Data.Logs.BuddyPokemonLogEntry BuddyPokemon {
+      get { return actionCase_ == ActionOneofCase.BuddyPokemon ? (global::POGOProtos.Data.Logs.BuddyPokemonLogEntry) action_ : null; }
+      set {
+        action_ = value;
+        actionCase_ = value == null ? ActionOneofCase.None : ActionOneofCase.BuddyPokemon;
+      }
+    }
+
     private object action_;
     /// <summary>Enum of possible cases for the "Action" oneof.</summary>
     public enum ActionOneofCase {
       None = 0,
       CatchPokemon = 3,
       FortSearch = 4,
+      BuddyPokemon = 5,
     }
     private ActionOneofCase actionCase_ = ActionOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -163,6 +180,7 @@ namespace POGOProtos.Data.Logs {
       if (Sfida != other.Sfida) return false;
       if (!object.Equals(CatchPokemon, other.CatchPokemon)) return false;
       if (!object.Equals(FortSearch, other.FortSearch)) return false;
+      if (!object.Equals(BuddyPokemon, other.BuddyPokemon)) return false;
       if (ActionCase != other.ActionCase) return false;
       return true;
     }
@@ -174,6 +192,7 @@ namespace POGOProtos.Data.Logs {
       if (Sfida != false) hash ^= Sfida.GetHashCode();
       if (actionCase_ == ActionOneofCase.CatchPokemon) hash ^= CatchPokemon.GetHashCode();
       if (actionCase_ == ActionOneofCase.FortSearch) hash ^= FortSearch.GetHashCode();
+      if (actionCase_ == ActionOneofCase.BuddyPokemon) hash ^= BuddyPokemon.GetHashCode();
       hash ^= (int) actionCase_;
       return hash;
     }
@@ -201,6 +220,10 @@ namespace POGOProtos.Data.Logs {
         output.WriteRawTag(34);
         output.WriteMessage(FortSearch);
       }
+      if (actionCase_ == ActionOneofCase.BuddyPokemon) {
+        output.WriteRawTag(42);
+        output.WriteMessage(BuddyPokemon);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -217,6 +240,9 @@ namespace POGOProtos.Data.Logs {
       }
       if (actionCase_ == ActionOneofCase.FortSearch) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(FortSearch);
+      }
+      if (actionCase_ == ActionOneofCase.BuddyPokemon) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(BuddyPokemon);
       }
       return size;
     }
@@ -238,6 +264,9 @@ namespace POGOProtos.Data.Logs {
           break;
         case ActionOneofCase.FortSearch:
           FortSearch = other.FortSearch;
+          break;
+        case ActionOneofCase.BuddyPokemon:
+          BuddyPokemon = other.BuddyPokemon;
           break;
       }
 
@@ -275,6 +304,15 @@ namespace POGOProtos.Data.Logs {
             }
             input.ReadMessage(subBuilder);
             FortSearch = subBuilder;
+            break;
+          }
+          case 42: {
+            global::POGOProtos.Data.Logs.BuddyPokemonLogEntry subBuilder = new global::POGOProtos.Data.Logs.BuddyPokemonLogEntry();
+            if (actionCase_ == ActionOneofCase.BuddyPokemon) {
+              subBuilder.MergeFrom(BuddyPokemon);
+            }
+            input.ReadMessage(subBuilder);
+            BuddyPokemon = subBuilder;
             break;
           }
         }

@@ -25,7 +25,7 @@ namespace POGOProtos.Data {
             "CiFQT0dPUHJvdG9zL0RhdGEvUG9rZW1vbkRhdGEucHJvdG8SD1BPR09Qcm90",
             "b3MuRGF0YRogUE9HT1Byb3Rvcy9FbnVtcy9Qb2tlbW9uSWQucHJvdG8aIlBP",
             "R09Qcm90b3MvRW51bXMvUG9rZW1vbk1vdmUucHJvdG8aJlBPR09Qcm90b3Mv",
-            "SW52ZW50b3J5L0l0ZW0vSXRlbUlkLnByb3RvIpgGCgtQb2tlbW9uRGF0YRIK",
+            "SW52ZW50b3J5L0l0ZW0vSXRlbUlkLnByb3RvIrUGCgtQb2tlbW9uRGF0YRIK",
             "CgJpZBgBIAEoBhIvCgpwb2tlbW9uX2lkGAIgASgOMhsuUE9HT1Byb3Rvcy5F",
             "bnVtcy5Qb2tlbW9uSWQSCgoCY3AYAyABKAUSDwoHc3RhbWluYRgEIAEoBRIT",
             "CgtzdGFtaW5hX21heBgFIAEoBRItCgZtb3ZlXzEYBiABKA4yHS5QT0dPUHJv",
@@ -43,11 +43,12 @@ namespace POGOProtos.Data {
             "cl9pZBgZIAEoCRIYChBjcmVhdGlvbl90aW1lX21zGBogASgEEhQKDG51bV91",
             "cGdyYWRlcxgbIAEoBRIgChhhZGRpdGlvbmFsX2NwX211bHRpcGxpZXIYHCAB",
             "KAISEAoIZmF2b3JpdGUYHSABKAUSEAoIbmlja25hbWUYHiABKAkSEQoJZnJv",
-            "bV9mb3J0GB8gASgFYgZwcm90bzM="));
+            "bV9mb3J0GB8gASgFEhsKE2J1ZGR5X2NhbmR5X2F3YXJkZWQYICABKAViBnBy",
+            "b3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::POGOProtos.Enums.PokemonIdReflection.Descriptor, global::POGOProtos.Enums.PokemonMoveReflection.Descriptor, global::POGOProtos.Inventory.Item.ItemIdReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Data.PokemonData), global::POGOProtos.Data.PokemonData.Parser, new[]{ "Id", "PokemonId", "Cp", "Stamina", "StaminaMax", "Move1", "Move2", "DeployedFortId", "OwnerName", "IsEgg", "EggKmWalkedTarget", "EggKmWalkedStart", "Origin", "HeightM", "WeightKg", "IndividualAttack", "IndividualDefense", "IndividualStamina", "CpMultiplier", "Pokeball", "CapturedCellId", "BattlesAttacked", "BattlesDefended", "EggIncubatorId", "CreationTimeMs", "NumUpgrades", "AdditionalCpMultiplier", "Favorite", "Nickname", "FromFort" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Data.PokemonData), global::POGOProtos.Data.PokemonData.Parser, new[]{ "Id", "PokemonId", "Cp", "Stamina", "StaminaMax", "Move1", "Move2", "DeployedFortId", "OwnerName", "IsEgg", "EggKmWalkedTarget", "EggKmWalkedStart", "Origin", "HeightM", "WeightKg", "IndividualAttack", "IndividualDefense", "IndividualStamina", "CpMultiplier", "Pokeball", "CapturedCellId", "BattlesAttacked", "BattlesDefended", "EggIncubatorId", "CreationTimeMs", "NumUpgrades", "AdditionalCpMultiplier", "Favorite", "Nickname", "FromFort", "BuddyCandyAwarded" }, null, null, null)
           }));
     }
     #endregion
@@ -108,6 +109,7 @@ namespace POGOProtos.Data {
       favorite_ = other.favorite_;
       nickname_ = other.nickname_;
       fromFort_ = other.fromFort_;
+      buddyCandyAwarded_ = other.buddyCandyAwarded_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -445,6 +447,17 @@ namespace POGOProtos.Data {
       }
     }
 
+    /// <summary>Field number for the "buddy_candy_awarded" field.</summary>
+    public const int BuddyCandyAwardedFieldNumber = 32;
+    private int buddyCandyAwarded_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int BuddyCandyAwarded {
+      get { return buddyCandyAwarded_; }
+      set {
+        buddyCandyAwarded_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as PokemonData);
@@ -488,6 +501,7 @@ namespace POGOProtos.Data {
       if (Favorite != other.Favorite) return false;
       if (Nickname != other.Nickname) return false;
       if (FromFort != other.FromFort) return false;
+      if (BuddyCandyAwarded != other.BuddyCandyAwarded) return false;
       return true;
     }
 
@@ -524,6 +538,7 @@ namespace POGOProtos.Data {
       if (Favorite != 0) hash ^= Favorite.GetHashCode();
       if (Nickname.Length != 0) hash ^= Nickname.GetHashCode();
       if (FromFort != 0) hash ^= FromFort.GetHashCode();
+      if (BuddyCandyAwarded != 0) hash ^= BuddyCandyAwarded.GetHashCode();
       return hash;
     }
 
@@ -654,6 +669,10 @@ namespace POGOProtos.Data {
         output.WriteRawTag(248, 1);
         output.WriteInt32(FromFort);
       }
+      if (BuddyCandyAwarded != 0) {
+        output.WriteRawTag(128, 2);
+        output.WriteInt32(BuddyCandyAwarded);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -748,6 +767,9 @@ namespace POGOProtos.Data {
       }
       if (FromFort != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(FromFort);
+      }
+      if (BuddyCandyAwarded != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(BuddyCandyAwarded);
       }
       return size;
     }
@@ -846,6 +868,9 @@ namespace POGOProtos.Data {
       }
       if (other.FromFort != 0) {
         FromFort = other.FromFort;
+      }
+      if (other.BuddyCandyAwarded != 0) {
+        BuddyCandyAwarded = other.BuddyCandyAwarded;
       }
     }
 
@@ -975,6 +1000,10 @@ namespace POGOProtos.Data {
           }
           case 248: {
             FromFort = input.ReadInt32();
+            break;
+          }
+          case 256: {
+            BuddyCandyAwarded = input.ReadInt32();
             break;
           }
         }

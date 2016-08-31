@@ -318,8 +318,8 @@ namespace POGOLib.Net
                 RequestId = GetNextRequestId(),
                 Latitude = _session.Player.Coordinate.Latitude,
                 Longitude = _session.Player.Coordinate.Longitude,
-                Altitude = _session.Player.Coordinate.Altitude,
-                Unknown12 = 123, // TODO: Figure this out.
+				Accuracy = _session.Player.Coordinate.HorizontalAccuracy,
+				MsSinceLastLocationfix = 123, // TODO: Figure this out.
                 Requests = {GetDefaultRequests()}
             };
             requestEnvelope.Requests.Insert(0, request);
@@ -346,7 +346,7 @@ namespace POGOLib.Net
                 requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
             }
 
-            requestEnvelope.Unknown6 = _rpcEncryption.GenerateSignature(requestEnvelope);
+			requestEnvelope.PlatformRequests.Add(_rpcEncryption.GenerateSignature(requestEnvelope));
 
             return requestEnvelope;
         }
@@ -441,17 +441,17 @@ namespace POGOLib.Net
 
 					switch (responseEnvelope.StatusCode)
                     {
-                        case 1:
+                        case ResponseEnvelope.Types.StatusCode.Ok:
                             // Success!?
                             break;
 
-                        case 52: // Slow servers? TODO: Throttling (?)
+                        case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest: // Slow servers? TODO: Throttling (?)
                             Logger.Warn(
                                 $"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
                             await Task.Delay(TimeSpan.FromMilliseconds(Configuration.SlowServerTimeout));
                             return await PerformRemoteProcedureCall(request);
 
-                        case 53: // New RPC url
+                        case ResponseEnvelope.Types.StatusCode.Redirect: // New RPC url
                             if (Regex.IsMatch(responseEnvelope.ApiUrl, "pgorelease\\.nianticlabs\\.com\\/plfe\\/\\d+"))
                             {
                                 _requestUrl = $"https://{responseEnvelope.ApiUrl}/rpc";
@@ -460,7 +460,7 @@ namespace POGOLib.Net
                             throw new Exception(
                                 $"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
 
-                        case 102: // Invalid auth
+                        case ResponseEnvelope.Types.StatusCode.InvalidAuthToken: // Invalid auth
                             Logger.Debug("Received StatusCode 102, reauthenticating.");
                             _session.AccessToken.Expire();
                             await _session.Reauthenticate();
