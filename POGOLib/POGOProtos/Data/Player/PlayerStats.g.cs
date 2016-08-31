@@ -36,7 +36,7 @@ namespace POGOProtos.Data.Player {
             "aW5nX3dvbhgRIAEoBRIdChViYXR0bGVfdHJhaW5pbmdfdG90YWwYEiABKAUS",
             "HQoVcHJlc3RpZ2VfcmFpc2VkX3RvdGFsGBMgASgFEh4KFnByZXN0aWdlX2Ry",
             "b3BwZWRfdG90YWwYFCABKAUSGAoQcG9rZW1vbl9kZXBsb3llZBgVIAEoBRIe",
-            "ChZwb2tlbW9uX2NhdWdodF9ieV90eXBlGBYgASgMEhwKFHNtYWxsX3JhdHRh",
+            "ChZwb2tlbW9uX2NhdWdodF9ieV90eXBlGBYgAygFEhwKFHNtYWxsX3JhdHRh",
             "dGFfY2F1Z2h0GBcgASgFYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
@@ -93,7 +93,7 @@ namespace POGOProtos.Data.Player {
       prestigeRaisedTotal_ = other.prestigeRaisedTotal_;
       prestigeDroppedTotal_ = other.prestigeDroppedTotal_;
       pokemonDeployed_ = other.pokemonDeployed_;
-      pokemonCaughtByType_ = other.pokemonCaughtByType_;
+      pokemonCaughtByType_ = other.pokemonCaughtByType_.Clone();
       smallRattataCaught_ = other.smallRattataCaught_;
     }
 
@@ -335,16 +335,12 @@ namespace POGOProtos.Data.Player {
 
     /// <summary>Field number for the "pokemon_caught_by_type" field.</summary>
     public const int PokemonCaughtByTypeFieldNumber = 22;
-    private pb::ByteString pokemonCaughtByType_ = pb::ByteString.Empty;
-    /// <summary>
-    ///  TODO: repeated PokemonType ??
-    /// </summary>
+    private static readonly pb::FieldCodec<int> _repeated_pokemonCaughtByType_codec
+        = pb::FieldCodec.ForInt32(178);
+    private readonly pbc::RepeatedField<int> pokemonCaughtByType_ = new pbc::RepeatedField<int>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pb::ByteString PokemonCaughtByType {
+    public pbc::RepeatedField<int> PokemonCaughtByType {
       get { return pokemonCaughtByType_; }
-      set {
-        pokemonCaughtByType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
     }
 
     /// <summary>Field number for the "small_rattata_caught" field.</summary>
@@ -392,7 +388,7 @@ namespace POGOProtos.Data.Player {
       if (PrestigeRaisedTotal != other.PrestigeRaisedTotal) return false;
       if (PrestigeDroppedTotal != other.PrestigeDroppedTotal) return false;
       if (PokemonDeployed != other.PokemonDeployed) return false;
-      if (PokemonCaughtByType != other.PokemonCaughtByType) return false;
+      if(!pokemonCaughtByType_.Equals(other.pokemonCaughtByType_)) return false;
       if (SmallRattataCaught != other.SmallRattataCaught) return false;
       return true;
     }
@@ -421,7 +417,7 @@ namespace POGOProtos.Data.Player {
       if (PrestigeRaisedTotal != 0) hash ^= PrestigeRaisedTotal.GetHashCode();
       if (PrestigeDroppedTotal != 0) hash ^= PrestigeDroppedTotal.GetHashCode();
       if (PokemonDeployed != 0) hash ^= PokemonDeployed.GetHashCode();
-      if (PokemonCaughtByType.Length != 0) hash ^= PokemonCaughtByType.GetHashCode();
+      hash ^= pokemonCaughtByType_.GetHashCode();
       if (SmallRattataCaught != 0) hash ^= SmallRattataCaught.GetHashCode();
       return hash;
     }
@@ -517,10 +513,7 @@ namespace POGOProtos.Data.Player {
         output.WriteRawTag(168, 1);
         output.WriteInt32(PokemonDeployed);
       }
-      if (PokemonCaughtByType.Length != 0) {
-        output.WriteRawTag(178, 1);
-        output.WriteBytes(PokemonCaughtByType);
-      }
+      pokemonCaughtByType_.WriteTo(output, _repeated_pokemonCaughtByType_codec);
       if (SmallRattataCaught != 0) {
         output.WriteRawTag(184, 1);
         output.WriteInt32(SmallRattataCaught);
@@ -593,9 +586,7 @@ namespace POGOProtos.Data.Player {
       if (PokemonDeployed != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(PokemonDeployed);
       }
-      if (PokemonCaughtByType.Length != 0) {
-        size += 2 + pb::CodedOutputStream.ComputeBytesSize(PokemonCaughtByType);
-      }
+      size += pokemonCaughtByType_.CalculateSize(_repeated_pokemonCaughtByType_codec);
       if (SmallRattataCaught != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(SmallRattataCaught);
       }
@@ -670,9 +661,7 @@ namespace POGOProtos.Data.Player {
       if (other.PokemonDeployed != 0) {
         PokemonDeployed = other.PokemonDeployed;
       }
-      if (other.PokemonCaughtByType.Length != 0) {
-        PokemonCaughtByType = other.PokemonCaughtByType;
-      }
+      pokemonCaughtByType_.Add(other.pokemonCaughtByType_);
       if (other.SmallRattataCaught != 0) {
         SmallRattataCaught = other.SmallRattataCaught;
       }
@@ -770,8 +759,9 @@ namespace POGOProtos.Data.Player {
             PokemonDeployed = input.ReadInt32();
             break;
           }
-          case 178: {
-            PokemonCaughtByType = input.ReadBytes();
+          case 178:
+          case 176: {
+            pokemonCaughtByType_.AddEntriesFrom(input, _repeated_pokemonCaughtByType_codec);
             break;
           }
           case 184: {

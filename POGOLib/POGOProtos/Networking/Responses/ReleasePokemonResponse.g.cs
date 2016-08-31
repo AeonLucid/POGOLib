@@ -24,12 +24,12 @@ namespace POGOProtos.Networking.Responses {
           string.Concat(
             "CjxQT0dPUHJvdG9zL05ldHdvcmtpbmcvUmVzcG9uc2VzL1JlbGVhc2VQb2tl",
             "bW9uUmVzcG9uc2UucHJvdG8SH1BPR09Qcm90b3MuTmV0d29ya2luZy5SZXNw",
-            "b25zZXMi3QEKFlJlbGVhc2VQb2tlbW9uUmVzcG9uc2USTgoGcmVzdWx0GAEg",
+            "b25zZXMi+QEKFlJlbGVhc2VQb2tlbW9uUmVzcG9uc2USTgoGcmVzdWx0GAEg",
             "ASgOMj4uUE9HT1Byb3Rvcy5OZXR3b3JraW5nLlJlc3BvbnNlcy5SZWxlYXNl",
             "UG9rZW1vblJlc3BvbnNlLlJlc3VsdBIVCg1jYW5keV9hd2FyZGVkGAIgASgF",
-            "IlwKBlJlc3VsdBIJCgVVTlNFVBAAEgsKB1NVQ0NFU1MQARIUChBQT0tFTU9O",
+            "IngKBlJlc3VsdBIJCgVVTlNFVBAAEgsKB1NVQ0NFU1MQARIUChBQT0tFTU9O",
             "X0RFUExPWUVEEAISCgoGRkFJTEVEEAMSGAoURVJST1JfUE9LRU1PTl9JU19F",
-            "R0cQBGIGcHJvdG8z"));
+            "R0cQBBIaChZFUlJPUl9QT0tFTU9OX0lTX0JVRERZEAViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -193,6 +193,7 @@ namespace POGOProtos.Networking.Responses {
         [pbr::OriginalName("POKEMON_DEPLOYED")] PokemonDeployed = 2,
         [pbr::OriginalName("FAILED")] Failed = 3,
         [pbr::OriginalName("ERROR_POKEMON_IS_EGG")] ErrorPokemonIsEgg = 4,
+        [pbr::OriginalName("ERROR_POKEMON_IS_BUDDY")] ErrorPokemonIsBuddy = 5,
       }
 
     }

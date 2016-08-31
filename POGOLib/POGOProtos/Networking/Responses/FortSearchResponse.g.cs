@@ -25,7 +25,7 @@ namespace POGOProtos.Networking.Responses {
             "CjhQT0dPUHJvdG9zL05ldHdvcmtpbmcvUmVzcG9uc2VzL0ZvcnRTZWFyY2hS",
             "ZXNwb25zZS5wcm90bxIfUE9HT1Byb3Rvcy5OZXR3b3JraW5nLlJlc3BvbnNl",
             "cxohUE9HT1Byb3Rvcy9EYXRhL1Bva2Vtb25EYXRhLnByb3RvGilQT0dPUHJv",
-            "dG9zL0ludmVudG9yeS9JdGVtL0l0ZW1Bd2FyZC5wcm90byK7AwoSRm9ydFNl",
+            "dG9zL0ludmVudG9yeS9JdGVtL0l0ZW1Bd2FyZC5wcm90byLWAwoSRm9ydFNl",
             "YXJjaFJlc3BvbnNlEkoKBnJlc3VsdBgBIAEoDjI6LlBPR09Qcm90b3MuTmV0",
             "d29ya2luZy5SZXNwb25zZXMuRm9ydFNlYXJjaFJlc3BvbnNlLlJlc3VsdBI7",
             "Cg1pdGVtc19hd2FyZGVkGAIgAygLMiQuUE9HT1Byb3Rvcy5JbnZlbnRvcnku",
@@ -33,9 +33,10 @@ namespace POGOProtos.Networking.Responses {
             "b25fZGF0YV9lZ2cYBCABKAsyHC5QT0dPUHJvdG9zLkRhdGEuUG9rZW1vbkRh",
             "dGESGgoSZXhwZXJpZW5jZV9hd2FyZGVkGAUgASgFEiYKHmNvb2xkb3duX2Nv",
             "bXBsZXRlX3RpbWVzdGFtcF9tcxgGIAEoAxIiChpjaGFpbl9oYWNrX3NlcXVl",
-            "bmNlX251bWJlchgHIAEoBSJmCgZSZXN1bHQSEQoNTk9fUkVTVUxUX1NFVBAA",
-            "EgsKB1NVQ0NFU1MQARIQCgxPVVRfT0ZfUkFOR0UQAhIWChJJTl9DT09MRE9X",
-            "Tl9QRVJJT0QQAxISCg5JTlZFTlRPUllfRlVMTBAEYgZwcm90bzM="));
+            "bmNlX251bWJlchgHIAEoBSKAAQoGUmVzdWx0EhEKDU5PX1JFU1VMVF9TRVQQ",
+            "ABILCgdTVUNDRVNTEAESEAoMT1VUX09GX1JBTkdFEAISFgoSSU5fQ09PTERP",
+            "V05fUEVSSU9EEAMSEgoOSU5WRU5UT1JZX0ZVTEwQBBIYChRFWENFRURFRF9E",
+            "QUlMWV9MSU1JVBAFYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::POGOProtos.Data.PokemonDataReflection.Descriptor, global::POGOProtos.Inventory.Item.ItemAwardReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -337,6 +338,7 @@ namespace POGOProtos.Networking.Responses {
         [pbr::OriginalName("OUT_OF_RANGE")] OutOfRange = 2,
         [pbr::OriginalName("IN_COOLDOWN_PERIOD")] InCooldownPeriod = 3,
         [pbr::OriginalName("INVENTORY_FULL")] InventoryFull = 4,
+        [pbr::OriginalName("EXCEEDED_DAILY_LIMIT")] ExceededDailyLimit = 5,
       }
 
     }

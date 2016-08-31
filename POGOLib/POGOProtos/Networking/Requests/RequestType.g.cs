@@ -23,7 +23,7 @@ namespace POGOProtos.Networking.Requests {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CjBQT0dPUHJvdG9zL05ldHdvcmtpbmcvUmVxdWVzdHMvUmVxdWVzdFR5cGUu",
-            "cHJvdG8SHlBPR09Qcm90b3MuTmV0d29ya2luZy5SZXF1ZXN0cyrBDAoLUmVx",
+            "cHJvdG8SHlBPR09Qcm90b3MuTmV0d29ya2luZy5SZXF1ZXN0cyqdDQoLUmVx",
             "dWVzdFR5cGUSEAoMTUVUSE9EX1VOU0VUEAASEQoNUExBWUVSX1VQREFURRAB",
             "Eg4KCkdFVF9QTEFZRVIQAhIRCg1HRVRfSU5WRU5UT1JZEAQSFQoRRE9XTkxP",
             "QURfU0VUVElOR1MQBRIbChdET1dOTE9BRF9JVEVNX1RFTVBMQVRFUxAGEiIK",
@@ -49,17 +49,19 @@ namespace POGOProtos.Networking.Requests {
             "SVNLX0VOQ09VTlRFUhCRARIhChxDT0xMRUNUX0RBSUxZX0RFRkVOREVSX0JP",
             "TlVTEJIBEhQKD1VQR1JBREVfUE9LRU1PThCTARIZChRTRVRfRkFWT1JJVEVf",
             "UE9LRU1PThCUARIVChBOSUNLTkFNRV9QT0tFTU9OEJUBEhAKC0VRVUlQX0JB",
-            "REdFEJYBEhkKFFNFVF9DT05UQUNUX1NFVFRJTkdTEJcBEhUKEEdFVF9BU1NF",
-            "VF9ESUdFU1QQrAISFgoRR0VUX0RPV05MT0FEX1VSTFMQrQISHAoXR0VUX1NV",
-            "R0dFU1RFRF9DT0RFTkFNRVMQkQMSHQoYQ0hFQ0tfQ09ERU5BTUVfQVZBSUxB",
-            "QkxFEJIDEhMKDkNMQUlNX0NPREVOQU1FEJMDEg8KClNFVF9BVkFUQVIQlAMS",
-            "FAoPU0VUX1BMQVlFUl9URUFNEJUDEhsKFk1BUktfVFVUT1JJQUxfQ09NUExF",
-            "VEUQlgMSFgoRTE9BRF9TUEFXTl9QT0lOVFMQ9AMSCQoERUNITxCaBRIbChZE",
-            "RUJVR19VUERBVEVfSU5WRU5UT1JZELwFEhgKE0RFQlVHX0RFTEVURV9QTEFZ",
-            "RVIQvQUSFwoSU0ZJREFfUkVHSVNUUkFUSU9OEKAGEhUKEFNGSURBX0FDVElP",
-            "Tl9MT0cQoQYSGAoTU0ZJREFfQ0VSVElGSUNBVElPThCiBhIRCgxTRklEQV9V",
-            "UERBVEUQowYSEQoMU0ZJREFfQUNUSU9OEKQGEhEKDFNGSURBX0RPV1NFUhCl",
-            "BhISCg1TRklEQV9DQVBUVVJFEKYGYgZwcm90bzM="));
+            "REdFEJYBEhkKFFNFVF9DT05UQUNUX1NFVFRJTkdTEJcBEhYKEVNFVF9CVURE",
+            "WV9QT0tFTU9OEJgBEhUKEEdFVF9CVUREWV9XQUxLRUQQmQESFQoQR0VUX0FT",
+            "U0VUX0RJR0VTVBCsAhIWChFHRVRfRE9XTkxPQURfVVJMUxCtAhIcChdHRVRf",
+            "U1VHR0VTVEVEX0NPREVOQU1FUxCRAxIdChhDSEVDS19DT0RFTkFNRV9BVkFJ",
+            "TEFCTEUQkgMSEwoOQ0xBSU1fQ09ERU5BTUUQkwMSDwoKU0VUX0FWQVRBUhCU",
+            "AxIUCg9TRVRfUExBWUVSX1RFQU0QlQMSGwoWTUFSS19UVVRPUklBTF9DT01Q",
+            "TEVURRCWAxIWChFMT0FEX1NQQVdOX1BPSU5UUxD0AxIUCg9DSEVDS19DSEFM",
+            "TEVOR0UQ2AQSFQoQVkVSSUZZX0NIQUxMRU5HRRDZBBIJCgRFQ0hPEJoFEhsK",
+            "FkRFQlVHX1VQREFURV9JTlZFTlRPUlkQvAUSGAoTREVCVUdfREVMRVRFX1BM",
+            "QVlFUhC9BRIXChJTRklEQV9SRUdJU1RSQVRJT04QoAYSFQoQU0ZJREFfQUNU",
+            "SU9OX0xPRxChBhIYChNTRklEQV9DRVJUSUZJQ0FUSU9OEKIGEhEKDFNGSURB",
+            "X1VQREFURRCjBhIRCgxTRklEQV9BQ1RJT04QpAYSEQoMU0ZJREFfRE9XU0VS",
+            "EKUGEhIKDVNGSURBX0NBUFRVUkUQpgZiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::POGOProtos.Networking.Requests.RequestType), }, null));
@@ -277,6 +279,8 @@ namespace POGOProtos.Networking.Requests {
     ///  Implemented [R &amp; M]
     /// </summary>
     [pbr::OriginalName("SET_CONTACT_SETTINGS")] SetContactSettings = 151,
+    [pbr::OriginalName("SET_BUDDY_POKEMON")] SetBuddyPokemon = 152,
+    [pbr::OriginalName("GET_BUDDY_WALKED")] GetBuddyWalked = 153,
     /// <summary>
     ///  Implemented [R &amp; M]
     /// </summary>
@@ -313,6 +317,8 @@ namespace POGOProtos.Networking.Requests {
     ///  Can't find this one
     /// </summary>
     [pbr::OriginalName("LOAD_SPAWN_POINTS")] LoadSpawnPoints = 500,
+    [pbr::OriginalName("CHECK_CHALLENGE")] CheckChallenge = 600,
+    [pbr::OriginalName("VERIFY_CHALLENGE")] VerifyChallenge = 601,
     /// <summary>
     ///  Implemented [R &amp; M]
     /// </summary>

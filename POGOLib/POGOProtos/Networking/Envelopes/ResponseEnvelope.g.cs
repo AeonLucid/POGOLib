@@ -25,17 +25,26 @@ namespace POGOProtos.Networking.Envelopes {
             "CjZQT0dPUHJvdG9zL05ldHdvcmtpbmcvRW52ZWxvcGVzL1Jlc3BvbnNlRW52",
             "ZWxvcGUucHJvdG8SH1BPR09Qcm90b3MuTmV0d29ya2luZy5FbnZlbG9wZXMa",
             "MFBPR09Qcm90b3MvTmV0d29ya2luZy9FbnZlbG9wZXMvQXV0aFRpY2tldC5w",
-            "cm90bxo2UE9HT1Byb3Rvcy9OZXR3b3JraW5nL0VudmVsb3Blcy9Vbmtub3du",
-            "NlJlc3BvbnNlLnByb3RvIvMBChBSZXNwb25zZUVudmVsb3BlEhMKC3N0YXR1",
-            "c19jb2RlGAEgASgFEhIKCnJlcXVlc3RfaWQYAiABKAQSDwoHYXBpX3VybBgD",
-            "IAEoCRJDCgh1bmtub3duNhgGIAMoCzIxLlBPR09Qcm90b3MuTmV0d29ya2lu",
-            "Zy5FbnZlbG9wZXMuVW5rbm93bjZSZXNwb25zZRJACgthdXRoX3RpY2tldBgH",
-            "IAEoCzIrLlBPR09Qcm90b3MuTmV0d29ya2luZy5FbnZlbG9wZXMuQXV0aFRp",
-            "Y2tldBIPCgdyZXR1cm5zGGQgAygMEg0KBWVycm9yGGUgASgJYgZwcm90bzM="));
+            "cm90bxo4UE9HT1Byb3Rvcy9OZXR3b3JraW5nL1BsYXRmb3JtL1BsYXRmb3Jt",
+            "UmVxdWVzdFR5cGUucHJvdG8i9gQKEFJlc3BvbnNlRW52ZWxvcGUSUQoLc3Rh",
+            "dHVzX2NvZGUYASABKA4yPC5QT0dPUHJvdG9zLk5ldHdvcmtpbmcuRW52ZWxv",
+            "cGVzLlJlc3BvbnNlRW52ZWxvcGUuU3RhdHVzQ29kZRISCgpyZXF1ZXN0X2lk",
+            "GAIgASgEEg8KB2FwaV91cmwYAyABKAkSXAoQcGxhdGZvcm1fcmV0dXJucxgG",
+            "IAMoCzJCLlBPR09Qcm90b3MuTmV0d29ya2luZy5FbnZlbG9wZXMuUmVzcG9u",
+            "c2VFbnZlbG9wZS5QbGF0Zm9ybVJlc3BvbnNlEkAKC2F1dGhfdGlja2V0GAcg",
+            "ASgLMisuUE9HT1Byb3Rvcy5OZXR3b3JraW5nLkVudmVsb3Blcy5BdXRoVGlj",
+            "a2V0Eg8KB3JldHVybnMYZCADKAwSDQoFZXJyb3IYZSABKAkaZwoQUGxhdGZv",
+            "cm1SZXNwb25zZRJBCgR0eXBlGAEgASgOMjMuUE9HT1Byb3Rvcy5OZXR3b3Jr",
+            "aW5nLlBsYXRmb3JtLlBsYXRmb3JtUmVxdWVzdFR5cGUSEAoIcmVzcG9uc2UY",
+            "AiABKAwiwAEKClN0YXR1c0NvZGUSCwoHVU5LTk9XThAAEgYKAk9LEAESGgoW",
+            "T0tfUlBDX1VSTF9JTl9SRVNQT05TRRACEg8KC0JBRF9SRVFVRVNUEAMSEwoP",
+            "SU5WQUxJRF9SRVFVRVNUEDMSHAoYSU5WQUxJRF9QTEFURk9STV9SRVFVRVNU",
+            "EDQSDAoIUkVESVJFQ1QQNRIXChNTRVNTSU9OX0lOVkFMSURBVEVEEGQSFgoS",
+            "SU5WQUxJRF9BVVRIX1RPS0VOEGZiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::POGOProtos.Networking.Envelopes.AuthTicketReflection.Descriptor, global::POGOProtos.Networking.Envelopes.Unknown6ResponseReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::POGOProtos.Networking.Envelopes.AuthTicketReflection.Descriptor, global::POGOProtos.Networking.Platform.PlatformRequestTypeReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Networking.Envelopes.ResponseEnvelope), global::POGOProtos.Networking.Envelopes.ResponseEnvelope.Parser, new[]{ "StatusCode", "RequestId", "ApiUrl", "Unknown6", "AuthTicket", "Returns", "Error" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Networking.Envelopes.ResponseEnvelope), global::POGOProtos.Networking.Envelopes.ResponseEnvelope.Parser, new[]{ "StatusCode", "RequestId", "ApiUrl", "PlatformReturns", "AuthTicket", "Returns", "Error" }, null, new[]{ typeof(global::POGOProtos.Networking.Envelopes.ResponseEnvelope.Types.StatusCode) }, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Networking.Envelopes.ResponseEnvelope.Types.PlatformResponse), global::POGOProtos.Networking.Envelopes.ResponseEnvelope.Types.PlatformResponse.Parser, new[]{ "Type", "Response" }, null, null, null)})
           }));
     }
     #endregion
@@ -69,7 +78,7 @@ namespace POGOProtos.Networking.Envelopes {
       statusCode_ = other.statusCode_;
       requestId_ = other.requestId_;
       apiUrl_ = other.apiUrl_;
-      unknown6_ = other.unknown6_.Clone();
+      platformReturns_ = other.platformReturns_.Clone();
       AuthTicket = other.authTicket_ != null ? other.AuthTicket.Clone() : null;
       returns_ = other.returns_.Clone();
       error_ = other.error_;
@@ -82,9 +91,9 @@ namespace POGOProtos.Networking.Envelopes {
 
     /// <summary>Field number for the "status_code" field.</summary>
     public const int StatusCodeFieldNumber = 1;
-    private int statusCode_;
+    private global::POGOProtos.Networking.Envelopes.ResponseEnvelope.Types.StatusCode statusCode_ = 0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int StatusCode {
+    public global::POGOProtos.Networking.Envelopes.ResponseEnvelope.Types.StatusCode StatusCode {
       get { return statusCode_; }
       set {
         statusCode_ = value;
@@ -113,14 +122,14 @@ namespace POGOProtos.Networking.Envelopes {
       }
     }
 
-    /// <summary>Field number for the "unknown6" field.</summary>
-    public const int Unknown6FieldNumber = 6;
-    private static readonly pb::FieldCodec<global::POGOProtos.Networking.Envelopes.Unknown6Response> _repeated_unknown6_codec
-        = pb::FieldCodec.ForMessage(50, global::POGOProtos.Networking.Envelopes.Unknown6Response.Parser);
-    private readonly pbc::RepeatedField<global::POGOProtos.Networking.Envelopes.Unknown6Response> unknown6_ = new pbc::RepeatedField<global::POGOProtos.Networking.Envelopes.Unknown6Response>();
+    /// <summary>Field number for the "platform_returns" field.</summary>
+    public const int PlatformReturnsFieldNumber = 6;
+    private static readonly pb::FieldCodec<global::POGOProtos.Networking.Envelopes.ResponseEnvelope.Types.PlatformResponse> _repeated_platformReturns_codec
+        = pb::FieldCodec.ForMessage(50, global::POGOProtos.Networking.Envelopes.ResponseEnvelope.Types.PlatformResponse.Parser);
+    private readonly pbc::RepeatedField<global::POGOProtos.Networking.Envelopes.ResponseEnvelope.Types.PlatformResponse> platformReturns_ = new pbc::RepeatedField<global::POGOProtos.Networking.Envelopes.ResponseEnvelope.Types.PlatformResponse>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::POGOProtos.Networking.Envelopes.Unknown6Response> Unknown6 {
-      get { return unknown6_; }
+    public pbc::RepeatedField<global::POGOProtos.Networking.Envelopes.ResponseEnvelope.Types.PlatformResponse> PlatformReturns {
+      get { return platformReturns_; }
     }
 
     /// <summary>Field number for the "auth_ticket" field.</summary>
@@ -171,7 +180,7 @@ namespace POGOProtos.Networking.Envelopes {
       if (StatusCode != other.StatusCode) return false;
       if (RequestId != other.RequestId) return false;
       if (ApiUrl != other.ApiUrl) return false;
-      if(!unknown6_.Equals(other.unknown6_)) return false;
+      if(!platformReturns_.Equals(other.platformReturns_)) return false;
       if (!object.Equals(AuthTicket, other.AuthTicket)) return false;
       if(!returns_.Equals(other.returns_)) return false;
       if (Error != other.Error) return false;
@@ -184,7 +193,7 @@ namespace POGOProtos.Networking.Envelopes {
       if (StatusCode != 0) hash ^= StatusCode.GetHashCode();
       if (RequestId != 0UL) hash ^= RequestId.GetHashCode();
       if (ApiUrl.Length != 0) hash ^= ApiUrl.GetHashCode();
-      hash ^= unknown6_.GetHashCode();
+      hash ^= platformReturns_.GetHashCode();
       if (authTicket_ != null) hash ^= AuthTicket.GetHashCode();
       hash ^= returns_.GetHashCode();
       if (Error.Length != 0) hash ^= Error.GetHashCode();
@@ -200,7 +209,7 @@ namespace POGOProtos.Networking.Envelopes {
     public void WriteTo(pb::CodedOutputStream output) {
       if (StatusCode != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(StatusCode);
+        output.WriteEnum((int) StatusCode);
       }
       if (RequestId != 0UL) {
         output.WriteRawTag(16);
@@ -210,7 +219,7 @@ namespace POGOProtos.Networking.Envelopes {
         output.WriteRawTag(26);
         output.WriteString(ApiUrl);
       }
-      unknown6_.WriteTo(output, _repeated_unknown6_codec);
+      platformReturns_.WriteTo(output, _repeated_platformReturns_codec);
       if (authTicket_ != null) {
         output.WriteRawTag(58);
         output.WriteMessage(AuthTicket);
@@ -226,7 +235,7 @@ namespace POGOProtos.Networking.Envelopes {
     public int CalculateSize() {
       int size = 0;
       if (StatusCode != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(StatusCode);
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) StatusCode);
       }
       if (RequestId != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(RequestId);
@@ -234,7 +243,7 @@ namespace POGOProtos.Networking.Envelopes {
       if (ApiUrl.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(ApiUrl);
       }
-      size += unknown6_.CalculateSize(_repeated_unknown6_codec);
+      size += platformReturns_.CalculateSize(_repeated_platformReturns_codec);
       if (authTicket_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(AuthTicket);
       }
@@ -259,7 +268,7 @@ namespace POGOProtos.Networking.Envelopes {
       if (other.ApiUrl.Length != 0) {
         ApiUrl = other.ApiUrl;
       }
-      unknown6_.Add(other.unknown6_);
+      platformReturns_.Add(other.platformReturns_);
       if (other.authTicket_ != null) {
         if (authTicket_ == null) {
           authTicket_ = new global::POGOProtos.Networking.Envelopes.AuthTicket();
@@ -281,7 +290,7 @@ namespace POGOProtos.Networking.Envelopes {
             input.SkipLastField();
             break;
           case 8: {
-            StatusCode = input.ReadInt32();
+            statusCode_ = (global::POGOProtos.Networking.Envelopes.ResponseEnvelope.Types.StatusCode) input.ReadEnum();
             break;
           }
           case 16: {
@@ -293,7 +302,7 @@ namespace POGOProtos.Networking.Envelopes {
             break;
           }
           case 50: {
-            unknown6_.AddEntriesFrom(input, _repeated_unknown6_codec);
+            platformReturns_.AddEntriesFrom(input, _repeated_platformReturns_codec);
             break;
           }
           case 58: {
@@ -314,6 +323,194 @@ namespace POGOProtos.Networking.Envelopes {
         }
       }
     }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the ResponseEnvelope message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      public enum StatusCode {
+        [pbr::OriginalName("UNKNOWN")] Unknown = 0,
+        /// <summary>
+        ///  valid response with no api url
+        /// </summary>
+        [pbr::OriginalName("OK")] Ok = 1,
+        /// <summary>
+        ///  the response envelope has api_url set and this response is valid
+        /// </summary>
+        [pbr::OriginalName("OK_RPC_URL_IN_RESPONSE")] OkRpcUrlInResponse = 2,
+        /// <summary>
+        ///  bad request
+        /// </summary>
+        [pbr::OriginalName("BAD_REQUEST")] BadRequest = 3,
+        /// <summary>
+        ///  using unimplemented request or corrupt request
+        /// </summary>
+        [pbr::OriginalName("INVALID_REQUEST")] InvalidRequest = 51,
+        /// <summary>
+        ///  invalid platform request or corrupt platform request
+        /// </summary>
+        [pbr::OriginalName("INVALID_PLATFORM_REQUEST")] InvalidPlatformRequest = 52,
+        /// <summary>
+        ///  a new rpc endpoint is available and you should redirect to there
+        /// </summary>
+        [pbr::OriginalName("REDIRECT")] Redirect = 53,
+        /// <summary>
+        ///  occurs when you send blank authinfo, or sending nonsense timings (ie LocationFix.timestampSnapshot == Signature.timestampSinceStart)
+        /// </summary>
+        [pbr::OriginalName("SESSION_INVALIDATED")] SessionInvalidated = 100,
+        /// <summary>
+        ///  occurs when the login token is invalid
+        /// </summary>
+        [pbr::OriginalName("INVALID_AUTH_TOKEN")] InvalidAuthToken = 102,
+      }
+
+      public sealed partial class PlatformResponse : pb::IMessage<PlatformResponse> {
+        private static readonly pb::MessageParser<PlatformResponse> _parser = new pb::MessageParser<PlatformResponse>(() => new PlatformResponse());
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<PlatformResponse> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::POGOProtos.Networking.Envelopes.ResponseEnvelope.Descriptor.NestedTypes[0]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public PlatformResponse() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public PlatformResponse(PlatformResponse other) : this() {
+          type_ = other.type_;
+          response_ = other.response_;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public PlatformResponse Clone() {
+          return new PlatformResponse(this);
+        }
+
+        /// <summary>Field number for the "type" field.</summary>
+        public const int TypeFieldNumber = 1;
+        private global::POGOProtos.Networking.Platform.PlatformRequestType type_ = 0;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::POGOProtos.Networking.Platform.PlatformRequestType Type {
+          get { return type_; }
+          set {
+            type_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "response" field.</summary>
+        public const int ResponseFieldNumber = 2;
+        private pb::ByteString response_ = pb::ByteString.Empty;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pb::ByteString Response {
+          get { return response_; }
+          set {
+            response_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as PlatformResponse);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(PlatformResponse other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (Type != other.Type) return false;
+          if (Response != other.Response) return false;
+          return true;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Type != 0) hash ^= Type.GetHashCode();
+          if (Response.Length != 0) hash ^= Response.GetHashCode();
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+          if (Type != 0) {
+            output.WriteRawTag(8);
+            output.WriteEnum((int) Type);
+          }
+          if (Response.Length != 0) {
+            output.WriteRawTag(18);
+            output.WriteBytes(Response);
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (Type != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Type);
+          }
+          if (Response.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeBytesSize(Response);
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(PlatformResponse other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Type != 0) {
+            Type = other.Type;
+          }
+          if (other.Response.Length != 0) {
+            Response = other.Response;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                input.SkipLastField();
+                break;
+              case 8: {
+                type_ = (global::POGOProtos.Networking.Platform.PlatformRequestType) input.ReadEnum();
+                break;
+              }
+              case 18: {
+                Response = input.ReadBytes();
+                break;
+              }
+            }
+          }
+        }
+
+      }
+
+    }
+    #endregion
 
   }
 
