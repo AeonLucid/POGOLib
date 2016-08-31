@@ -6,6 +6,7 @@ using Google.Protobuf;
 using POGOLib.Util;
 using POGOLib.Util.Encryption;
 using POGOProtos.Networking.Envelopes;
+using POGOProtos.Networking.Platform.Requests;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 namespace POGOLib.Net
@@ -35,14 +36,14 @@ namespace POGOLib.Net
 		/// <param name="requests">The requests of the <see cref="RequestEnvelope"/>.</param>
 		/// <returns>The encrypted <see cref="RequestEnvelope.Types.PlatformRequest"/> (Signature).</returns>
 		internal RequestEnvelope.Types.PlatformRequest GenerateSignature(RequestEnvelope requestEnvelope)
-        {
+		{
 			Contract.Ensures(Contract.Result<ByteString>() != null);
 			var signature = new Signature
-            {
-                TimestampSinceStart = (ulong) _internalStopwatch.ElapsedMilliseconds,
-                Timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds(),
-                SensorInfo = new SensorInfo()
-                {
+			{
+				TimestampSinceStart = (ulong)_internalStopwatch.ElapsedMilliseconds,
+				Timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds(),
+				SensorInfo = new SensorInfo()
+				{
 					GravityX = Randomize(0.02),
 					GravityY = Randomize(0.3),
 					GravityZ = Randomize(9.8),
@@ -60,67 +61,72 @@ namespace POGOLib.Net
 					GyroscopeRawY = Randomize(-0.00054931640625),
 					GyroscopeRawZ = Randomize(0.0024566650390625),
 					AccelerometerAxes = 3
-                },
-                DeviceInfo = new DeviceInfo()
-                {
-                    DeviceId = _session.Device.DeviceId,
-                    AndroidBoardName = _session.Device.AndroidBoardName,
-                    AndroidBootloader = _session.Device.AndroidBootloader,
-                    DeviceBrand = _session.Device.DeviceBrand,
-                    DeviceModel = _session.Device.DeviceModel,
-                    DeviceModelIdentifier = _session.Device.DeviceModelIdentifier,
-                    DeviceModelBoot = _session.Device.DeviceModelBoot,
-                    HardwareManufacturer = _session.Device.HardwareManufacturer,
-                    HardwareModel = _session.Device.HardwareModel,
-                    FirmwareBrand = _session.Device.FirmwareBrand,
-                    FirmwareTags = _session.Device.FirmwareTags,
-                    FirmwareType = _session.Device.FirmwareType,
-                    FirmwareFingerprint = _session.Device.FirmwareFingerprint
-                },
-                LocationFix =
-                {
-                    new LocationFix
-                    {
-                        Provider = "network",
+				},
+				DeviceInfo = new DeviceInfo()
+				{
+					DeviceId = _session.Device.DeviceId,
+					AndroidBoardName = _session.Device.AndroidBoardName,
+					AndroidBootloader = _session.Device.AndroidBootloader,
+					DeviceBrand = _session.Device.DeviceBrand,
+					DeviceModel = _session.Device.DeviceModel,
+					DeviceModelIdentifier = _session.Device.DeviceModelIdentifier,
+					DeviceModelBoot = _session.Device.DeviceModelBoot,
+					HardwareManufacturer = _session.Device.HardwareManufacturer,
+					HardwareModel = _session.Device.HardwareModel,
+					FirmwareBrand = _session.Device.FirmwareBrand,
+					FirmwareTags = _session.Device.FirmwareTags,
+					FirmwareType = _session.Device.FirmwareType,
+					FirmwareFingerprint = _session.Device.FirmwareFingerprint
+				},
+				LocationFix =
+				{
+					new LocationFix
+					{
+						Provider = "network",
                         //Unk4 = 120,
                         Latitude = (float)_session.Player.Coordinate.Latitude,
-                        Longitude = (float)_session.Player.Coordinate.Longitude,
-                        Altitude = (float)_session.Player.Coordinate.Altitude,
+						Longitude = (float)_session.Player.Coordinate.Longitude,
+						Altitude = (float)_session.Player.Coordinate.Altitude,
 						HorizontalAccuracy = (float)_session.Player.Coordinate.HorizontalAccuracy,
 						TimestampSnapshot = (ulong)_internalStopwatch.ElapsedMilliseconds - 200, // TODO: Verify this
                         Floor = 3,
-                        LocationType = 1
-                    }
-                }
-            };
+						LocationType = 1
+					}
+				}
+			};
 
-            // Compute 10
-            var serializedTicket = requestEnvelope.AuthTicket != null ? requestEnvelope.AuthTicket.ToByteArray() : requestEnvelope.AuthInfo.ToByteArray();
-            var firstHash = CalculateHash32(serializedTicket, 0x1B845238);
-            var locationBytes = BitConverter.GetBytes(_session.Player.Coordinate.Latitude).Reverse()
-                .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Longitude).Reverse())
-                .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Altitude).Reverse()).ToArray();
-            signature.LocationHash1 = CalculateHash32(locationBytes, firstHash);
-            // Compute 20
-            signature.LocationHash2 = CalculateHash32(locationBytes, 0x1B845238);
-            // Compute 24
-            var seed = xxHash64.CalculateHash(serializedTicket, serializedTicket.Length, 0x1B845238);
-            foreach (var req in requestEnvelope.Requests)
-            {
-                var reqBytes = req.ToByteArray();
-                signature.RequestHash.Add(xxHash64.CalculateHash(reqBytes, reqBytes.Length, seed));
-            }
+			// Compute 10
+			var serializedTicket = requestEnvelope.AuthTicket != null ? requestEnvelope.AuthTicket.ToByteArray() : requestEnvelope.AuthInfo.ToByteArray();
+			var firstHash = CalculateHash32(serializedTicket, 0x1B845238);
+			var locationBytes = BitConverter.GetBytes(_session.Player.Coordinate.Latitude).Reverse()
+				.Concat(BitConverter.GetBytes(_session.Player.Coordinate.Longitude).Reverse())
+				.Concat(BitConverter.GetBytes(_session.Player.Coordinate.HorizontalAccuracy).Reverse()).ToArray();
+			signature.LocationHash1 = CalculateHash32(locationBytes, firstHash);
+			// Compute 20
+			signature.LocationHash2 = CalculateHash32(locationBytes, 0x1B845238);
+			// Compute 24
+			var seed = xxHash64.CalculateHash(serializedTicket, serializedTicket.Length, 0x1B845238);
+			foreach (var req in requestEnvelope.Requests)
+			{
+				var reqBytes = req.ToByteArray();
+				signature.RequestHash.Add(xxHash64.CalculateHash(reqBytes, reqBytes.Length, seed));
+			}
 
-            //static for now
+			//static for now
 			signature.SessionHash = ByteString.CopyFrom(0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
 
-            var iv = new byte[32];
-            _random.NextBytes(iv);
+			var iv = new byte[32];
+			_random.NextBytes(iv);
 
+			var encryptedRequest = new SendEncryptedSignatureRequest
+			{
+				EncryptedSignature = ByteString.CopyFrom(PokemonGoEncryptSharp.Util.Encrypt(signature.ToByteArray(), iv))
+			};
 			var encryptedSignature = new RequestEnvelope.Types.PlatformRequest
 			{
 				Type = POGOProtos.Networking.Platform.PlatformRequestType.SendEncryptedSignature,
-				RequestMessage = ByteString.CopyFrom(PokemonGoEncryptSharp.Util.Encrypt(signature.ToByteArray(), iv))
+				RequestMessage = encryptedRequest.ToByteString()
+				//RequestMessage = ByteString.CopyFrom(PokemonGoEncryptSharp.Util.Encrypt(signature.ToByteArray(), iv))
 			};
 
 			return encryptedSignature;

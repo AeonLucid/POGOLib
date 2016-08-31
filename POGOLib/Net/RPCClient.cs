@@ -387,10 +387,6 @@ namespace POGOLib.Net
 			{
 				queue.Enqueue(request);
 				var count = queue.Count;
-				if (count > 1)
-				{
-					int foo = 5;
-				}
 				m.WaitOne();
 				if (OnStartRPC != null)
 				{
@@ -440,12 +436,15 @@ namespace POGOLib.Net
                     var responseEnvelope = ResponseEnvelope.Parser.ParseFrom(responseBytes);
 
 					switch (responseEnvelope.StatusCode)
-                    {
+					{
                         case ResponseEnvelope.Types.StatusCode.Ok:
                             // Success!?
                             break;
 
-                        case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest: // Slow servers? TODO: Throttling (?)
+						case ResponseEnvelope.Types.StatusCode.OkRpcUrlInResponse:
+							break;
+							
+						case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest: // Slow servers? TODO: Throttling (?)
                             Logger.Warn(
                                 $"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
                             await Task.Delay(TimeSpan.FromMilliseconds(Configuration.SlowServerTimeout));
