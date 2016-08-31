@@ -32,6 +32,7 @@ namespace POGOLib.Net.Authentication.Data
         {
             Expiry = DateTime.UtcNow;
             AuthTicket = null;
+			Token = null;
         }
     }
 }
