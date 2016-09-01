@@ -409,9 +409,9 @@ namespace POGOLib.Net
                 {
                     OnEndRPC(request);
                 }
-                m.Release();
                 ByteString ret;
                 dict.TryRemove(request, out ret);
+                m.Release();
                 return ret;
             });
         }
