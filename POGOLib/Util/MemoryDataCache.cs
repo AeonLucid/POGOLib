@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Google.Protobuf;
-using POGOProtos.Networking.Responses;
 
 namespace POGOLib.Util
 {
@@ -17,11 +13,14 @@ namespace POGOLib.Util
             _cachedData[fileName] = msg;
         }
 
-        public async Task<IMessage<T>> GetCachedData<T>(string fileName) where T : IMessage<T>, new()
+        public Task<IMessage<T>> GetCachedData<T>(string fileName) where T : IMessage<T>, new()
         {
-            IMessage msg = null;
-            _cachedData.TryGetValue(fileName, out msg);
-            return (IMessage<T>)msg;
+			return Task.Run(() =>
+			{
+				IMessage msg = null;
+				_cachedData.TryGetValue(fileName, out msg);
+				return (IMessage<T>)msg;
+			});
         }
     }
 }

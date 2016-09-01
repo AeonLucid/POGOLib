@@ -1,8 +1,8 @@
-﻿using System;
-using Google.Protobuf;
+﻿using Google.Protobuf;
 using POGOLib.Util;
 using Java.IO;
 using Android.Content;
+using System.Threading.Tasks;
 
 namespace AndroidDemo
 {
@@ -15,19 +15,22 @@ namespace AndroidDemo
             _ctx = ctx;
         }
 
-        public IMessage<T> GetCachedData<T>(string fileName) where T : IMessage<T>, new()
+        public Task<IMessage<T>> GetCachedData<T>(string fileName) where T : IMessage<T>, new()
         {
-            File file = new File(_ctx.FilesDir, fileName);
-            if (!file.Exists())
-            {
-                return null;
-            }
-            var bytes = new byte[file.Length()];
-            using (var stream = new FileInputStream(file))
-            {
-                stream.Read(bytes);
-            }
-            return this.ParseMessageFromBytes<T>(bytes);
+			return Task.Run(() =>
+			{
+				File file = new File(_ctx.FilesDir, fileName);
+				if (!file.Exists())
+				{
+					return null;
+				}
+				var bytes = new byte[file.Length()];
+				using (var stream = new FileInputStream(file))
+				{
+					stream.Read(bytes);
+				}
+				return this.ParseMessageFromBytes<T>(bytes);
+			});
         }
 
         public void SaveData(string fileName, IMessage msg)

@@ -1,9 +1,5 @@
 ﻿using Google.Protobuf;
 using POGOProtos.Networking.Responses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace POGOLib.Util
@@ -28,5 +24,10 @@ namespace POGOLib.Util
         {
             return await dataCache.GetCachedData<DownloadItemTemplatesResponse>(ItemTemplatesFile) as DownloadItemTemplatesResponse;
         }
+
+		public static IMessage<T> ParseMessageFromBytes<T>(this IDataCache dataCache, byte[] data) where T : IMessage<T>, new()
+        {
+            return new MessageParser<T>(() => new T()).ParseFrom(data);
+		}
     }
 }
