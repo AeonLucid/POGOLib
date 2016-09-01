@@ -40,8 +40,8 @@ namespace POGOLib.Pokemon
         ///     Gets the <see cref="Stats" /> of the beautiful <see cref="Inventory" /> object by PokémonGo.
         /// </summary>
         public PlayerStats Stats { get; private set; }
-		
-		public PlayerData Data { get; set; }
+        
+        public PlayerData Data { get; set; }
 
         /// <summary>
         ///     Sets the <see cref="GeoCoordinate" /> of the <see cref="Player" />.
@@ -52,6 +52,15 @@ namespace POGOLib.Pokemon
         public void SetCoordinates(double latitude, double longitude, double altitude = 100)
         {
             Coordinate = new GeoCoordinate(latitude, longitude, altitude);
+        }
+
+        /// <summary>
+        ///     Sets the <see cref="GeoCoordinate" /> of the <see cref="Player" />.
+        /// </summary>
+        /// <param name="coordinate">The coordinate of your location.</param>
+        public void SetCoordinates(GeoCoordinate coordinate)
+        {
+            Coordinate = coordinate;
         }
 
         /// <summary>

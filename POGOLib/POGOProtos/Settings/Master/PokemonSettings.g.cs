@@ -31,7 +31,7 @@ namespace POGOProtos.Settings.Master {
             "b3Rvcy9TZXR0aW5ncy9NYXN0ZXIvUG9rZW1vbi9TdGF0c0F0dHJpYnV0ZXMu",
             "cHJvdG8aOVBPR09Qcm90b3MvU2V0dGluZ3MvTWFzdGVyL1Bva2Vtb24vQ2Ft",
             "ZXJhQXR0cmlidXRlcy5wcm90bxo8UE9HT1Byb3Rvcy9TZXR0aW5ncy9NYXN0",
-            "ZXIvUG9rZW1vbi9FbmNvdW50ZXJBdHRyaWJ1dGVzLnByb3RvIpQHCg9Qb2tl",
+            "ZXIvUG9rZW1vbi9FbmNvdW50ZXJBdHRyaWJ1dGVzLnByb3RvIs4ICg9Qb2tl",
             "bW9uU2V0dGluZ3MSLwoKcG9rZW1vbl9pZBgBIAEoDjIbLlBPR09Qcm90b3Mu",
             "RW51bXMuUG9rZW1vbklkEhMKC21vZGVsX3NjYWxlGAMgASgCEisKBHR5cGUY",
             "BCABKA4yHS5QT0dPUHJvdG9zLkVudW1zLlBva2Vtb25UeXBlEi0KBnR5cGVf",
@@ -52,11 +52,15 @@ namespace POGOProtos.Settings.Master {
             "dGRfZGV2GBIgASgCEhYKDndlaWdodF9zdGRfZGV2GBMgASgCEhwKFGttX2Rp",
             "c3RhbmNlX3RvX2hhdGNoGBQgASgCEjQKCWZhbWlseV9pZBgVIAEoDjIhLlBP",
             "R09Qcm90b3MuRW51bXMuUG9rZW1vbkZhbWlseUlkEhcKD2NhbmR5X3RvX2V2",
-            "b2x2ZRgWIAEoBWIGcHJvdG8z"));
+            "b2x2ZRgWIAEoBRIZChFrbV9idWRkeV9kaXN0YW5jZRgXIAEoAhJJCgpidWRk",
+            "eV9zaXplGBggASgOMjUuUE9HT1Byb3Rvcy5TZXR0aW5ncy5NYXN0ZXIuUG9r",
+            "ZW1vblNldHRpbmdzLkJ1ZGR5U2l6ZSJSCglCdWRkeVNpemUSEAoMQlVERFlf",
+            "TUVESVVNEAASEgoOQlVERFlfU0hPVUxERVIQARINCglCVUREWV9CSUcQAhIQ",
+            "CgxCVUREWV9GTFlJTkcQA2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::POGOProtos.Enums.PokemonIdReflection.Descriptor, global::POGOProtos.Enums.PokemonRarityReflection.Descriptor, global::POGOProtos.Enums.PokemonTypeReflection.Descriptor, global::POGOProtos.Enums.PokemonMoveReflection.Descriptor, global::POGOProtos.Enums.PokemonFamilyIdReflection.Descriptor, global::POGOProtos.Settings.Master.Pokemon.StatsAttributesReflection.Descriptor, global::POGOProtos.Settings.Master.Pokemon.CameraAttributesReflection.Descriptor, global::POGOProtos.Settings.Master.Pokemon.EncounterAttributesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Settings.Master.PokemonSettings), global::POGOProtos.Settings.Master.PokemonSettings.Parser, new[]{ "PokemonId", "ModelScale", "Type", "Type2", "Camera", "Encounter", "Stats", "QuickMoves", "CinematicMoves", "AnimationTime", "EvolutionIds", "EvolutionPips", "Rarity", "PokedexHeightM", "PokedexWeightKg", "ParentPokemonId", "HeightStdDev", "WeightStdDev", "KmDistanceToHatch", "FamilyId", "CandyToEvolve" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::POGOProtos.Settings.Master.PokemonSettings), global::POGOProtos.Settings.Master.PokemonSettings.Parser, new[]{ "PokemonId", "ModelScale", "Type", "Type2", "Camera", "Encounter", "Stats", "QuickMoves", "CinematicMoves", "AnimationTime", "EvolutionIds", "EvolutionPips", "Rarity", "PokedexHeightM", "PokedexWeightKg", "ParentPokemonId", "HeightStdDev", "WeightStdDev", "KmDistanceToHatch", "FamilyId", "CandyToEvolve", "KmBuddyDistance", "BuddySize" }, null, new[]{ typeof(global::POGOProtos.Settings.Master.PokemonSettings.Types.BuddySize) }, null)
           }));
     }
     #endregion
@@ -108,6 +112,8 @@ namespace POGOProtos.Settings.Master {
       kmDistanceToHatch_ = other.kmDistanceToHatch_;
       familyId_ = other.familyId_;
       candyToEvolve_ = other.candyToEvolve_;
+      kmBuddyDistance_ = other.kmBuddyDistance_;
+      buddySize_ = other.buddySize_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -342,6 +348,28 @@ namespace POGOProtos.Settings.Master {
       }
     }
 
+    /// <summary>Field number for the "km_buddy_distance" field.</summary>
+    public const int KmBuddyDistanceFieldNumber = 23;
+    private float kmBuddyDistance_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float KmBuddyDistance {
+      get { return kmBuddyDistance_; }
+      set {
+        kmBuddyDistance_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "buddy_size" field.</summary>
+    public const int BuddySizeFieldNumber = 24;
+    private global::POGOProtos.Settings.Master.PokemonSettings.Types.BuddySize buddySize_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::POGOProtos.Settings.Master.PokemonSettings.Types.BuddySize BuddySize {
+      get { return buddySize_; }
+      set {
+        buddySize_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as PokemonSettings);
@@ -376,6 +404,8 @@ namespace POGOProtos.Settings.Master {
       if (KmDistanceToHatch != other.KmDistanceToHatch) return false;
       if (FamilyId != other.FamilyId) return false;
       if (CandyToEvolve != other.CandyToEvolve) return false;
+      if (KmBuddyDistance != other.KmBuddyDistance) return false;
+      if (BuddySize != other.BuddySize) return false;
       return true;
     }
 
@@ -403,6 +433,8 @@ namespace POGOProtos.Settings.Master {
       if (KmDistanceToHatch != 0F) hash ^= KmDistanceToHatch.GetHashCode();
       if (FamilyId != 0) hash ^= FamilyId.GetHashCode();
       if (CandyToEvolve != 0) hash ^= CandyToEvolve.GetHashCode();
+      if (KmBuddyDistance != 0F) hash ^= KmBuddyDistance.GetHashCode();
+      if (BuddySize != 0) hash ^= BuddySize.GetHashCode();
       return hash;
     }
 
@@ -485,6 +517,14 @@ namespace POGOProtos.Settings.Master {
         output.WriteRawTag(176, 1);
         output.WriteInt32(CandyToEvolve);
       }
+      if (KmBuddyDistance != 0F) {
+        output.WriteRawTag(189, 1);
+        output.WriteFloat(KmBuddyDistance);
+      }
+      if (BuddySize != 0) {
+        output.WriteRawTag(192, 1);
+        output.WriteEnum((int) BuddySize);
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -544,6 +584,12 @@ namespace POGOProtos.Settings.Master {
       }
       if (CandyToEvolve != 0) {
         size += 2 + pb::CodedOutputStream.ComputeInt32Size(CandyToEvolve);
+      }
+      if (KmBuddyDistance != 0F) {
+        size += 2 + 4;
+      }
+      if (BuddySize != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeEnumSize((int) BuddySize);
       }
       return size;
     }
@@ -616,6 +662,12 @@ namespace POGOProtos.Settings.Master {
       }
       if (other.CandyToEvolve != 0) {
         CandyToEvolve = other.CandyToEvolve;
+      }
+      if (other.KmBuddyDistance != 0F) {
+        KmBuddyDistance = other.KmBuddyDistance;
+      }
+      if (other.BuddySize != 0) {
+        BuddySize = other.BuddySize;
       }
     }
 
@@ -724,9 +776,31 @@ namespace POGOProtos.Settings.Master {
             CandyToEvolve = input.ReadInt32();
             break;
           }
+          case 189: {
+            KmBuddyDistance = input.ReadFloat();
+            break;
+          }
+          case 192: {
+            buddySize_ = (global::POGOProtos.Settings.Master.PokemonSettings.Types.BuddySize) input.ReadEnum();
+            break;
+          }
         }
       }
     }
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the PokemonSettings message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      public enum BuddySize {
+        [pbr::OriginalName("BUDDY_MEDIUM")] BuddyMedium = 0,
+        [pbr::OriginalName("BUDDY_SHOULDER")] BuddyShoulder = 1,
+        [pbr::OriginalName("BUDDY_BIG")] BuddyBig = 2,
+        [pbr::OriginalName("BUDDY_FLYING")] BuddyFlying = 3,
+      }
+
+    }
+    #endregion
 
   }
 

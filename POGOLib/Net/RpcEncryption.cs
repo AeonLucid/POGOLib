@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using Google.Protobuf;
 using POGOLib.Util;
 using POGOLib.Util.Encryption;
 using POGOProtos.Networking.Envelopes;
+using POGOProtos.Networking.Platform.Requests;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 namespace POGOLib.Net
@@ -32,28 +34,29 @@ namespace POGOLib.Net
         ///     Generates the encrypted signature which is required for the <see cref="RequestEnvelope"/>.
         /// </summary>
         /// <param name="requests">The requests of the <see cref="RequestEnvelope"/>.</param>
-        /// <returns>The encrypted <see cref="Unknown6"/> (Signature).</returns>
-        internal Unknown6 GenerateSignature(RequestEnvelope requestEnvelope)
+        /// <returns>The encrypted <see cref="RequestEnvelope.Types.PlatformRequest"/> (Signature).</returns>
+        internal RequestEnvelope.Types.PlatformRequest GenerateSignature(RequestEnvelope requestEnvelope)
         {
+            Contract.Ensures(Contract.Result<ByteString>() != null);
             var signature = new Signature
             {
                 TimestampSinceStart = (ulong) _internalStopwatch.ElapsedMilliseconds,
                 Timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds(),
                 SensorInfo = new SensorInfo()
                 {
-                    AccelNormalizedZ = Randomize(9.8),
-                    AccelNormalizedX = Randomize(0.02),
-                    AccelNormalizedY = Randomize(0.3),
+                    GravityX = Randomize(0.02),
+                    GravityY = Randomize(0.3),
+                    GravityZ = Randomize(9.8),
                     TimestampSnapshot = (ulong) _internalStopwatch.ElapsedMilliseconds - 230,
-                    MagnetometerX = Randomize(012271042913198471),
-                    MagnetometerY = Randomize(-0.015570580959320068),
-                    MagnetometerZ = Randomize(0.010850906372070313),
-                    AngleNormalizedX = Randomize(17.950439453125),
-                    AngleNormalizedY = Randomize(-23.36273193359375),
-                    AngleNormalizedZ = Randomize(-48.8250732421875),
-                    AccelRawX = Randomize(-0.0120010357350111),
-                    AccelRawY = Randomize(-0.04214850440621376),
-                    AccelRawZ = Randomize(0.94571763277053833),
+                    LinearAccelerationX = Randomize(012271042913198471),
+                    LinearAccelerationY = Randomize(-0.015570580959320068),
+                    LinearAccelerationZ = Randomize(0.010850906372070313),
+                    MagneticFieldX = Randomize(17.950439453125),
+                    MagneticFieldY = Randomize(-23.36273193359375),
+                    MagneticFieldZ = Randomize(-48.8250732421875),
+                    RotationVectorX = Randomize(-0.0120010357350111),
+                    RotationVectorY = Randomize(-0.04214850440621376),
+                    RotationVectorZ = Randomize(0.94571763277053833),
                     GyroscopeRawX = Randomize(7.62939453125e-005),
                     GyroscopeRawY = Randomize(-0.00054931640625),
                     GyroscopeRawZ = Randomize(0.0024566650390625),
@@ -80,11 +83,14 @@ namespace POGOLib.Net
                     new LocationFix
                     {
                         Provider = "network",
-                        //Unk4 = 120,
                         Latitude = (float)_session.Player.Coordinate.Latitude,
                         Longitude = (float)_session.Player.Coordinate.Longitude,
                         Altitude = (float)_session.Player.Coordinate.Altitude,
-                        TimestampSinceStart = (ulong)_internalStopwatch.ElapsedMilliseconds - 200,
+                        HorizontalAccuracy = (float)_session.Player.Coordinate.HorizontalAccuracy,
+                        VerticalAccuracy = (float)_session.Player.Coordinate.VerticalAccuracy,
+                        Speed = (float)_session.Player.Coordinate.Speed,
+                        Course = (float)_session.Player.Coordinate.Course,
+                        TimestampSnapshot = (ulong)_internalStopwatch.ElapsedMilliseconds - 200, // TODO: Verify this
                         Floor = 3,
                         LocationType = 1
                     }
@@ -96,7 +102,7 @@ namespace POGOLib.Net
             var firstHash = CalculateHash32(serializedTicket, 0x1B845238);
             var locationBytes = BitConverter.GetBytes(_session.Player.Coordinate.Latitude).Reverse()
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Longitude).Reverse())
-                .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Altitude).Reverse()).ToArray();
+                .Concat(BitConverter.GetBytes(_session.Player.Coordinate.HorizontalAccuracy).Reverse()).ToArray();
             signature.LocationHash1 = CalculateHash32(locationBytes, firstHash);
             // Compute 20
             signature.LocationHash2 = CalculateHash32(locationBytes, 0x1B845238);
@@ -109,18 +115,19 @@ namespace POGOLib.Net
             }
 
             //static for now
-            signature.Unknown22 = ByteString.CopyFrom(0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
+            signature.SessionHash = ByteString.CopyFrom(0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
 
             var iv = new byte[32];
             _random.NextBytes(iv);
 
-            var encryptedSignature = new Unknown6
+            var encryptedRequest = new SendEncryptedSignatureRequest
             {
-                RequestType = 6,
-                Unknown2 = new Unknown6.Types.Unknown2
-                {
-                    EncryptedSignature = ByteString.CopyFrom(PokemonGoEncryptSharp.Util.Encrypt(signature.ToByteArray(), iv))
-                }
+                EncryptedSignature = ByteString.CopyFrom(PokemonGoEncryptSharp.Util.Encrypt(signature.ToByteArray(), iv))
+            };
+            var encryptedSignature = new RequestEnvelope.Types.PlatformRequest
+            {
+                Type = POGOProtos.Networking.Platform.PlatformRequestType.SendEncryptedSignature,
+                RequestMessage = encryptedRequest.ToByteString()
             };
 
             return encryptedSignature;

@@ -17,7 +17,7 @@ namespace POGOLib.Util
             _cachedData[fileName] = msg;
         }
 
-        public IMessage<T> GetCachedData<T>(string fileName) where T : IMessage<T>, new()
+        public async Task<IMessage<T>> GetCachedData<T>(string fileName) where T : IMessage<T>, new()
         {
             IMessage msg = null;
             _cachedData.TryGetValue(fileName, out msg);

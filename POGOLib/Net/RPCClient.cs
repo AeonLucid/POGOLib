@@ -17,6 +17,7 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace POGOLib.Net
 {
@@ -92,7 +93,7 @@ namespace POGOLib.Net
                     }
                 } while (!playerResponse.Success);
 
-				_session.Player.Data = playerResponse.PlayerData;
+                _session.Player.Data = playerResponse.PlayerData;
 
             }
             catch (Exception)
@@ -125,7 +126,7 @@ namespace POGOLib.Net
             //       however, looking at this code I'm not sure it's implemented correctly - or if these refactors still match the behavior of
             //       the previous code... same concern with the next method GetItemTemplates()..
 
-            var cachedMsg = _session.DataCache.GetCachedAssetDigest();
+            var cachedMsg = await _session.DataCache.GetCachedAssetDigest();
             if (cachedMsg != null && remoteConfigParsed.AssetDigestTimestampMs <= timestamp)
             {
                 return cachedMsg;
@@ -164,7 +165,7 @@ namespace POGOLib.Net
             var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
             var timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds();
 
-            var cachedMsg = _session.DataCache.GetCachedItemTemplates();
+            var cachedMsg = await _session.DataCache.GetCachedItemTemplates();
             if (cachedMsg != null && remoteConfigParsed.AssetDigestTimestampMs <= timestamp)
             {
                 return cachedMsg;
@@ -317,8 +318,8 @@ namespace POGOLib.Net
                 RequestId = GetNextRequestId(),
                 Latitude = _session.Player.Coordinate.Latitude,
                 Longitude = _session.Player.Coordinate.Longitude,
-                Altitude = _session.Player.Coordinate.Altitude,
-                Unknown12 = 123, // TODO: Figure this out.
+                Accuracy = _session.Player.Coordinate.HorizontalAccuracy,
+                MsSinceLastLocationfix = 123, // TODO: Figure this out.
                 Requests = {GetDefaultRequests()}
             };
             requestEnvelope.Requests.Insert(0, request);
@@ -345,7 +346,7 @@ namespace POGOLib.Net
                 requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
             }
 
-            requestEnvelope.Unknown6 = _rpcEncryption.GenerateSignature(requestEnvelope);
+            requestEnvelope.PlatformRequests.Add(_rpcEncryption.GenerateSignature(requestEnvelope));
 
             return requestEnvelope;
         }
@@ -372,12 +373,56 @@ namespace POGOLib.Net
             });
         }
 
-        public async Task<ByteString> SendRemoteProcedureCall(Request request)
+        public Action<Request> OnStartRPC;
+        public Action<Request> OnEndRPC;
+
+        private static long lastRpc = 0;
+        private const int minDiff = 1000;
+        private ConcurrentQueue<Request> queue = new ConcurrentQueue<Request>();
+        private ConcurrentDictionary<Request, ByteString> dict = new ConcurrentDictionary<Request, ByteString>();
+        private static Semaphore m = new Semaphore(1, 1);
+        public Task<ByteString> SendRemoteProcedureCall(Request request)
+        {
+            return Task.Run(async () =>
+            {
+                queue.Enqueue(request);
+                var count = queue.Count;
+                m.WaitOne();
+                if (OnStartRPC != null)
+                {
+                    OnStartRPC(request);
+                }
+                Request r;
+                while (queue.TryDequeue(out r))
+                {
+                    var diff = Math.Max(0, DateTime.Now.Millisecond - lastRpc);
+                    if (diff < minDiff)
+                    {
+                        var delay = (minDiff - diff) + (int)(new Random().NextDouble() * 0); // Add some randomness
+                        await Task.Delay((int)(delay));
+                    }
+                    lastRpc = DateTime.Now.Millisecond;
+                    var response = await PerformRemoteProcedureCall(r);
+                    dict.GetOrAdd(r, response);
+                }
+                if (OnEndRPC != null)
+                {
+                    OnEndRPC(request);
+                }
+                m.Release();
+                ByteString ret;
+                dict.TryRemove(request, out ret);
+                return ret;
+            });
+        }
+
+        private async Task<ByteString> PerformRemoteProcedureCall(Request request)
         {
             var requestEnvelope = await GetRequestEnvelope(request);
 
             using (var requestData = PrepareRequestEnvelope(requestEnvelope))
             {
+                
                 using (var response = await _httpClient.PostAsync(_requestUrl ?? Constants.ApiUrl, requestData))
                 {
                     if (!response.IsSuccessStatusCode)
@@ -392,30 +437,33 @@ namespace POGOLib.Net
 
                     switch (responseEnvelope.StatusCode)
                     {
-                        case 1:
+                        case ResponseEnvelope.Types.StatusCode.Ok:
                             // Success!?
                             break;
 
-                        case 52: // Slow servers? TODO: Throttling (?)
+                        case ResponseEnvelope.Types.StatusCode.OkRpcUrlInResponse:
+                            break;
+                            
+                        case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest: // Slow servers? TODO: Throttling (?)
                             Logger.Warn(
                                 $"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
                             await Task.Delay(TimeSpan.FromMilliseconds(Configuration.SlowServerTimeout));
-                            return await SendRemoteProcedureCall(request);
+                            return await PerformRemoteProcedureCall(request);
 
-                        case 53: // New RPC url
+                        case ResponseEnvelope.Types.StatusCode.Redirect: // New RPC url
                             if (Regex.IsMatch(responseEnvelope.ApiUrl, "pgorelease\\.nianticlabs\\.com\\/plfe\\/\\d+"))
                             {
                                 _requestUrl = $"https://{responseEnvelope.ApiUrl}/rpc";
-                                return await SendRemoteProcedureCall(request);
+                                return await PerformRemoteProcedureCall(request);
                             }
                             throw new Exception(
                                 $"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
 
-                        case 102: // Invalid auth
+                        case ResponseEnvelope.Types.StatusCode.InvalidAuthToken: // Invalid auth
                             Logger.Debug("Received StatusCode 102, reauthenticating.");
                             _session.AccessToken.Expire();
                             await _session.Reauthenticate();
-                            return await SendRemoteProcedureCall(request);
+                            return await PerformRemoteProcedureCall(request);
 
                         default:
                             Logger.Info($"Unknown status code: {responseEnvelope.StatusCode}");
