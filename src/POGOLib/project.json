@@ -1,0 +1,23 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+  "dependencies": {
+    "GeoCoordinate.NetStandard1": "1.0.0",
+    "Newtonsoft.Json": "9.0.1",
+    "POGOProtos": {
+      "target": "project"
+    },
+    "PokemonGoEncryptSharp.NetStandard1": "1.0.0",
+    "S2Geometry": "1.0.3",
+    "System.Net.Http": "4.1.0"
+  },
+  "frameworks": {
+    "netstandard1.1": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    }
+  }
+}
