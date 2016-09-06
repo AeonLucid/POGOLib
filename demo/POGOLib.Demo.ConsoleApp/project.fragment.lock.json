@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "exports": {
+    "POGOLib/1.0.0": {
+      "type": "project",
+      "framework": ".NETStandard,Version=v1.1",
+      "compile": {
+        "bin/Debug/POGOLib.dll": {}
+      },
+      "runtime": {
+        "bin/Debug/POGOLib.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/POGOLib.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    }
+  }
+}

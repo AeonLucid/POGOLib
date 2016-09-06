@@ -5,9 +5,7 @@
     "emitEntryPoint": true
   },
   "dependencies": {
-    "POGOLib": {
-      "target": "project"
-    } 
+    "Google.Protobuf": "3.0.0"
   },
   "frameworks": {
     "netcoreapp1.0": {
@@ -15,6 +13,9 @@
         "Microsoft.NETCore.App": {
           "type": "platform",
           "version": "1.0.0"
+        },
+        "POGOLib": {
+          "target": "project"
         }
       },
       "imports": "dnxcore50"

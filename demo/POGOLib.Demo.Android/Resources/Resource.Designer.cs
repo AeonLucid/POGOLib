@@ -69,6 +69,9 @@ namespace POGOLib.Demo.Android
 			// aapt resource value: 0x7f050004
 			public const int EditTextUsername = 2131034116;
 			
+			// aapt resource value: 0x7f050008
+			public const int TextViewOutput = 2131034120;
+			
 			// aapt resource value: 0x7f050005
 			public const int TextViewPassword = 2131034117;
 			
