@@ -1,0 +1,16 @@
+﻿{
+  "supports": {},
+  "dependencies": {
+    "GeoCoordinate.NetStandard1": "1.0.0",
+    "Google.Protobuf": "3.0.0",
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
+    "NETStandard.Library": "1.6.0",
+    "Newtonsoft.Json": "9.0.1",
+    "POGOProtos.NetStandard1": "1.0.0",
+    "PokemonGoEncryptSharp.NetStandard1": "1.0.0",
+    "S2Geometry": "1.0.3"
+  },
+  "frameworks": {
+    "netstandard1.1": {}
+  }
+}
