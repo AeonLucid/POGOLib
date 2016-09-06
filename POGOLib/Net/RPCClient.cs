@@ -410,7 +410,10 @@ namespace POGOLib.Net
                     OnEndRPC(request);
                 }
                 ByteString ret;
-                dict.TryRemove(request, out ret);
+				if (!dict.TryRemove(request, out ret))
+				{
+					Logger.Debug("Unexpected situation where we are unable to get the response out");
+				}
                 m.Release();
                 return ret;
             });
@@ -422,68 +425,76 @@ namespace POGOLib.Net
 
             using (var requestData = PrepareRequestEnvelope(requestEnvelope))
             {
-                
-                using (var response = await _httpClient.PostAsync(_requestUrl ?? Constants.ApiUrl, requestData))
-                {
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        Logger.Debug(await response.Content.ReadAsStringAsync());
-                        throw new Exception(
-                            "Received a non-success HTTP status code from the RPC server, see the console for the response.");
-                    }
+				try
+				{
+					using (var response = await _httpClient.PostAsync(_requestUrl ?? Constants.ApiUrl, requestData))
+					{
+						if (!response.IsSuccessStatusCode)
+						{
+							Logger.Debug(await response.Content.ReadAsStringAsync());
+							throw new Exception(
+								"Received a non-success HTTP status code from the RPC server, see the console for the response.");
+						}
 
-                    var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
-                    var responseEnvelope = ResponseEnvelope.Parser.ParseFrom(responseBytes);
+						var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
+						var responseEnvelope = ResponseEnvelope.Parser.ParseFrom(responseBytes);
 
-                    switch (responseEnvelope.StatusCode)
-                    {
-                        case ResponseEnvelope.Types.StatusCode.Ok:
-                            // Success!?
-                            break;
+						switch (responseEnvelope.StatusCode)
+						{
+							case ResponseEnvelope.Types.StatusCode.Ok:
+								// Success!?
+								break;
 
-                        case ResponseEnvelope.Types.StatusCode.OkRpcUrlInResponse:
-                            break;
-                            
-                        case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest: // Slow servers? TODO: Throttling (?)
-                            Logger.Warn(
-                                $"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
-                            await Task.Delay(TimeSpan.FromMilliseconds(Configuration.SlowServerTimeout));
-                            return await PerformRemoteProcedureCall(request);
+							case ResponseEnvelope.Types.StatusCode.OkRpcUrlInResponse:
+								break;
 
-                        case ResponseEnvelope.Types.StatusCode.Redirect: // New RPC url
-                            if (Regex.IsMatch(responseEnvelope.ApiUrl, "pgorelease\\.nianticlabs\\.com\\/plfe\\/\\d+"))
-                            {
-                                _requestUrl = $"https://{responseEnvelope.ApiUrl}/rpc";
-                                return await PerformRemoteProcedureCall(request);
-                            }
-                            throw new Exception(
-                                $"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
+							case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest: // Slow servers? TODO: Throttling (?)
+								Logger.Warn(
+									$"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
+								await Task.Delay(TimeSpan.FromMilliseconds(Configuration.SlowServerTimeout));
+								return await PerformRemoteProcedureCall(request);
 
-                        case ResponseEnvelope.Types.StatusCode.InvalidAuthToken: // Invalid auth
-                            Logger.Debug("Received StatusCode 102, reauthenticating.");
-                            _session.AccessToken.Expire();
-                            await _session.Reauthenticate();
-                            return await PerformRemoteProcedureCall(request);
+							case ResponseEnvelope.Types.StatusCode.Redirect: // New RPC url
+								if (Regex.IsMatch(responseEnvelope.ApiUrl, "pgorelease\\.nianticlabs\\.com\\/plfe\\/\\d+"))
+								{
+									_requestUrl = $"https://{responseEnvelope.ApiUrl}/rpc";
+									return await PerformRemoteProcedureCall(request);
+								}
+								throw new Exception(
+									$"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
 
-                        default:
-                            Logger.Info($"Unknown status code: {responseEnvelope.StatusCode}");
-                            break;
-                    }
+							case ResponseEnvelope.Types.StatusCode.InvalidAuthToken: // Invalid auth
+								Logger.Debug("Received StatusCode 102, reauthenticating.");
+								_session.AccessToken.Expire();
+								await _session.Reauthenticate();
+								return await PerformRemoteProcedureCall(request);
 
-                    LastRpcRequest = DateTime.UtcNow;
-                    Logger.Debug($"Sent RPC Request: '{request.RequestType}'");
-                    if (request.RequestType == RequestType.GetMapObjects)
-                    {
-                        LastRpcMapObjectsRequest = LastRpcRequest;
-                        LastGeoCoordinateMapObjectsRequest = _session.Player.Coordinate;
-                    }
-                    if (responseEnvelope.AuthTicket != null)
-                    {
-                        _session.AccessToken.AuthTicket = responseEnvelope.AuthTicket;
-                        Logger.Debug("Received a new AuthTicket from Pokémon!");
-                    }
-                    return HandleResponseEnvelope(request, responseEnvelope);
-                }
+							default:
+								Logger.Info($"Unknown status code: {responseEnvelope.StatusCode}");
+								break;
+						}
+
+						LastRpcRequest = DateTime.UtcNow;
+						Logger.Debug($"Sent RPC Request: '{request.RequestType}'");
+						if (request.RequestType == RequestType.GetMapObjects)
+						{
+							LastRpcMapObjectsRequest = LastRpcRequest;
+							LastGeoCoordinateMapObjectsRequest = _session.Player.Coordinate;
+						}
+						if (responseEnvelope.AuthTicket != null)
+						{
+							_session.AccessToken.AuthTicket = responseEnvelope.AuthTicket;
+							Logger.Debug("Received a new AuthTicket from Pokémon!");
+						}
+						return HandleResponseEnvelope(request, responseEnvelope);
+					}
+				}
+				catch (WebException w)
+				{
+					Logger.Error("WebException: " + w.Message);
+					await _session.Reauthenticate();
+					return await PerformRemoteProcedureCall(request);
+				}
             }
         }
 
