@@ -25,11 +25,16 @@ namespace POGOLib.Net
 
         private readonly Random _random;
 
+        private readonly ByteString _sessionHash;
+
         internal RpcEncryption(Session session)
         {
             _session = session;
             _internalStopwatch = new Stopwatch();
             _random = new Random();
+            var sessionHash = new byte[16];
+            _random.NextBytes(sessionHash);
+            _sessionHash = ByteString.CopyFrom(sessionHash);
         }
 
         /// <summary>
@@ -41,8 +46,8 @@ namespace POGOLib.Net
         {
             var signature = new Signature
             {
-                TimestampSinceStart = (ulong) _internalStopwatch.ElapsedMilliseconds,
-                Timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds(),
+                TimestampSinceStart = (ulong)_internalStopwatch.ElapsedMilliseconds,
+                Timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds(),
                 SensorInfo = new SensorInfo()
                 {
                     TimestampSnapshot = (ulong)_internalStopwatch.ElapsedMilliseconds - 230,
@@ -98,17 +103,20 @@ namespace POGOLib.Net
                 }
             };
 
+
+            const uint seed035 = 0x61656632;
+            const long unknown25_035 = 7363665268261373700;
             // Compute 10
             var serializedTicket = requestEnvelope.AuthTicket != null ? requestEnvelope.AuthTicket.ToByteArray() : requestEnvelope.AuthInfo.ToByteArray();
-            var firstHash = CalculateHash32(serializedTicket, 0x1B845238);
+            var firstHash = CalculateHash32(serializedTicket, seed035);
             var locationBytes = BitConverter.GetBytes(_session.Player.Coordinate.Latitude).Reverse()
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Longitude).Reverse())
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.HorizontalAccuracy).Reverse()).ToArray();
             signature.LocationHash1 = CalculateHash32(locationBytes, firstHash);
             // Compute 20
-            signature.LocationHash2 = CalculateHash32(locationBytes, 0x1B845238);
+            signature.LocationHash2 = CalculateHash32(locationBytes, seed035);
             // Compute 24
-            var seed = xxHash64.CalculateHash(serializedTicket, serializedTicket.Length, 0x1B845238);
+            var seed = xxHash64.CalculateHash(serializedTicket, serializedTicket.Length, seed035);
             foreach (var req in requestEnvelope.Requests)
             {
                 var reqBytes = req.ToByteArray();
@@ -116,11 +124,12 @@ namespace POGOLib.Net
             }
 
             //static for now
-            signature.SessionHash = ByteString.CopyFrom(0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
-
+            //signature.SessionHash = ByteString.CopyFrom(0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
+            signature.SessionHash = _sessionHash;
+            signature.Unknown25 = unknown25_035;
             var iv = new byte[32];
             _random.NextBytes(iv);
-            
+
             var encryptedSignature = new PlatformRequest()
             {
                 Type = PlatformRequestType.SendEncryptedSignature,
