@@ -63,9 +63,9 @@ namespace POGOLib.Net
                     GyroscopeRawX = Randomize(7.62939453125e-005),
                     GyroscopeRawY = Randomize(-0.00054931640625),
                     GyroscopeRawZ = Randomize(0.0024566650390625),
-                    GravityX = Randomize(9.8),
-                    GravityY = Randomize(0.02),
-                    GravityZ = Randomize(0.3),
+                    GravityX = Randomize(0.02),
+                    GravityY = Randomize(0.3),
+                    GravityZ = Randomize(9.8),
                     AccelerometerAxes = 3
                 },
                 DeviceInfo = new DeviceInfo()
