@@ -53,6 +53,15 @@ namespace POGOLib.Pokemon
         {
             Coordinate = new GeoCoordinate(latitude, longitude, altitude);
         }
+ 
+        /// <summary>
+        ///     Sets the <see cref="GeoCoordinate" /> of the <see cref="Player" />.
+        /// </summary>
+        /// <param name="coordinate">The coordinate of your location.</param>
+        public void SetCoordinates(GeoCoordinate coordinate)
+        {
+            Coordinate = coordinate;
+        }
 
         /// <summary>
         ///     Calculates the distance between the <see cref="Player" /> his current <see cref="Coordinate" /> and the given
