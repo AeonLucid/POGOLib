@@ -393,6 +393,28 @@ namespace POGOLib.Net
             return new ByteArrayContent(messageBytes);
         }
 
+        /// <summary>
+        /// Sends a remote procedure call to the server.
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <typeparam name="TResult">The type of the result. Make sure that this is the correct result for the message you are sending.</typeparam>
+        /// <param name="type">The type of the request. Make sure that this is the correct type for the message you are sending.</param>
+        /// <param name="message">The message.</param>
+        /// <returns></returns>
+        public async Task<TResult> SendRemoteProcedureCall<TMessage, TResult>(RequestType type, TMessage message)
+            where TResult : IMessage<TResult>, new()
+            where TMessage : IMessage<TMessage>
+        {
+            var response = await SendRemoteProcedureCall(new Request
+            {
+                RequestType = type,
+                RequestMessage = message.ToByteString()
+            });
+
+            var parser = new MessageParser<TResult>(() => new TResult());
+            return parser.ParseFrom(response);
+        }
+
         public async Task<ByteString> SendRemoteProcedureCall(RequestType requestType)
         {
             return await SendRemoteProcedureCall(new Request
@@ -434,10 +456,10 @@ namespace POGOLib.Net
                         switch (responseEnvelope.StatusCode)
                         {
                             // Valid response.
-                            case ResponseEnvelope.Types.StatusCode.Ok: 
+                            case ResponseEnvelope.Types.StatusCode.Ok:
                                 // Success!?
                                 break;
-                        
+
                             // Valid response and new rpc url.
                             case ResponseEnvelope.Types.StatusCode.OkRpcUrlInResponse:
                                 if (Regex.IsMatch(responseEnvelope.ApiUrl, "pgorelease\\.nianticlabs\\.com\\/plfe\\/\\d+"))
@@ -451,7 +473,7 @@ namespace POGOLib.Net
                                 break;
 
                             // The response envelope has api_rul set. TODO: Use this
-//                        case ResponseEnvelope.Types.StatusCode.OkRpcUrlInResponse: 
+//                        case ResponseEnvelope.Types.StatusCode.OkRpcUrlInResponse:
 //                            Logger.Warn($"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
 //
 //                            await Task.Delay(TimeSpan.FromMilliseconds(Configuration.SlowServerTimeout));
@@ -459,7 +481,7 @@ namespace POGOLib.Net
 //                            return await SendRemoteProcedureCall(request);
 
                             // A new rpc endpoint is available.
-                            case ResponseEnvelope.Types.StatusCode.Redirect: 
+                            case ResponseEnvelope.Types.StatusCode.Redirect:
                                 if (Regex.IsMatch(responseEnvelope.ApiUrl, "pgorelease\\.nianticlabs\\.com\\/plfe\\/\\d+"))
                                 {
                                     _requestUrl = $"https://{responseEnvelope.ApiUrl}/rpc";
@@ -579,7 +601,7 @@ namespace POGOLib.Net
         private void HandleDefaultResponses(RequestEnvelope requestEnvelope, RepeatedField<ByteString> returns)
         {
             var responseIndexes = new Dictionary<int, RequestType>();
-            
+
             for (var i = 0; i < requestEnvelope.Requests.Count; i++)
             {
                 var request = requestEnvelope.Requests[i];
