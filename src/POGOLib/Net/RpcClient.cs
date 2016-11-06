@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using GeoCoordinatePortable;
 using Google.Protobuf;
-using Google.Protobuf.Collections;
 using POGOLib.Logging;
 using POGOLib.Util;
 using POGOProtos.Enums;
@@ -346,7 +345,7 @@ namespace POGOLib.Net
         /// <param name="request"></param>
         /// <param name="addDefaultRequests"></param>
         /// <returns></returns>
-        private async Task<RequestEnvelope> GetRequestEnvelope(Request[] request, bool addDefaultRequests)
+        private async Task<RequestEnvelope> GetRequestEnvelope(IEnumerable<Request> request, bool addDefaultRequests)
         {
             var requestEnvelope = new RequestEnvelope
             {
@@ -388,20 +387,6 @@ namespace POGOLib.Net
             requestEnvelope.PlatformRequests.Add(_rpcEncryption.GenerateSignature(requestEnvelope));
 
             return requestEnvelope;
-        }
-
-        /// <summary>
-        ///     Prepares the <see cref="RequestEnvelope" /> to be sent with <see cref="_httpClient" />.
-        /// </summary>
-        /// <param name="requestEnvelope">The <see cref="RequestEnvelope" /> that will be send.</param>
-        /// <returns><see cref="StreamContent" /> to be sent with <see cref="_httpClient" />.</returns>
-        private ByteArrayContent PrepareRequestEnvelope(RequestEnvelope requestEnvelope)
-        {
-            var messageBytes = requestEnvelope.ToByteArray();
-
-            // TODO: Compression?
-
-            return new ByteArrayContent(messageBytes);
         }
 
         public async Task<ByteString> SendRemoteProcedureCall(RequestType requestType)
@@ -457,7 +442,7 @@ namespace POGOLib.Net
         {
             try
             {
-                using (var requestData = PrepareRequestEnvelope(requestEnvelope))
+                using (var requestData = new ByteArrayContent(requestEnvelope.ToByteArray()))
                 {
                     Logger.Debug($"Sending RPC Request: '{string.Join(", ", requestEnvelope.Requests.Select(x => x.RequestType))}'");
 
@@ -549,15 +534,11 @@ namespace POGOLib.Net
         }
 
         /// <summary>
-        ///     Responsible for handling the received <see cref="ResponseEnvelope" />.
+        /// Responsible for handling the received <see cref="ResponseEnvelope" />.
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="requestEnvelope"></param>
-        /// <param name="responseEnvelope">
-        ///     The <see cref="ResponseEnvelope" /> received from
-        ///     <see cref="SendRemoteProcedureCall(Request)" />.
-        /// </param>
-        /// <returns>Returns the <see cref="ByteString" /> response of the <see cref="Request" />.</returns>
+        /// <param name="requestEnvelope">The <see cref="RequestEnvelope"/> prepared by <see cref="PerformRemoteProcedureCall(RequestEnvelope)"/>.</param>
+        /// <param name="responseEnvelope">The <see cref="ResponseEnvelope"/> received from <see cref="SendRemoteProcedureCall(Request)" />.</param>
+        /// <returns>Returns the <see cref="ByteString" />response of the <see cref="Request"/>.</returns>
         private ByteString HandleResponseEnvelope(RequestEnvelope requestEnvelope, ResponseEnvelope responseEnvelope)
         {
             if (responseEnvelope.Returns.Count == 0)
@@ -617,7 +598,7 @@ namespace POGOLib.Net
         /// </summary>
         /// <param name="requestEnvelope"></param>
         /// <param name="returns">The payload of the <see cref="ResponseEnvelope" />.</param>
-        private void HandleDefaultResponses(RequestEnvelope requestEnvelope, RepeatedField<ByteString> returns)
+        private void HandleDefaultResponses(RequestEnvelope requestEnvelope, IList<ByteString> returns)
         {
             var responseIndexes = new Dictionary<int, RequestType>();
             

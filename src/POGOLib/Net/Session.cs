@@ -2,7 +2,6 @@
 using System.Threading;
 using GeoCoordinatePortable;
 using POGOLib.Logging;
-using POGOLib.Net.Authentication;
 using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon;
 using POGOProtos.Settings;
@@ -10,7 +9,6 @@ using System.Threading.Tasks;
 using System.Linq;
 using POGOLib.Net.Authentication.Providers;
 using POGOLib.Util;
-using POGOProtos.Networking.Envelopes;
 
 namespace POGOLib.Net
 {

@@ -1,13 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Google.Protobuf;
-using Google.Protobuf.Collections;
-using POGOProtos.Data;
-using POGOProtos.Networking.Responses;
-using POGOLib.Util;
-
-namespace POGOLib.Pokemon
+﻿namespace POGOLib.Pokemon
 {
     /*
     public class Templates

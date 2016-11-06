@@ -1,6 +1,5 @@
 ﻿using System;
 using Newtonsoft.Json;
-using POGOLib.Pokemon;
 using POGOProtos.Networking.Envelopes;
 
 namespace POGOLib.Net.Authentication.Data
