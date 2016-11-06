@@ -42,9 +42,9 @@ namespace POGOLib.Net
             _deviceId = HexUtil.GetRandomHexNumber(32);
         }
 
-        public long TimestampSinceStartMs => _stopwatch.ElapsedMilliseconds;
+        private long TimestampSinceStartMs => _stopwatch.ElapsedMilliseconds;
 
-        private List<LocationFix> BuildLocationFixes(RequestEnvelope requestEnvelope)
+        private List<LocationFix> BuildLocationFixes(long timestampSinceStart, RequestEnvelope requestEnvelope)
         {
             var locationFixes = new List<LocationFix>();
 
@@ -56,7 +56,7 @@ namespace POGOLib.Net
             {
                 locationFixes.Insert(0, new LocationFix
                 {
-                    TimestampSnapshot = (ulong) (TimestampSinceStartMs + (150*(i + 1) + _random.Next(250*(i + 1) - 150*(i + 1)))),
+                    TimestampSnapshot = (ulong) (timestampSinceStart + (150*(i + 1) + _random.Next(250*(i + 1) - 150*(i + 1)))),
                     Latitude = LocationUtil.OffsetLatitudeLongitude(_session.Player.Coordinate.Latitude, _random.Next(100) + 10),
                     Longitude = LocationUtil.OffsetLatitudeLongitude(_session.Player.Coordinate.Longitude, _random.Next(100) + 10),
                     HorizontalAccuracy = (float) _random.NextDouble()*(25 - 5) + 5,
@@ -80,7 +80,7 @@ namespace POGOLib.Net
         internal PlatformRequest GenerateSignature(RequestEnvelope requestEnvelope)
         {
             var timestampSinceStart = TimestampSinceStartMs;
-            var locationFixes = BuildLocationFixes(requestEnvelope);
+            var locationFixes = BuildLocationFixes(timestampSinceStart, requestEnvelope);
 
             // TODO: Figure out why the map request sometimes fails.
             
@@ -98,7 +98,7 @@ namespace POGOLib.Net
                 {
                     new SensorInfo
                     {
-                        TimestampSnapshot = (ulong) (timestampSinceStart + _random.Next(500)),
+                        TimestampSnapshot = (ulong) (timestampSinceStart + _random.Next(100, 250)),
                         LinearAccelerationX = -0.7 + _random.NextDouble() * 1.4,
                         LinearAccelerationY = -0.7 + _random.NextDouble() * 1.4,
                         LinearAccelerationZ = -0.7 + _random.NextDouble() * 1.4,
