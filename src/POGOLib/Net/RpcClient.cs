@@ -426,7 +426,7 @@ namespace POGOLib.Net
                         await Task.Delay(delay);
                     }
                     
-                    _rpcResponses.GetOrAdd(processRequestEnvelope, await PerformRemoteProcedureCall(requestEnvelope));
+                    _rpcResponses.GetOrAdd(processRequestEnvelope, await PerformRemoteProcedureCall(processRequestEnvelope));
                 }
 
                 ByteString ret;
