@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeoCoordinatePortable;
 using Google.Protobuf.Collections;
 using POGOLib.Net;
 using POGOProtos.Map;
 using POGOProtos.Map.Fort;
+using System.Device.Location;
 
 namespace POGOLib.Pokemon
 {
