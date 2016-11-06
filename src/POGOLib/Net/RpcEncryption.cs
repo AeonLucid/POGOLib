@@ -54,7 +54,7 @@ namespace POGOLib.Net
             var providerCount = _random.Next(4, 10);
             for (var i = 0; i < providerCount; i++)
             {
-                locationFixes.Add(new LocationFix
+                locationFixes.Insert(0, new LocationFix
                 {
                     TimestampSnapshot = (ulong) (TimestampSinceStartMs + (150*(i + 1) + _random.Next(250*(i + 1) - 150*(i + 1)))),
                     Latitude = LocationUtil.OffsetLatitudeLongitude(_session.Player.Coordinate.Latitude, _random.Next(100) + 10),
@@ -84,11 +84,11 @@ namespace POGOLib.Net
 
             // TODO: Figure out why the map request sometimes fails.
             
-            _session.Player.Coordinate.HorizontalAccuracy = locationFixes[locationFixes.Count - 1].HorizontalAccuracy;
-            _session.Player.Coordinate.VerticalAccuracy = locationFixes[locationFixes.Count - 1].VerticalAccuracy;
+            _session.Player.Coordinate.HorizontalAccuracy = locationFixes[0].HorizontalAccuracy;
+            _session.Player.Coordinate.VerticalAccuracy = locationFixes[0].VerticalAccuracy;
 
             requestEnvelope.Accuracy = _session.Player.Coordinate.HorizontalAccuracy;
-//            requestEnvelope.MsSinceLastLocationfix = timestampSinceStart - (long) locationFixes[locationFixes.Count - 1].TimestampSnapshot;
+            requestEnvelope.MsSinceLastLocationfix = (long)locationFixes[0].TimestampSnapshot;
 
             var signature = new Signature
             {
