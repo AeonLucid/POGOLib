@@ -131,7 +131,11 @@ namespace POGOLib.Net
                     FirmwareType = "9.3.3",
                     FirmwareFingerprint = string.Empty
                 },
-                LocationFix = { locationFixes }
+                LocationFix = { locationFixes },
+                ActivityStatus = new ActivityStatus
+                {
+                    Stationary = true
+                }
             };
 
             var serializedTicket = requestEnvelope.AuthTicket != null ? requestEnvelope.AuthTicket.ToByteArray() : requestEnvelope.AuthInfo.ToByteArray();
@@ -141,7 +145,7 @@ namespace POGOLib.Net
 
             signature.LocationHash1 = NiaHash.Hash32Salt(locationBytes, NiaHash.Hash32(serializedTicket));
             signature.LocationHash2 = NiaHash.Hash32(locationBytes);
-
+            
             foreach (var req in requestEnvelope.Requests)
             {
                 signature.RequestHash.Add(NiaHash.Hash64Salt64(req.ToByteArray(), NiaHash.Hash64(serializedTicket)));
