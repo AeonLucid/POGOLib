@@ -84,7 +84,7 @@ namespace POGOLib.Net
         /// </summary>
         internal string GlobalSettingsHash { get; set; } = string.Empty;
 
-        private Mutex ReauthenticateMutex { get; } = new Mutex();
+        private Semaphore ReauthenticateMutex { get; } = new Semaphore(1, 1);
 
         public void Dispose()
         {
@@ -140,7 +140,7 @@ namespace POGOLib.Net
                 AccessToken = accessToken;
                 OnAccessTokenUpdated();
             }
-            ReauthenticateMutex.ReleaseMutex();
+            ReauthenticateMutex.Release();
         }
 
         private void OnAccessTokenUpdated()

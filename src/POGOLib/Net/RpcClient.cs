@@ -16,6 +16,8 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Threading;
 
 namespace POGOLib.Net
 {
@@ -411,7 +413,40 @@ namespace POGOLib.Net
             return await SendRemoteProcedureCall(await GetRequestEnvelope(request, false));
         }
 
-        private async Task<ByteString> SendRemoteProcedureCall(RequestEnvelope requestEnvelope)
+        // RPC Calls need to be throttled 
+        private static long lastRpc = 0;    // Starting at 0 to allow first RPC call to be done immediately
+        private const int minDiff = 1000;   // Derived by trial-and-error. Up to 900 can cause server to complain.
+        private ConcurrentQueue<RequestEnvelope> rpcQueue = new ConcurrentQueue<RequestEnvelope>();
+        private ConcurrentDictionary<RequestEnvelope, ByteString> responses = new ConcurrentDictionary<RequestEnvelope, ByteString>();
+        private static Semaphore mutex = new Semaphore(1, 1);
+        private Task<ByteString> SendRemoteProcedureCall(RequestEnvelope requestEnvelope)
+        {
+            return Task.Run(async () =>
+            {
+                rpcQueue.Enqueue(requestEnvelope);
+                var count = rpcQueue.Count;
+                mutex.WaitOne();
+                RequestEnvelope r;
+                while (rpcQueue.TryDequeue(out r))
+                {
+                    var diff = Math.Max(0, DateTime.Now.Millisecond - lastRpc);
+                    if (diff < minDiff)
+                    {
+                        var delay = (minDiff - diff) + (int)(new Random().NextDouble() * 0); // Add some randomness
+                        await Task.Delay((int)(delay));
+                    }
+                    lastRpc = DateTime.Now.Millisecond;
+                    var response = await PerformRemoteProcedureCall(requestEnvelope);
+                    responses.GetOrAdd(r, response);
+                }
+                ByteString ret;
+                responses.TryRemove(requestEnvelope, out ret);
+                mutex.Release();
+                return ret;
+            });
+        }
+
+        private async Task<ByteString> PerformRemoteProcedureCall(RequestEnvelope requestEnvelope)
         {
             try
             {
@@ -450,7 +485,7 @@ namespace POGOLib.Net
                                 }
                                 break;
 
-                            // The response envelope has api_rul set. TODO: Use this
+                            // The response envelope has api_url set. TODO: Use this
 //                        case ResponseEnvelope.Types.StatusCode.OkRpcUrlInResponse: 
 //                            Logger.Warn($"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
 //
@@ -464,7 +499,7 @@ namespace POGOLib.Net
                                 {
                                     _requestUrl = $"https://{responseEnvelope.ApiUrl}/rpc";
 
-                                    return await SendRemoteProcedureCall(requestEnvelope);
+                                    return await PerformRemoteProcedureCall(requestEnvelope);
                                 }
                                 throw new Exception($"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
 
@@ -475,7 +510,7 @@ namespace POGOLib.Net
                                 _session.AccessToken.Expire();
                                 await _session.Reauthenticate();
 
-                                return await SendRemoteProcedureCall(requestEnvelope);
+                                return await PerformRemoteProcedureCall(requestEnvelope);
 
                             default:
                                 Logger.Info($"Unknown status code: {responseEnvelope.StatusCode}");
