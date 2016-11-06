@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Google.Protobuf;
@@ -20,22 +21,56 @@ namespace POGOLib.Net
         /// </summary>
         private readonly Session _session;
 
-        private readonly Stopwatch _internalStopwatch;
+        private readonly Stopwatch _stopwatch;
 
         private readonly ByteString _sessionHash;
 
         private readonly Random _random;
 
+        private readonly string _deviceId;
+
         internal RpcEncryption(Session session)
         {
             _session = session;
-            _internalStopwatch = Stopwatch.StartNew();
+            _stopwatch = Stopwatch.StartNew();
             _random = new Random();
 
             var sessionHash = new byte[32];
             _random.NextBytes(sessionHash);
 
             _sessionHash = ByteString.CopyFrom(sessionHash);
+            _deviceId = HexUtil.GetRandomHexNumber(32);
+        }
+
+        public long TimestampSinceStartMs => _stopwatch.ElapsedMilliseconds;
+
+        private List<LocationFix> BuildLocationFixes(RequestEnvelope requestEnvelope)
+        {
+            var locationFixes = new List<LocationFix>();
+
+            if (requestEnvelope.Requests.Count == 0 || requestEnvelope.Requests[0] == null)
+                return locationFixes;
+
+            var providerCount = _random.Next(4, 10);
+            for (var i = 0; i < providerCount; i++)
+            {
+                locationFixes.Add(new LocationFix
+                {
+                    TimestampSnapshot = (ulong) (TimestampSinceStartMs + (150*(i + 1) + _random.Next(250*(i + 1) - 150*(i + 1)))),
+                    Latitude = LocationUtil.OffsetLatitudeLongitude(_session.Player.Coordinate.Latitude, _random.Next(100) + 10),
+                    Longitude = LocationUtil.OffsetLatitudeLongitude(_session.Player.Coordinate.Longitude, _random.Next(100) + 10),
+                    HorizontalAccuracy = (float) _random.NextDouble()*(25 - 5) + 5,
+                    VerticalAccuracy = (float) _random.NextDouble()*(25 - 5) + 5,
+                    Altitude = (float) _session.Player.Coordinate.Altitude,
+                    ProviderStatus = 3,
+                    LocationType = 1,
+//                    Speed = ?,
+                    Course = -1,
+//                    Floor = 0
+                });
+            }
+
+            return locationFixes;
         }
 
         /// <summary>
@@ -44,67 +79,59 @@ namespace POGOLib.Net
         /// <returns>The encrypted <see cref="PlatformRequest"/> (Signature).</returns>
         internal PlatformRequest GenerateSignature(RequestEnvelope requestEnvelope)
         {
-            // TODO: Figure out why the map request sometimes fails, probably has to do with the Randomize() method.
+            var timestampSinceStart = TimestampSinceStartMs;
+            var locationFixes = BuildLocationFixes(requestEnvelope);
 
-            _session.Player.Coordinate.HorizontalAccuracy = 10.0; // TODO: TEMP FIX, figure out why only this returns map data.
+            // TODO: Figure out why the map request sometimes fails.
+            
+            _session.Player.Coordinate.HorizontalAccuracy = locationFixes[locationFixes.Count - 1].HorizontalAccuracy;
+            _session.Player.Coordinate.VerticalAccuracy = locationFixes[locationFixes.Count - 1].VerticalAccuracy;
+
+            requestEnvelope.Accuracy = _session.Player.Coordinate.HorizontalAccuracy;
+//            requestEnvelope.MsSinceLastLocationfix = timestampSinceStart - (long) locationFixes[locationFixes.Count - 1].TimestampSnapshot;
 
             var signature = new Signature
             {
-                TimestampSinceStart = (ulong) _internalStopwatch.ElapsedMilliseconds,
+                TimestampSinceStart = (ulong)timestampSinceStart,
                 Timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds(),
-                SensorInfo = new SensorInfo
+                SensorInfo =
                 {
-                    TimestampSnapshot = (ulong) (_internalStopwatch.ElapsedMilliseconds - _random.Next(100, 250)),
-                    LinearAccelerationX = Randomize(012271042913198471),
-                    LinearAccelerationY = Randomize(-0.015570580959320068),
-                    LinearAccelerationZ = Randomize(0.010850906372070313),
-                    MagneticFieldX = Randomize(17.950439453125),
-                    MagneticFieldY = Randomize(-23.36273193359375),
-                    MagneticFieldZ = Randomize(-48.8250732421875),
-                    RotationVectorX = Randomize(-0.0120010357350111),
-                    RotationVectorY = Randomize(-0.04214850440621376),
-                    RotationVectorZ = Randomize(0.94571763277053833),
-                    GyroscopeRawX = Randomize(7.62939453125e-005),
-                    GyroscopeRawY = Randomize(-0.00054931640625),
-                    GyroscopeRawZ = Randomize(0.0024566650390625),
-                    GravityX = Randomize(0.02),
-                    GravityY = Randomize(0.3),
-                    GravityZ = Randomize(9.8),
-                    AccelerometerAxes = 3
+                    new SensorInfo
+                    {
+                        TimestampSnapshot = (ulong) (timestampSinceStart + _random.Next(500)),
+                        LinearAccelerationX = -0.7 + _random.NextDouble() * 1.4,
+                        LinearAccelerationY = -0.7 + _random.NextDouble() * 1.4,
+                        LinearAccelerationZ = -0.7 + _random.NextDouble() * 1.4,
+                        RotationRateX = 0.7 * _random.NextDouble(),
+                        RotationRateY = 0.8 * _random.NextDouble(),
+                        RotationRateZ = 0.8 * _random.NextDouble(),
+                        AttitudePitch = -1.0 + _random.NextDouble() * 2.0,
+                        AttitudeRoll = -1.0 + _random.NextDouble() * 2.0,
+                        AttitudeYaw = -1.0 + _random.NextDouble() * 2.0,
+                        GravityX = -1.0 + _random.NextDouble() * 2.0,
+                        GravityY = -1.0 + _random.NextDouble() * 2.0,
+                        GravityZ = -1.0 + _random.NextDouble() * 2.0,
+                        MagneticFieldAccuracy = -1,
+                        Status = 3
+                    }
                 },
                 DeviceInfo = new DeviceInfo
                 {
-                    DeviceId = _session.Device.DeviceId,
-                    AndroidBoardName = _session.Device.AndroidBoardName,
-                    AndroidBootloader = _session.Device.AndroidBootloader,
-                    DeviceBrand = _session.Device.DeviceBrand,
-                    DeviceModel = _session.Device.DeviceModel,
-                    DeviceModelIdentifier = _session.Device.DeviceModelIdentifier,
-                    DeviceModelBoot = _session.Device.DeviceModelBoot,
-                    HardwareManufacturer = _session.Device.HardwareManufacturer,
-                    HardwareModel = _session.Device.HardwareModel,
-                    FirmwareBrand = _session.Device.FirmwareBrand,
-                    FirmwareTags = _session.Device.FirmwareTags,
-                    FirmwareType = _session.Device.FirmwareType,
-                    FirmwareFingerprint = _session.Device.FirmwareFingerprint
+                    DeviceId = _deviceId,
+                    AndroidBoardName = string.Empty,
+                    AndroidBootloader = string.Empty,
+                    DeviceBrand = "Apple",
+                    DeviceModel = "iPhone",
+                    DeviceModelIdentifier = string.Empty,
+                    DeviceModelBoot = "iPhone6,1",
+                    HardwareManufacturer = "Apple",
+                    HardwareModel = "N51AP",
+                    FirmwareBrand = "iPhone OS",
+                    FirmwareTags = string.Empty,
+                    FirmwareType = "9.3.3",
+                    FirmwareFingerprint = string.Empty
                 },
-                LocationFix = // Max 30
-                {
-                    new LocationFix
-                    {
-                        Provider = "network",
-                        Latitude = (float)_session.Player.Coordinate.Latitude,
-                        Longitude = (float)_session.Player.Coordinate.Longitude,
-                        Altitude = (float)_session.Player.Coordinate.Altitude,
-                        HorizontalAccuracy = (float)_session.Player.Coordinate.HorizontalAccuracy,
-                        VerticalAccuracy = (float)_session.Player.Coordinate.VerticalAccuracy,
-                        Speed = (float)_session.Player.Coordinate.Speed,
-                        Course = (float)_session.Player.Coordinate.Course,
-                        TimestampSnapshot = (ulong) (_internalStopwatch.ElapsedMilliseconds - _random.Next(100, 250)), // TODO: Verify this
-                        Floor = 0,
-                        LocationType = 1
-                    }
-                }
+                LocationFix = { locationFixes }
             };
 
             var serializedTicket = requestEnvelope.AuthTicket != null ? requestEnvelope.AuthTicket.ToByteArray() : requestEnvelope.AuthInfo.ToByteArray();
@@ -128,20 +155,11 @@ namespace POGOLib.Net
                 Type = PlatformRequestType.SendEncryptedSignature,
                 RequestMessage = new SendEncryptedSignatureRequest
                 {
-                    EncryptedSignature = ByteString.CopyFrom(PCrypt.Encrypt(signature.ToByteArray(), (uint) _internalStopwatch.ElapsedMilliseconds))
+                    EncryptedSignature = ByteString.CopyFrom(PCrypt.Encrypt(signature.ToByteArray(), (uint)timestampSinceStart))
                 }.ToByteString()
             };
             
             return encryptedSignature;
-        }
-
-        private static double Randomize(double num)
-        {
-            const float randomFactor = 0.3f;
-            var randomMin = num * (1 - randomFactor);
-            var randomMax = num * (1 + randomFactor);
-            var randomizedDelay = new Random().NextDouble() * (randomMax - randomMin) + randomMin; 
-            return randomizedDelay;
         }
 
     }

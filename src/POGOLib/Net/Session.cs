@@ -5,7 +5,6 @@ using POGOLib.Logging;
 using POGOLib.Net.Authentication;
 using POGOLib.Net.Authentication.Data;
 using POGOLib.Pokemon;
-using POGOLib.Util.Devices;
 using POGOProtos.Settings;
 using System.Threading.Tasks;
 using System.Linq;
@@ -41,17 +40,13 @@ namespace POGOLib.Net
         /// </summary>
         public IDataCache DataCache { get; set; } = new MemoryDataCache();
 
-        internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate, Device device = null)
+        internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate)
         {
             if (!ValidLoginProviders.Contains(loginProvider.ProviderID))
                 throw new ArgumentException($"LoginProvider ID must be one of the following: {string.Join(", ", ValidLoginProviders)}");
 
-            if (device == null) // Default device
-                device = DeviceInfo.GetDeviceByName("nexus5");
-
             LoginProvider = loginProvider;
             AccessToken = accessToken;
-            Device = device;
             Player = new Player(geoCoordinate);
             Map = new Map(this);
             RpcClient = new RpcClient(this);
@@ -68,11 +63,6 @@ namespace POGOLib.Net
         public AccessToken AccessToken { get; private set; }
 
         public ILoginProvider LoginProvider { get; private set; }
-
-        /// <summary>
-        ///     Gets the <see cref="Device"/> of the <see cref="Session"/>. The <see cref="RpcClient"/> will try to act like this <see cref="Device"/>.
-        /// </summary>
-        public Device Device { get; private set; }
 
         /// <summary>
         ///     Gets the <see cref="Player" /> of the <see cref="Session" />.

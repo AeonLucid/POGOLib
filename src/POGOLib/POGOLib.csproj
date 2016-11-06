@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="HexUtil.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="Net\Authentication\Data\AccessToken.cs" />
@@ -58,12 +59,11 @@
     <Compile Include="Pokemon\Player.cs" />
     <Compile Include="Pokemon\Templates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\Devices\Device.cs" />
-    <Compile Include="Util\Devices\DeviceInfo.cs" />
     <Compile Include="Util\Encryption\NiaHash.cs" />
     <Compile Include="Util\Encryption\PCrypt.cs" />
     <Compile Include="Util\Encryption\Shuffles.cs" />
     <Compile Include="Util\IDataCache.cs" />
+    <Compile Include="Util\LocationUtil.cs" />
     <Compile Include="Util\MapUtil.cs" />
     <Compile Include="Util\MemoryDataCache.cs" />
     <Compile Include="Util\TimeUtil.cs" />

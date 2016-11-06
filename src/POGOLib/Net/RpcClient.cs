@@ -67,7 +67,7 @@ namespace POGOLib.Net
             };
 
             _httpClient = new HttpClient(httpClientHandler);
-            _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(_session.Device.UserAgent);
+            _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("Niantic App");
             _httpClient.DefaultRequestHeaders.ExpectContinue = false;
             _requestId = (ulong)new Random().Next(100000000, 999999999);
         }
