@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading;
 using GeoCoordinatePortable;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
@@ -47,7 +49,7 @@ namespace POGOLib.Net
         /// </summary>
         private string _requestUrl;
 
-        private List<RequestType> _defaultRequests = new List<RequestType>
+        private readonly List<RequestType> _defaultRequests = new List<RequestType>
         {
             RequestType.CheckChallenge,
             RequestType.GetHatchedEggs,
@@ -55,6 +57,14 @@ namespace POGOLib.Net
             RequestType.CheckAwardedBadges,
             RequestType.DownloadSettings
         };
+
+        private readonly Random _random = new Random();
+
+        private readonly ConcurrentQueue<RequestEnvelope> _rpcQueue = new ConcurrentQueue<RequestEnvelope>();
+
+        private readonly ConcurrentDictionary<RequestEnvelope, ByteString> _rpcResponses = new ConcurrentDictionary<RequestEnvelope, ByteString>();
+
+        private static readonly Semaphore RpcQueueMutex = new Semaphore(1, 1);
 
         internal RpcClient(Session session)
         {
@@ -69,7 +79,7 @@ namespace POGOLib.Net
             _httpClient = new HttpClient(httpClientHandler);
             _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("Niantic App");
             _httpClient.DefaultRequestHeaders.ExpectContinue = false;
-            _requestId = (ulong)new Random().Next(100000000, 999999999);
+            _requestId = (ulong) _random.Next(100000000, 999999999);
         }
 
         internal DateTime LastRpcRequest { get; private set; }
@@ -89,7 +99,7 @@ namespace POGOLib.Net
                 GetPlayerResponse playerResponse;
                 do
                 {
-                    var response = await SendRemoteProcedureCall(new []
+                    var response = await SendRemoteProcedureCall(new[]
                     {
                         new Request
                         {
@@ -137,7 +147,7 @@ namespace POGOLib.Net
             });
 
             var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
-            var timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds();
+            var timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds();
 
             // TODO: the timestamp comparisons seem to be used for determining if the stored data is invalid and needs refreshed,
             //       however, looking at this code I'm not sure it's implemented correctly - or if these refactors still match the behavior of
@@ -180,7 +190,7 @@ namespace POGOLib.Net
             });
 
             var remoteConfigParsed = DownloadRemoteConfigVersionResponse.Parser.ParseFrom(remoteConfigResponse);
-            var timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds();
+            var timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds();
 
             var cachedMsg = _session.DataCache.GetCachedItemTemplates();
             if (cachedMsg != null && remoteConfigParsed.AssetDigestTimestampMs <= timestamp)
@@ -205,7 +215,8 @@ namespace POGOLib.Net
         /// </summary>
         public async Task RefreshMapObjects()
         {
-            var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
+            var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude,
+                _session.Player.Coordinate.Longitude);
             var sinceTimeMs = new List<long>(cellIds.Length);
 
             for (var i = 0; i < cellIds.Length; i++)
@@ -411,7 +422,38 @@ namespace POGOLib.Net
             return await SendRemoteProcedureCall(await GetRequestEnvelope(request, false));
         }
 
-        private async Task<ByteString> SendRemoteProcedureCall(RequestEnvelope requestEnvelope)
+        private Task<ByteString> SendRemoteProcedureCall(RequestEnvelope requestEnvelope)
+        {
+            return Task.Run(async () =>
+            {
+                _rpcQueue.Enqueue(requestEnvelope);
+                
+                RpcQueueMutex.WaitOne();
+
+                RequestEnvelope processRequestEnvelope;
+                while (_rpcQueue.TryDequeue(out processRequestEnvelope))
+                {
+                    var diff = Math.Max(0, DateTime.Now.Millisecond - LastRpcRequest.Millisecond);
+                    if (diff < Configuration.ThrottleDifference)
+                    {
+                        var delay = Configuration.ThrottleDifference - diff + (int) (_random.NextDouble()*0);
+
+                        await Task.Delay(delay);
+                    }
+                    
+                    _rpcResponses.GetOrAdd(processRequestEnvelope, await PerformRemoteProcedureCall(processRequestEnvelope));
+                }
+
+                ByteString ret;
+                _rpcResponses.TryRemove(requestEnvelope, out ret);
+
+                RpcQueueMutex.Release();
+
+                return ret;
+            });
+        }
+
+        private async Task<ByteString> PerformRemoteProcedureCall(RequestEnvelope requestEnvelope)
         {
             try
             {
@@ -449,14 +491,13 @@ namespace POGOLib.Net
                                     throw new Exception($"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
                                 }
                                 break;
-
-                            // The response envelope has api_rul set. TODO: Use this
-//                        case ResponseEnvelope.Types.StatusCode.OkRpcUrlInResponse: 
-//                            Logger.Warn($"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
+                                
+//                            case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest: 
+//                                Logger.Warn($"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
 //
-//                            await Task.Delay(TimeSpan.FromMilliseconds(Configuration.SlowServerTimeout));
+//                                await Task.Delay(TimeSpan.FromMilliseconds(Configuration.SlowServerTimeout));
 //
-//                            return await SendRemoteProcedureCall(request);
+//                                return await SendRemoteProcedureCall(requestEnvelope);
 
                             // A new rpc endpoint is available.
                             case ResponseEnvelope.Types.StatusCode.Redirect: 
@@ -464,7 +505,7 @@ namespace POGOLib.Net
                                 {
                                     _requestUrl = $"https://{responseEnvelope.ApiUrl}/rpc";
 
-                                    return await SendRemoteProcedureCall(requestEnvelope);
+                                    return await PerformRemoteProcedureCall(requestEnvelope);
                                 }
                                 throw new Exception($"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
 
@@ -475,7 +516,7 @@ namespace POGOLib.Net
                                 _session.AccessToken.Expire();
                                 await _session.Reauthenticate();
 
-                                return await SendRemoteProcedureCall(requestEnvelope);
+                                return await PerformRemoteProcedureCall(requestEnvelope);
 
                             default:
                                 Logger.Info($"Unknown status code: {responseEnvelope.StatusCode}");
