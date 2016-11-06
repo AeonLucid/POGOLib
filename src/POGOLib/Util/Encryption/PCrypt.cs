@@ -137,7 +137,9 @@ namespace POGOLib.Util.Encryption
             foreach (var bytes in outputcontent)
             {
                 var temp2 = new uint[0x100 / 4];
+                var temp3 = new uint[0x100 / 4];
                 Buffer.BlockCopy(bytes, 0, temp2, 0, 0x100);
+                Buffer.BlockCopy(temp2, 0, temp3, 0, 0x100);
 
                 if (version == 1)
                     Shuffles.Unshuffle(temp2);
@@ -149,6 +151,7 @@ namespace POGOLib.Util.Encryption
                 {
                     bytes[j] ^= cipher8[j];
                 }
+                Buffer.BlockCopy(temp3, 0, cipher8, 0, 0x100);
             }
 
             var ret = new byte[outputLen];
