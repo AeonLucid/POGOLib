@@ -88,7 +88,7 @@ namespace POGOLib.Net
                     FirmwareType = _session.Device.FirmwareType,
                     FirmwareFingerprint = _session.Device.FirmwareFingerprint
                 },
-                LocationFix =
+                LocationFix = // Max 30
                 {
                     new LocationFix
                     {
