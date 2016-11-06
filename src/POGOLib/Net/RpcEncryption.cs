@@ -29,16 +29,14 @@ namespace POGOLib.Net
         internal RpcEncryption(Session session)
         {
             _session = session;
-            _internalStopwatch = new Stopwatch();
+            _internalStopwatch = Stopwatch.StartNew();
             _random = new Random();
 
-            var sessionHash = new byte[16];
+            var sessionHash = new byte[32];
             _random.NextBytes(sessionHash);
 
             _sessionHash = ByteString.CopyFrom(sessionHash);
         }
-
-        private ulong TimestampSinceStart => (ulong) _internalStopwatch.ElapsedMilliseconds;
 
         /// <summary>
         ///     Generates the encrypted signature which is required for the <see cref="RequestEnvelope"/>.
@@ -46,13 +44,17 @@ namespace POGOLib.Net
         /// <returns>The encrypted <see cref="PlatformRequest"/> (Signature).</returns>
         internal PlatformRequest GenerateSignature(RequestEnvelope requestEnvelope)
         {
+            // TODO: Figure out why the map request sometimes fails, probably has to do with the Randomize() method.
+
+            _session.Player.Coordinate.HorizontalAccuracy = 10.0; // TODO: TEMP FIX, figure out why only this returns map data.
+
             var signature = new Signature
             {
-                TimestampSinceStart = TimestampSinceStart,
+                TimestampSinceStart = (ulong) _internalStopwatch.ElapsedMilliseconds,
                 Timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds(),
                 SensorInfo = new SensorInfo
                 {
-                    TimestampSnapshot = TimestampSinceStart - (ulong) _random.Next(100, 250),
+                    TimestampSnapshot = (ulong) (_internalStopwatch.ElapsedMilliseconds - _random.Next(100, 250)),
                     LinearAccelerationX = Randomize(012271042913198471),
                     LinearAccelerationY = Randomize(-0.015570580959320068),
                     LinearAccelerationZ = Randomize(0.010850906372070313),
@@ -98,13 +100,13 @@ namespace POGOLib.Net
                         VerticalAccuracy = (float)_session.Player.Coordinate.VerticalAccuracy,
                         Speed = (float)_session.Player.Coordinate.Speed,
                         Course = (float)_session.Player.Coordinate.Course,
-                        TimestampSnapshot = TimestampSinceStart - (ulong) _random.Next(100, 250), // TODO: Verify this
-                        Floor = 3,
+                        TimestampSnapshot = (ulong) (_internalStopwatch.ElapsedMilliseconds - _random.Next(100, 250)), // TODO: Verify this
+                        Floor = 0,
                         LocationType = 1
                     }
                 }
             };
-            
+
             var serializedTicket = requestEnvelope.AuthTicket != null ? requestEnvelope.AuthTicket.ToByteArray() : requestEnvelope.AuthInfo.ToByteArray();
             var locationBytes = BitConverter.GetBytes(_session.Player.Coordinate.Latitude).Reverse()
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Longitude).Reverse())
@@ -115,8 +117,7 @@ namespace POGOLib.Net
 
             foreach (var req in requestEnvelope.Requests)
             {
-                var reqBytes = req.ToByteArray();
-                signature.RequestHash.Add(NiaHash.Hash64Salt64(reqBytes, NiaHash.Hash64(serializedTicket)));
+                signature.RequestHash.Add(NiaHash.Hash64Salt64(req.ToByteArray(), NiaHash.Hash64(serializedTicket)));
             }
 
             signature.SessionHash = _sessionHash;
@@ -127,7 +128,7 @@ namespace POGOLib.Net
                 Type = PlatformRequestType.SendEncryptedSignature,
                 RequestMessage = new SendEncryptedSignatureRequest
                 {
-                    EncryptedSignature = ByteString.CopyFrom(PCrypt.Encrypt(signature.ToByteArray(), (uint) TimestampSinceStart))
+                    EncryptedSignature = ByteString.CopyFrom(PCrypt.Encrypt(signature.ToByteArray(), (uint) _internalStopwatch.ElapsedMilliseconds))
                 }.ToByteString()
             };
             
@@ -137,10 +138,10 @@ namespace POGOLib.Net
         private static double Randomize(double num)
         {
             const float randomFactor = 0.3f;
-            var randomMin = (num * (1 - randomFactor));
-            var randomMax = (num * (1 + randomFactor));
-            var randomizedDelay = new Random().NextDouble() * (randomMax - randomMin) + randomMin; ;
-            return randomizedDelay; ;
+            var randomMin = num * (1 - randomFactor);
+            var randomMax = num * (1 + randomFactor);
+            var randomizedDelay = new Random().NextDouble() * (randomMax - randomMin) + randomMin; 
+            return randomizedDelay;
         }
 
     }
