@@ -57,8 +57,8 @@ namespace POGOLib.Demo.ConsoleApp
 
             // Settings
             const string loginProviderStr = "ptc";
-            const string usernameStr = "fukptclogin2";
-            const string passwordStr = "14gwz2Wp";
+            const string usernameStr = "";
+            const string passwordStr = "";
 
             // Login
             ILoginProvider loginProvider;
