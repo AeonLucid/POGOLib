@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using Google.Protobuf;
-using PokemonGoEncryptSharp;
 using POGOLib.Util;
 using POGOLib.Util.Encryption;
 using POGOProtos.Networking.Envelopes;
@@ -23,34 +22,37 @@ namespace POGOLib.Net
 
         private readonly Stopwatch _internalStopwatch;
 
-        private readonly Random _random;
-
         private readonly ByteString _sessionHash;
+
+        private readonly Random _random;
 
         internal RpcEncryption(Session session)
         {
             _session = session;
             _internalStopwatch = new Stopwatch();
             _random = new Random();
+
             var sessionHash = new byte[16];
             _random.NextBytes(sessionHash);
+
             _sessionHash = ByteString.CopyFrom(sessionHash);
         }
+
+        private ulong TimestampSinceStart => (ulong) _internalStopwatch.ElapsedMilliseconds;
 
         /// <summary>
         ///     Generates the encrypted signature which is required for the <see cref="RequestEnvelope"/>.
         /// </summary>
-        /// <param name="requests">The requests of the <see cref="RequestEnvelope"/>.</param>
-        /// <returns>The encrypted <see cref="Unknown6"/> (Signature).</returns>
+        /// <returns>The encrypted <see cref="PlatformRequest"/> (Signature).</returns>
         internal PlatformRequest GenerateSignature(RequestEnvelope requestEnvelope)
         {
             var signature = new Signature
             {
-                TimestampSinceStart = (ulong)_internalStopwatch.ElapsedMilliseconds,
+                TimestampSinceStart = TimestampSinceStart,
                 Timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds(),
-                SensorInfo = new SensorInfo()
+                SensorInfo = new SensorInfo
                 {
-                    TimestampSnapshot = (ulong)_internalStopwatch.ElapsedMilliseconds - 230,
+                    TimestampSnapshot = TimestampSinceStart - (ulong) _random.Next(100, 250),
                     LinearAccelerationX = Randomize(012271042913198471),
                     LinearAccelerationY = Randomize(-0.015570580959320068),
                     LinearAccelerationZ = Randomize(0.010850906372070313),
@@ -68,7 +70,7 @@ namespace POGOLib.Net
                     GravityZ = Randomize(9.8),
                     AccelerometerAxes = 3
                 },
-                DeviceInfo = new DeviceInfo()
+                DeviceInfo = new DeviceInfo
                 {
                     DeviceId = _session.Device.DeviceId,
                     AndroidBoardName = _session.Device.AndroidBoardName,
@@ -96,63 +98,45 @@ namespace POGOLib.Net
                         VerticalAccuracy = (float)_session.Player.Coordinate.VerticalAccuracy,
                         Speed = (float)_session.Player.Coordinate.Speed,
                         Course = (float)_session.Player.Coordinate.Course,
-                        TimestampSnapshot = (ulong)_internalStopwatch.ElapsedMilliseconds - 200, // TODO: Verify this
+                        TimestampSnapshot = TimestampSinceStart - (ulong) _random.Next(100, 250), // TODO: Verify this
                         Floor = 3,
                         LocationType = 1
                     }
                 }
             };
-
-
-            const uint seed035 = 0x61656632;
-            const long unknown25_035 = 7363665268261373700;
-            // Compute 10
+            
             var serializedTicket = requestEnvelope.AuthTicket != null ? requestEnvelope.AuthTicket.ToByteArray() : requestEnvelope.AuthInfo.ToByteArray();
-            var firstHash = CalculateHash32(serializedTicket, seed035);
             var locationBytes = BitConverter.GetBytes(_session.Player.Coordinate.Latitude).Reverse()
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Longitude).Reverse())
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.HorizontalAccuracy).Reverse()).ToArray();
-            signature.LocationHash1 = CalculateHash32(locationBytes, firstHash);
-            // Compute 20
-            signature.LocationHash2 = CalculateHash32(locationBytes, seed035);
-            // Compute 24
-            var seed = xxHash64.CalculateHash(serializedTicket, serializedTicket.Length, seed035);
+
+            signature.LocationHash1 = NiaHash.Hash32Salt(locationBytes, NiaHash.Hash32(serializedTicket));
+            signature.LocationHash2 = NiaHash.Hash32(locationBytes);
+
             foreach (var req in requestEnvelope.Requests)
             {
                 var reqBytes = req.ToByteArray();
-                signature.RequestHash.Add(xxHash64.CalculateHash(reqBytes, reqBytes.Length, seed));
+                signature.RequestHash.Add(NiaHash.Hash64Salt64(reqBytes, NiaHash.Hash64(serializedTicket)));
             }
 
-            //static for now
-            //signature.SessionHash = ByteString.CopyFrom(0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
             signature.SessionHash = _sessionHash;
-            signature.Unknown25 = unknown25_035;
-            var iv = new byte[32];
-            _random.NextBytes(iv);
+            signature.Unknown25 = -8408506833887075802;
 
-            var encryptedSignature = new PlatformRequest()
+            var encryptedSignature = new PlatformRequest
             {
                 Type = PlatformRequestType.SendEncryptedSignature,
                 RequestMessage = new SendEncryptedSignatureRequest
                 {
-                    EncryptedSignature = ByteString.CopyFrom(PogoEncryptUtil.Encrypt(signature.ToByteArray(), iv))
+                    EncryptedSignature = ByteString.CopyFrom(PCrypt.Encrypt(signature.ToByteArray(), (uint) TimestampSinceStart))
                 }.ToByteString()
             };
-
+            
             return encryptedSignature;
         }
 
-        private uint CalculateHash32(byte[] bytes, uint seed)
+        private static double Randomize(double num)
         {
-            var xxHash = new xxHash32();
-            xxHash.Init(seed);
-            xxHash.Update(bytes, bytes.Length);
-            return xxHash.Digest();
-        }
-
-        private double Randomize(double num)
-        {
-            var randomFactor = 0.3f;
+            const float randomFactor = 0.3f;
             var randomMin = (num * (1 - randomFactor));
             var randomMax = (num * (1 + randomFactor));
             var randomizedDelay = new Random().NextDouble() * (randomMax - randomMin) + randomMin; ;

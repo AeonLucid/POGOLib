@@ -343,7 +343,7 @@ namespace POGOLib.Net
                 RequestId = GetNextRequestId(),
                 Latitude = _session.Player.Coordinate.Latitude,
                 Longitude = _session.Player.Coordinate.Longitude,
-                Accuracy = _session.Player.Coordinate.HorizontalAccuracy,
+                Accuracy = (int) _session.Player.Coordinate.HorizontalAccuracy,
                 MsSinceLastLocationfix = 123 // TODO: Figure this out.
             };
 
