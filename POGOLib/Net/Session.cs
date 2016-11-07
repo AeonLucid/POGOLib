@@ -42,9 +42,11 @@ namespace POGOLib.Net
             Templates = new Templates();
             RpcClient = new RpcClient(this);
             _heartbeat = new HeartbeatDispatcher(this);
+			GlobalSettingsHash = string.Empty;
+			ReauthenticateMutex = new Mutex ();
         }
 
-        public Templates Templates { get; }
+		public Templates Templates { get; private set; }
 
         /// <summary>
         ///     Gets the <see cref="AccessToken" /> of the <see cref="Session" />.
@@ -54,7 +56,7 @@ namespace POGOLib.Net
         /// <summary>
         ///     Gets the <see cref="Password" /> of the <see cref="Session" />.
         /// </summary>
-        internal string Password { get; }
+		internal string Password { get; private set; }
 
         /// <summary>
         ///     Gets the <see cref="Device"/> of the <see cref="Session"/>. The <see cref="RpcClient"/> will try to act like this <see cref="Device"/>.
@@ -69,7 +71,7 @@ namespace POGOLib.Net
         /// <summary>
         ///     Gets the <see cref="Map" /> of the <see cref="Session" />.
         /// </summary>
-        public Map Map { get; }
+		public Map Map { get; private set; }
 
         /// <summary>
         ///     Gets the <see cref="GlobalSettings" /> of the <see cref="Session" />.
@@ -79,9 +81,9 @@ namespace POGOLib.Net
         /// <summary>
         ///     Gets the hash of the <see cref="GlobalSettings" />.
         /// </summary>
-        internal string GlobalSettingsHash { get; set; } = string.Empty;
+        internal string GlobalSettingsHash { get; set; }
 
-        private Mutex ReauthenticateMutex { get; } = new Mutex();
+		private Mutex ReauthenticateMutex { get; set; }
 
         public void Dispose()
         {
@@ -132,14 +134,14 @@ namespace POGOLib.Net
                     }
                     catch (Exception exception)
                     {
-                        Logger.Error($"Reauthenticate exception was catched: {exception}");
+						Logger.Error("Reauthenticate exception was catched: {0}", exception.ToString());
                     }
                     finally
                     {
                         if (accessToken == null)
                         {
                             var sleepSeconds = Math.Min(60, ++tries*5);
-                            Logger.Error($"Reauthentication failed, trying again in {sleepSeconds} seconds.");
+							Logger.Error("Reauthentication failed, trying again in {0} seconds.", sleepSeconds.ToString());
                             Thread.Sleep(sleepSeconds*1000);
                         }
                     }
@@ -152,7 +154,8 @@ namespace POGOLib.Net
 
         private void OnAccessTokenUpdated()
         {
-            AccessTokenUpdated?.Invoke(this, EventArgs.Empty);
+			if(AccessTokenUpdated != null)
+            	AccessTokenUpdated.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler<EventArgs> AccessTokenUpdated;
@@ -161,8 +164,10 @@ namespace POGOLib.Net
         {
             if (disposing)
             {
-                ReauthenticateMutex?.Dispose();
-                RpcClient?.Dispose();
+				if(ReauthenticateMutex != null)
+                	ReauthenticateMutex.Dispose();
+				if(RpcClient != null)
+                	RpcClient.Dispose();
             }
         }
     }

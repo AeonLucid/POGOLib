@@ -38,7 +38,8 @@ namespace POGOLib.Pokemon
             internal set
             {
                 _cells = value;
-                Update?.Invoke(this, EventArgs.Empty);
+				if(Update != null)
+                	Update.Invoke(this, EventArgs.Empty);
             }
         }
 

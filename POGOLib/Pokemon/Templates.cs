@@ -16,26 +16,43 @@ namespace POGOLib.Pokemon
 
         public Templates()
         {
-            _assetDigestResponse = LoadAssetDigest();
-            _itemTemplatesResponse = LoadItemTemplates();
+			LoadTemplates ();
         }
 
-        public RepeatedField<AssetDigestEntry> AssetDigests => _assetDigestResponse?.Digest;
+		public void LoadTemplates() {
+			_assetDigestResponse = LoadAssetDigest();
+			_itemTemplatesResponse = LoadItemTemplates();
+		}
 
-        public RepeatedField<DownloadItemTemplatesResponse.Types.ItemTemplate> ItemTemplates
-            => _itemTemplatesResponse?.ItemTemplates;
+		public RepeatedField<AssetDigestEntry> AssetDigests {
+			get {
+				return _assetDigestResponse == null ? null : _assetDigestResponse.Digest;
+			}
+		}
 
-        public string AssetDigestFile
-            =>
-                Path.Combine(Environment.CurrentDirectory,
-                    ConfigurationManager.AppSettings["POGOLib.Templates.Directory"] ?? string.Empty,
-                    "templates.asset-digests.dat");
+		public RepeatedField<DownloadItemTemplatesResponse.Types.ItemTemplate> ItemTemplates {
+			get {
+				return _itemTemplatesResponse == null ? null : _itemTemplatesResponse.ItemTemplates;
+			}
+		}
+            
 
-        public string ItemTemplatesFile
-            =>
-                Path.Combine(Environment.CurrentDirectory,
-                    ConfigurationManager.AppSettings["POGOLib.Templates.Directory"] ?? string.Empty,
-                    "templates.items.dat");
+		public string AssetDigestFile {
+			get {
+				return Path.Combine (Environment.CurrentDirectory,
+					ConfigurationManager.AppSettings ["POGOLib.Templates.Directory"] ?? string.Empty,
+					"templates.asset-digests.dat");
+			}
+		}
+                
+
+		public string ItemTemplatesFile {
+			get {
+				return Path.Combine (Environment.CurrentDirectory,
+					ConfigurationManager.AppSettings ["POGOLib.Templates.Directory"] ?? string.Empty,
+					"templates.items.dat");
+			}
+		}
 
         public void SetAssetDigests(GetAssetDigestResponse assetDigestResponse)
         {

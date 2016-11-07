@@ -5,7 +5,6 @@ using Google.Protobuf;
 using POGOLib.Util;
 using POGOLib.Util.Encryption;
 using POGOProtos.Networking.Envelopes;
-using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 namespace POGOLib.Net
 {
@@ -42,7 +41,7 @@ namespace POGOLib.Net
             {
                 TimestampSinceStart = (ulong) _internalStopwatch.ElapsedMilliseconds,
                 Timestamp = (ulong) TimeUtil.GetCurrentTimestampInMilliseconds(),
-                SensorInfo = new SensorInfo()
+				SensorInfo = new Signature.Types.SensorInfo()
                 {
                     AccelNormalizedZ = Randomize(9.8),
                     AccelNormalizedX = Randomize(0.02),
@@ -62,7 +61,7 @@ namespace POGOLib.Net
                     GyroscopeRawZ = Randomize(0.0024566650390625),
                     AccelerometerAxes = 3
                 },
-                DeviceInfo = new DeviceInfo()
+				DeviceInfo = new Signature.Types.DeviceInfo()
                 {
                     DeviceId = _session.Device.DeviceId,
                     AndroidBoardName = _session.Device.AndroidBoardName,
@@ -80,14 +79,14 @@ namespace POGOLib.Net
                 },
                 LocationFix =
                 {
-                    new LocationFix
+					new Signature.Types.LocationFix
                     {
                         Provider = "network",
                         //Unk4 = 120,
                         Latitude = (float)_session.Player.Coordinate.Latitude,
                         Longitude = (float)_session.Player.Coordinate.Longitude,
                         Altitude = (float)_session.Player.Coordinate.Altitude,
-                        TimestampSinceStart = (ulong)_internalStopwatch.ElapsedMilliseconds - 200,
+                        TimestampSnapshot = (ulong)_internalStopwatch.ElapsedMilliseconds - 200,
                         Floor = 3,
                         LocationType = 1
                     }
@@ -112,7 +111,7 @@ namespace POGOLib.Net
             }
 
             //static for now
-            signature.Unknown22 = ByteString.CopyFrom(0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
+            signature.SessionHash = ByteString.CopyFrom(0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
 
             var iv = new byte[32];
             _random.NextBytes(iv);

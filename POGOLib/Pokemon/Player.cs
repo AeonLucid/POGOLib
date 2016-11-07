@@ -24,17 +24,25 @@ namespace POGOLib.Pokemon
         /// <summary>
         ///     Gets the <see cref="Player" /> his current latitude.
         /// </summary>
-        public double Latitude => Coordinate.Latitude;
+		public double Latitude {
+			get {
+				return Coordinate.Latitude;
+			}
+		}
 
         /// <summary>
         ///     Gets the <see cref="Player" /> his current longitude.
         /// </summary>
-        public double Longitude => Coordinate.Longitude;
+		public double Longitude {
+			get {
+				return Coordinate.Longitude;
+			}
+		}
 
         /// <summary>
         ///     Gets the <see cref="Inventory" /> of the <see cref="Player" />
         /// </summary>
-        public Inventory Inventory { get; }
+		public Inventory Inventory { get; private set; }
 
         /// <summary>
         ///     Gets the <see cref="Stats" /> of the beautiful <see cref="Inventory" /> object by PokémonGo.
@@ -68,9 +76,11 @@ namespace POGOLib.Pokemon
 
         private void InventoryOnUpdate(object sender, EventArgs eventArgs)
         {
-            var stats =
-                Inventory.InventoryItems.FirstOrDefault(i => i?.InventoryItemData?.PlayerStats != null)?
-                    .InventoryItemData?.PlayerStats;
+            PlayerStats stats = null;
+            var invItem = Inventory.InventoryItems.FirstOrDefault (i => i.InventoryItemData != null && i.InventoryItemData.PlayerStats != null);
+			if(invItem != null)
+            	stats = invItem.InventoryItemData.PlayerStats;
+			
             if (stats != null)
             {
                 Stats = stats;

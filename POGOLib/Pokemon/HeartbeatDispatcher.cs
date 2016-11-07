@@ -49,12 +49,12 @@ namespace POGOLib.Pokemon
                         var metersMoved = _session.Player.Coordinate.GetDistanceTo(lastGeoCoordinate);
                         if (secondsSinceLast >= maxSeconds)
                         {
-                            Logger.Debug($"Refreshing MapObjects, reason: 'secondsSinceLast({secondsSinceLast}) >= maxSeconds({maxSeconds})'.");
+							Logger.Debug("Refreshing MapObjects, reason: 'secondsSinceLast({0}) >= maxSeconds({1})'.", secondsSinceLast.ToString(), maxSeconds.ToString());
                             canRefresh = true;
                         }
                         else if (metersMoved >= minDistance)
                         {
-                            Logger.Debug($"Refreshing MapObjects, reason: 'metersMoved({metersMoved}) >= minDistance({minDistance})'.");
+							Logger.Debug("Refreshing MapObjects, reason: 'metersMoved({0}) >= minDistance({1})'.", metersMoved.ToString(), minDistance.ToString());
                             canRefresh = true;
                         }
                     }

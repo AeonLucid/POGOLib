@@ -12,7 +12,7 @@ namespace POGOLib.Logging
         /// <summary>
         ///     Gets or sets the <see cref="MinimumLogLevel" /> for the <see cref="Logger"/>.
         /// </summary>
-        public static LogLevel MinimumLogLevel { get; set; } = LogLevel.Debug;
+        public static LogLevel MinimumLogLevel { get; set; }
 
         /// <summary>
         ///     Gets or sets the <see cref="DefaultForegroundColor" /> for the <see cref="Logger"/>.

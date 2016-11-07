@@ -61,7 +61,7 @@ namespace POGOLib.Net.Authentication
                     accessToken = WithPokemonTrainerClub(username, password);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(loginProvider), loginProvider, null);
+                    throw new ArgumentOutOfRangeException("loginProvider", loginProvider, null);
             }
 
             return new Session(accessToken, password, new GeoCoordinate(initialLatitude, initialLongitude));
@@ -75,7 +75,7 @@ namespace POGOLib.Net.Authentication
 
             if (masterLoginResponse.ContainsKey("Error"))
             {
-                throw new Exception($"Google returned an error message: '{masterLoginResponse["Error"]}'");
+				throw new Exception(string.Format("Google returned an error message: '{0}'", masterLoginResponse["Error"]));
             }
             if (!masterLoginResponse.ContainsKey("Token"))
             {
@@ -160,7 +160,7 @@ namespace POGOLib.Net.Authentication
             var loginResponseData = JObject.Parse(loginResponseDataRaw);
             var loginResponseErrors = (JArray) loginResponseData["errors"];
 
-            throw new Exception($"Pokemon Trainer Club gave error(s): '{string.Join(",", loginResponseErrors)}'");
+			throw new Exception(string.Format("Pokemon Trainer Club gave error(s): '{0}'", string.Join(",", loginResponseErrors)));
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace POGOLib.Net.Authentication
                 "access_token=(?<accessToken>.*?)&expires=(?<expires>\\d+)");
             if (!oAuthData.Success)
             {
-                throw new Exception($"Couldn't verify the OAuth login response data '{loginResponseDataRaw}'.");
+				throw new Exception(string.Format("Couldn't verify the OAuth login response data '{0}'.", loginResponseDataRaw));
             }
             return new AccessToken
             {

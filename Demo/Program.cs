@@ -83,7 +83,7 @@ namespace Demo
 
         private static void SaveAccessToken(AccessToken accessToken)
         {
-            var fileName = Path.Combine(Environment.CurrentDirectory, "cache", $"{accessToken.Uid}.json");
+			var fileName = Path.Combine(Environment.CurrentDirectory, "cache", string.Format("{0}.json", accessToken.Uid));
 
             File.WriteAllText(fileName, JsonConvert.SerializeObject(accessToken, Formatting.Indented));
         }
@@ -121,7 +121,7 @@ namespace Demo
         {
             var loginProvider = ResolveLoginProvider(loginProviderStr);
             var cacheDir = Path.Combine(Environment.CurrentDirectory, "cache");
-            var fileName = Path.Combine(cacheDir, $"{username}-{loginProvider}.json");
+			var fileName = Path.Combine(cacheDir, string.Format("{0}-{1}.json", username, loginProvider));
 
             if (mayCache)
             {
@@ -154,7 +154,7 @@ namespace Demo
                 case "Google":
                     return LoginProvider.GoogleAuth;
                 default:
-                    throw new Exception($"The login method '{loginProvider}' is not supported.");
+				throw new Exception(string.Format("The login method '{0}' is not supported.", loginProvider));
             }
         }
     }

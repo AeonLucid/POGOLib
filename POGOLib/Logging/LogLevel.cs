@@ -6,6 +6,7 @@
         Info = 2000,
         Notice = 3000,
         Warn = 4000,
-        Error = 5000
+        Error = 5000,
+        Disabled = 10000
     }
 }
