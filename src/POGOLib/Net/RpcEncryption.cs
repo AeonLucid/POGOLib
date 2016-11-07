@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Google.Protobuf;
+using POGOLib.Extensions;
 using POGOLib.Util;
 using POGOLib.Util.Encryption;
 using POGOProtos.Networking.Envelopes;
@@ -54,14 +55,25 @@ namespace POGOLib.Net
             var providerCount = _random.Next(4, 10);
             for (var i = 0; i < providerCount; i++)
             {
+                var timestampSnapshot = timestampSinceStart + (150 * (i + 1) + _random.Next(250 * (i + 1) - 150 * (i + 1)));
+                if (timestampSnapshot >= timestampSinceStart)
+                {
+                    if (locationFixes.Count != 0) break;
+
+                    timestampSnapshot = timestampSinceStart - _random.Next(20, 50);
+
+                    if (timestampSnapshot < 0) timestampSnapshot = 0;
+                }
+
                 locationFixes.Insert(0, new LocationFix
                 {
-                    TimestampSnapshot = (ulong) (timestampSinceStart + (150*(i + 1) + _random.Next(250*(i + 1) - 150*(i + 1)))),
+                    TimestampSnapshot = (ulong) timestampSnapshot,
                     Latitude = LocationUtil.OffsetLatitudeLongitude(_session.Player.Coordinate.Latitude, _random.Next(100) + 10),
                     Longitude = LocationUtil.OffsetLatitudeLongitude(_session.Player.Coordinate.Longitude, _random.Next(100) + 10),
-                    HorizontalAccuracy = (float) _random.NextDouble()*(25 - 5) + 5,
-                    VerticalAccuracy = (float) _random.NextDouble()*(25 - 5) + 5,
-                    Altitude = (float) _session.Player.Coordinate.Altitude,
+                    HorizontalAccuracy = (float) _random.NextDouble(5.0, 25.0),
+                    VerticalAccuracy = (float) _random.NextDouble(5.0, 25.0),
+                    Altitude = (float) _random.NextDouble(10.0, 30.0),
+                    Provider = "fused",
                     ProviderStatus = 3,
                     LocationType = 1,
 //                    Speed = ?,
@@ -86,7 +98,7 @@ namespace POGOLib.Net
             
             _session.Player.Coordinate.HorizontalAccuracy = locationFixes[0].HorizontalAccuracy;
             _session.Player.Coordinate.VerticalAccuracy = locationFixes[0].VerticalAccuracy;
-
+            
             requestEnvelope.Accuracy = _session.Player.Coordinate.HorizontalAccuracy;
             requestEnvelope.MsSinceLastLocationfix = (long)locationFixes[0].TimestampSnapshot;
 

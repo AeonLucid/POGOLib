@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Newtonsoft.Json;
+using POGOLib.Extensions;
 using POGOLib.Logging;
 using POGOLib.Net;
 using POGOLib.Net.Authentication;
@@ -71,8 +73,9 @@ namespace POGOLib.Demo.ConsoleApp
             else
                 throw new ArgumentException("Login provider must be either \"google\" or \"ptc\"");
 
-            var latitude = 51.507351; // Somewhere in London
-            var longitude = -0.127758;
+            var locRandom = new Random();
+            var latitude = 51.507352 + locRandom.NextDouble(-0.000030, 0.000030); // Somewhere in London
+            var longitude = -0.127758 + locRandom.NextDouble(-0.000030, 0.000030);
             var session = await GetSession(loginProvider, latitude, longitude, true);
 
             SaveAccessToken(session.AccessToken);

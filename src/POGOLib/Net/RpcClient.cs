@@ -17,6 +17,7 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace POGOLib.Net
 {
@@ -214,8 +215,7 @@ namespace POGOLib.Net
         /// </summary>
         public async Task RefreshMapObjects()
         {
-            var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude,
-                _session.Player.Coordinate.Longitude);
+            var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
             var sinceTimeMs = new List<long>(cellIds.Length);
 
             for (var i = 0; i < cellIds.Length; i++)
@@ -245,14 +245,22 @@ namespace POGOLib.Net
 
             if (mapObjects.Status == MapObjectsStatus.Success)
             {
+                // TODO: Cleaner?
+                var pokemonCatchable = mapObjects.MapCells.SelectMany(c => c.CatchablePokemons).Count();
+                var pokemonWild = mapObjects.MapCells.SelectMany(c => c.WildPokemons).Count();
+                var pokemonNearby = mapObjects.MapCells.SelectMany(c => c.NearbyPokemons).Count();
+                var pokemonCount = pokemonCatchable + pokemonWild + pokemonNearby;
+
                 Logger.Debug($"Received '{mapObjects.MapCells.Count}' map cells.");
-                Logger.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.CatchablePokemons).Count()}' pokemons.");
+                Logger.Debug($"Received '{pokemonCount}' pokemons. Catchable({pokemonCatchable}) Wild({pokemonWild}) Nearby({pokemonNearby})");
                 Logger.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.Forts).Count()}' forts.");
+
                 if (mapObjects.MapCells.Count == 0)
                 {
                     Logger.Error("We received 0 map cells, are your GPS coordinates correct?");
                     return;
                 }
+
                 _session.Map.Cells = mapObjects.MapCells;
             }
             else
@@ -670,6 +678,15 @@ namespace POGOLib.Net
                         else
                         {
                             Logger.Debug($"DownloadSettingsResponse.Error: '{downloadSettings.Error}'");
+                        }
+                        break;
+
+                    case RequestType.CheckChallenge:
+                        var checkChallenge = CheckChallengeResponse.Parser.ParseFrom(bytes);
+                        if (checkChallenge.ShowChallenge)
+                        {
+                            Logger.Warn("Received Captcha");
+                            Logger.Warn(JsonConvert.SerializeObject(checkChallenge, Formatting.Indented));
                         }
                         break;
                 }

@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Extensions\RandomExtension.cs" />
     <Compile Include="HexUtil.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LogLevel.cs" />
