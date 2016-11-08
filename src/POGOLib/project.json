@@ -9,7 +9,6 @@
     "owners": [ "AeonLucid" ],
     "iconUrl": "http://i.imgur.com/7vJxPxu.png",
     "projectUrl": "https://github.com/AeonLucid/POGOLib",
-    "requireLicenseAcceptance": true,
     "repository": {
       "type": "git",
       "url": "https://github.com/AeonLucid/POGOLib"
