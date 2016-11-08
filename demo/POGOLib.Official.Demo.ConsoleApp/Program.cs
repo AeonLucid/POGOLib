@@ -58,8 +58,8 @@ namespace POGOLib.Official.Demo.ConsoleApp
 
             // Settings
             const string loginProviderStr = "ptc";
-            const string usernameStr = "fukptclogin2";
-            const string passwordStr = "qt3W6UHb9u";
+            var usernameStr = Environment.GetEnvironmentVariable("PTC_USERNAME") ?? ""; // Your PTC username
+            var passwordStr = Environment.GetEnvironmentVariable("PTC_PASSWORD") ?? ""; // Your PTC password
 
             // Login
             ILoginProvider loginProvider;
