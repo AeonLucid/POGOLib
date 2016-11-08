@@ -1,7 +1,7 @@
 {
   "version": 2,
   "exports": {
-    "POGOLib/1.0.0": {
+    "POGOLib.Official/1.0.0": {
       "type": "project",
       "framework": ".NETStandard,Version=v1.1",
       "compile": {

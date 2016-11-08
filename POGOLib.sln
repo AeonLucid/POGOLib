@@ -16,7 +16,7 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "POGOLib.Demo.ConsoleApp", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POGOLib.Demo.Android", "demo\POGOLib.Demo.Android\POGOLib.Demo.Android.csproj", "{72431964-2AD7-48BB-9609-2EC4E8D609F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POGOLib", "src\POGOLib\POGOLib.csproj", "{CD4C6557-8A33-40D9-952B-A10694D3F042}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POGOLib.Official", "src\POGOLib.Official\POGOLib.Official.csproj", "{CD4C6557-8A33-40D9-952B-A10694D3F042}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

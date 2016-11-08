@@ -16,11 +16,11 @@ before_build:
   - appveyor-retry dotnet restore -v Minimal
 
 build_script:
-  - dotnet build "src\POGOLib" -c %CONFIGURATION% --no-dependencies
+  - dotnet build "src\POGOLib.Official" -c %CONFIGURATION% --no-dependencies
   - dotnet build "demo\POGOLib.Demo.ConsoleApp" -c %CONFIGURATION% --no-dependencies
   
 after_build:
-  - dotnet pack "src\POGOLib" -c %CONFIGURATION% --no-build -o artifacts
+  - dotnet pack "src\POGOLib.Official" -c %CONFIGURATION% --no-build -o artifacts
   
 artifacts:
   - path: artifacts\**\*.*

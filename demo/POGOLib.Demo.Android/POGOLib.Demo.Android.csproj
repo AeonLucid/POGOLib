@@ -100,9 +100,9 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\POGOLib\POGOLib.csproj">
+    <ProjectReference Include="..\..\src\POGOLib.Official\POGOLib.Official.csproj">
       <Project>{cd4c6557-8a33-40d9-952b-a10694d3f042}</Project>
-      <Name>POGOLib</Name>
+      <Name>POGOLib.Official</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
