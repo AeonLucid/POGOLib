@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace POGOLib.Net.Authentication.Data
+namespace POGOLib.Official.Net.Authentication.Data
 {
     internal struct LoginData
     {

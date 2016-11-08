@@ -4,8 +4,6 @@ using Android.OS;
 using Android.Widget;
 using Google.Protobuf;
 using Newtonsoft.Json;
-using POGOLib.Net.Authentication;
-using POGOLib.Net.Authentication.Providers;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;

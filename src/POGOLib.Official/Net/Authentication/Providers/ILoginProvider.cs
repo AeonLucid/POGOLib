@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using POGOLib.Net.Authentication.Data;
+using POGOLib.Official.Net.Authentication.Data;
 
-namespace POGOLib.Net.Authentication.Providers
+namespace POGOLib.Official.Net.Authentication.Providers
 {
     public interface ILoginProvider
     {

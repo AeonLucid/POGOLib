@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace POGOLib.Net.Authentication.Exceptions
+namespace POGOLib.Official.Net.Authentication.Exceptions
 {
     public class WrongCredentialsException : Exception
     {

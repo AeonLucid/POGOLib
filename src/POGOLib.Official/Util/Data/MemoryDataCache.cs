@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Google.Protobuf;
 
-namespace POGOLib.Util
+namespace POGOLib.Official.Util.Data
 {
-    class MemoryDataCache : IDataCache
+    internal class MemoryDataCache : IDataCache
     {
         Dictionary<string, IMessage> _cachedData = new Dictionary<string, IMessage>();
 

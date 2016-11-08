@@ -1,4 +1,4 @@
-﻿namespace POGOLib.Util.Encryption
+﻿namespace POGOLib.Official.Util.Encryption
 {
     internal class Shuffles
     {

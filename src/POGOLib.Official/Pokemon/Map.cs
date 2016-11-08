@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using GeoCoordinatePortable;
 using Google.Protobuf.Collections;
-using POGOLib.Net;
+using POGOLib.Official.Net;
 using POGOProtos.Map;
 using POGOProtos.Map.Fort;
 
-namespace POGOLib.Pokemon
+namespace POGOLib.Official.Pokemon
 {
     /// <summary>
     ///     A wrapper class for <see cref="RepeatedField{T}" />.

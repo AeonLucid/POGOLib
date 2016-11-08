@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace POGOLib.Util.Encryption
+namespace POGOLib.Official.Util.Encryption
 {
     internal class PCrypt
     {

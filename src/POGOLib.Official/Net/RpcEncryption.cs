@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Google.Protobuf;
-using POGOLib.Extensions;
-using POGOLib.Util;
-using POGOLib.Util.Encryption;
+using POGOLib.Official.Extensions;
+using POGOLib.Official.Util;
+using POGOLib.Official.Util.Encryption;
 using POGOProtos.Networking.Envelopes;
 using POGOProtos.Networking.Platform;
 using POGOProtos.Networking.Platform.Requests;
-using static POGOProtos.Networking.Envelopes.Signature.Types;
-using static POGOProtos.Networking.Envelopes.RequestEnvelope.Types;
 
-namespace POGOLib.Net
+namespace POGOLib.Official.Net
 {
     internal class RpcEncryption
     {
@@ -45,9 +43,9 @@ namespace POGOLib.Net
 
         private long TimestampSinceStartMs => _stopwatch.ElapsedMilliseconds;
 
-        private List<LocationFix> BuildLocationFixes(long timestampSinceStart, RequestEnvelope requestEnvelope)
+        private List<Signature.Types.LocationFix> BuildLocationFixes(long timestampSinceStart, RequestEnvelope requestEnvelope)
         {
-            var locationFixes = new List<LocationFix>();
+            var locationFixes = new List<Signature.Types.LocationFix>();
 
             if (requestEnvelope.Requests.Count == 0 || requestEnvelope.Requests[0] == null)
                 return locationFixes;
@@ -65,7 +63,7 @@ namespace POGOLib.Net
                     if (timestampSnapshot < 0) timestampSnapshot = 0;
                 }
 
-                locationFixes.Insert(0, new LocationFix
+                locationFixes.Insert(0, new Signature.Types.LocationFix
                 {
                     TimestampSnapshot = (ulong) timestampSnapshot,
                     Latitude = LocationUtil.OffsetLatitudeLongitude(_session.Player.Coordinate.Latitude, _random.Next(100) + 10),
@@ -88,8 +86,8 @@ namespace POGOLib.Net
         /// <summary>
         ///     Generates the encrypted signature which is required for the <see cref="RequestEnvelope"/>.
         /// </summary>
-        /// <returns>The encrypted <see cref="PlatformRequest"/> (Signature).</returns>
-        internal PlatformRequest GenerateSignature(RequestEnvelope requestEnvelope)
+        /// <returns>The encrypted <see cref="RequestEnvelope.Types.PlatformRequest"/> (Signature).</returns>
+        internal RequestEnvelope.Types.PlatformRequest GenerateSignature(RequestEnvelope requestEnvelope)
         {
             var timestampSinceStart = TimestampSinceStartMs;
             var locationFixes = BuildLocationFixes(timestampSinceStart, requestEnvelope);
@@ -108,7 +106,7 @@ namespace POGOLib.Net
                 Timestamp = (ulong)TimeUtil.GetCurrentTimestampInMilliseconds(),
                 SensorInfo =
                 {
-                    new SensorInfo
+                    new Signature.Types.SensorInfo
                     {
                         TimestampSnapshot = (ulong) (timestampSinceStart + _random.Next(100, 250)),
                         LinearAccelerationX = -0.7 + _random.NextDouble() * 1.4,
@@ -127,7 +125,7 @@ namespace POGOLib.Net
                         Status = 3
                     }
                 },
-                DeviceInfo = new DeviceInfo
+                DeviceInfo = new Signature.Types.DeviceInfo
                 {
                     DeviceId = _deviceId,
                     AndroidBoardName = string.Empty,
@@ -144,7 +142,7 @@ namespace POGOLib.Net
                     FirmwareFingerprint = string.Empty
                 },
                 LocationFix = { locationFixes },
-                ActivityStatus = new ActivityStatus
+                ActivityStatus = new Signature.Types.ActivityStatus
                 {
                     Stationary = true
                 }
@@ -166,7 +164,7 @@ namespace POGOLib.Net
             signature.SessionHash = _sessionHash;
             signature.Unknown25 = -8408506833887075802;
 
-            var encryptedSignature = new PlatformRequest
+            var encryptedSignature = new RequestEnvelope.Types.PlatformRequest
             {
                 Type = PlatformRequestType.SendEncryptedSignature,
                 RequestMessage = new SendEncryptedSignatureRequest

@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Threading;
-using GeoCoordinatePortable;
-using POGOLib.Logging;
-using POGOLib.Net.Authentication.Data;
-using POGOLib.Pokemon;
-using POGOProtos.Settings;
-using System.Threading.Tasks;
 using System.Linq;
-using POGOLib.Net.Authentication.Providers;
-using POGOLib.Util;
+using System.Threading;
+using System.Threading.Tasks;
+using GeoCoordinatePortable;
+using POGOLib.Official.Logging;
+using POGOLib.Official.Net.Authentication.Data;
+using POGOLib.Official.Net.Authentication.Providers;
+using POGOLib.Official.Pokemon;
+using POGOLib.Official.Util;
+using POGOLib.Official.Util.Data;
+using POGOProtos.Settings;
 
-namespace POGOLib.Net
+namespace POGOLib.Official.Net
 {
     /// <summary>
     ///     This is an authenticated <see cref="Session" /> with PokémonGo that handles everything between the developer and

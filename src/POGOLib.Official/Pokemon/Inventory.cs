@@ -4,7 +4,7 @@ using System.Linq;
 using Google.Protobuf.Collections;
 using POGOProtos.Inventory;
 
-namespace POGOLib.Pokemon
+namespace POGOLib.Official.Pokemon
 {
     /// <summary>
     ///     A wrapper class for <see cref="Inventory" />.

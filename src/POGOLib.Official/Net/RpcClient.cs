@@ -6,20 +6,21 @@ using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using GeoCoordinatePortable;
 using Google.Protobuf;
-using POGOLib.Logging;
-using POGOLib.Util;
+using Newtonsoft.Json;
+using POGOLib.Official.Logging;
+using POGOLib.Official.Util;
+using POGOLib.Official.Util.Data;
 using POGOProtos.Enums;
 using POGOProtos.Map;
 using POGOProtos.Networking.Envelopes;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 
-namespace POGOLib.Net
+namespace POGOLib.Official.Net
 {
     public class RpcClient : IDisposable
     {

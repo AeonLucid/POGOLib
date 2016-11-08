@@ -1,4 +1,4 @@
-﻿namespace POGOLib
+﻿namespace POGOLib.Official
 {
     public static class Configuration
     {

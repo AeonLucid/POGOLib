@@ -3,20 +3,26 @@ using System.IO;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Newtonsoft.Json;
+using POGOLib.Official.Logging;
+using POGOLib.Official.Net;
+using POGOLib.Official.Net.Authentication;
+using POGOLib.Official.Net.Authentication.Data;
+using POGOLib.Official.Net.Authentication.Providers;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
+using POGOLib.Official.Extensions;
 
-namespace POGOLib.Demo.ConsoleApp
+namespace POGOLib.Official.Demo.ConsoleApp
 {
     public class Program
     {
-        
+
         /// <summary>
         ///     This is just a demo application to test out the library / show a bit how it works.
         /// </summary>
         /// <param name="args"></param>
-        public static  void Main(string[] args)
+        public static void Main(string[] args)
         {
             Run(args).GetAwaiter().GetResult();
         }
@@ -52,15 +58,15 @@ namespace POGOLib.Demo.ConsoleApp
 
             // Settings
             const string loginProviderStr = "ptc";
-            const string usernameStr = "";
-            const string passwordStr = "";
+            const string usernameStr = "fukptclogin2";
+            const string passwordStr = "qt3W6UHb9u";
 
             // Login
             ILoginProvider loginProvider;
 
-//            if (loginProviderStr == "google")
-//                loginProvider = new GoogleLoginProvider(usernameStr, passwordStr);
-//            else 
+            //            if (loginProviderStr == "google")
+            //                loginProvider = new GoogleLoginProvider(usernameStr, passwordStr);
+            //            else 
             if (loginProviderStr == "ptc")
                 loginProvider = new PtcLoginProvider(usernameStr, passwordStr);
             else
@@ -73,7 +79,7 @@ namespace POGOLib.Demo.ConsoleApp
 
             SaveAccessToken(session.AccessToken);
 
-//            session.DataCache = new FileDataCache();
+            //            session.DataCache = new FileDataCache();
             session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
             session.Player.Inventory.Update += InventoryOnUpdate;
             session.Map.Update += MapOnUpdate;
@@ -100,7 +106,7 @@ namespace POGOLib.Demo.ConsoleApp
 
         private static void SessionOnAccessTokenUpdated(object sender, EventArgs eventArgs)
         {
-            var session = (Session) sender;
+            var session = (Session)sender;
 
             SaveAccessToken(session.AccessToken);
 

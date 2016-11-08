@@ -1,10 +1,10 @@
-ï»¿{
+{
   "title": "POGOLib.Official",
-  "description": "A community driven PokÃ©monGo API Library written in C#.",
+  "description": "A community driven PokémonGo API Library written in C#.",
   "authors": [ "AeonLucid" ],
   "version": "1.0.1",
   "packOptions": {
-    "summary": "A community driven PokÃ©monGo API Library written in C#.",
+    "summary": "A community driven PokémonGo API Library written in C#.",
     "tags": [ "Pokemon", "POGOLib", "netstandard" ],
     "owners": [ "AeonLucid" ],
     "iconUrl": "http://i.imgur.com/7vJxPxu.png",
@@ -24,8 +24,7 @@
   "frameworks": {
     "netstandard1.1": {
       "dependencies": {
-        "NETStandard.Library": "1.6.0",
-        "Microsoft.NETCore.Portable.Compatibility": "1.0.1"
+        "NETStandard.Library": "1.6.0"
       }
     }, "net45": {
 

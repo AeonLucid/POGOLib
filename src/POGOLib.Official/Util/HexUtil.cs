@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace POGOLib
+namespace POGOLib.Official.Util
 {
     internal class HexUtil
     {

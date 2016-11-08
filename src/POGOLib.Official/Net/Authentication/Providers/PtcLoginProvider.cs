@@ -5,10 +5,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using POGOLib.Logging;
-using POGOLib.Net.Authentication.Data;
+using POGOLib.Official.Logging;
+using POGOLib.Official.Net.Authentication.Data;
 
-namespace POGOLib.Net.Authentication.Providers
+namespace POGOLib.Official.Net.Authentication.Providers
 {
     public class PtcLoginProvider : ILoginProvider
     {

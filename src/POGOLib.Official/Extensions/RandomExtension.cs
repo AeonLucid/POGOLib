@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace POGOLib.Extensions
+namespace POGOLib.Official.Extensions
 {
     public static class RandomExtension
     {

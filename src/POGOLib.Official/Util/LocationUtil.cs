@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace POGOLib.Util
+namespace POGOLib.Official.Util
 {
     internal class LocationUtil
     {

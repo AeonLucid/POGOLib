@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
-using POGOLib.Logging;
-using POGOLib.Net;
 using System.Threading.Tasks;
+using POGOLib.Official.Logging;
+using POGOLib.Official.Net;
 
-namespace POGOLib.Pokemon
+namespace POGOLib.Official.Pokemon
 {
     internal class HeartbeatDispatcher
     {

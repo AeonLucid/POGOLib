@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using POGOProtos.Networking.Envelopes;
 
-namespace POGOLib.Net.Authentication.Data
+namespace POGOLib.Official.Net.Authentication.Data
 {
     public class AccessToken
     {

@@ -1,4 +1,4 @@
-﻿namespace POGOLib.Logging
+﻿namespace POGOLib.Official.Logging
 {
     public enum LogLevel
     {

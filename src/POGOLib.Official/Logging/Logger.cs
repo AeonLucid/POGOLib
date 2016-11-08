@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace POGOLib.Logging
+namespace POGOLib.Official.Logging
 {
     public delegate void LogOutputDelegate(LogLevel logLevel, string message);
 

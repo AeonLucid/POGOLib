@@ -100,8 +100,8 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\POGOLib.Official\POGOLib.Official.csproj">
-      <Project>{cd4c6557-8a33-40d9-952b-a10694d3f042}</Project>
+    <ProjectReference Include="..\..\src\POGOLib.Official\POGOLib.Official.xproj">
+      <Project>{095ae5ce-3f9d-4a63-b335-c8355189a1a3}</Project>
       <Name>POGOLib.Official</Name>
     </ProjectReference>
   </ItemGroup>

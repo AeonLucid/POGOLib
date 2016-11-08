@@ -1,7 +1,7 @@
 ﻿using Google.Protobuf;
 using POGOProtos.Networking.Responses;
 
-namespace POGOLib.Util
+namespace POGOLib.Official.Util.Data
 {
     public interface IDataCache
     {

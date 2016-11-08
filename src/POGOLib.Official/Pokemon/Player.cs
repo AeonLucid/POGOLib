@@ -4,7 +4,7 @@ using GeoCoordinatePortable;
 using POGOProtos.Data;
 using POGOProtos.Data.Player;
 
-namespace POGOLib.Pokemon
+namespace POGOLib.Official.Pokemon
 {
     public class Player
     {

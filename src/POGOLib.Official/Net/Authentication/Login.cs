@@ -1,11 +1,11 @@
 ﻿using System;
-using GeoCoordinatePortable;
-using POGOLib.Logging;
-using POGOLib.Net.Authentication.Data;
 using System.Threading.Tasks;
-using POGOLib.Net.Authentication.Providers;
+using GeoCoordinatePortable;
+using POGOLib.Official.Logging;
+using POGOLib.Official.Net.Authentication.Data;
+using POGOLib.Official.Net.Authentication.Providers;
 
-namespace POGOLib.Net.Authentication
+namespace POGOLib.Official.Net.Authentication
 {
     /// <summary>
     ///     Responsible for Authenticating and Re-authenticating the user.

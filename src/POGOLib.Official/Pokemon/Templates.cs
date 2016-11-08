@@ -1,4 +1,4 @@
-﻿namespace POGOLib.Pokemon
+﻿namespace POGOLib.Official.Pokemon
 {
     /*
     public class Templates

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Google.Common.Geometry;
 
-namespace POGOLib.Util
+namespace POGOLib.Official.Util
 {
     internal static class MapUtil
     {
