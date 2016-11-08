@@ -12,7 +12,7 @@ namespace POGOLib.Official.LoginProviders
 {
     /// <summary>
     /// The <see cref="ILoginProvider"/> for Pokemon Trainer Club.
-    /// Use this if you want to authenticate to PokemonGo using a PTC account.
+    /// Use this if you want to authenticate to PokemonGo using a Pokemon Trainer Club account.
     /// </summary>
     public class PtcLoginProvider : ILoginProvider
     {
