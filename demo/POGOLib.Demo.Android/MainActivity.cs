@@ -48,9 +48,9 @@ namespace POGOLib.Demo.Android
             {
                 var session = await Login.GetSession(new PtcLoginProvider(username, password), 51.507351, -0.127758);
 
-                await session.Startup();
+                await session.StartupAsync();
 
-                var fortDetailsBytes = await session.RpcClient.SendRemoteProcedureCall(new Request
+                var fortDetailsBytes = await session.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.FortDetails,
                     RequestMessage = new FortDetailsMessage

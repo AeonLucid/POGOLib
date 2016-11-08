@@ -1,5 +1,20 @@
 ﻿{
-  "supports": {},
+  "title": "POGOLib.Official",
+  "description": "A community driven PokémonGo API Library written in C#.",
+  "authors": [ "AeonLucid" ],
+  "version": "1.0.0",
+  "packOptions": {
+    "summary": "A community driven PokémonGo API Library written in C#.",
+    "tags": [ "Pokemon", "POGOLib", "netstandard" ],
+    "owners": [ "AeonLucid" ],
+    "iconUrl": "http://i.imgur.com/7vJxPxu.png",
+    "projectUrl": "https://github.com/AeonLucid/POGOLib",
+    "requireLicenseAcceptance": true,
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/AeonLucid/POGOLib"
+    }
+  },
   "dependencies": {
     "GeoCoordinate.NetStandard1": "1.0.0",
     "Google.Protobuf": "3.1.0",

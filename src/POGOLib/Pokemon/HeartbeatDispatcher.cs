@@ -109,7 +109,7 @@ namespace POGOLib.Pokemon
 
         private async Task Dispatch()
         {
-            await _session.RpcClient.RefreshMapObjects();
+            await _session.RpcClient.RefreshMapObjectsAsync();
         }
     }
 }

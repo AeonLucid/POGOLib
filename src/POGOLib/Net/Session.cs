@@ -90,9 +90,9 @@ namespace POGOLib.Net
             GC.SuppressFinalize(this);
         }
 
-        public async Task<bool> Startup()
+        public async Task<bool> StartupAsync()
         {
-            if (!(await RpcClient.Startup()))
+            if (!(await RpcClient.StartupAsync()))
             {
                 return false;
             }

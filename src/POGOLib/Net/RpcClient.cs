@@ -91,7 +91,7 @@ namespace POGOLib.Net
         /// <summary>
         ///     Sends all requests which the (android-)client sends on startup
         /// </summary>
-        internal async Task<bool> Startup()
+        internal async Task<bool> StartupAsync()
         {
             try
             {
@@ -99,7 +99,7 @@ namespace POGOLib.Net
                 GetPlayerResponse playerResponse;
                 do
                 {
-                    var response = await SendRemoteProcedureCall(new[]
+                    var response = await SendRemoteProcedureCallAsync(new[]
                     {
                         new Request
                         {
@@ -131,12 +131,12 @@ namespace POGOLib.Net
             return true;
         }
 
-        public async Task<GetAssetDigestResponse> GetAssets()
+        public async Task<GetAssetDigestResponse> GetAssetsAsync()
         {
             // check if template cache has been set
 
             // Get DownloadRemoteConfig
-            var remoteConfigResponse = await SendRemoteProcedureCall(new Request
+            var remoteConfigResponse = await SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.DownloadRemoteConfigVersion,
                 RequestMessage = new DownloadRemoteConfigVersionMessage
@@ -161,7 +161,7 @@ namespace POGOLib.Net
             else
             {
                 // GetAssetDigest
-                var assetDigestResponse = await SendRemoteProcedureCall(new Request
+                var assetDigestResponse = await SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.GetAssetDigest,
                     RequestMessage = new GetAssetDigestMessage
@@ -176,10 +176,10 @@ namespace POGOLib.Net
             }
         }
 
-        public async Task<DownloadItemTemplatesResponse> GetItemTemplates()
+        public async Task<DownloadItemTemplatesResponse> GetItemTemplatesAsync()
         {
             // Get DownloadRemoteConfig
-            var remoteConfigResponse = await SendRemoteProcedureCall(new Request
+            var remoteConfigResponse = await SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.DownloadRemoteConfigVersion,
                 RequestMessage = new DownloadRemoteConfigVersionMessage
@@ -200,7 +200,7 @@ namespace POGOLib.Net
             else
             {
                 // GetAssetDigest
-                var itemTemplateResponse = await SendRemoteProcedureCall(new Request
+                var itemTemplateResponse = await SendRemoteProcedureCallAsync(new Request
                 {
                     RequestType = RequestType.DownloadItemTemplates
                 });
@@ -213,7 +213,7 @@ namespace POGOLib.Net
         /// <summary>
         ///     It is not recommended to call this. Map objects will update automatically and fire the map update event.
         /// </summary>
-        public async Task RefreshMapObjects()
+        public async Task RefreshMapObjectsAsync()
         {
             var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
             var sinceTimeMs = new List<long>(cellIds.Length);
@@ -223,7 +223,7 @@ namespace POGOLib.Net
                 sinceTimeMs.Add(0);
             }
 
-            var response = await SendRemoteProcedureCall(new Request
+            var response = await SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GetMapObjects,
                 RequestMessage = new GetMapObjectsMessage
@@ -353,7 +353,7 @@ namespace POGOLib.Net
         /// <param name="request"></param>
         /// <param name="addDefaultRequests"></param>
         /// <returns></returns>
-        private async Task<RequestEnvelope> GetRequestEnvelope(IEnumerable<Request> request, bool addDefaultRequests)
+        private async Task<RequestEnvelope> GetRequestEnvelopeAsync(IEnumerable<Request> request, bool addDefaultRequests)
         {
             var requestEnvelope = new RequestEnvelope
             {
@@ -397,22 +397,22 @@ namespace POGOLib.Net
             return requestEnvelope;
         }
 
-        public async Task<ByteString> SendRemoteProcedureCall(RequestType requestType)
+        public async Task<ByteString> SendRemoteProcedureCallAsync(RequestType requestType)
         {
-            return await SendRemoteProcedureCall(new Request
+            return await SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = requestType
             });
         }
 
-        public async Task<ByteString> SendRemoteProcedureCall(Request request)
+        public async Task<ByteString> SendRemoteProcedureCallAsync(Request request)
         {
-            return await SendRemoteProcedureCall(await GetRequestEnvelope(new[] {request}, true));
+            return await SendRemoteProcedureCall(await GetRequestEnvelopeAsync(new[] {request}, true));
         }
 
-        public async Task<ByteString> SendRemoteProcedureCall(Request[] request)
+        public async Task<ByteString> SendRemoteProcedureCallAsync(Request[] request)
         {
-            return await SendRemoteProcedureCall(await GetRequestEnvelope(request, false));
+            return await SendRemoteProcedureCall(await GetRequestEnvelopeAsync(request, false));
         }
 
         private Task<ByteString> SendRemoteProcedureCall(RequestEnvelope requestEnvelope)
@@ -434,7 +434,7 @@ namespace POGOLib.Net
                         await Task.Delay(delay);
                     }
                     
-                    _rpcResponses.GetOrAdd(processRequestEnvelope, await PerformRemoteProcedureCall(requestEnvelope));
+                    _rpcResponses.GetOrAdd(processRequestEnvelope, await PerformRemoteProcedureCallAsync(requestEnvelope));
                 }
 
                 ByteString ret;
@@ -446,7 +446,7 @@ namespace POGOLib.Net
             });
         }
 
-        private async Task<ByteString> PerformRemoteProcedureCall(RequestEnvelope requestEnvelope)
+        private async Task<ByteString> PerformRemoteProcedureCallAsync(RequestEnvelope requestEnvelope)
         {
             try
             {
@@ -498,7 +498,7 @@ namespace POGOLib.Net
                                 {
                                     _requestUrl = $"https://{responseEnvelope.ApiUrl}/rpc";
 
-                                    return await PerformRemoteProcedureCall(requestEnvelope);
+                                    return await PerformRemoteProcedureCallAsync(requestEnvelope);
                                 }
                                 throw new Exception($"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
 
@@ -509,7 +509,7 @@ namespace POGOLib.Net
                                 _session.AccessToken.Expire();
                                 await _session.Reauthenticate();
 
-                                return await PerformRemoteProcedureCall(requestEnvelope);
+                                return await PerformRemoteProcedureCallAsync(requestEnvelope);
 
                             default:
                                 Logger.Info($"Unknown status code: {responseEnvelope.StatusCode}");
@@ -544,8 +544,8 @@ namespace POGOLib.Net
         /// <summary>
         /// Responsible for handling the received <see cref="ResponseEnvelope" />.
         /// </summary>
-        /// <param name="requestEnvelope">The <see cref="RequestEnvelope"/> prepared by <see cref="PerformRemoteProcedureCall(RequestEnvelope)"/>.</param>
-        /// <param name="responseEnvelope">The <see cref="ResponseEnvelope"/> received from <see cref="SendRemoteProcedureCall(Request)" />.</param>
+        /// <param name="requestEnvelope">The <see cref="RequestEnvelope"/> prepared by <see cref="PerformRemoteProcedureCallAsync"/>.</param>
+        /// <param name="responseEnvelope">The <see cref="ResponseEnvelope"/> received from <see cref="SendRemoteProcedureCallAsync(POGOProtos.Networking.Requests.Request)" />.</param>
         /// <returns>Returns the <see cref="ByteString" />response of the <see cref="Request"/>.</returns>
         private ByteString HandleResponseEnvelope(RequestEnvelope requestEnvelope, ResponseEnvelope responseEnvelope)
         {

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Newtonsoft.Json;
-using POGOLib.Extensions;
 using POGOLib.Logging;
 using POGOLib.Net;
 using POGOLib.Net.Authentication;
@@ -13,6 +11,7 @@ using POGOLib.Net.Authentication.Providers;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
+using POGOLib.Extensions;
 
 namespace POGOLib.Demo.ConsoleApp
 {
@@ -86,9 +85,9 @@ namespace POGOLib.Demo.ConsoleApp
             session.Map.Update += MapOnUpdate;
 
             // Send initial requests and start HeartbeatDispatcher
-            await session.Startup();
+            await session.StartupAsync();
 
-            var fortDetailsBytes = await session.RpcClient.SendRemoteProcedureCall(new Request
+            var fortDetailsBytes = await session.RpcClient.SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.FortDetails,
                 RequestMessage = new FortDetailsMessage
