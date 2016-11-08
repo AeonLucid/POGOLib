@@ -79,7 +79,6 @@ namespace POGOLib.Official.Demo.ConsoleApp
 
             SaveAccessToken(session.AccessToken);
 
-            //            session.DataCache = new FileDataCache();
             session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
             session.Player.Inventory.Update += InventoryOnUpdate;
             session.Map.Update += MapOnUpdate;
