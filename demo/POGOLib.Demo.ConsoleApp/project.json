@@ -14,7 +14,7 @@
           "type": "platform",
           "version": "1.0.0"
         },
-        "POGOLib": {
+        "POGOLib.Official": {
           "target": "project"
         }
       },
