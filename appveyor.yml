@@ -1,6 +1,6 @@
 branches:
   only:
-  - netstandard-convert
+  - master
 
 assembly_info:
   patch: false
