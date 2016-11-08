@@ -1,10 +1,10 @@
 {
   "title": "POGOLib.Official",
-  "description": "A community driven PokémonGo API Library written in C#.",
+  "description": "A community driven PokemonGo API Library written in C#.",
   "authors": [ "AeonLucid" ],
   "version": "1.0.1",
   "packOptions": {
-    "summary": "A community driven PokémonGo API Library written in C#.",
+    "summary": "A community driven PokemonGo API Library written in C#.",
     "tags": [ "Pokemon", "POGOLib", "netstandard" ],
     "owners": [ "AeonLucid" ],
     "iconUrl": "http://i.imgur.com/7vJxPxu.png",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "GeoCoordinate.NetStandard1": "1.0.0",
-    "POGOProtos.NetStandard1": "2.0.1",
+    "POGOProtos.NetStandard1": "2.0.2",
     "Google.Protobuf": "3.1.0",
     "Newtonsoft.Json": "9.0.1",
     "S2Geometry": "1.0.3"

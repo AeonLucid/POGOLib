@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Google.Protobuf;
 using POGOLib.Official.Extensions;
+using POGOLib.Official.Logging;
 using POGOLib.Official.Util;
 using POGOLib.Official.Util.Encryption;
 using POGOProtos.Networking.Envelopes;
@@ -144,8 +145,8 @@ namespace POGOLib.Official.Net
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Longitude).Reverse())
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.HorizontalAccuracy).Reverse()).ToArray();
 
-            signature.LocationHash1 = NiaHash.Hash32Salt(locationBytes, NiaHash.Hash32(serializedTicket));
-            signature.LocationHash2 = NiaHash.Hash32(locationBytes);
+            signature.LocationHash1 = (int) NiaHash.Hash32Salt(locationBytes, NiaHash.Hash32(serializedTicket));
+            signature.LocationHash2 = (int) NiaHash.Hash32(locationBytes);
             
             foreach (var req in requestEnvelope.Requests)
             {
