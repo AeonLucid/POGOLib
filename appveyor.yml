@@ -1,25 +1,29 @@
 branches:
   only:
-  - master
+  - netstandard-convert
 
 assembly_info:
   patch: false
 
 configuration: Release
+
+platform: Any CPU
+  
+environment:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
   
 before_build:
-  - cmd: nuget restore
+  - appveyor-retry dotnet restore -v Minimal
 
-build:
-  project: POGOLib\POGOLib.csproj
-  publish_nuget: true
-  include_nuget_references: true
-  verbosity: minimal
+build_script:
+  - dotnet build "src\POGOLib" -c %CONFIGURATION% --no-dependencies
+  - dotnet build "demo\POGOLib.Demo.ConsoleApp" -c %CONFIGURATION% --no-dependencies
+  
+after_build:
+  - dotnet pack "src\POGOLib" -c %CONFIGURATION% --no-build -o artifacts
+  
+artifacts:
+  - path: artifacts\**\*.*
 
-# Change to only deploy on tag.  
-#deploy:
-#  - provider: NuGet
-#    api_key:
-#      secure: Y/AgjrCeBdDo/UpZoyVLIV61fC3YNdmAgMQ1yHE6lMxs0ArlO5NDCmu2cUpcXR/Y
-#    on:
-#      branch: master
+cache:
+  - '%USERPROFILE%\.nuget\packages'

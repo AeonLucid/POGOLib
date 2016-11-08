@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CD4C6557-8A33-40D9-952B-A10694D3F042}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>POGOLib</RootNamespace>
+    <AssemblyName>POGOLib</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Configuration.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Extensions\RandomExtension.cs" />
+    <Compile Include="HexUtil.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Net\Authentication\Data\AccessToken.cs" />
+    <Compile Include="Net\Authentication\Data\LoginData.cs" />
+    <Compile Include="Net\Authentication\Exceptions\WrongCredentialsException.cs" />
+    <Compile Include="Net\Authentication\Login.cs" />
+    <Compile Include="Net\Authentication\Providers\ILoginProvider.cs" />
+    <Compile Include="Net\Authentication\Providers\PtcLoginProvider.cs" />
+    <Compile Include="Net\RpcClient.cs" />
+    <Compile Include="Net\RpcEncryption.cs" />
+    <Compile Include="Net\Session.cs" />
+    <Compile Include="Pokemon\HeartbeatDispatcher.cs" />
+    <Compile Include="Pokemon\Inventory.cs" />
+    <Compile Include="Pokemon\Map.cs" />
+    <Compile Include="Pokemon\Player.cs" />
+    <Compile Include="Pokemon\Templates.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\Encryption\NiaHash.cs" />
+    <Compile Include="Util\Encryption\PCrypt.cs" />
+    <Compile Include="Util\Encryption\Shuffles.cs" />
+    <Compile Include="Util\IDataCache.cs" />
+    <Compile Include="Util\LocationUtil.cs" />
+    <Compile Include="Util\MapUtil.cs" />
+    <Compile Include="Util\MemoryDataCache.cs" />
+    <Compile Include="Util\TimeUtil.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,4 +1,4 @@
-POGOLib [![AppVeyor](https://img.shields.io/appveyor/ci/AeonLucid/pogolib/master.svg?maxAge=60)](https://ci.appveyor.com/project/AeonLucid/pogolib) [![NuGet Pre Release](https://img.shields.io/nuget/vpre/POGOLib.Official.svg?maxAge=60)](https://www.nuget.org/packages/POGOLib.Official)
+POGOLib [![AppVeyor](https://img.shields.io/appveyor/ci/AeonLucid/pogolib/master.svg?maxAge=60)](https://ci.appveyor.com/project/AeonLucid/pogolib) [![NuGet](https://img.shields.io/nuget/v/POGOLib.Official.svg?maxAge=60)](https://www.nuget.org/packages/POGOLib.Official)
 ===================
 
 POGOLib is written in C# and aims to be a community-driven PokémonGo API. Feel free to submit pull requests.
@@ -7,10 +7,14 @@ The library is a bit low-level now but the goal is to provide a high-level libra
 
 # Installation
 
+## Supported Platforms
+
+* .NET Standard 1.1 ([Specific platforms](https://github.com/dotnet/corefx/blob/master/Documentation/architecture/net-platform-standard.md#mapping-the-net-platform-standard-to-platforms))
+
 ## NuGet
 
 ### Console
-Run `Install-Package POGOLib.Official -Pre`  in `Tools > NuGet Package Manager > Package Manager Console` .
+Run `Install-Package POGOLib.Official`  in `Tools > NuGet Package Manager > Package Manager Console` .
 
 ### Package Browser
 Right click your project in Visual Studio, click `Manage NuGet Packages..`, make sure `Browse` is pressed and **Include prereleases is checked**. Search for `POGOLib.Official` and press `Install`.
@@ -32,21 +36,17 @@ When PokémonGo tells POGOLib that the authentication token is no longer valid, 
 When the session has successful re-authenticated, we fire an event. You can subscribe to the event to receive a notification.
 
 ```csharp
-var session = Login.GetSession("username", "password", LoginProvider.PokemonTrainerClub, 51.507351, -0.127758);
-
 session.AccessTokenUpdated += (sender, eventArgs) =>
 {
 	// Save to file.. 
 	// session.AccessToken
 };
-
-session.Startup();
 ```
 
 ## Heartbeats
 The map, inventory and player are automatically updated by the heartbeat.
 
-The heartbeat is checks every second if:
+The heartbeat checks every second if:
 
  - the seconds since the last heartbeat is greater than or equal to the [maximum allowed refresh seconds](https://github.com/AeonLucid/POGOProtos/blob/master/src/POGOProtos/Settings/MapSettings.proto#L9) of the game settings;
  - the distance moved is greater than or equal to the [minimum allowed distance](https://github.com/AeonLucid/POGOProtos/blob/master/src/POGOProtos/Settings/MapSettings.proto#L10) of the game settings;
@@ -56,23 +56,32 @@ If one of these is true, an heartbeat will be sent. This automatically fetches t
 If you want to receive a notification when these update, you can subscribe to the following events.
 
 ```csharp
-var session = Login.GetSession("username", "password", LoginProvider.PokemonTrainerClub, 51.507351, -0.127758);
-
 session.Player.Inventory.Update += (sender, eventArgs) =>
 {
-	// Access updated inventory: session.Player.Inventory
-	Console.WriteLine("Inventory was updated.");
-};
-session.Map.Update += (sender, eventArgs) =>
-{
-	// Access updated map: session.Map
-	Console.WriteLine("Map was updated.");
+    var session = (Session) sender;
+
+    // Access updated inventory: session.Player.Inventory
+    Console.WriteLine("Inventory was updated.");
 };
 
-session.Startup();
+session.Map.Update += (sender, eventArgs) =>
+{
+    var session = (Session) sender;
+
+    // Access updated map: session.Map
+    Console.WriteLine("Map was updated.");
+};
 ```
 
 *Make sure you start the session **after** subscribing to the events.*
+
+## Throttling
+
+Requests are throttled automatically, this means that only one request will be sent every X milliseconds. You can configure the milliseconds like this.
+
+```csharp
+POGOLib.Configuration.ThrottleDifference = 1000;
+```
 
 ## Custom crafted requests
 
@@ -86,18 +95,15 @@ If you want to know what kind of data is available, [have a look through all POG
 You can send a request and parse the response like this.
 
 ```csharp
-var session = Login.GetSession("username", "password", LoginProvider.PokemonTrainerClub, 51.507351, -0.127758);
-session.Startup();
-
-var fortDetailsBytes = session.RpcClient.SendRemoteProcedureCall(new Request
+var fortDetailsBytes = await session.RpcClient.SendRemoteProcedureCallAsync(new Request
 {
-	RequestType = RequestType.FortDetails,
-	RequestMessage = new FortDetailsMessage
-	{
-		FortId = "e4a5b5a63cf34100bd620c598597f21c.12",
-		Latitude = 51.507335,
-		Longitude = -0.127689
-	}.ToByteString()
+    RequestType = RequestType.FortDetails,
+    RequestMessage = new FortDetailsMessage
+    {
+        FortId = "e4a5b5a63cf34100bd620c598597f21c.12",
+        Latitude = 51.507335,
+        Longitude = -0.127689
+    }.ToByteString()
 });
 var fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(fortDetailsBytes);
 					
@@ -125,14 +131,14 @@ Console.WriteLine(JsonConvert.SerializeObject(fortDetailsResponse, Formatting.In
   "Modifiers": [
     {
       "ItemId": 501,
-      "ExpirationTimestampMs": 1469238785723,
-      "DeployerPlayerCodename": "Gibbons3D"
+      "ExpirationTimestampMs": 1478571243838,
+      "DeployerPlayerCodename": "Poketigre77"
     }
   ]
 }
 ```
 
-# Examples
+# Example (OUTDATED)
 
 This example logs in, retrieves nearby pokestops, checks if you have already searched them, if you have not, he will check the distance between you and the pokestop. If you are close enough to the pokestop, he will search it and display the results.
 
@@ -183,13 +189,3 @@ foreach (var fortData in session.Map.GetFortsSortedByDistance(f => f.Type == For
 	}
 }
 ```
- 
-# Build
-In order to build POGOLib you need to have two things installed:
-
- - [Visual Studio 2015](https://www.visualstudio.com/en-us/downloads/download-visual-studio-vs.aspx)
- - [.NET Framework 4.6.1](https://www.microsoft.com/download/details.aspx?id=49981)
-
-Open **POGO.sln** with **Visual Studio 2015** and go to **Build > Build Solution**. Visual Studio should automatically download the required libraries for you through NuGet.
-
-You can find the DLL here: **POGO\POGOLib\bin\Debug\POGOLib.dll**.
