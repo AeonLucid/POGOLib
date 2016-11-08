@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using GeoCoordinatePortable;
 using POGOLib.Official.Logging;
+using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net.Authentication.Data;
-using POGOLib.Official.Net.Authentication.Providers;
 
 namespace POGOLib.Official.Net.Authentication
 {
@@ -12,10 +12,10 @@ namespace POGOLib.Official.Net.Authentication
     /// </summary>
     public static class Login
     {
-
         /// <summary>
         ///     Login with a stored <see cref="AccessToken" />.
         /// </summary>
+        /// <param name="loginProvider"></param>
         /// <param name="accessToken"></param>
         /// <param name="initialLatitude">The initial latitude you will spawn at after logging into PokémonGo.</param>
         /// <param name="initialLongitude">The initial longitude you will spawn at after logging into PokémonGo.</param>

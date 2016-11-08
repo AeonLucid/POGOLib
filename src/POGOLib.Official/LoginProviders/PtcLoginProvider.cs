@@ -8,14 +8,14 @@ using Newtonsoft.Json.Linq;
 using POGOLib.Official.Logging;
 using POGOLib.Official.Net.Authentication.Data;
 
-namespace POGOLib.Official.Net.Authentication.Providers
+namespace POGOLib.Official.LoginProviders
 {
+    /// <summary>
+    /// The <see cref="ILoginProvider"/> for Pokemon Trainer Club.
+    /// Use this if you want to authenticate to PokemonGo using a PTC account.
+    /// </summary>
     public class PtcLoginProvider : ILoginProvider
     {
-        public string ProviderID => "ptc";
-
-        public string UserID => _username;
-
         private readonly string _username;
         private readonly string _password;
 
@@ -25,6 +25,20 @@ namespace POGOLib.Official.Net.Authentication.Providers
             _password = password;
         }
 
+        /// <summary>
+        /// The unique identifier of the <see cref="PtcLoginProvider"/>.
+        /// </summary>
+        public string ProviderId => "ptc";
+
+        /// <summary>
+        /// The unique identifier of the user trying to authenticate using the <see cref="PtcLoginProvider"/>.
+        /// </summary>
+        public string UserId => _username;
+
+        /// <summary>
+        /// Retrieves an <see cref="AccessToken"/> by logging into the Pokemon Trainer Club website.
+        /// </summary>
+        /// <returns>Returns an <see cref="AccessToken"/>.</returns>
         public async Task<AccessToken> GetAccessToken()
         {
             using (var httpClientHandler = new HttpClientHandler())
@@ -44,7 +58,7 @@ namespace POGOLib.Official.Net.Authentication.Providers
         }
 
         /// <summary>
-        ///     Responsible for retrieving login parameters for <see cref="PostLogin" />.
+        /// Responsible for retrieving login parameters for <see cref="PostLogin" />.
         /// </summary>
         /// <param name="httpClient">An initialized <see cref="HttpClient" />.</param>
         /// <returns><see cref="LoginData" /> for <see cref="PostLogin" />.</returns>
@@ -56,7 +70,7 @@ namespace POGOLib.Official.Net.Authentication.Providers
         }
 
         /// <summary>
-        ///     Responsible for submitting the login request.
+        /// Responsible for submitting the login request.
         /// </summary>
         /// <param name="httpClient"></param>
         /// <param name="username">The user's PTC username.</param>
@@ -90,7 +104,7 @@ namespace POGOLib.Official.Net.Authentication.Providers
         }
 
         /// <summary>
-        ///     Responsible for finishing the oauth login request.
+        /// Responsible for finishing the oauth login request.
         /// </summary>
         /// <param name="httpClient"></param>
         /// <param name="ticket"></param>
@@ -117,7 +131,7 @@ namespace POGOLib.Official.Net.Authentication.Providers
             {
                 Token = oAuthData.Groups["accessToken"].Value,
                 Expiry = DateTime.UtcNow.AddSeconds(int.Parse(oAuthData.Groups["expires"].Value)),
-                ProviderID = ProviderID
+                ProviderID = ProviderId
             };
         }
     }

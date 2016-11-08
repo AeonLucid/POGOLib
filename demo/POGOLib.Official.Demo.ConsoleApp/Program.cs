@@ -7,11 +7,11 @@ using POGOLib.Official.Logging;
 using POGOLib.Official.Net;
 using POGOLib.Official.Net.Authentication;
 using POGOLib.Official.Net.Authentication.Data;
-using POGOLib.Official.Net.Authentication.Providers;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using POGOLib.Official.Extensions;
+using POGOLib.Official.LoginProviders;
 
 namespace POGOLib.Official.Demo.ConsoleApp
 {
@@ -159,7 +159,7 @@ namespace POGOLib.Official.Demo.ConsoleApp
         private static async Task<Session> GetSession(ILoginProvider loginProvider, double initLat, double initLong, bool mayCache = false)
         {
             var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
-            var fileName = Path.Combine(cacheDir, $"{loginProvider.UserID}-{loginProvider.ProviderID}.json");
+            var fileName = Path.Combine(cacheDir, $"{loginProvider.UserId}-{loginProvider.ProviderId}.json");
 
             if (mayCache)
             {

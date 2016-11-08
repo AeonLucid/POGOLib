@@ -4,8 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using GeoCoordinatePortable;
 using POGOLib.Official.Logging;
+using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net.Authentication.Data;
-using POGOLib.Official.Net.Authentication.Providers;
 using POGOLib.Official.Pokemon;
 using POGOLib.Official.Util;
 using POGOLib.Official.Util.Data;
@@ -41,7 +41,7 @@ namespace POGOLib.Official.Net
 
         internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate)
         {
-            if (!ValidLoginProviders.Contains(loginProvider.ProviderID))
+            if (!ValidLoginProviders.Contains(loginProvider.ProviderId))
                 throw new ArgumentException($"LoginProvider ID must be one of the following: {string.Join(", ", ValidLoginProviders)}");
 
             LoginProvider = loginProvider;
