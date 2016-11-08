@@ -18,7 +18,7 @@ before_build:
 
 build_script:
   - dotnet build "src\POGOLib.Official" -c %CONFIGURATION% --no-dependencies
-  - dotnet build "demo\POGOLib.Demo.ConsoleApp" -c %CONFIGURATION% --no-dependencies
+  - dotnet build "demo\POGOLib.Official.Demo.ConsoleApp" -c %CONFIGURATION% --no-dependencies
   
 after_build:
   - dotnet pack "src\POGOLib.Official" -c %CONFIGURATION% --no-build -o artifacts
