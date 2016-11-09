@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using GPSOAuthSharp;
 using POGOLib.Official.Logging;
 using POGOLib.Official.Net.Authentication.Data;
 using POGOLib.Official.Util;
@@ -42,6 +43,9 @@ namespace POGOLib.Official.LoginProviders
 
             if (masterLoginResponse.ContainsKey("Error"))
             {
+                if (masterLoginResponse["Error"].Equals("NeedsBrowser"))
+                    throw new Exception($"You have to log into an browser with the email '{_username}'.");
+
                 throw new Exception($"Google returned an error message: '{masterLoginResponse["Error"]}'");
             }
             if (!masterLoginResponse.ContainsKey("Token"))

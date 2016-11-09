@@ -1,9 +1,10 @@
 {
-  "version": "1.0.0-*",
+  "version": "1.0.0",
   "buildOptions": {
     "debugType": "portable"
   },
   "dependencies": {
+    "GPSOAuthSharp.NetStandard1": "1.0.0",
     "POGOLib.Official": {
       "target": "project"
     }

@@ -5,7 +5,8 @@
     "emitEntryPoint": true
   },
   "dependencies": {
-    "POGOLib.Official": "1.0.1"
+    "POGOLib.Official": "1.0.1",
+    "POGOLib.Official.Google": "1.0.0"
   },
   "frameworks": {
     "netcoreapp1.0": {

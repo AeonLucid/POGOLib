@@ -19,9 +19,9 @@ namespace POGOLib.Official.Demo.ConsoleApp
     {
 
         /// <summary>
-        ///     This is just a demo application to test out the library / show a bit how it works.
+        /// This is just a demo application to test out the library / show a bit how it works.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">The command line arguments.</param>
         public static void Main(string[] args)
         {
             Run(args).GetAwaiter().GetResult();
@@ -57,20 +57,24 @@ namespace POGOLib.Official.Demo.ConsoleApp
             Console.Title = "POGO Demo";
 
             // Settings
-            const string loginProviderStr = "ptc";
+            var loginProviderStr = "ptc";
             var usernameStr = Environment.GetEnvironmentVariable("PTC_USERNAME") ?? ""; // Your PTC username
             var passwordStr = Environment.GetEnvironmentVariable("PTC_PASSWORD") ?? ""; // Your PTC password
 
             // Login
             ILoginProvider loginProvider;
 
-            //            if (loginProviderStr == "google")
-            //                loginProvider = new GoogleLoginProvider(usernameStr, passwordStr);
-            //            else 
-            if (loginProviderStr == "ptc")
-                loginProvider = new PtcLoginProvider(usernameStr, passwordStr);
-            else
-                throw new ArgumentException("Login provider must be either \"google\" or \"ptc\"");
+            switch (loginProviderStr)
+            {
+                case "google":
+                    loginProvider = new GoogleLoginProvider(usernameStr, passwordStr);
+                    break;
+                case "ptc":
+                    loginProvider = new PtcLoginProvider(usernameStr, passwordStr);
+                    break;
+                default:
+                    throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");
+            }
 
             var locRandom = new Random();
             var latitude = 51.507352 + locRandom.NextDouble(-0.000030, 0.000030); // Somewhere in London
@@ -149,7 +153,7 @@ namespace POGOLib.Official.Demo.ConsoleApp
         }
 
         /// <summary>
-        ///     Login to PokémonGo and return an authenticated <see cref="Session" />.
+        /// Login to PokémonGo and return an authenticated <see cref="Session" />.
         /// </summary>
         /// <param name="loginProvider">Provider ID must be 'PTC' or 'Google'.</param>
         /// <param name="initLat">The initial latitude.</param>
