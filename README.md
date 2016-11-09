@@ -51,7 +51,7 @@ The heartbeat checks every second if:
  - the seconds since the last heartbeat is greater than or equal to the [maximum allowed refresh seconds](https://github.com/AeonLucid/POGOProtos/blob/master/src/POGOProtos/Settings/MapSettings.proto#L9) of the game settings;
  - the distance moved is greater than or equal to the [minimum allowed distance](https://github.com/AeonLucid/POGOProtos/blob/master/src/POGOProtos/Settings/MapSettings.proto#L10) of the game settings;
 
-If one of these is true, an heartbeat will be sent. This automatically fetches the map data surrounding your current position, your inventory data and the game settings.
+If one of these is true, a heartbeat will be sent. This automatically fetches the map data surrounding your current position, your inventory data and the game settings.
 
 If you want to receive a notification when these update, you can subscribe to the following events.
 
@@ -140,7 +140,7 @@ Console.WriteLine(JsonConvert.SerializeObject(fortDetailsResponse, Formatting.In
 
 # Example (OUTDATED)
 
-This example logs in, retrieves nearby pokestops, checks if you have already searched them, if you have not, he will check the distance between you and the pokestop. If you are close enough to the pokestop, he will search it and display the results.
+This example logs in, retrieves nearby pokestops, checks if you have already searched them. If you have not, he will check the distance between you and the pokestop. If you are close enough to the pokestop, he will search it and display the results.
 
 ```csharp
 var session = Login.GetSession("username", "password", LoginProvider.PokemonTrainerClub, 51.507351, -0.127758);
