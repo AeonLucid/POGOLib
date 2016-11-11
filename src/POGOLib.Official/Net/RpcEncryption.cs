@@ -154,7 +154,7 @@ namespace POGOLib.Official.Net
             }
 
             signature.SessionHash = _sessionHash;
-            signature.Unknown25 = -8408506833887075802;
+            signature.Unknown25 = Constants.Unknown25;
 
             var encryptedSignature = new PlatformRequest
             {

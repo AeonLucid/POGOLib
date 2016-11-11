@@ -4,22 +4,22 @@ namespace POGOLib.Official.Util.Encryption
 {
     internal class NiaHash
     {
-        /* IOS 1.13.3 */
+        /* IOS 1.15.0 */
         private static readonly ulong[] MagicTable = {
-            0x95C05F4D1512959E, 0xE4F3C46EEF0DCF07,
-            0x6238DC228F980AD2, 0x53F3E3BC49607092,
-            0x4E7BE7069078D625, 0x1016D709D1AD25FC,
-            0x044E89B8AC76E045, 0xE0B684DDA364BFA1,
-            0x90C533B835E89E5F, 0x3DAF462A74FA874F,
-            0xFEA54965DD3EF5A0, 0x287A5D7CCB31B970,
-            0xAE681046800752F8, 0x121C2D6EAF66EC6E,
-            0xEE8F8CA7E090FB20, 0xCE1AE25F48FE0A52,
+            0x2dd7caaefcf073eb, 0xa9209937349cfe9c,
+            0xb84bfc934b0e60ef, 0xff709c157b26e477,
+            0x3936fd8735455112, 0xca141bf22338d331,
+            0xdd40e749cb64fd02, 0x5e268f564b0deb26,
+            0x658239596bdea9ec, 0x31cedf33ac38c624,
+            0x12f56816481b0cfd, 0x94e9de155f40f095,
+            0x5089c907844c6325, 0xdf887e97d73c50e3,
+            0xae8870787ce3c11d, 0xa6767d18c58d2117,
         };
 
-        private static readonly UInt128 RoundMagic = new UInt128(0x78F32468CD48D6DE, 0x14C983660183C0AE);
-        private const ulong FinalMagic0 = 0xBDB31B10864F3F87;
-        private const ulong FinalMagic1 = 0x5B7E9E828A9B8ABD;
-        private const uint HashSeed = 0x61247FBF;
+        private static readonly UInt128 RoundMagic = new UInt128(0xe3f0d44988bcdfab, 0x081570afdd535ec3);
+        private const ulong FinalMagic0 = 0xce7c4801d683e824;
+        private const ulong FinalMagic1 = 0x6823775b1daad522;
+        private const uint HashSeed = 0x46e945f8;
 
         private static ulong read_int64(byte[] p, int offset)
         {

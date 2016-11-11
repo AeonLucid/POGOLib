@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "GeoCoordinate.NetStandard1": "1.0.0",
-    "POGOProtos.NetStandard1": "2.0.2",
+    "POGOProtos.NetStandard1": "2.1.0",
     "Google.Protobuf": "3.1.0",
     "Newtonsoft.Json": "9.0.1",
     "S2Geometry": "1.0.3"
