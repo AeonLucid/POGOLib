@@ -484,13 +484,6 @@ namespace POGOLib.Official.Net
                                     throw new Exception($"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
                                 }
                                 break;
-                                
-//                            case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest: 
-//                                Logger.Warn($"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
-//
-//                                await Task.Delay(TimeSpan.FromMilliseconds(Configuration.SlowServerTimeout));
-//
-//                                return await SendRemoteProcedureCall(requestEnvelope);
 
                             // A new rpc endpoint is available.
                             case ResponseEnvelope.Types.StatusCode.Redirect: 
@@ -503,12 +496,29 @@ namespace POGOLib.Official.Net
                                 throw new Exception($"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
 
                             // The login token is invalid.
+                            // TODO: Make cleaner to reduce duplicate code with the GetRequestEnvelopeAsync method.
                             case ResponseEnvelope.Types.StatusCode.InvalidAuthToken:
                                 Logger.Debug("Received StatusCode 102, reauthenticating.");
 
                                 _session.AccessToken.Expire();
                                 await _session.Reauthenticate();
 
+                                // Apply new token.
+                                requestEnvelope.AuthInfo = new RequestEnvelope.Types.AuthInfo
+                                {
+                                    Provider = _session.AccessToken.ProviderID,
+                                    Token = new RequestEnvelope.Types.AuthInfo.Types.JWT
+                                    {
+                                        Contents = _session.AccessToken.Token,
+                                        Unknown2 = 59
+                                    }
+                                };
+
+                                // Re-sign envelope.
+                                requestEnvelope.PlatformRequests.Clear();
+                                requestEnvelope.PlatformRequests.Add(_rpcEncryption.GenerateSignature(requestEnvelope));
+
+                                // Re-send envelope.
                                 return await PerformRemoteProcedureCallAsync(requestEnvelope);
 
                             default:
