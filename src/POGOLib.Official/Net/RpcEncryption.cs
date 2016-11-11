@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using Google.Protobuf;
 using POGOLib.Official.Extensions;
-using POGOLib.Official.Logging;
 using POGOLib.Official.Util;
 using POGOLib.Official.Util.Encryption;
 using POGOProtos.Networking.Envelopes;

@@ -12,8 +12,6 @@ using Google.Protobuf;
 using Newtonsoft.Json;
 using POGOLib.Official.Logging;
 using POGOLib.Official.Util;
-using POGOLib.Official.Util.Data;
-using POGOProtos.Enums;
 using POGOProtos.Map;
 using POGOProtos.Networking.Envelopes;
 using POGOProtos.Networking.Requests;
@@ -90,7 +88,7 @@ namespace POGOLib.Official.Net
         internal GeoCoordinate LastGeoCoordinateMapObjectsRequest { get; private set; } = new GeoCoordinate();
 
         /// <summary>
-        ///     Sends all requests which the (android-)client sends on startup
+        ///     Sends all requests which the (ios-)client sends on startup
         /// </summary>
         internal async Task<bool> StartupAsync()
         {
@@ -364,9 +362,7 @@ namespace POGOLib.Official.Net
                 StatusCode = 2,
                 RequestId = GetNextRequestId(),
                 Latitude = _session.Player.Coordinate.Latitude,
-                Longitude = _session.Player.Coordinate.Longitude,
-                Accuracy = (int) _session.Player.Coordinate.HorizontalAccuracy,
-                MsSinceLastLocationfix = 123 // TODO: Figure this out.
+                Longitude = _session.Player.Coordinate.Longitude
             };
 
             requestEnvelope.Requests.AddRange(request);
