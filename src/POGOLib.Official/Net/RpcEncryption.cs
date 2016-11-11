@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using Google.Protobuf;
 using POGOLib.Official.Extensions;
-using POGOLib.Official.Logging;
 using POGOLib.Official.Util;
 using POGOLib.Official.Util.Encryption;
 using POGOProtos.Networking.Envelopes;
@@ -154,7 +153,7 @@ namespace POGOLib.Official.Net
             }
 
             signature.SessionHash = _sessionHash;
-            signature.Unknown25 = -8408506833887075802;
+            signature.Unknown25 = Constants.Unknown25;
 
             var encryptedSignature = new PlatformRequest
             {

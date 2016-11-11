@@ -12,8 +12,6 @@ using Google.Protobuf;
 using Newtonsoft.Json;
 using POGOLib.Official.Logging;
 using POGOLib.Official.Util;
-using POGOLib.Official.Util.Data;
-using POGOProtos.Enums;
 using POGOProtos.Map;
 using POGOProtos.Networking.Envelopes;
 using POGOProtos.Networking.Requests;
@@ -90,7 +88,7 @@ namespace POGOLib.Official.Net
         internal GeoCoordinate LastGeoCoordinateMapObjectsRequest { get; private set; } = new GeoCoordinate();
 
         /// <summary>
-        ///     Sends all requests which the (android-)client sends on startup
+        ///     Sends all requests which the (ios-)client sends on startup
         /// </summary>
         internal async Task<bool> StartupAsync()
         {
@@ -364,9 +362,7 @@ namespace POGOLib.Official.Net
                 StatusCode = 2,
                 RequestId = GetNextRequestId(),
                 Latitude = _session.Player.Coordinate.Latitude,
-                Longitude = _session.Player.Coordinate.Longitude,
-                Accuracy = (int) _session.Player.Coordinate.HorizontalAccuracy,
-                MsSinceLastLocationfix = 123 // TODO: Figure this out.
+                Longitude = _session.Player.Coordinate.Longitude
             };
 
             requestEnvelope.Requests.AddRange(request);
@@ -488,13 +484,6 @@ namespace POGOLib.Official.Net
                                     throw new Exception($"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
                                 }
                                 break;
-                                
-//                            case ResponseEnvelope.Types.StatusCode.InvalidPlatformRequest: 
-//                                Logger.Warn($"We are sending requests too fast, sleeping for {Configuration.SlowServerTimeout} milliseconds.");
-//
-//                                await Task.Delay(TimeSpan.FromMilliseconds(Configuration.SlowServerTimeout));
-//
-//                                return await SendRemoteProcedureCall(requestEnvelope);
 
                             // A new rpc endpoint is available.
                             case ResponseEnvelope.Types.StatusCode.Redirect: 
@@ -507,12 +496,29 @@ namespace POGOLib.Official.Net
                                 throw new Exception($"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
 
                             // The login token is invalid.
+                            // TODO: Make cleaner to reduce duplicate code with the GetRequestEnvelopeAsync method.
                             case ResponseEnvelope.Types.StatusCode.InvalidAuthToken:
                                 Logger.Debug("Received StatusCode 102, reauthenticating.");
 
                                 _session.AccessToken.Expire();
                                 await _session.Reauthenticate();
 
+                                // Apply new token.
+                                requestEnvelope.AuthInfo = new RequestEnvelope.Types.AuthInfo
+                                {
+                                    Provider = _session.AccessToken.ProviderID,
+                                    Token = new RequestEnvelope.Types.AuthInfo.Types.JWT
+                                    {
+                                        Contents = _session.AccessToken.Token,
+                                        Unknown2 = 59
+                                    }
+                                };
+
+                                // Re-sign envelope.
+                                requestEnvelope.PlatformRequests.Clear();
+                                requestEnvelope.PlatformRequests.Add(_rpcEncryption.GenerateSignature(requestEnvelope));
+
+                                // Re-send envelope.
                                 return await PerformRemoteProcedureCallAsync(requestEnvelope);
 
                             default:
