@@ -5,6 +5,10 @@ POGOLib is written in C# and aims to be a community-driven PokémonGo API. Feel 
 
 The library is a bit low-level now but the goal is to provide a high-level library while also allowing low-level request crafting.
 
+# Changelog
+
+[Click here to read the changelog of POGOLib.](CHANGELOG.md)
+
 # Installation
 
 ## Supported Platforms
