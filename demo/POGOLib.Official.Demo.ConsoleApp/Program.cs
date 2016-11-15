@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Newtonsoft.Json;
@@ -87,23 +88,37 @@ namespace POGOLib.Official.Demo.ConsoleApp
             session.Player.Inventory.Update += InventoryOnUpdate;
             session.Map.Update += MapOnUpdate;
 
-            // Send initial requests and start HeartbeatDispatcher
-            await session.StartupAsync();
-
-            var fortDetailsBytes = await session.RpcClient.SendRemoteProcedureCallAsync(new Request
+            // Send initial requests and start HeartbeatDispatcher.
+            // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
+            if(!await session.StartupAsync())
             {
-                RequestType = RequestType.FortDetails,
-                RequestMessage = new FortDetailsMessage
+                throw new Exception("Session couldn't start up.");
+            }
+
+            // Retrieve the closest fort to your current player coordinates.
+            var closestFort = session.Map.GetFortsSortedByDistance().FirstOrDefault();
+            if (closestFort != null)
+            {
+                var fortDetailsBytes = await session.RpcClient.SendRemoteProcedureCallAsync(new Request
                 {
-                    FortId = "e4a5b5a63cf34100bd620c598597f21c.12",
-                    Latitude = 51.507335,
-                    Longitude = -0.127689
-                }.ToByteString()
-            });
-            var fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(fortDetailsBytes);
+                    RequestType = RequestType.FortDetails,
+                    RequestMessage = new FortDetailsMessage
+                    {
+                        FortId = closestFort.Id,
+                        Latitude = closestFort.Latitude,
+                        Longitude = closestFort.Longitude
+                    }.ToByteString()
+                });
+                var fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(fortDetailsBytes);
 
-            Console.WriteLine(JsonConvert.SerializeObject(fortDetailsResponse, Formatting.Indented));
+                Console.WriteLine(JsonConvert.SerializeObject(fortDetailsResponse, Formatting.Indented));
+            }
+            else
+            {
+                Logger.Info("No fort found nearby.");
+            }
 
+            // Handle quit commands.
             HandleCommands();
         }
 
