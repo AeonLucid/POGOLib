@@ -67,15 +67,6 @@ namespace POGOLib.Official.Net
         {
             _session = session;
             _rpcEncryption = new RpcEncryption(session);
-
-            var httpClientHandler = new HttpClientHandler
-            {
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-            };
-
-            _httpClient = new HttpClient(httpClientHandler);
-            _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("Niantic App");
-            _httpClient.DefaultRequestHeaders.ExpectContinue = false;
             _requestId = (ulong) session.Random.Next(100000000, 999999999);
         }
 

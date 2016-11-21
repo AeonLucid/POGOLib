@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using GeoCoordinatePortable;
@@ -43,6 +45,15 @@ namespace POGOLib.Official.Net
             if (!ValidLoginProviders.Contains(loginProvider.ProviderId))
                 throw new ArgumentException($"LoginProvider ID must be one of the following: {string.Join(", ", ValidLoginProviders)}");
 
+            var httpClientHandler = new HttpClientHandler
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+
+            HttpClient = new HttpClient(httpClientHandler);
+            HttpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("Niantic App");
+            HttpClient.DefaultRequestHeaders.ExpectContinue = false;
+
             DeviceInfo = deviceInfo ?? DeviceInfoUtil.GetRandomDevice(this);
             AccessToken = accessToken;
             LoginProvider = loginProvider;
@@ -56,6 +67,11 @@ namespace POGOLib.Official.Net
         /// Gets the <see cref="Random"/> of the <see cref="Session"/>.
         /// </summary>
         internal Random Random { get; private set; } = new Random();
+
+        /// <summary>
+        /// Gets the <see cref="HttpClient"/> of the <see cref="Session"/>.
+        /// </summary>
+        internal HttpClient HttpClient { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="DeviceInfo"/> used by <see cref="RpcEncryption"/>.
