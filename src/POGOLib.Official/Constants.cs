@@ -6,6 +6,8 @@
 
         public const string ApiUrl = "https://pgorelease.nianticlabs.com/plfe/rpc";
 
+        public const string VersionUrl = "https://pgorelease.nianticlabs.com/plfe/version";
+
         // Login stuff
 
         public const string LoginUrl = "https://sso.pokemon.com/sso/login?service=https%3A%2F%2Fsso.pokemon.com%2Fsso%2Foauth2.0%2FcallbackAuthorize";
