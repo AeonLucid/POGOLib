@@ -57,8 +57,6 @@ namespace POGOLib.Official.Net
             RequestType.DownloadSettings
         };
 
-        private readonly Random _random = new Random();
-
         private readonly ConcurrentQueue<RequestEnvelope> _rpcQueue = new ConcurrentQueue<RequestEnvelope>();
 
         private readonly ConcurrentDictionary<RequestEnvelope, ByteString> _rpcResponses = new ConcurrentDictionary<RequestEnvelope, ByteString>();
@@ -78,7 +76,7 @@ namespace POGOLib.Official.Net
             _httpClient = new HttpClient(httpClientHandler);
             _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("Niantic App");
             _httpClient.DefaultRequestHeaders.ExpectContinue = false;
-            _requestId = (ulong) _random.Next(100000000, 999999999);
+            _requestId = (ulong) session.Random.Next(100000000, 999999999);
         }
 
         internal DateTime LastRpcRequest { get; private set; }
@@ -429,7 +427,7 @@ namespace POGOLib.Official.Net
                     var diff = Math.Max(0, DateTime.Now.Millisecond - LastRpcRequest.Millisecond);
                     if (diff < Configuration.ThrottleDifference)
                     {
-                        var delay = Configuration.ThrottleDifference - diff + (int) (_random.NextDouble()*0);
+                        var delay = Configuration.ThrottleDifference - diff + (int) (_session.Random.NextDouble()*0);
 
                         await Task.Delay(delay);
                     }
