@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -22,11 +21,6 @@ namespace POGOLib.Official.Net
 {
     public class RpcClient : IDisposable
     {
-
-        /// <summary>
-        ///     The <see cref="HttpClient" /> used for communication with PokémonGo.
-        /// </summary>
-        private readonly HttpClient _httpClient;
 
         /// <summary>
         ///     The authenticated <see cref="Session" />.
@@ -443,7 +437,7 @@ namespace POGOLib.Official.Net
                 {
                     Logger.Debug($"Sending RPC Request: '{string.Join(", ", requestEnvelope.Requests.Select(x => x.RequestType))}'");
 
-                    using (var response = await _httpClient.PostAsync(_requestUrl ?? Constants.ApiUrl, requestData))
+                    using (var response = await _session.HttpClient.PostAsync(_requestUrl ?? Constants.ApiUrl, requestData))
                     {
                         if (!response.IsSuccessStatusCode)
                         {
@@ -702,7 +696,7 @@ namespace POGOLib.Official.Net
         {
             if (disposing)
             {
-                _httpClient?.Dispose();
+
             }
         }
     }

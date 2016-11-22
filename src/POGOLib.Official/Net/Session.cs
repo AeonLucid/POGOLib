@@ -45,12 +45,10 @@ namespace POGOLib.Official.Net
             if (!ValidLoginProviders.Contains(loginProvider.ProviderId))
                 throw new ArgumentException($"LoginProvider ID must be one of the following: {string.Join(", ", ValidLoginProviders)}");
 
-            var httpClientHandler = new HttpClientHandler
+            HttpClient = new HttpClient(new HttpClientHandler
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-            };
-
-            HttpClient = new HttpClient(httpClientHandler);
+            });
             HttpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("Niantic App");
             HttpClient.DefaultRequestHeaders.ExpectContinue = false;
 
@@ -71,7 +69,7 @@ namespace POGOLib.Official.Net
         /// <summary>
         /// Gets the <see cref="HttpClient"/> of the <see cref="Session"/>.
         /// </summary>
-        internal HttpClient HttpClient { get; private set; }
+        internal HttpClient HttpClient { get; }
 
         /// <summary>
         /// Gets the <see cref="DeviceInfo"/> used by <see cref="RpcEncryption"/>.
@@ -167,8 +165,7 @@ namespace POGOLib.Official.Net
         }
 
         public event EventHandler<EventArgs> AccessTokenUpdated;
-
-
+        
         public void Dispose()
         {
             Dispose(true);
@@ -181,6 +178,7 @@ namespace POGOLib.Official.Net
 
             ReauthenticateMutex?.Dispose();
             RpcClient?.Dispose();
+            HttpClient?.Dispose();
         }
     }
 }
