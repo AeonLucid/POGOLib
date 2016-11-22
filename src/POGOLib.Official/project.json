@@ -2,7 +2,7 @@
   "title": "POGOLib.Official",
   "description": "A community driven PokemonGo API Library written in C#. You can read the changelog here https://github.com/AeonLucid/POGOLib/blob/master/README.md.",
   "authors": [ "AeonLucid" ],
-  "version": "1.2.0",
+  "version": "1.2.1",
   "packOptions": {
     "summary": "A community driven PokemonGo API Library written in C#.",
     "tags": [ "Pokemon", "POGOLib", "netstandard" ],

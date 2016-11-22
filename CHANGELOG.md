@@ -1,9 +1,15 @@
 # POGOLib Changelog
 
+## 1.2.1
+- Fixed not being able to specify `DeviceInfo` for a `Session`.
+- Added version checking to `Session` Startup. Can be disabled using the `Configuration` class.
+- Added the possibility to implement an hashing server or another source of hashing.
+    - Create a class that extends the `IHasher` interface and set it to `Configuration.Hasher`. 
+
 ## 1.2.0
 - Fixed issue [#59](https://github.com/AeonLucid/POGOLib/issues/59).
 - Updated to "POGOProtos" v2.1.0.
-- Updated NiaHash to work like PokemonGo IOS 1.15.0.
+- Updated `NiaHash` to work like PokemonGo IOS 1.15.0.
 
 ## 1.1.0
 - Added `GoogleLoginProvider` through an additional NuGet "POGOLib.Official.Google".
