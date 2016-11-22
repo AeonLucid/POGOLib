@@ -5,7 +5,6 @@ using System.Linq;
 using Google.Protobuf;
 using POGOLib.Official.Extensions;
 using POGOLib.Official.Util;
-using POGOLib.Official.Util.Encryption;
 using POGOProtos.Networking.Envelopes;
 using POGOProtos.Networking.Platform;
 using POGOProtos.Networking.Platform.Requests;
@@ -97,6 +96,11 @@ namespace POGOLib.Official.Net
         /// <returns>The encrypted <see cref="PlatformRequest"/>.</returns>
         internal PlatformRequest GenerateSignature(RequestEnvelope requestEnvelope)
         {
+            if (Configuration.Hasher == null)
+            {
+                throw new NullReferenceException($"{nameof(Configuration.Hasher)} is not set, which is required to send valid calls to PokemonGo.");
+            }
+
             var timestampSinceStart = TimestampSinceStartMs;
             var locationFixes = BuildLocationFixes(requestEnvelope, timestampSinceStart);
             
@@ -144,23 +148,23 @@ namespace POGOLib.Official.Net
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Longitude).Reverse())
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.HorizontalAccuracy).Reverse()).ToArray();
 
-            signature.LocationHash1 = (int) NiaHash.Hash32Salt(locationBytes, NiaHash.Hash32(serializedTicket));
-            signature.LocationHash2 = (int) NiaHash.Hash32(locationBytes);
+            signature.LocationHash1 = Configuration.Hasher.GetLocationHash1(locationBytes, serializedTicket);
+            signature.LocationHash2 = Configuration.Hasher.GetLocationHash2(locationBytes);
             
             foreach (var req in requestEnvelope.Requests)
             {
-                signature.RequestHash.Add(NiaHash.Hash64Salt64(req.ToByteArray(), NiaHash.Hash64(serializedTicket)));
+                signature.RequestHash.Add(Configuration.Hasher.GetRequestHash(req.ToByteArray(), serializedTicket));
             }
 
             signature.SessionHash = _sessionHash;
-            signature.Unknown25 = Constants.Unknown25;
+            signature.Unknown25 = Configuration.Hasher.Unknown25;
 
             var encryptedSignature = new PlatformRequest
             {
                 Type = PlatformRequestType.SendEncryptedSignature,
                 RequestMessage = new SendEncryptedSignatureRequest
                 {
-                    EncryptedSignature = ByteString.CopyFrom(PCrypt.Encrypt(signature.ToByteArray(), (uint)timestampSinceStart))
+                    EncryptedSignature = ByteString.CopyFrom(Configuration.Hasher.GetEncryptedSignature(signature.ToByteArray(), (uint)timestampSinceStart))
                 }.ToByteString()
             };
             

@@ -1,12 +1,25 @@
-﻿namespace POGOLib.Official
+﻿using POGOLib.Official.Net;
+using POGOLib.Official.Util.Hash;
+
+namespace POGOLib.Official
 {
     public static class Configuration
     {
-        /// <summary>
-        ///     Gets or sets the <see cref="SlowServerTimeout" /> in milliseconds for when StatusCode 52 is received from PokémonGo.
-        /// </summary>
-        public static int SlowServerTimeout { get; set; } = 10000;
 
+        /// <summary>
+        /// Gets or sets the amount of milliseconds between HTTP requests to PokemonGo.
+        /// </summary>
         public static int ThrottleDifference { get; set; } = 1000;
+
+        /// <summary>
+        /// Gets or sets the <see cref="IgnoreHashVersion"/> boolean. If set to true, HashVersion checking will be disabled.
+        /// </summary>
+        public static bool IgnoreHashVersion { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets the <see cref="IHasher"/> used in <see cref="RpcEncryption"/>.
+        /// </summary>
+        public static IHasher Hasher { get; set; } = new InternalHasher();
+
     }
 }

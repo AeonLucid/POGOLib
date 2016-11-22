@@ -71,44 +71,37 @@ namespace POGOLib.Official.Net
         internal GeoCoordinate LastGeoCoordinateMapObjectsRequest { get; private set; } = new GeoCoordinate();
 
         /// <summary>
-        ///     Sends all requests which the (ios-)client sends on startup
+        /// Sends all requests which the (ios-)client sends on startup
         /// </summary>
         internal async Task<bool> StartupAsync()
         {
-            try
+            // Send GetPlayer to check if we're connected and authenticated
+            GetPlayerResponse playerResponse;
+            do
             {
-                // Send GetPlayer to check if we're connected and authenticated
-                GetPlayerResponse playerResponse;
-                do
+                var response = await SendRemoteProcedureCallAsync(new[]
                 {
-                    var response = await SendRemoteProcedureCallAsync(new[]
+                    new Request
                     {
-                        new Request
-                        {
-                            RequestType = RequestType.GetPlayer
-                        },
-                        new Request
-                        {
-                            RequestType = RequestType.CheckChallenge,
-                            RequestMessage = new CheckChallengeMessage
-                            {
-                                DebugRequest = false
-                            }.ToByteString()
-                        }
-                    });
-                    playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
-                    if (!playerResponse.Success)
+                        RequestType = RequestType.GetPlayer
+                    },
+                    new Request
                     {
-                        await Task.Delay(TimeSpan.FromMilliseconds(1000));
+                        RequestType = RequestType.CheckChallenge,
+                        RequestMessage = new CheckChallengeMessage
+                        {
+                            DebugRequest = false
+                        }.ToByteString()
                     }
-                } while (!playerResponse.Success);
+                });
+                playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
+                if (!playerResponse.Success)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(1000));
+                }
+            } while (!playerResponse.Success);
 
-                _session.Player.Data = playerResponse.PlayerData;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            _session.Player.Data = playerResponse.PlayerData;
 
             return true;
         }

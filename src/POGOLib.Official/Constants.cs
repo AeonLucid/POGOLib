@@ -20,10 +20,5 @@
         public const string GoogleAuthApp = "com.nianticlabs.pokemongo";
         public const string GoogleAuthClientSig = "321187995bc7cdc2b5fc91b11a96e2baa8602c62";
 
-        // Hash stuff
-        // Currently updated for version IOS(1.15.0) and Android(0.45.0)
-
-        public const long Unknown25 = -1553869577012279119;
-
     }
 }

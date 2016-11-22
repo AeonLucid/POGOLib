@@ -10,6 +10,7 @@ using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net.Authentication.Data;
 using POGOLib.Official.Pokemon;
 using POGOLib.Official.Util.Device;
+using POGOLib.Official.Util.Hash;
 using POGOProtos.Settings;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 
@@ -43,7 +44,9 @@ namespace POGOLib.Official.Net
         internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate, DeviceInfo deviceInfo = null)
         {
             if (!ValidLoginProviders.Contains(loginProvider.ProviderId))
+            {
                 throw new ArgumentException($"LoginProvider ID must be one of the following: {string.Join(", ", ValidLoginProviders)}");
+            }
 
             HttpClient = new HttpClient(new HttpClientHandler
             {
@@ -51,7 +54,7 @@ namespace POGOLib.Official.Net
             });
             HttpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("Niantic App");
             HttpClient.DefaultRequestHeaders.ExpectContinue = false;
-
+            
             DeviceInfo = deviceInfo ?? DeviceInfoUtil.GetRandomDevice(this);
             AccessToken = accessToken;
             LoginProvider = loginProvider;
@@ -110,17 +113,34 @@ namespace POGOLib.Official.Net
 
         public async Task<bool> StartupAsync()
         {
-            if (!(await RpcClient.StartupAsync()))
+            if (!Configuration.IgnoreHashVersion && !await CheckHasherVersion())
+            {
+                throw new HashVersionMismatchException($"The version of the {nameof(Configuration.Hasher)} ({Configuration.Hasher.PokemonVersion}) does not match the minimal API version of PokemonGo. Set 'Configuration.IgnoreHashVersion' to true if you want to disable the version check.");
+            }
+
+            if (!await RpcClient.StartupAsync().ConfigureAwait(false))
             {
                 return false;
             }
-            await _heartbeat.StartDispatcher();
+
+            await _heartbeat.StartDispatcher().ConfigureAwait(false);
+
             return true;
         }
 
         public void Shutdown()
         {
             _heartbeat.StopDispatcher();
+        }
+
+        /// <summary>
+        /// Checks if the current minimal version of PokemonGo matches the version of the <see cref="Configuration.Hasher"/>.
+        /// </summary>
+        /// <returns>Returns true if the version matches.</returns>
+        public async Task<bool> CheckHasherVersion()
+        {
+            var pogoVersion = await HttpClient.GetStringAsync(Constants.VersionUrl);
+            return pogoVersion == Configuration.Hasher.PokemonVersion;
         }
 
         /// <summary>
