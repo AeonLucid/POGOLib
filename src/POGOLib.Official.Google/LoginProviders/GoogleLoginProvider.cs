@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using GPSOAuthSharp;
 using POGOLib.Official.Logging;
 using POGOLib.Official.Net.Authentication.Data;
@@ -44,19 +43,19 @@ namespace POGOLib.Official.LoginProviders
             if (masterLoginResponse.ContainsKey("Error"))
             {
                 if (masterLoginResponse["Error"].Equals("NeedsBrowser"))
-                    throw new Exception($"You have to log into an browser with the email '{_username}'.");
+                    throw new GoogleLoginException($"You have to log into an browser with the email '{_username}'.");
 
-                throw new Exception($"Google returned an error message: '{masterLoginResponse["Error"]}'");
+                throw new GoogleLoginException($"Google returned an error message: '{masterLoginResponse["Error"]}'");
             }
             if (!masterLoginResponse.ContainsKey("Token"))
             {
-                throw new Exception("Token was missing from master login response.");
+                throw new GoogleLoginException("Token was missing from master login response.");
             }
             var oauthResponse = await googleClient.PerformOAuth(masterLoginResponse["Token"], Constants.GoogleAuthService,
                 Constants.GoogleAuthApp, Constants.GoogleAuthClientSig);
             if (!oauthResponse.ContainsKey("Auth"))
             {
-                throw new Exception("Auth token was missing from oauth login response.");
+                throw new GoogleLoginException("Auth token was missing from oauth login response.");
             }
             Logger.Debug("Authenticated through Google.");
             return new AccessToken
