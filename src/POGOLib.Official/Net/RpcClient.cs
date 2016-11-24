@@ -393,6 +393,12 @@ namespace POGOLib.Official.Net
             if (addDefaultRequests)
                 requestEnvelope.Requests.AddRange(GetDefaultRequests());
 
+            if (_session.AccessToken.AuthTicket != null && _session.AccessToken.AuthTicket.ExpireTimestampMs < ((ulong)TimeUtil.GetCurrentTimestampInMilliseconds() - (60000 * 2)))
+            {
+                // Check for almost expired AuthTicket (2 minute buffer). Null out the AuthTicket so that AccessToken is used.
+                _session.AccessToken.AuthTicket = null;
+            }
+
             if (_session.AccessToken.AuthTicket == null || _session.AccessToken.IsExpired)
             {
                 if (_session.AccessToken.IsExpired)
