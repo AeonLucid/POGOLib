@@ -16,6 +16,7 @@ using POGOProtos.Networking.Envelopes;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
+using POGOProtos.Enums;
 
 namespace POGOLib.Official.Net
 {
@@ -33,9 +34,9 @@ namespace POGOLib.Official.Net
         private readonly RpcEncryption _rpcEncryption;
 
         /// <summary>
-        ///     The current 'unique' request id we are at.
+        ///     The current request count we are at.
         /// </summary>
-        private ulong _requestId;
+        private ulong _requestCount;
 
         /// <summary>
         ///     The rpc url we have to call.
@@ -61,7 +62,6 @@ namespace POGOLib.Official.Net
         {
             _session = session;
             _rpcEncryption = new RpcEncryption(session);
-            _requestId = (ulong) session.Random.Next(100000000, 999999999);
         }
 
         internal DateTime LastRpcRequest { get; private set; }
@@ -69,7 +69,33 @@ namespace POGOLib.Official.Net
         internal DateTime LastRpcMapObjectsRequest { get; private set; }
 
         internal GeoCoordinate LastGeoCoordinateMapObjectsRequest { get; private set; } = new GeoCoordinate();
+        
+        internal Platform GetPlatform()
+        {
+            return _session.DeviceInfo.DeviceBrand == "Apple" ? Platform.Ios : Platform.Android;
+        }
 
+        private long PositiveRandom()
+        {
+            long ret = _session.Random.Next() | (_session.Random.Next() << 32);
+            // lrand48 ensures it's never < 0
+            // So do the same
+            if (ret < 0)
+                ret = -ret;
+            return ret;
+        }
+
+        private void IncrementRequestCount()
+        {
+            // Request counts on android jump more than 1 at a time according to logs
+            // They are fully sequential on iOS though
+            // So mimic that same behavior here.
+            if (GetPlatform() == Platform.Android)
+                _requestCount += (uint)_session.Random.Next(2, 15);
+            else if (GetPlatform() == Platform.Ios)
+                _requestCount++;
+        }
+        
         /// <summary>
         /// Sends all requests which the (ios-)client sends on startup
         /// </summary>
@@ -248,12 +274,33 @@ namespace POGOLib.Official.Net
         }
 
         /// <summary>
-        ///     Gets the next <see cref="_requestId" /> for the <see cref="RequestEnvelope" />.
+        ///     Gets the next request id for the <see cref="RequestEnvelope" />.
         /// </summary>
         /// <returns></returns>
         private ulong GetNextRequestId()
         {
-            return _requestId++;
+            if (_requestCount == 1)
+            {
+                IncrementRequestCount();
+                if (GetPlatform() == Platform.Android)
+                {
+                    // lrand48 is "broken" in that the first run of it will return a static value.
+                    // So the first time we send a request, we need to match that initial value. 
+                    // Note: On android srand(4) is called in .init_array which seeds the initial value.
+                    return 0x53B77E48000000B0;
+                }
+                if (GetPlatform() == Platform.Ios)
+                {
+                    // Same as lrand48, iOS uses "rand()" without a pre-seed which always gives the same first value.
+                    return 0x41A700000002;
+                }
+            }
+
+            // Note that the API expects a "positive" random value here. (At least on Android it does due to lrand48 implementation details)
+            // So we'll just use the same for iOS since it doesn't hurt, and means less code required.
+            ulong r = (((ulong)PositiveRandom() | ((_requestCount + 1) >> 31)) << 32) | (_requestCount + 1);
+            IncrementRequestCount();
+            return r;
         }
 
         /// <summary>
