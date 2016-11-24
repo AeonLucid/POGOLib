@@ -396,29 +396,33 @@ namespace POGOLib.Official.Net
             return Task.Run(async () =>
             {
                 _rpcQueue.Enqueue(requestEnvelope);
-                
-                RpcQueueMutex.WaitOne();
 
-                RequestEnvelope processRequestEnvelope;
-                while (_rpcQueue.TryDequeue(out processRequestEnvelope))
+                try
                 {
-                    var diff = Math.Max(0, DateTime.Now.Millisecond - LastRpcRequest.Millisecond);
-                    if (diff < Configuration.ThrottleDifference)
+                    RpcQueueMutex.WaitOne();
+
+                    RequestEnvelope processRequestEnvelope;
+                    while (_rpcQueue.TryDequeue(out processRequestEnvelope))
                     {
-                        var delay = Configuration.ThrottleDifference - diff + (int) (_session.Random.NextDouble()*0);
+                        var diff = Math.Max(0, DateTime.Now.Millisecond - LastRpcRequest.Millisecond);
+                        if (diff < Configuration.ThrottleDifference)
+                        {
+                            var delay = Configuration.ThrottleDifference - diff + (int)(_session.Random.NextDouble() * 0);
 
-                        await Task.Delay(delay);
+                            await Task.Delay(delay);
+                        }
+
+                        _rpcResponses.GetOrAdd(processRequestEnvelope, await PerformRemoteProcedureCallAsync(processRequestEnvelope));
                     }
-                    
-                    _rpcResponses.GetOrAdd(processRequestEnvelope, await PerformRemoteProcedureCallAsync(processRequestEnvelope));
+
+                    ByteString ret;
+                    _rpcResponses.TryRemove(requestEnvelope, out ret);
+                    return ret;
                 }
-
-                ByteString ret;
-                _rpcResponses.TryRemove(requestEnvelope, out ret);
-
-                RpcQueueMutex.Release();
-
-                return ret;
+                finally
+                {
+                    RpcQueueMutex.Release();
+                }
             });
         }
 
