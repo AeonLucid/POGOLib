@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using POGOProtos.Networking.Envelopes;
 
 namespace POGOLib.Official.Util.Hash
@@ -14,7 +15,7 @@ namespace POGOLib.Official.Util.Hash
 
         long Unknown25 { get; }
 
-        HashData GetHashData(RequestEnvelope requestEnvelope, byte[] locationBytes, byte[][] requestsBytes, byte[] serializedTicket);
+        Task<HashData> GetHashDataAsync(RequestEnvelope requestEnvelope, Signature signature, byte[] locationBytes, byte[][] requestsBytes, byte[] serializedTicket);
 
         byte[] GetEncryptedSignature(byte[] signatureBytes, uint timestampSinceStartMs);
 

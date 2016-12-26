@@ -426,7 +426,7 @@ namespace POGOLib.Official.Net
                 requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
             }
 
-            requestEnvelope.PlatformRequests.Add(_rpcEncryption.GenerateSignature(requestEnvelope));
+            requestEnvelope.PlatformRequests.Add(await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
 
             return requestEnvelope;
         }
@@ -554,7 +554,7 @@ namespace POGOLib.Official.Net
 
                                 // Re-sign envelope.
                                 requestEnvelope.PlatformRequests.Clear();
-                                requestEnvelope.PlatformRequests.Add(_rpcEncryption.GenerateSignature(requestEnvelope));
+                                requestEnvelope.PlatformRequests.Add(await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
 
                                 // Re-send envelope.
                                 return await PerformRemoteProcedureCallAsync(requestEnvelope);

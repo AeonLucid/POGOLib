@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using POGOLib.Official.Util.Encryption.Legacy;
 using POGOProtos.Networking.Envelopes;
 
@@ -16,8 +17,8 @@ namespace POGOLib.Official.Util.Hash
         public Version PokemonVersion { get; } = new Version("0.45.0");
 
         public long Unknown25 { get; } = -1553869577012279119;
-        
-        public HashData GetHashData(RequestEnvelope requestEnvelope, byte[] locationBytes, byte[][] requestsBytes, byte[] serializedTicket)
+
+        public async Task<HashData> GetHashDataAsync(RequestEnvelope requestEnvelope, Signature signature, byte[] locationBytes, byte[][] requestsBytes, byte[] serializedTicket)
         {
             return new HashData
             {

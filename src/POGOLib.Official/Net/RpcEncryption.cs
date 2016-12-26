@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Google.Protobuf;
 using POGOLib.Official.Extensions;
 using POGOLib.Official.Util;
@@ -94,7 +95,7 @@ namespace POGOLib.Official.Net
         /// Generates the encrypted signature which is required for the <see cref="RequestEnvelope"/>.
         /// </summary>
         /// <returns>The encrypted <see cref="PlatformRequest"/>.</returns>
-        internal PlatformRequest GenerateSignature(RequestEnvelope requestEnvelope)
+        internal async Task<PlatformRequest> GenerateSignatureAsync(RequestEnvelope requestEnvelope)
         {
             if (Configuration.Hasher == null)
             {
@@ -106,8 +107,9 @@ namespace POGOLib.Official.Net
             
             _session.Player.Coordinate.HorizontalAccuracy = locationFixes[0].HorizontalAccuracy;
             _session.Player.Coordinate.VerticalAccuracy = locationFixes[0].VerticalAccuracy;
-            
-            requestEnvelope.Accuracy = _session.Player.Coordinate.HorizontalAccuracy;
+            _session.Player.Coordinate.Altitude = locationFixes[0].Altitude;
+
+            requestEnvelope.Accuracy = _session.Player.Coordinate.Altitude; // _session.Player.Coordinate.HorizontalAccuracy;
             requestEnvelope.MsSinceLastLocationfix = (long)locationFixes[0].TimestampSnapshot;
 
             var signature = new Signature
@@ -144,21 +146,21 @@ namespace POGOLib.Official.Net
             };
 
             // Hashing
+            signature.SessionHash = _sessionHash;
+            signature.Unknown25 = Configuration.Hasher.Unknown25;
+
             var serializedTicket = requestEnvelope.AuthTicket != null ? requestEnvelope.AuthTicket.ToByteArray() : requestEnvelope.AuthInfo.ToByteArray();
             var locationBytes = BitConverter.GetBytes(_session.Player.Coordinate.Latitude).Reverse()
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Longitude).Reverse())
-                .Concat(BitConverter.GetBytes(_session.Player.Coordinate.HorizontalAccuracy).Reverse()).ToArray();
+                .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Altitude).Reverse()).ToArray();
 
             var requestsBytes = requestEnvelope.Requests.Select(x => x.ToByteArray()).ToArray();
-            var hashData = Configuration.Hasher.GetHashData(requestEnvelope, locationBytes, requestsBytes, serializedTicket);
+            var hashData = await Configuration.Hasher.GetHashDataAsync(requestEnvelope, signature, locationBytes, requestsBytes, serializedTicket);
 
             signature.LocationHash1 = (int) hashData.LocationAuthHash;
             signature.LocationHash2 = (int) hashData.LocationHash;
 
             signature.RequestHash.AddRange(hashData.RequestHashes);
-
-            signature.SessionHash = _sessionHash;
-            signature.Unknown25 = Configuration.Hasher.Unknown25;
 
             var encryptedSignature = new PlatformRequest
             {
