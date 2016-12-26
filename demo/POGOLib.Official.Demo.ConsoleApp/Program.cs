@@ -13,6 +13,7 @@ using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using POGOLib.Official.Extensions;
 using POGOLib.Official.LoginProviders;
+using POGOLib.Official.Util.Hash;
 
 namespace POGOLib.Official.Demo.ConsoleApp
 {
@@ -56,6 +57,23 @@ namespace POGOLib.Official.Demo.ConsoleApp
             Logger.Info("Booting up.");
             Logger.Info("Type 'q', 'quit' or 'exit' to exit.");
             Console.Title = "POGO Demo";
+
+            // Configure hasher - DO THIS BEFORE ANYTHING ELSE!!
+            //
+            //  If you want to use the latest POGO version, you have
+            //  to use the PokeHashHasher. For more information:
+            //  https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer
+            //
+            //  You may also not use the PokeHashHasher, it will then use
+            //  the built-in hasher which was made for POGO 0.45.0. 
+            //  Don't forget to use "Configuration.IgnoreHashVersion = true;" too.
+            //
+            //  Expect some captchas in that case..
+
+            var pokeHashAuthKey = Environment.GetEnvironmentVariable("POKEHASH_AUTHKEY") ?? "";
+
+            Configuration.Hasher = new PokeHashHasher(pokeHashAuthKey);
+            // Configuration.IgnoreHashVersion = true;
 
             // Settings
             var loginProviderStr = "ptc";
