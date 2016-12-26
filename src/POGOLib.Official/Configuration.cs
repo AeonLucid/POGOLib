@@ -1,5 +1,4 @@
-﻿using POGOLib.Official.Net;
-using POGOLib.Official.Util.Hash;
+﻿using POGOLib.Official.Util.Hash;
 
 namespace POGOLib.Official
 {
@@ -17,9 +16,9 @@ namespace POGOLib.Official
         public static bool IgnoreHashVersion { get; set; } = false;
 
         /// <summary>
-        /// Gets or sets the <see cref="IHasher"/> used in <see cref="RpcEncryption"/>.
+        /// Gets or sets the <see cref="IHasher"/> used in <see cref="POGOLib.Official.Net.RpcEncryption"/>.
         /// </summary>
-        public static IHasher Hasher { get; set; } = new InternalHasher();
+        public static IHasher Hasher { get; set; } = new LegacyHasher();
 
     }
 }

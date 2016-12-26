@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using GeoCoordinatePortable;
@@ -139,8 +140,13 @@ namespace POGOLib.Official.Net
         /// <returns>Returns true if the version matches.</returns>
         public async Task<bool> CheckHasherVersion()
         {
-            var pogoVersion = await HttpClient.GetStringAsync(Constants.VersionUrl);
-            return pogoVersion == Configuration.Hasher.PokemonVersion;
+            var pogoVersionRaw = await HttpClient.GetStringAsync(Constants.VersionUrl);
+            pogoVersionRaw = pogoVersionRaw.Replace("\n", "");
+            pogoVersionRaw = pogoVersionRaw.Replace("\u0006", "");
+
+            var pogoVersion = new Version(pogoVersionRaw);
+            var result = Configuration.Hasher.PokemonVersion.CompareTo(pogoVersion);
+            return result != -1;
         }
 
         /// <summary>

@@ -143,18 +143,19 @@ namespace POGOLib.Official.Net
                 }
             };
 
+            // Hashing
             var serializedTicket = requestEnvelope.AuthTicket != null ? requestEnvelope.AuthTicket.ToByteArray() : requestEnvelope.AuthInfo.ToByteArray();
             var locationBytes = BitConverter.GetBytes(_session.Player.Coordinate.Latitude).Reverse()
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.Longitude).Reverse())
                 .Concat(BitConverter.GetBytes(_session.Player.Coordinate.HorizontalAccuracy).Reverse()).ToArray();
 
-            signature.LocationHash1 = Configuration.Hasher.GetLocationHash1(locationBytes, serializedTicket);
-            signature.LocationHash2 = Configuration.Hasher.GetLocationHash2(locationBytes);
-            
-            foreach (var req in requestEnvelope.Requests)
-            {
-                signature.RequestHash.Add(Configuration.Hasher.GetRequestHash(req.ToByteArray(), serializedTicket));
-            }
+            var requestsBytes = requestEnvelope.Requests.Select(x => x.ToByteArray()).ToArray();
+            var hashData = Configuration.Hasher.GetHashData(requestEnvelope, locationBytes, requestsBytes, serializedTicket);
+
+            signature.LocationHash1 = (int) hashData.LocationAuthHash;
+            signature.LocationHash2 = (int) hashData.LocationHash;
+
+            signature.RequestHash.AddRange(hashData.RequestHashes);
 
             signature.SessionHash = _sessionHash;
             signature.Unknown25 = Configuration.Hasher.Unknown25;
