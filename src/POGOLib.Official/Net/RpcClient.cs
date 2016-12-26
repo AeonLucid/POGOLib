@@ -90,10 +90,15 @@ namespace POGOLib.Official.Net
             // Request counts on android jump more than 1 at a time according to logs
             // They are fully sequential on iOS though
             // So mimic that same behavior here.
-            if (GetPlatform() == Platform.Android)
-                _requestCount += (uint)_session.Random.Next(2, 15);
-            else if (GetPlatform() == Platform.Ios)
-                _requestCount++;
+            switch (GetPlatform())
+            {
+                case Platform.Android:
+                    _requestCount += (uint)_session.Random.Next(2, 15);
+                    break;
+                case Platform.Ios:
+                    _requestCount++;
+                    break;
+            }
         }
         
         /// <summary>
@@ -282,17 +287,17 @@ namespace POGOLib.Official.Net
             if (_requestCount == 1)
             {
                 IncrementRequestCount();
-                if (GetPlatform() == Platform.Android)
+
+                switch (GetPlatform())
                 {
-                    // lrand48 is "broken" in that the first run of it will return a static value.
-                    // So the first time we send a request, we need to match that initial value. 
-                    // Note: On android srand(4) is called in .init_array which seeds the initial value.
-                    return 0x53B77E48000000B0;
-                }
-                if (GetPlatform() == Platform.Ios)
-                {
-                    // Same as lrand48, iOS uses "rand()" without a pre-seed which always gives the same first value.
-                    return 0x41A700000002;
+                    case Platform.Android:
+                        // lrand48 is "broken" in that the first run of it will return a static value.
+                        // So the first time we send a request, we need to match that initial value. 
+                        // Note: On android srand(4) is called in .init_array which seeds the initial value.
+                        return 0x53B77E48000000B0;
+                    case Platform.Ios:
+                        // Same as lrand48, iOS uses "rand()" without a pre-seed which always gives the same first value.
+                        return 0x41A700000002;
                 }
             }
 

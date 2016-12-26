@@ -2,22 +2,28 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace POGOLib.Official.Util.Encryption
+namespace POGOLib.Official.Util.Encryption.Legacy
 {
-    internal class PCrypt
+    /// <summary>
+    ///     This is the legacy PCrypt used by POGOLib.
+    /// 
+    ///     Android version: 0.45.0
+    ///     IOS version: 1.15.0
+    /// </summary>
+    internal static class PCryptLegacy
     {
-        public static byte Rot18(byte val, int bits)
+        private static byte Rot18(byte val, int bits)
         {
             return (byte)(((val << bits) | (val >> (8 - bits))) & 0xff);
         }
 
-        public static byte GenerateRand(ref uint rand)
+        private static byte GenerateRand(ref uint rand)
         {
             rand = rand * 0x41c64e6d + 12345;
             return (byte)((rand >> 16) & 0xff);
         }
 
-        public static byte[] Cipher8FromIv(byte[] iv)
+        private static byte[] Cipher8FromIv(byte[] iv)
         {
             var ret = new byte[256];
             for (var i = 0; i < 8; i++)
@@ -30,7 +36,7 @@ namespace POGOLib.Official.Util.Encryption
             return ret;
         }
 
-        public static byte[] Cipher8FromRand(ref uint rand)
+        private static byte[] Cipher8FromRand(ref uint rand)
         {
             var ret = new byte[256];
             for (var i = 0; i < 256; i++)
@@ -40,7 +46,7 @@ namespace POGOLib.Official.Util.Encryption
             return ret;
         }
 
-        public static byte MakeIntegrityByte(byte b)
+        private static byte MakeIntegrityByte(byte b)
         {
             var tmp = (byte)((b ^ 0x0c) & b);
             return (byte)(((~tmp & 0x67) | (tmp & 0x98)) ^ 0x6f | (tmp & 0x08));
@@ -61,7 +67,7 @@ namespace POGOLib.Official.Util.Encryption
 
                 var temp2 = new uint[0x100 / 4];
                 Buffer.BlockCopy(bytes, 0, temp2, 0, 0x100);
-                Shuffles.Shuffle2(temp2);
+                ShufflesLegacy.Shuffle2(temp2);
 
                 Buffer.BlockCopy(temp2, 0, iv, 0, 0x100);
                 Buffer.BlockCopy(temp2, 0, bytes, 0, 0x100);
@@ -142,9 +148,9 @@ namespace POGOLib.Official.Util.Encryption
                 Buffer.BlockCopy(temp2, 0, temp3, 0, 0x100);
 
                 if (version == 1)
-                    Shuffles.Unshuffle(temp2);
+                    ShufflesLegacy.Unshuffle(temp2);
                 else
-                    Shuffles.Unshuffle2(temp2);
+                    ShufflesLegacy.Unshuffle2(temp2);
 
                 Buffer.BlockCopy(temp2, 0, bytes, 0, 0x100);
                 for (var j = 0; j < 256; j++)
@@ -163,12 +169,12 @@ namespace POGOLib.Official.Util.Encryption
             return ret;
         }
 
-        internal class CipherText
+        private class CipherText
         {
             private readonly byte[] _prefix;
             private readonly int _totalsize;
 
-            public Collection<byte[]> Content;
+            public readonly Collection<byte[]> Content;
 
             private static byte[] IntToBytes(int x)
             {

@@ -1,8 +1,14 @@
 ﻿using System;
 
-namespace POGOLib.Official.Util.Encryption
-{
-    internal class NiaHash
+namespace POGOLib.Official.Util.Encryption.Legacy
+{   
+    /// <summary>
+    ///     This is the legacy NiaHash used by POGOLib.
+    /// 
+    ///     Android version: 0.45.0
+    ///     IOS version: 1.15.0
+    /// </summary>
+    internal static class NiaHashLegacy
     {
         /* IOS 1.15.0 */
         private static readonly ulong[] MagicTable = {
