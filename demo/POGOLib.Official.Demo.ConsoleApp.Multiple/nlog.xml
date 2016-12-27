@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" throwExceptions="true">
+  <targets>
+    <target xsi:type="ColoredConsole"
+            name="ColoredOutput"
+            layout="${longdate} ${pad:padding=5:inner=${level:uppercase=true}} ${message} ${exception:format=tostring}"
+            useDefaultRowHighlightingRules="true"
+            errorStream="false">
+    </target>
+  </targets>
+  <rules>
+    <logger name="*" minlevel="Trace" writeTo="ColoredOutput" />
+  </rules>
+</nlog>

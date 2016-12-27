@@ -5,8 +5,10 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using POGOLib.Official.Logging;
 using POGOLib.Official.Util.Encryption.PokeHash;
 using POGOLib.Official.Util.Hash.PokeHash;
 using POGOProtos.Networking.Envelopes;
@@ -28,14 +30,40 @@ namespace POGOLib.Official.Util.Hash
 
         private const string PokeHashEndpoint = "api/v121/hash";
 
-        private readonly HttpClient _httpClient;
+        private readonly Semaphore _keySelectorMutex;
 
+        private readonly List<PokeHashAuthKey> _authKeys;
+
+        private readonly HttpClient _httpClient;
+        
         /// <summary>
         ///     Initializes the <see cref="PokeHashHasher"/>.
         /// </summary>
         /// <param name="authKey">The PokeHash authkey obtained from https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer. </param>
-        public PokeHashHasher(string authKey)
+        public PokeHashHasher(string authKey) : this(new []{ authKey })
         {
+
+        }
+
+        /// <summary>
+        ///     Initializes the <see cref="PokeHashHasher"/>.
+        /// </summary>
+        /// <param name="authKeys">The PokeHash authkeys obtained from https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer. </param>
+        public PokeHashHasher(IEnumerable<string> authKeys)
+        {
+            _keySelectorMutex = new Semaphore(1, 1);
+            _authKeys = new List<PokeHashAuthKey>();
+
+            // Default RPS at 1.
+            foreach (var authKey in authKeys)
+            {
+                var pokeHashAuthKey = new PokeHashAuthKey(authKey);
+                if (_authKeys.Contains(pokeHashAuthKey))
+                    throw new Exception($"{nameof(_authKeys)} already contains authkey '{authKeys}'.");
+
+                _authKeys.Add(pokeHashAuthKey);
+            }
+
             _httpClient = new HttpClient
             {
                 BaseAddress = new Uri(PokeHashUrl)
@@ -44,7 +72,7 @@ namespace POGOLib.Official.Util.Hash
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("POGOLib (https://github.com/AeonLucid/POGOLib)");
-            _httpClient.DefaultRequestHeaders.Add("X-AuthToken", authKey);
+//            _httpClient.DefaultRequestHeaders.Add("X-AuthToken", authKey);
         }
 
         public Version PokemonVersion { get; } = new Version("0.51.0");
@@ -66,9 +94,11 @@ namespace POGOLib.Official.Util.Hash
 
             var requestContent = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
             
-            using (var response = await _httpClient.PostAsync(PokeHashEndpoint, requestContent))
+            using (var response = await PerformRequest(requestContent))
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
+                
+                string message;
 
                 switch (response.StatusCode)
                 {
@@ -85,17 +115,175 @@ namespace POGOLib.Official.Util.Hash
                         };
 
                     case HttpStatusCode.BadRequest:
-                        throw new Exception($"Bad request sent to the hashing server! {responseContent}");
+                        message = $"Bad request sent to the hashing server! {responseContent}";
+                        break;
                     
                     case HttpStatusCode.Unauthorized:
-                        throw new Exception("The auth key supplied for PokeHash was invalid.");
+                        message = "The auth key supplied for PokeHash was invalid.";
+                        break;
                     
                     case (HttpStatusCode) 429:
-                        throw new Exception($"Your request has been limited. {responseContent}");
+                        message = $"Your request has been limited. {responseContent}";
+                        break;
 
                     default:
-                        throw new Exception($"We received an unknown HttpStatusCode ({response.StatusCode})..");
+                        message = $"We received an unknown HttpStatusCode ({response.StatusCode})..";
+                        break;
                 }
+
+                // TODO: Find a better way to let the developer know of these issues.
+                message = $"[PokeHash]: {message}";
+
+                Logger.Error(message);
+                throw new Exception(message);
+            }
+        }
+
+        private int accessId;
+        
+        private Task<HttpResponseMessage> PerformRequest(HttpContent requestContent)
+        {
+            return Task.Run(async () =>
+            {
+                var currentAccessId = accessId++;
+                var directlyUsable = false;
+
+                PokeHashAuthKey authKey = null;
+
+                // Key Selection
+                try
+                {
+                    _keySelectorMutex.WaitOne();
+
+                    // First check, are any keys directly useable?
+                    foreach (var key in _authKeys)
+                    {
+                        if (key.WaitListCount != 0 ||
+                            !key.IsUsable()) continue;
+
+                        directlyUsable = true;
+
+                        // Increment requests because the key is directly used after this semaphore.
+                        authKey = key;
+                        authKey.Requests++;
+
+                        // TODO: Remove code below
+                        if (authKey.MaxRequests == 150)
+                        {
+                            authKey.Requests += 50;
+                        }
+                        
+                        break;
+                    }
+
+                    if (authKey == null)
+                    {
+                        // Second check, search for the best candidate.
+                        var waitingTime = int.MaxValue;
+
+                        foreach (var key in _authKeys)
+                        {
+                            var keyWaitingTime = key.GetTimeLeft();
+                            if (keyWaitingTime >= waitingTime) continue;
+
+                            waitingTime = keyWaitingTime;
+                            authKey = key;
+                        }
+
+                        if (authKey == null)
+                            throw new Exception($"No {nameof(authKey)} was set.");
+
+                        authKey.WaitListCount++;
+
+                        Logger.Debug($"[PokeHash][{currentAccessId}][{authKey.AuthKey}] Best one takes {waitingTime}s. (Waitlist: {authKey.WaitListCount}, Requests: {authKey.Requests})");
+                    }
+                }
+                finally
+                {
+                    _keySelectorMutex.Release();
+                }
+
+                // Add the auth token to the headers
+                requestContent.Headers.Add("X-AuthToken", authKey.AuthKey);
+
+                if (directlyUsable)
+                {
+                    var response = await _httpClient.PostAsync(PokeHashEndpoint, requestContent);
+
+                    ParseHeaders(authKey, response.Headers);
+
+                    return response;
+                }
+
+                // Throttle waitlist
+                try
+                {
+                    authKey.WaitList.WaitOne();
+
+                    Logger.Warn("Auth key waitlist join.");
+
+                    if (!authKey.IsUsable())
+                    {
+                        Logger.Debug($"[PokeHash][{currentAccessId}][{authKey.AuthKey}] Cooldown of {60 - DateTime.UtcNow.Second}s. (Waitlist: {authKey.WaitListCount}, Requests: {authKey.Requests})");
+                        
+                        await Task.Delay(TimeSpan.FromSeconds(60 - DateTime.UtcNow.Second));
+                    }
+
+                    // A request was done in this rate period
+                    authKey.Requests++;
+
+                    var response = await _httpClient.PostAsync(PokeHashEndpoint, requestContent);
+
+                    ParseHeaders(authKey, response.Headers);
+
+                    return response;
+                }
+                finally
+                {
+                    Logger.Debug($"[PokeHash][{currentAccessId}][{authKey.AuthKey}] Used (Waitlist: {authKey.WaitListCount}, Requests: {authKey.Requests})");
+                    Logger.Warn("Auth key waitlist release.");
+
+                    authKey.WaitListCount--;
+                    authKey.WaitList.Release();
+                }
+
+            });
+        }
+
+        private void ParseHeaders(PokeHashAuthKey authKey, HttpHeaders responseHeaders)
+        {
+            if (!authKey.MaxRequestsParsed)
+            {
+                // If we haven't parsed the max requests yet, do that.
+                IEnumerable<string> requestCountHeader;
+                if (responseHeaders.TryGetValues("X-MaxRequestCount", out requestCountHeader))
+                {
+                    int maxRequests;
+
+                    int.TryParse(requestCountHeader.FirstOrDefault() ?? "1", out maxRequests);
+
+                    authKey.MaxRequests = maxRequests;
+                    authKey.MaxRequestsParsed = true;
+                }
+            }
+            
+            IEnumerable<string> ratePeriodEndHeader;
+            if (responseHeaders.TryGetValues("X-RatePeriodEnd", out ratePeriodEndHeader))
+            {
+                int secs;
+                int.TryParse(ratePeriodEndHeader.FirstOrDefault() ?? "1", out secs);
+
+                Logger.Warn($"Resets: {TimeUtil.GetDateTimeFromSeconds(secs)}");
+            }
+            
+            IEnumerable<string> rateRequestsRemainingHeader;
+            if (responseHeaders.TryGetValues("X-RateRequestsRemaining", out rateRequestsRemainingHeader))
+            {
+                int remaining;
+                int.TryParse(rateRequestsRemainingHeader.FirstOrDefault() ?? "1", out remaining);
+                
+                Logger.Warn($"Remaining / Max: {remaining} / {authKey.MaxRequests}");
+                Logger.Warn($"Requests / ShouldBe: {authKey.Requests} / {authKey.MaxRequests - remaining}");
             }
         }
 

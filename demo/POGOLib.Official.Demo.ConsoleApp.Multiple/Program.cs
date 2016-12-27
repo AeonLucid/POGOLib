@@ -1,39 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Newtonsoft.Json;
 using NLog;
 using NLog.Config;
+using POGOLib.Official.Extensions;
+using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net;
 using POGOLib.Official.Net.Authentication;
 using POGOLib.Official.Net.Authentication.Data;
+using POGOLib.Official.Util.Hash;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
-using POGOProtos.Networking.Responses;
-using POGOLib.Official.Extensions;
-using POGOLib.Official.LoginProviders;
-using POGOLib.Official.Util.Hash;
 using LogLevel = POGOLib.Official.Logging.LogLevel;
 
-namespace POGOLib.Official.Demo.ConsoleApp
+namespace POGOLib.Official.Demo.ConsoleApp.Multiple
 {
     public class Program
     {
 
+        private static readonly CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
+
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// This is just a demo application to test out the library / show a bit how it works.
+        /// This is just a demo application to test out the library and hit all
+        /// rate limits. If you want to see basic usage, please look at
+        /// the project "POGOLib.Official.Demo.ConsoleApp".
         /// </summary>
         /// <param name="args">The command line arguments.</param>
         public static void Main(string[] args)
-        {
-            Run(args).GetAwaiter().GetResult();
-        }
-
-        private static async Task Run(string[] args)
         {
             // Configure Logger
             LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(Directory.GetCurrentDirectory(), "nlog.xml"));
@@ -63,88 +63,98 @@ namespace POGOLib.Official.Demo.ConsoleApp
             // Initiate console
             Logger.Info("Booting up.");
             Logger.Info("Type 'q', 'quit' or 'exit' to exit.");
-            Console.Title = "POGO Demo";
+            Console.Title = "POGO Multiple Demo";
 
-            // Configure hasher - DO THIS BEFORE ANYTHING ELSE!!
-            //
-            //  If you want to use the latest POGO version, you have
-            //  to use the PokeHashHasher. For more information:
-            //  https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer
-            //
-            //  You may also not use the PokeHashHasher, it will then use
-            //  the built-in hasher which was made for POGO 0.45.0. 
-            //  Don't forget to use "Configuration.IgnoreHashVersion = true;" too.
-            //
-            //  Expect some captchas in that case..
-
+            // Configure hasher
             var pokeHashAuthKey = Environment.GetEnvironmentVariable("POKEHASH_AUTHKEY") ?? "";
 
             Configuration.Hasher = new PokeHashHasher(pokeHashAuthKey);
-            // Configuration.IgnoreHashVersion = true;
 
             // Settings
-            var loginProviderStr = "ptc";
-            var usernameStr = Environment.GetEnvironmentVariable("PTC_USERNAME") ?? ""; // Your PTC username
-            var passwordStr = Environment.GetEnvironmentVariable("PTC_PASSWORD") ?? ""; // Your PTC password
+            var accounts = JsonConvert.DeserializeObject<List<Account>>(File.ReadAllText("accounts.json"));
 
-            // Login
-            ILoginProvider loginProvider;
-
-            switch (loginProviderStr)
-            {
-                case "google":
-                    loginProvider = new GoogleLoginProvider(usernameStr, passwordStr);
-                    break;
-                case "ptc":
-                    loginProvider = new PtcLoginProvider(usernameStr, passwordStr);
-                    break;
-                default:
-                    throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");
-            }
-
-            var locRandom = new Random();
-            var latitude = 51.507352 + locRandom.NextDouble(-0.000030, 0.000030); // Somewhere in London
-            var longitude = -0.127758 + locRandom.NextDouble(-0.000030, 0.000030);
-            var session = await GetSession(loginProvider, latitude, longitude, true);
-
-            SaveAccessToken(session.AccessToken);
-
-            session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
-            session.Player.Inventory.Update += InventoryOnUpdate;
-            session.Map.Update += MapOnUpdate;
-
-            // Send initial requests and start HeartbeatDispatcher.
-            // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
-            if(!await session.StartupAsync())
-            {
-                throw new Exception("Session couldn't start up.");
-            }
-
-            // Retrieve the closest fort to your current player coordinates.
-            var closestFort = session.Map.GetFortsSortedByDistance().FirstOrDefault();
-            if (closestFort != null)
-            {
-                var fortDetailsBytes = await session.RpcClient.SendRemoteProcedureCallAsync(new Request
-                {
-                    RequestType = RequestType.FortDetails,
-                    RequestMessage = new FortDetailsMessage
-                    {
-                        FortId = closestFort.Id,
-                        Latitude = closestFort.Latitude,
-                        Longitude = closestFort.Longitude
-                    }.ToByteString()
-                });
-                var fortDetailsResponse = FortDetailsResponse.Parser.ParseFrom(fortDetailsBytes);
-
-                Console.WriteLine(JsonConvert.SerializeObject(fortDetailsResponse, Formatting.Indented));
-            }
-            else
-            {
-                Logger.Info("No fort found nearby.");
-            }
+            Run(accounts);
 
             // Handle quit commands.
             HandleCommands();
+        }
+
+        private static void Run(IEnumerable<Account> accounts)
+        {
+            foreach (var account in accounts)
+            {
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        // Login
+                        ILoginProvider loginProvider;
+
+                        switch (account.LoginProvider)
+                        {
+                            case "google":
+                                loginProvider = new GoogleLoginProvider(account.Username, account.Password);
+                                break;
+                            case "ptc":
+                                loginProvider = new PtcLoginProvider(account.Username, account.Password);
+                                break;
+                            default:
+                                throw new ArgumentException("Login provider must be either \"google\" or \"ptc\".");
+                        }
+
+                        var locRandom = new Random();
+                        var latitude = 51.507352 + locRandom.NextDouble(-0.000030, 0.000030); // Somewhere in London
+                        var longitude = -0.127758 + locRandom.NextDouble(-0.000030, 0.000030);
+                        var session = await GetSession(loginProvider, latitude, longitude, true);
+
+                        SaveAccessToken(session.AccessToken);
+
+                        session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
+                        session.Player.Inventory.Update += InventoryOnUpdate;
+                        session.Map.Update += MapOnUpdate;
+
+                        // Send initial requests and start HeartbeatDispatcher.
+                        // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
+                        if (!await session.StartupAsync())
+                        {
+                            throw new Exception("Session couldn't start up.");
+                        }
+
+                        // Retrieve the closest fort to your current player coordinates.
+                        var closestFort = session.Map.GetFortsSortedByDistance().FirstOrDefault();
+                        if (closestFort != null)
+                        {
+                            for (var i = 0; i < 50; i++)
+                            {
+                                Task.Run(async () =>
+                                {
+                                    var request = new Request
+                                    {
+                                        RequestType = RequestType.FortDetails,
+                                        RequestMessage = new FortDetailsMessage
+                                        {
+                                            FortId = closestFort.Id,
+                                            Latitude = closestFort.Latitude,
+                                            Longitude = closestFort.Longitude
+                                        }.ToByteString()
+                                    };
+
+                                    await session.RpcClient.GetRequestEnvelopeAsync(new[] { request }, true);
+                                });
+                            }
+                        }
+                        else
+                        {
+                            Logger.Info("No fort found nearby.");
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error($"Username '{account.Username}' had exception: {e.Message}");
+                    }
+                }, CancellationTokenSource.Token);
+            }
         }
 
         private static void SessionOnAccessTokenUpdated(object sender, EventArgs eventArgs)
@@ -186,6 +196,7 @@ namespace POGOLib.Official.Demo.ConsoleApp
                     case "q":
                     case "quit":
                     case "exit":
+                        CancellationTokenSource.Cancel(false);
                         keepRunning = false;
                         break;
                 }

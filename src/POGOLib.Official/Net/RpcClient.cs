@@ -383,7 +383,7 @@ namespace POGOLib.Official.Net
         /// <param name="request"></param>
         /// <param name="addDefaultRequests"></param>
         /// <returns></returns>
-        private async Task<RequestEnvelope> GetRequestEnvelopeAsync(IEnumerable<Request> request, bool addDefaultRequests)
+        public async Task<RequestEnvelope> GetRequestEnvelopeAsync(IEnumerable<Request> request, bool addDefaultRequests)
         {
             var requestEnvelope = new RequestEnvelope
             {
@@ -729,11 +729,12 @@ namespace POGOLib.Official.Net
                         }
                         break;
 
+                    // TODO: Let the developer know about this somehow.
                     case RequestType.CheckChallenge:
                         var checkChallenge = CheckChallengeResponse.Parser.ParseFrom(bytes);
                         if (checkChallenge.ShowChallenge)
                         {
-                            Logger.Warn("Received Captcha");
+                            Logger.Warn($"Received Captcha on {_session.AccessToken.Username}");
                             Logger.Warn(JsonConvert.SerializeObject(checkChallenge, Formatting.Indented));
                         }
                         break;

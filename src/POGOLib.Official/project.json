@@ -26,7 +26,8 @@
       "dependencies": {
         "NETStandard.Library": "1.6.1"
       }
-    }, "net45": {
+    },
+    "net45": {
 
     }
   }

@@ -12,7 +12,7 @@ namespace POGOLib.Official.Util
         /// <returns></returns>
         public static long GetCurrentTimestampInMilliseconds()
         {
-            return (long) (DateTime.UtcNow - _posixTime).TotalMilliseconds;
+            return DateTime.UtcNow.ToMilliseconds();
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace POGOLib.Official.Util
         /// <returns></returns>
         public static long GetCurrentTimestampInSeconds()
         {
-            return (long) (DateTime.UtcNow - _posixTime).TotalSeconds;
+            return DateTime.UtcNow.ToSeconds();
         }
 
         public static DateTime GetDateTimeFromMilliseconds(long timestampMilliseconds)
@@ -32,6 +32,21 @@ namespace POGOLib.Official.Util
         public static DateTime GetDateTimeFromSeconds(int timestampSeconds)
         {
             return _posixTime.AddSeconds(timestampSeconds);
+        }
+
+        public static long ToMilliseconds(this DateTime dateTime)
+        {
+            return (long)(dateTime - _posixTime).TotalMilliseconds;
+        }
+
+        public static long ToSeconds(this DateTime dateTime)
+        {
+            return (long)(dateTime - _posixTime).TotalSeconds;
+        }
+
+        public static long ToMinutes(this DateTime dateTime)
+        {
+            return (long)(dateTime - _posixTime).TotalMinutes;
         }
     }
 }

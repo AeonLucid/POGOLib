@@ -1,10 +1,11 @@
 {
-  "version": "1.0.0-*",
+  "version": "1.0.0",
   "buildOptions": {
     "debugType": "portable",
     "emitEntryPoint": true
   },
-  "dependencies": {
+  "dependencies":
+  {
     "NLog": "5.0.0-beta04",
     "POGOLib.Official": {
       "target": "project"
