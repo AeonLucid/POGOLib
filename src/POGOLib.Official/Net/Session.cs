@@ -191,6 +191,12 @@ namespace POGOLib.Official.Net
         }
 
         public event EventHandler<EventArgs> AccessTokenUpdated;
+        public event EventHandler<EventArgs> CaptchaRequired;
+
+        private void InvokeCaptchaRequiredHandler(string url)
+        {
+            CaptchaRequired?.Invoke(url, EventArgs.Empty);
+        }
         
         public void Dispose()
         {

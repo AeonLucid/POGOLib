@@ -112,6 +112,7 @@ namespace POGOLib.Official.Demo.ConsoleApp
             session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
             session.Player.Inventory.Update += InventoryOnUpdate;
             session.Map.Update += MapOnUpdate;
+            session.CaptchaRequired += OnCaptchaRequired;
 
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
@@ -145,6 +146,11 @@ namespace POGOLib.Official.Demo.ConsoleApp
 
             // Handle quit commands.
             HandleCommands();
+        }
+
+        private static void OnCaptchaRequired(object sender, EventArgs e)
+        {
+            Logger.Warn($"Captcha Required. Please Solve at the following URL: {(string)sender}");
         }
 
         private static void SessionOnAccessTokenUpdated(object sender, EventArgs eventArgs)

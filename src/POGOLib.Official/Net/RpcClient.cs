@@ -17,6 +17,7 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Enums;
+using System.Reflection;
 
 namespace POGOLib.Official.Net
 {
@@ -736,10 +737,18 @@ namespace POGOLib.Official.Net
                         {
                             Logger.Warn($"Received Captcha on {_session.AccessToken.Username}");
                             Logger.Warn(JsonConvert.SerializeObject(checkChallenge, Formatting.Indented));
+                            InvokeCaptchaRequiredHandler(checkChallenge.ChallengeUrl);
                         }
                         break;
                 }
             }
+        }
+
+        private void InvokeCaptchaRequiredHandler(string challengeUrl)
+        {
+            var allMethods = typeof(Session).GetRuntimeMethods();
+            MethodInfo invokeMethod = _session.GetType().GetTypeInfo().GetDeclaredMethod(nameof(InvokeCaptchaRequiredHandler));
+            invokeMethod.Invoke(_session, new object[] { challengeUrl });
         }
 
         public void Dispose()
