@@ -12,7 +12,12 @@ platform: Any CPU
   
 environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
-  
+
+# Install .NET Core 1.1 SDK
+init:
+  - ps: (new-object net.webclient).DownloadFile('https://go.microsoft.com/fwlink/?LinkID=835014', "c:/dotnet-install.exe")
+  - ps: Start-Process c:\dotnet-install.exe -ArgumentList "/install","/quiet" -Wait
+
 before_build:
   - appveyor-retry dotnet restore -v Minimal
 
