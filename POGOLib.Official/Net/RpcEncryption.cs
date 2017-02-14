@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using POGOLib.Official.Extensions;
+using POGOLib.Official.Logging;
 using POGOLib.Official.Util;
 using POGOProtos.Networking.Envelopes;
 using POGOProtos.Networking.Platform;
@@ -32,6 +33,11 @@ namespace POGOLib.Official.Net
         /// </summary>
         private readonly ByteString _sessionHash;
 
+        /// <summary>
+        /// Holds the value that was used in the previous <see cref="BuildLocationFixes"/> iteration.
+        /// </summary>
+        private long _lastTimestampSinceStart;
+
         internal RpcEncryption(Session session)
         {
             _session = session;
@@ -41,9 +47,11 @@ namespace POGOLib.Official.Net
             session.Random.NextBytes(sessionHash);
 
             _sessionHash = ByteString.CopyFrom(sessionHash);
+            _lastTimestampSinceStart = 0;
         }
 
         private long TimestampSinceStartMs => _stopwatch.ElapsedMilliseconds;
+
 
         /// <summary>
         /// Generates a few random <see cref="LocationFix"/>es to act like a real GPS sensor.
@@ -58,20 +66,45 @@ namespace POGOLib.Official.Net
             if (requestEnvelope.Requests.Count == 0 || requestEnvelope.Requests[0] == null)
                 return locationFixes;
 
-            var providerCount = _session.Random.Next(4, 10);
+            // Determine amount of location fixes.
+            //      We look for the amount of seconds that have passed since the last location fixes request.
+            //      If that results in 0, send 1 location fix.
+            var millisecondsPerFix = _session.Random.Next(995, 999);
+            var providerCount = Math.Min((timestampSinceStart - _lastTimestampSinceStart) / millisecondsPerFix, _session.Random.Next(8, 11));
+            if (providerCount == 0)
+                providerCount = 1;
+
+            // Determine size of the "play around" window.
+            //      Not so relevant when starting up.
+            var totalMilliseconds = providerCount * millisecondsPerFix;
+            var baseTimestampSnapshot = Math.Max(timestampSinceStart - totalMilliseconds, 0);
+            var playAroundWindow = baseTimestampSnapshot - _lastTimestampSinceStart;
+
+            if (playAroundWindow == 0 && providerCount == 1 && millisecondsPerFix >= timestampSinceStart)
+            {
+                // We really need an offset for this one..
+                playAroundWindow = _session.Random.Next(0, (int) timestampSinceStart);
+            }
+            else
+            {
+                // A small offset between location fixes.
+                playAroundWindow = Math.Min(playAroundWindow, providerCount * 2);
+            }
+
+            // Share "play around" window over all location fixes.
+            var playAroundWindowPart = playAroundWindow != 0
+                ? playAroundWindow / providerCount
+                : 1;
+
             for (var i = 0; i < providerCount; i++)
             {
-                var timestampSnapshot = timestampSinceStart + (150 * (i + 1) + _session.Random.Next(250 * (i + 1) - 150 * (i + 1)));
-                if (timestampSnapshot >= timestampSinceStart)
-                {
-                    if (locationFixes.Count != 0) break;
+                var timestampSnapshot = baseTimestampSnapshot;
+                // Apply current location fix position.
+                timestampSnapshot += i * millisecondsPerFix;
+                // Apply an offset.
+                timestampSnapshot += _session.Random.Next(0, (int) ((i + 1) * playAroundWindowPart));
 
-                    timestampSnapshot = timestampSinceStart - _session.Random.Next(20, 50);
-
-                    if (timestampSnapshot < 0) timestampSnapshot = 0;
-                }
-
-                locationFixes.Insert(0, new LocationFix
+                locationFixes.Add(new LocationFix
                 {
                     TimestampSnapshot = (ulong) timestampSnapshot,
                     Latitude = LocationUtil.OffsetLatitudeLongitude(_session.Player.Coordinate.Latitude, _session.Random.Next(100) + 10),
@@ -82,11 +115,13 @@ namespace POGOLib.Official.Net
                     Provider = "fused",
                     ProviderStatus = 3,
                     LocationType = 1,
-                    // Speed = ?,
                     Course = -1,
+                    Speed = -1
                     // Floor = 0
                 });
             }
+
+            _lastTimestampSinceStart = timestampSinceStart;
 
             return locationFixes;
         }
@@ -104,13 +139,14 @@ namespace POGOLib.Official.Net
 
             var timestampSinceStart = TimestampSinceStartMs;
             var locationFixes = BuildLocationFixes(requestEnvelope, timestampSinceStart);
-            
-            _session.Player.Coordinate.HorizontalAccuracy = locationFixes[0].HorizontalAccuracy;
-            _session.Player.Coordinate.VerticalAccuracy = locationFixes[0].VerticalAccuracy;
-            _session.Player.Coordinate.Altitude = locationFixes[0].Altitude;
+            var locationFix = locationFixes.Last();
+
+            _session.Player.Coordinate.HorizontalAccuracy = locationFix.HorizontalAccuracy;
+            _session.Player.Coordinate.VerticalAccuracy = locationFix.VerticalAccuracy;
+            _session.Player.Coordinate.Altitude = locationFix.Altitude;
 
             requestEnvelope.Accuracy = _session.Player.Coordinate.Altitude; // _session.Player.Coordinate.HorizontalAccuracy;
-            requestEnvelope.MsSinceLastLocationfix = (long)locationFixes[0].TimestampSnapshot;
+            requestEnvelope.MsSinceLastLocationfix = timestampSinceStart - (long) locationFix.TimestampSnapshot;
 
             var signature = new Signature
             {
