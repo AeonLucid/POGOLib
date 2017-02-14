@@ -22,19 +22,17 @@ before_build:
   - appveyor-retry dotnet restore -v Minimal
 
 build_script:
-  - dotnet build "POGOLib.Official\POGOLib.Official.csproj" -c %CONFIGURATION% --no-dependencies
-  - dotnet build "POGOLib.Official.Google\POGOLib.Official.Google.csproj" -c %CONFIGURATION% --no-dependencies
-  - dotnet build "POGOLib.Official.Demo.ConsoleApp\POGOLib.Official.Demo.ConsoleApp.csproj" -c %CONFIGURATION% --no-dependencies
+  - ps: dotnet restore --no-cache
+  - ps: dotnet build ".\POGOLib.Official\POGOLib.Official.csproj" -c %CONFIGURATION% --no-dependencies
+  - ps: dotnet build ".\POGOLib.Official.Google\POGOLib.Official.Google.csproj" -c %CONFIGURATION% --no-dependencies
+  - ps: dotnet build ".\POGOLib.Official.Demo.ConsoleApp\POGOLib.Official.Demo.ConsoleApp.csproj" -c %CONFIGURATION% --no-dependencies
   
 after_build:
-  - dotnet pack "POGOLib.Official\POGOLib.Official.csproj" -c %CONFIGURATION% --no-build -o artifacts
-  - dotnet pack "POGOLib.Official.Google\POGOLib.Official.Google.csproj" -c %CONFIGURATION% --no-build -o artifacts
+  - ps: dotnet pack ".\POGOLib.Official\POGOLib.Official.csproj" -c %CONFIGURATION% --no-build -o artifacts
+  - ps: dotnet pack ".\POGOLib.Official.Google\POGOLib.Official.Google.csproj" -c %CONFIGURATION% --no-build -o artifacts
   
 artifacts:
   - path: artifacts\**\*.*
-
-cache:
-  - '%USERPROFILE%\.nuget\packages'
 
 deploy:
   - provider: NuGet
