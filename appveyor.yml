@@ -18,9 +18,6 @@ init:
   - ps: (new-object net.webclient).DownloadFile('https://go.microsoft.com/fwlink/?LinkID=835014', "c:/dotnet-install.exe")
   - ps: Start-Process c:\dotnet-install.exe -ArgumentList "/install","/quiet" -Wait
 
-before_build:
-  - appveyor-retry dotnet restore -v Minimal
-
 build_script:
   - ps: dotnet restore --no-cache
   - ps: dotnet build .\POGOLib.Official\POGOLib.Official.csproj -c Release
