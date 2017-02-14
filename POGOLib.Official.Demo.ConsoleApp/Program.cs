@@ -35,7 +35,7 @@ namespace POGOLib.Official.Demo.ConsoleApp
         private static async Task Run(string[] args)
         {
             // Configure Logger
-            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(Directory.GetCurrentDirectory(), "nlog.xml"));
+            LogManager.Configuration = new XmlLoggingConfiguration(Path.Combine(Directory.GetCurrentDirectory(), "nlog.config"));
 
             Logging.Logger.RegisterLogOutput((level, message) =>
             {
