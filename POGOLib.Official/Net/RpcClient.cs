@@ -507,6 +507,7 @@ namespace POGOLib.Official.Net
                 using (var requestData = new ByteArrayContent(requestEnvelope.ToByteArray()))
                 {
                     Logger.Debug($"Sending RPC Request: '{string.Join(", ", requestEnvelope.Requests.Select(x => x.RequestType))}'");
+                    Logger.Debug($"=> Platform Request: '{string.Join(", ", requestEnvelope.PlatformRequests.Select(x => x.Type))}'");
 
                     using (var response = await _session.HttpClient.PostAsync(_requestUrl ?? Constants.ApiUrl, requestData))
                     {
