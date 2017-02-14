@@ -17,6 +17,8 @@ using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Enums;
+using POGOProtos.Networking.Platform;
+using POGOProtos.Networking.Platform.Requests;
 
 namespace POGOLib.Official.Net
 {
@@ -427,6 +429,20 @@ namespace POGOLib.Official.Net
             }
 
             requestEnvelope.PlatformRequests.Add(await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
+
+            if (requestEnvelope.Requests.Count > 0 && (
+                    requestEnvelope.Requests[0].RequestType == RequestType.GetMapObjects ||
+                    requestEnvelope.Requests[0].RequestType == RequestType.GetPlayer))
+            {
+                requestEnvelope.PlatformRequests.Add(new RequestEnvelope.Types.PlatformRequest
+                {
+                    Type = PlatformRequestType.UnknownPtr8,
+                    RequestMessage = new UnknownPtr8Request
+                    {
+                        Message = "e40c3e64817d9c96d99d28f6488a2efc40b11046"
+                    }.ToByteString()
+                });
+            }
 
             return requestEnvelope;
         }
