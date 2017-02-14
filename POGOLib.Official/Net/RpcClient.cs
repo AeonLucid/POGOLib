@@ -569,8 +569,13 @@ namespace POGOLib.Official.Net
                                 };
 
                                 // Re-sign envelope.
-                                requestEnvelope.PlatformRequests.Clear();
-                                requestEnvelope.PlatformRequests.Add(await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
+                                var signature = requestEnvelope.PlatformRequests.FirstOrDefault(x => x.Type == PlatformRequestType.SendEncryptedSignature);
+                                if (signature != null)
+                                {
+                                    requestEnvelope.PlatformRequests.Remove(signature);
+                                }
+
+                                requestEnvelope.PlatformRequests.Insert(0, await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
 
                                 // Re-send envelope.
                                 return await PerformRemoteProcedureCallAsync(requestEnvelope);

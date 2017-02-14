@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using POGOLib.Official.Extensions;
-using POGOLib.Official.Logging;
 using POGOLib.Official.Util;
 using POGOProtos.Networking.Envelopes;
 using POGOProtos.Networking.Platform;
