@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>A community driven PokemonGo API Library written in C#. You can read the changelog here https://github.com/AeonLucid/POGOLib/blob/master/README.md.</Description>
+    <AssemblyTitle>POGOLib.Official</AssemblyTitle>
+    <VersionPrefix>1.3.0-alpha</VersionPrefix>
+    <Authors>AeonLucid</Authors>
+    <TargetFramework>netstandard1.1</TargetFramework>
+    <AssemblyName>POGOLib.Official</AssemblyName>
+    <PackageId>POGOLib.Official</PackageId>
+    <PackageTags>Pokemon;POGOLib;netstandard</PackageTags>
+    <PackageIconUrl>http://i.imgur.com/7vJxPxu.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/AeonLucid/POGOLib</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/AeonLucid/POGOLib</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GeoCoordinate.NetStandard1" Version="1.0.0" />
+    <PackageReference Include="POGOProtos.NetStandard1" Version="2.4.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="S2Geometry" Version="1.0.3" />
+  </ItemGroup>
+
+</Project>

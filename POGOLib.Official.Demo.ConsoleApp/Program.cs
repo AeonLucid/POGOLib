@@ -6,22 +6,21 @@ using Google.Protobuf;
 using Newtonsoft.Json;
 using NLog;
 using NLog.Config;
+using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net;
 using POGOLib.Official.Net.Authentication;
 using POGOLib.Official.Net.Authentication.Data;
+using POGOLib.Official.Util.Hash;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
-using POGOLib.Official.Extensions;
-using POGOLib.Official.LoginProviders;
-using POGOLib.Official.Util.Hash;
 using LogLevel = POGOLib.Official.Logging.LogLevel;
+using POGOLib.Official.Extensions;
 
 namespace POGOLib.Official.Demo.ConsoleApp
 {
     public class Program
     {
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
@@ -115,7 +114,7 @@ namespace POGOLib.Official.Demo.ConsoleApp
 
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
-            if(!await session.StartupAsync())
+            if (!await session.StartupAsync())
             {
                 throw new Exception("Session couldn't start up.");
             }
@@ -225,6 +224,5 @@ namespace POGOLib.Official.Demo.ConsoleApp
 
             return session;
         }
-
     }
 }

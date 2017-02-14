@@ -8,7 +8,6 @@ using Google.Protobuf;
 using Newtonsoft.Json;
 using NLog;
 using NLog.Config;
-using POGOLib.Official.Extensions;
 using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net;
 using POGOLib.Official.Net.Authentication;
@@ -17,12 +16,12 @@ using POGOLib.Official.Util.Hash;
 using POGOProtos.Networking.Requests;
 using POGOProtos.Networking.Requests.Messages;
 using LogLevel = POGOLib.Official.Logging.LogLevel;
+using POGOLib.Official.Extensions;
 
 namespace POGOLib.Official.Demo.ConsoleApp.Multiple
 {
     public class Program
     {
-
         private static readonly CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -43,17 +42,17 @@ namespace POGOLib.Official.Demo.ConsoleApp.Multiple
                 switch (level)
                 {
                     case LogLevel.Debug:
-                        Logger.Debug(message);
+                        Program.Logger.Debug(message);
                         break;
                     case LogLevel.Info:
-                        Logger.Info(message);
+                        Program.Logger.Info(message);
                         break;
                     case LogLevel.Notice:
                     case LogLevel.Warn:
-                        Logger.Warn(message);
+                        Program.Logger.Warn(message);
                         break;
                     case LogLevel.Error:
-                        Logger.Error(message);
+                        Program.Logger.Error(message);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(level), level, null);
@@ -61,8 +60,8 @@ namespace POGOLib.Official.Demo.ConsoleApp.Multiple
             });
 
             // Initiate console
-            Logger.Info("Booting up.");
-            Logger.Info("Type 'q', 'quit' or 'exit' to exit.");
+            Program.Logger.Info("Booting up.");
+            Program.Logger.Info("Type 'q', 'quit' or 'exit' to exit.");
             Console.Title = "POGO Multiple Demo";
 
             // Configure hasher
@@ -145,13 +144,13 @@ namespace POGOLib.Official.Demo.ConsoleApp.Multiple
                         }
                         else
                         {
-                            Logger.Info("No fort found nearby.");
+                            Program.Logger.Info("No fort found nearby.");
                         }
 
                     }
                     catch (Exception e)
                     {
-                        Logger.Error($"Username '{account.Username}' had exception: {e.Message}");
+                        Program.Logger.Error($"Username '{account.Username}' had exception: {e.Message}");
                     }
                 }, CancellationTokenSource.Token);
             }
@@ -163,17 +162,17 @@ namespace POGOLib.Official.Demo.ConsoleApp.Multiple
 
             SaveAccessToken(session.AccessToken);
 
-            Logger.Info("Saved access token to file.");
+            Program.Logger.Info("Saved access token to file.");
         }
 
         private static void InventoryOnUpdate(object sender, EventArgs eventArgs)
         {
-            Logger.Info("Inventory was updated.");
+            Program.Logger.Info("Inventory was updated.");
         }
 
         private static void MapOnUpdate(object sender, EventArgs eventArgs)
         {
-            Logger.Info("Map was updated.");
+            Program.Logger.Info("Map was updated.");
         }
 
         private static void SaveAccessToken(AccessToken accessToken)
@@ -236,6 +235,5 @@ namespace POGOLib.Official.Demo.ConsoleApp.Multiple
 
             return session;
         }
-
     }
 }

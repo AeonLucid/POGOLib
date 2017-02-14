@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>A community driven PokemonGo API Library written in C#. This project only contains a GoogleLoginProvider for 'POGOLib.Official'.</Description>
+    <AssemblyTitle>POGOLib.Official.Google</AssemblyTitle>
+    <Authors>AeonLucid</Authors>
+    <TargetFramework>netstandard1.1</TargetFramework>
+    <DebugType>portable</DebugType>
+    <AssemblyName>POGOLib.Official.Google</AssemblyName>
+    <PackageId>POGOLib.Official.Google</PackageId>
+    <PackageTags>Pokemon;POGOLib;GoogleLoginProvider;netstandard</PackageTags>
+    <PackageIconUrl>http://i.imgur.com/7vJxPxu.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/AeonLucid/POGOLib</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/AeonLucid/POGOLib</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\POGOLib.Official\POGOLib.Official.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GPSOAuthSharp.NetStandard1" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>

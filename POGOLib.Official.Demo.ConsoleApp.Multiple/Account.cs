@@ -4,7 +4,6 @@ namespace POGOLib.Official.Demo.ConsoleApp.Multiple
 {
     public class Account
     {
-
         [JsonProperty("login_provider")]
         public string LoginProvider { get; set; }
 
@@ -13,6 +12,5 @@ namespace POGOLib.Official.Demo.ConsoleApp.Multiple
 
         [JsonProperty("password")]
         public string Password { get; set; }
-
     }
 }
