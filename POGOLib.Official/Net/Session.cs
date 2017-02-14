@@ -114,9 +114,9 @@ namespace POGOLib.Official.Net
 
         public async Task<bool> StartupAsync()
         {
-            if (!Configuration.IgnoreHashVersion && !await CheckHasherVersion())
+            if (!Configuration.IgnoreHashVersion)
             {
-                throw new HashVersionMismatchException($"The version of the {nameof(Configuration.Hasher)} ({Configuration.Hasher.PokemonVersion}) does not match the minimal API version of PokemonGo. Set 'Configuration.IgnoreHashVersion' to true if you want to disable the version check.");
+                await CheckHasherVersion();
             }
 
             if (!await RpcClient.StartupAsync().ConfigureAwait(false))
@@ -136,9 +136,10 @@ namespace POGOLib.Official.Net
 
         /// <summary>
         /// Checks if the current minimal version of PokemonGo matches the version of the <see cref="Configuration.Hasher"/>.
+        /// Throws an exception if there is a version mismatch.
         /// </summary>
-        /// <returns>Returns true if the version matches.</returns>
-        public async Task<bool> CheckHasherVersion()
+        /// <returns></returns>
+        public async Task CheckHasherVersion()
         {
             var pogoVersionRaw = await HttpClient.GetStringAsync(Constants.VersionUrl);
             pogoVersionRaw = pogoVersionRaw.Replace("\n", "");
@@ -146,7 +147,10 @@ namespace POGOLib.Official.Net
 
             var pogoVersion = new Version(pogoVersionRaw);
             var result = Configuration.Hasher.PokemonVersion.CompareTo(pogoVersion);
-            return result != -1;
+            if (result != 0)
+            {
+                throw new HashVersionMismatchException($"The version of the {nameof(Configuration.Hasher)} ({Configuration.Hasher.PokemonVersion}) does not match the minimal API version of PokemonGo ({pogoVersion}). Set 'Configuration.IgnoreHashVersion' to true if you want to disable the version check.");
+            }
         }
 
         /// <summary>
