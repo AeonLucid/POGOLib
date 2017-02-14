@@ -25,11 +25,11 @@ build_script:
   - ps: dotnet build .\POGOLib.Official.Demo.ConsoleApp\POGOLib.Official.Demo.ConsoleApp.csproj -c Release
   
 after_build:
-  - ps: dotnet pack .\POGOLib.Official\POGOLib.Official.csproj -c Release --no-build -o .\artifacts
-  - ps: dotnet pack .\POGOLib.Official.Google\POGOLib.Official.Google.csproj -c Release --no-build -o .\artifacts
+  - ps: dotnet pack .\POGOLib.Official\POGOLib.Official.csproj -c Release --no-build -o artifacts
+  - ps: dotnet pack .\POGOLib.Official.Google\POGOLib.Official.Google.csproj -c Release --no-build -o artifacts
   
 artifacts:
-  - path: artifacts\**\*.*
+  - path: .\**\artifacts\*.nupkg
 
 deploy:
   - provider: NuGet
