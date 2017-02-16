@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -30,11 +31,11 @@ namespace POGOLib.Official.Util.Hash
 
         private const string PokeHashEndpoint = "api/v125/hash";
 
-        private readonly Semaphore _keySelectorMutex;
-
         private readonly List<PokeHashAuthKey> _authKeys;
 
         private readonly HttpClient _httpClient;
+
+        private readonly Semaphore _keySelection;
         
         /// <summary>
         ///     Initializes the <see cref="PokeHashHasher"/>.
@@ -49,21 +50,24 @@ namespace POGOLib.Official.Util.Hash
         ///     Initializes the <see cref="PokeHashHasher"/>.
         /// </summary>
         /// <param name="authKeys">The PokeHash authkeys obtained from https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer. </param>
-        public PokeHashHasher(IEnumerable<string> authKeys)
+        public PokeHashHasher(string[] authKeys)
         {
-            _keySelectorMutex = new Semaphore(1, 1);
-            _authKeys = new List<PokeHashAuthKey>();
+            if (authKeys.Length == 0)
+                throw new ArgumentException($"{nameof(authKeys)} may not be empty.");
 
-            // Default RPS at 1.
+            _authKeys = new List<PokeHashAuthKey>();
+            
+            // We don't want any duplicate keys.
             foreach (var authKey in authKeys)
             {
                 var pokeHashAuthKey = new PokeHashAuthKey(authKey);
                 if (_authKeys.Contains(pokeHashAuthKey))
-                    throw new Exception($"{nameof(_authKeys)} already contains authkey '{authKeys}'.");
+                    throw new Exception($"The auth key '{authKey}' is a duplicate.");
 
                 _authKeys.Add(pokeHashAuthKey);
             }
 
+            // Initialize HttpClient.
             _httpClient = new HttpClient
             {
                 BaseAddress = new Uri(PokeHashUrl)
@@ -72,7 +76,8 @@ namespace POGOLib.Official.Util.Hash
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("POGOLib (https://github.com/AeonLucid/POGOLib)");
-//            _httpClient.DefaultRequestHeaders.Add("X-AuthToken", authKey);
+
+            _keySelection = new Semaphore(1, 1);
         }
 
         public Version PokemonVersion { get; } = new Version("0.55.0");
@@ -138,153 +143,127 @@ namespace POGOLib.Official.Util.Hash
                 throw new Exception(message);
             }
         }
-
-        private int accessId;
         
         private Task<HttpResponseMessage> PerformRequest(HttpContent requestContent)
         {
             return Task.Run(async () =>
             {
-                var currentAccessId = accessId++;
-                var directlyUsable = false;
+                PokeHashAuthKey authKey;
+                var extendedSelection = false;
 
-                PokeHashAuthKey authKey = null;
-
-                // Key Selection
+                // Key selection
                 try
                 {
-                    _keySelectorMutex.WaitOne();
+                    _keySelection.WaitOne();
 
-                    // First check, are any keys directly useable?
-                    foreach (var key in _authKeys)
+                    Logger.Warn(">>> Entering key selection.");
+                    
+                    var availableKeys = _authKeys.Where(x => x.Requests < x.MaxRequestCount).ToArray();
+                    if (availableKeys.Length > 0)
                     {
-                        if (key.WaitListCount != 0 ||
-                            !key.IsUsable()) continue;
+                        authKey = availableKeys.First();
+                        authKey.Requests += 1;
 
-                        directlyUsable = true;
+                        Logger.Warn("Found available auth key.");
 
-                        // Increment requests because the key is directly used after this semaphore.
-                        authKey = key;
-                        authKey.Requests++;
-
-                        // TODO: Remove code below
-                        if (authKey.MaxRequests == 150)
-                        {
-                            authKey.Requests += 50;
-                        }
-                        
-                        break;
+                        // If the auth key has not been initialize yet, we need to have control a bit longer
+                        // to configure it properly.
+                        if (!authKey.IsInitialized)
+                            extendedSelection = true;
                     }
-
-                    if (authKey == null)
+                    else
                     {
-                        // Second check, search for the best candidate.
-                        var waitingTime = int.MaxValue;
+                        Logger.Warn("No available auth keys found.");
 
-                        foreach (var key in _authKeys)
-                        {
-                            var keyWaitingTime = key.GetTimeLeft();
-                            if (keyWaitingTime >= waitingTime) continue;
+                        authKey = _authKeys
+                            .OrderBy(x => x.RatePeriodEnd)
+                            .First();
 
-                            waitingTime = keyWaitingTime;
-                            authKey = key;
-                        }
+                        var sleepTime = (int) Math.Ceiling(authKey.RatePeriodEnd.Subtract(DateTime.UtcNow).TotalMilliseconds);
 
-                        if (authKey == null)
-                            throw new Exception($"No {nameof(authKey)} was set.");
+                        Logger.Warn($"Key selection is sleeping for {sleepTime}ms.");
 
-                        authKey.WaitListCount++;
+                        await Task.Delay(sleepTime);
 
-                        Logger.Debug($"[PokeHash][{currentAccessId}][{authKey.AuthKey}] Best one takes {waitingTime}s. (Waitlist: {authKey.WaitListCount}, Requests: {authKey.Requests})");
+                        // Rate limit is over, so reset requests.
+                        authKey.Requests = 0;
+                        // We have to receive the new rate period end.
+                        extendedSelection = true;
+
+                        Logger.Warn("Key selection is done with sleeping.");
                     }
                 }
                 finally
                 {
-                    _keySelectorMutex.Release();
+                    if (!extendedSelection)
+                    {
+                        Logger.Warn("<<< Exiting key selection.");
+
+                        _keySelection.Release();
+                    }
+                    else
+                    {
+                        Logger.Warn("=== Holding key selection.");
+                    }
                 }
 
-                // Add the auth token to the headers
+
                 requestContent.Headers.Add("X-AuthToken", authKey.AuthKey);
 
-                if (directlyUsable)
-                {
-                    var response = await _httpClient.PostAsync(PokeHashEndpoint, requestContent);
+                var response = await _httpClient.PostAsync(PokeHashEndpoint, requestContent);
 
-                    ParseHeaders(authKey, response.Headers);
-
-                    return response;
-                }
-
-                // Throttle waitlist
+                // Handle response
                 try
                 {
-                    authKey.WaitList.WaitOne();
+                    // Parse headers
+                    int maxRequestCount;
+                    int rateRequestsRemaining;
+                    int ratePeriodEndSeconds;
 
-                    Logger.Warn("Auth key waitlist join.");
-
-                    if (!authKey.IsUsable())
+                    if (response.Headers.TryGetValues("X-MaxRequestCount", out IEnumerable<string> maxRequestsValue) &&
+                        response.Headers.TryGetValues("X-RateRequestsRemaining", out IEnumerable<string> requestsRemainingValue) &&
+                        response.Headers.TryGetValues("X-RatePeriodEnd", out IEnumerable<string> ratePeriodEndValue))
                     {
-                        Logger.Debug($"[PokeHash][{currentAccessId}][{authKey.AuthKey}] Cooldown of {60 - DateTime.UtcNow.Second}s. (Waitlist: {authKey.WaitListCount}, Requests: {authKey.Requests})");
-                        
-                        await Task.Delay(TimeSpan.FromSeconds(60 - DateTime.UtcNow.Second));
+                        if (!int.TryParse(maxRequestsValue.First(), out maxRequestCount) ||
+                            !int.TryParse(requestsRemainingValue.First(), out rateRequestsRemaining) ||
+                            !int.TryParse(ratePeriodEndValue.FirstOrDefault(), out ratePeriodEndSeconds))
+                        {
+                            throw new Exception("Failed parsing pokehash response header values.");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Failed parsing pokehash response headers.");
                     }
 
-                    // A request was done in this rate period
-                    authKey.Requests++;
+                    // Use parsed headers
+                    if (!authKey.IsInitialized)
+                    {
+                        authKey.MaxRequestCount = maxRequestCount;
+                        authKey.Requests = authKey.MaxRequestCount - rateRequestsRemaining;
+                        authKey.IsInitialized = true;
+                    }
+                    
+                    var ratePeriodEnd = TimeUtil.GetDateTimeFromSeconds(ratePeriodEndSeconds);
+                    if (ratePeriodEnd > authKey.RatePeriodEnd)
+                    {
+                        Logger.Warn($"[AuthKey: {authKey.AuthKey}] {authKey.RatePeriodEnd} increased to {ratePeriodEnd}.");
 
-                    var response = await _httpClient.PostAsync(PokeHashEndpoint, requestContent);
-
-                    ParseHeaders(authKey, response.Headers);
+                        authKey.RatePeriodEnd = ratePeriodEnd;
+                    }
 
                     return response;
                 }
                 finally
                 {
-                    Logger.Debug($"[PokeHash][{currentAccessId}][{authKey.AuthKey}] Used (Waitlist: {authKey.WaitListCount}, Requests: {authKey.Requests})");
-                    Logger.Warn("Auth key waitlist release.");
+                    if (extendedSelection)
+                    {
+                        Logger.Warn("<<< Exiting extended key selection.");
 
-                    authKey.WaitListCount--;
-                    authKey.WaitList.Release();
+                        _keySelection.Release();
+                    }
                 }
-
             });
-        }
-
-        private void ParseHeaders(PokeHashAuthKey authKey, HttpHeaders responseHeaders)
-        {
-            if (!authKey.MaxRequestsParsed)
-            {
-                // If we haven't parsed the max requests yet, do that.
-                IEnumerable<string> requestCountHeader;
-                if (responseHeaders.TryGetValues("X-MaxRequestCount", out requestCountHeader))
-                {
-                    int maxRequests;
-
-                    int.TryParse(requestCountHeader.FirstOrDefault() ?? "1", out maxRequests);
-
-                    authKey.MaxRequests = maxRequests;
-                    authKey.MaxRequestsParsed = true;
-                }
-            }
-            
-            IEnumerable<string> ratePeriodEndHeader;
-            if (responseHeaders.TryGetValues("X-RatePeriodEnd", out ratePeriodEndHeader))
-            {
-                int secs;
-                int.TryParse(ratePeriodEndHeader.FirstOrDefault() ?? "1", out secs);
-
-                Logger.Warn($"Resets: {TimeUtil.GetDateTimeFromSeconds(secs)}");
-            }
-            
-            IEnumerable<string> rateRequestsRemainingHeader;
-            if (responseHeaders.TryGetValues("X-RateRequestsRemaining", out rateRequestsRemainingHeader))
-            {
-                int remaining;
-                int.TryParse(rateRequestsRemainingHeader.FirstOrDefault() ?? "1", out remaining);
-                
-                Logger.Warn($"Remaining / Max: {remaining} / {authKey.MaxRequests}");
-                Logger.Warn($"Requests / ShouldBe: {authKey.Requests} / {authKey.MaxRequests - remaining}");
-            }
         }
 
         public byte[] GetEncryptedSignature(byte[] signatureBytes, uint timestampSinceStartMs)
