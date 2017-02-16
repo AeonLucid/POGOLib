@@ -206,8 +206,7 @@ namespace POGOLib.Official.Util.Hash
                         Logger.Warn("=== Holding key selection.");
                     }
                 }
-
-
+                
                 requestContent.Headers.Add("X-AuthToken", authKey.AuthKey);
 
                 var response = await _httpClient.PostAsync(PokeHashEndpoint, requestContent);
