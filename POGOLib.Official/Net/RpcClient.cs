@@ -229,9 +229,11 @@ namespace POGOLib.Official.Net
             var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
             var sinceTimeMs = new List<long>(cellIds.Length);
 
-            for (var i = 0; i < cellIds.Length; i++)
+            foreach (var cellId in cellIds)
             {
-                sinceTimeMs.Add(0);
+                var cell = _session.Map.Cells.FirstOrDefault(x => x.S2CellId == cellId);
+
+                sinceTimeMs.Add(cell?.CurrentTimestampMs ?? 0);
             }
 
             var response = await SendRemoteProcedureCallAsync(new Request
@@ -253,7 +255,6 @@ namespace POGOLib.Official.Net
             });
 
             var mapObjects = GetMapObjectsResponse.Parser.ParseFrom(response);
-
             if (mapObjects.Status == MapObjectsStatus.Success)
             {
                 // TODO: Cleaner?
@@ -271,7 +272,7 @@ namespace POGOLib.Official.Net
                     Logger.Error("We received 0 map cells, are your GPS coordinates correct?");
                     return;
                 }
-
+                
                 _session.Map.Cells = mapObjects.MapCells;
             }
             else

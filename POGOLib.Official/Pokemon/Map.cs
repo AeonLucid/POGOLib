@@ -26,6 +26,7 @@ namespace POGOLib.Official.Pokemon
         internal Map(Session session)
         {
             _session = session;
+            _cells = new RepeatedField<MapCell>();
         }
 
         /// <summary>

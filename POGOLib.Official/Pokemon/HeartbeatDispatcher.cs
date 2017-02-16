@@ -68,7 +68,14 @@ namespace POGOLib.Official.Pokemon
                 }
                 if (canRefresh)
                 {
-                    await Dispatch();
+                    try
+                    {
+                        await Dispatch();
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error($"Map refresh failed: {e}");
+                    }
                 }
 
                 // after first dispatch, signal as complete
