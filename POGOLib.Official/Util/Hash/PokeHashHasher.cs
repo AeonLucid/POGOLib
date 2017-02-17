@@ -29,7 +29,7 @@ namespace POGOLib.Official.Util.Hash
     {
         private const string PokeHashUrl = "https://pokehash.buddyauth.com/";
 
-        private const string PokeHashEndpoint = "api/v125/hash";
+        private const string PokeHashEndpoint = "api/v127_2/hash";
 
         private readonly List<PokeHashAuthKey> _authKeys;
 
@@ -80,9 +80,9 @@ namespace POGOLib.Official.Util.Hash
             _keySelection = new Semaphore(1, 1);
         }
 
-        public Version PokemonVersion { get; } = new Version("0.55.0");
+        public Version PokemonVersion { get; } = new Version("0.57.2");
 
-        public long Unknown25 { get; } = -9156899491064153954;
+        public long Unknown25 { get; } = -816976800928766045;
 
         public async Task<HashData> GetHashDataAsync(RequestEnvelope requestEnvelope, Signature signature, byte[] locationBytes, byte[][] requestsBytes, byte[] serializedTicket)
         {
