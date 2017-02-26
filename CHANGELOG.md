@@ -1,5 +1,14 @@
 # POGOLib Changelog
 
+## 1.3.0
+- Added PokeHash support.
+- Added "Unknown 8".
+- Updated dependencies.
+- Improved location fixes generation.
+- Improved `RefreshMapObjectsAsync` so it does not use `0` for all `SinceTimestampMs` fields anymore.
+- Migrated projects to VS2017 RC.
+- Removed xamarin demo project.
+
 ## 1.2.1
 - Fixed not being able to specify `DeviceInfo` for a `Session`.
 - Added version checking to `Session` Startup. Can be disabled using the `Configuration` class.
@@ -12,7 +21,7 @@
 - Updated `NiaHash` to work like PokemonGo IOS 1.15.0.
 
 ## 1.1.0
-- Added `GoogleLoginProvider` through an additional NuGet "POGOLib.Official.Google".
+- Added `GoogleLoginProvider` through an additional NuGet package "POGOLib.Official.Google".
 - Added a random IOS `DeviceInfo` generator.
 - Added an option to specify a `DeviceInfo` object in the `Session` constructor.
 - Updated methods / properties documentation.

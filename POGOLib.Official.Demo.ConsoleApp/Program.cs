@@ -194,7 +194,7 @@ namespace POGOLib.Official.Demo.ConsoleApp
         /// <summary>
         /// Login to PokémonGo and return an authenticated <see cref="Session" />.
         /// </summary>
-        /// <param name="loginProvider">Provider ID must be 'PTC' or 'Google'.</param>
+        /// <param name="loginProvider">Provider must be PTC or Google.</param>
         /// <param name="initLat">The initial latitude.</param>
         /// <param name="initLong">The initial longitude.</param>
         /// <param name="mayCache">Can we cache the <see cref="AccessToken" /> to a local file?</param>

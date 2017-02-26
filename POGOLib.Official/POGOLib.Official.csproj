@@ -3,7 +3,6 @@
   <PropertyGroup>
     <Description>A community-driven PokemonGo API Library written in C#. You can read the changelog here https://github.com/AeonLucid/POGOLib/blob/master/README.md.</Description>
     <AssemblyTitle>POGOLib.Official</AssemblyTitle>
-    <VersionPrefix>1.3.0-alpha</VersionPrefix>
     <Authors>AeonLucid</Authors>
     <TargetFramework>netstandard1.1</TargetFramework>
     <AssemblyName>POGOLib.Official</AssemblyName>
@@ -13,6 +12,7 @@
     <PackageProjectUrl>https://github.com/AeonLucid/POGOLib</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/AeonLucid/POGOLib</RepositoryUrl>
+    <Version>1.3.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
