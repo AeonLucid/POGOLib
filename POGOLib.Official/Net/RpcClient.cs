@@ -19,6 +19,7 @@ using POGOProtos.Networking.Responses;
 using POGOProtos.Enums;
 using POGOProtos.Networking.Platform;
 using POGOProtos.Networking.Platform.Requests;
+using POGOProtos.Networking.Platform.Responses;
 
 namespace POGOLib.Official.Net
 {
@@ -45,6 +46,8 @@ namespace POGOLib.Official.Net
         /// </summary>
         private string _requestUrl;
 
+        private string _mapKey;
+
         private readonly List<RequestType> _defaultRequests = new List<RequestType>
         {
             RequestType.CheckChallenge,
@@ -64,6 +67,7 @@ namespace POGOLib.Official.Net
         {
             _session = session;
             _rpcEncryption = new RpcEncryption(session);
+            _mapKey = string.Empty;
         }
 
         internal DateTime LastRpcRequest { get; private set; }
@@ -440,7 +444,7 @@ namespace POGOLib.Official.Net
                     Type = PlatformRequestType.UnknownPtr8,
                     RequestMessage = new UnknownPtr8Request
                     {
-                        Message = "e40c3e64817d9c96d99d28f6488a2efc40b11046"
+                        Message = _mapKey
                     }.ToByteString()
                 });
             }
@@ -601,6 +605,13 @@ namespace POGOLib.Official.Net
                             Logger.Debug("Received a new AuthTicket from Pokemon!");
                         }
 
+                        var mapPlatform = responseEnvelope.PlatformReturns.FirstOrDefault(x => x.Type == PlatformRequestType.UnknownPtr8);
+                        if (mapPlatform != null)
+                        {
+                            var unknownPtr8Response = UnknownPtr8Response.Parser.ParseFrom(mapPlatform.Response);
+                            _mapKey = unknownPtr8Response.Message;
+                        }
+                        
                         return HandleResponseEnvelope(requestEnvelope, responseEnvelope);
                     }
                 }
