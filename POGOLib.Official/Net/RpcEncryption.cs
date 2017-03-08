@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -102,7 +102,10 @@ namespace POGOLib.Official.Net
                 // Apply current location fix position.
                 timestampSnapshot += i * millisecondsPerFix;
                 // Apply an offset.
-                timestampSnapshot += _session.Random.Next(0, (int) ((i + 1) * playAroundWindowPart));
+
+                var MaxVal = ((i + 1) * playAroundWindowPart);
+
+                timestampSnapshot += _session.Random.Next(0,  (MaxVal>0)? ((int)MaxVal):100 );
 
                 locationFixes.Add(new LocationFix
                 {

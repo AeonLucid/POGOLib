@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using GeoCoordinatePortable;
 using Google.Protobuf;
 using Newtonsoft.Json;
 using POGOLib.Official.Logging;
@@ -67,7 +67,7 @@ namespace POGOLib.Official.Net
         {
             _session = session;
             _rpcEncryption = new RpcEncryption(session);
-            _mapKey = string.Empty;
+            _mapKey = "90f6a704505bccac73cec99b07794993e6fd5a12"; //unknownPtr8 for .57.4
         }
 
         internal DateTime LastRpcRequest { get; private set; }
@@ -114,6 +114,7 @@ namespace POGOLib.Official.Net
         {
             // Send GetPlayer to check if we're connected and authenticated
             GetPlayerResponse playerResponse;
+            var tries = 5;
             do
             {
                 var response = await SendRemoteProcedureCallAsync(new[]
@@ -136,11 +137,12 @@ namespace POGOLib.Official.Net
                 {
                     await Task.Delay(TimeSpan.FromMilliseconds(1000));
                 }
-            } while (!playerResponse.Success);
+                tries --;
+            } while (!playerResponse.Success && tries > 0);
 
             _session.Player.Data = playerResponse.PlayerData;
 
-            return true;
+            return (tries>0);
         }
 
         // TODO: Reimplement

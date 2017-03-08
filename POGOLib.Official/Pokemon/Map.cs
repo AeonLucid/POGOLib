@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.Linq;
-using GeoCoordinatePortable;
 using Google.Protobuf.Collections;
 using POGOLib.Official.Net;
 using POGOProtos.Map;
