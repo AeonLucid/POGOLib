@@ -28,7 +28,7 @@ namespace POGOLib.Official.Util.Hash
     {
         private const string PokeHashUrl = "https://pokehash.buddyauth.com/";
 
-        private const string PokeHashEndpoint = "api/v127_2/hash";
+        private const string PokeHashEndpoint = "api/v127_4/hash";
 
         private readonly List<PokeHashAuthKey> _authKeys;
 
@@ -79,7 +79,7 @@ namespace POGOLib.Official.Util.Hash
             _keySelection = new Semaphore(1, 1);
         }
 
-        public Version PokemonVersion { get; } = new Version("0.57.2");
+        public Version PokemonVersion { get; } = new Version("0.57.4");
 
         public long Unknown25 { get; } = -816976800928766045;
 
@@ -155,7 +155,7 @@ namespace POGOLib.Official.Util.Hash
                 {
                     _keySelection.WaitOne();
 
-                    Logger.Warn(">>> Entering key selection.");
+//                    Logger.Warn(">>> Entering key selection.");
                     
                     var availableKeys = _authKeys.Where(x => x.Requests < x.MaxRequestCount).ToArray();
                     if (availableKeys.Length > 0)
@@ -163,7 +163,7 @@ namespace POGOLib.Official.Util.Hash
                         authKey = availableKeys.First();
                         authKey.Requests += 1;
 
-                        Logger.Warn("Found available auth key.");
+//                        Logger.Warn("Found available auth key.");
 
                         // If the auth key has not been initialize yet, we need to have control a bit longer
                         // to configure it properly.
@@ -172,7 +172,7 @@ namespace POGOLib.Official.Util.Hash
                     }
                     else
                     {
-                        Logger.Warn("No available auth keys found.");
+//                        Logger.Warn("No available auth keys found.");
 
                         authKey = _authKeys
                             .OrderBy(x => x.RatePeriodEnd)
@@ -180,7 +180,7 @@ namespace POGOLib.Official.Util.Hash
 
                         var sleepTime = (int) Math.Ceiling(authKey.RatePeriodEnd.Subtract(DateTime.UtcNow).TotalMilliseconds);
 
-                        Logger.Warn($"Key selection is sleeping for {sleepTime}ms.");
+//                        Logger.Warn($"Key selection is sleeping for {sleepTime}ms.");
 
                         await Task.Delay(sleepTime);
 
@@ -189,20 +189,20 @@ namespace POGOLib.Official.Util.Hash
                         // We have to receive the new rate period end.
                         extendedSelection = true;
 
-                        Logger.Warn("Key selection is done with sleeping.");
+//                        Logger.Warn("Key selection is done with sleeping.");
                     }
                 }
                 finally
                 {
                     if (!extendedSelection)
                     {
-                        Logger.Warn("<<< Exiting key selection.");
+//                        Logger.Warn("<<< Exiting key selection.");
 
                         _keySelection.Release();
                     }
                     else
                     {
-                        Logger.Warn("=== Holding key selection.");
+//                        Logger.Warn("=== Holding key selection.");
                     }
                 }
                 
@@ -245,7 +245,7 @@ namespace POGOLib.Official.Util.Hash
                     var ratePeriodEnd = TimeUtil.GetDateTimeFromSeconds(ratePeriodEndSeconds);
                     if (ratePeriodEnd > authKey.RatePeriodEnd)
                     {
-                        Logger.Warn($"[AuthKey: {authKey.AuthKey}] {authKey.RatePeriodEnd} increased to {ratePeriodEnd}.");
+//                        Logger.Warn($"[AuthKey: {authKey.AuthKey}] {authKey.RatePeriodEnd} increased to {ratePeriodEnd}.");
 
                         authKey.RatePeriodEnd = ratePeriodEnd;
                     }
@@ -256,7 +256,7 @@ namespace POGOLib.Official.Util.Hash
                 {
                     if (extendedSelection)
                     {
-                        Logger.Warn("<<< Exiting extended key selection.");
+//                        Logger.Warn("<<< Exiting extended key selection.");
 
                         _keySelection.Release();
                     }
