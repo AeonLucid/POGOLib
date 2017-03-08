@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Device.Location;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using GeoCoordinatePortable;
 using POGOLib.Official.Logging;
 using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net.Authentication.Data;
@@ -13,7 +13,6 @@ using POGOLib.Official.Pokemon;
 using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
 using POGOProtos.Settings;
-using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 namespace POGOLib.Official.Net
 {
@@ -42,11 +41,11 @@ namespace POGOLib.Official.Net
         // public IDataCache DataCache { get; set; } = new MemoryDataCache();
         // public Templates Templates { get; private set; }
 
-        internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate, DeviceInfo deviceInfo = null)
+        internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate, POGOProtos.Networking.Envelopes.Signature.Types.DeviceInfo deviceInfo = null)
         {
             if (!ValidLoginProviders.Contains(loginProvider.ProviderId))
             {
-                throw new ArgumentException($"LoginProvider ID must be one of the following: {string.Join(", ", ValidLoginProviders)}");
+                throw new ArgumentException("LoginProvider ID must be one of the following: "+string.Join(", ", ValidLoginProviders));
             }
 
             HttpClient = new HttpClient(new HttpClientHandler
@@ -78,7 +77,7 @@ namespace POGOLib.Official.Net
         /// <summary>
         /// Gets the <see cref="DeviceInfo"/> used by <see cref="RpcEncryption"/>.
         /// </summary>
-        public DeviceInfo DeviceInfo { get; private set; }
+        public POGOProtos.Networking.Envelopes.Signature.Types.DeviceInfo DeviceInfo { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="ILoginProvider"/> used to obtain an <see cref="AccessToken"/>.
@@ -115,16 +114,12 @@ namespace POGOLib.Official.Net
         public async Task<bool> StartupAsync()
         {
             if (!Configuration.IgnoreHashVersion)
-            {
-                await CheckHasherVersion();
-            }
+                CheckHasherVersion().Wait();
 
-            if (!await RpcClient.StartupAsync().ConfigureAwait(false))
-            {
+            if (!RpcClient.StartupAsync().Result)
                 return false;
-            }
 
-            await _heartbeat.StartDispatcher().ConfigureAwait(false);
+            _heartbeat.StartDispatcher().Wait();
 
             return true;
         }
@@ -149,7 +144,9 @@ namespace POGOLib.Official.Net
             var result = Configuration.Hasher.PokemonVersion.CompareTo(pogoVersion);
             if (result != 0)
             {
-                throw new HashVersionMismatchException($"The version of the {nameof(Configuration.Hasher)} ({Configuration.Hasher.PokemonVersion}) does not match the minimal API version of PokemonGo ({pogoVersion}). Set 'Configuration.IgnoreHashVersion' to true if you want to disable the version check.");
+                var str1 = "Set 'Configuration.IgnoreHashVersion' to true if you want to disable the version check.";
+                var str2 = $"The version of the {nameof(Configuration.Hasher)} ({Configuration.Hasher.PokemonVersion}) does not match the minimal API version of PokemonGo ({pogoVersion}). {str1}";
+                throw new HashVersionMismatchException(str2);
             }
         }
 
