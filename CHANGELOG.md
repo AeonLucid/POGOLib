@@ -1,5 +1,8 @@
 # POGOLib Changelog
 
+## 1.3.1
+- Updated PokeHash to 0.57.4.
+
 ## 1.3.0
 - Added PokeHash support.
 - Added "Unknown 8".
