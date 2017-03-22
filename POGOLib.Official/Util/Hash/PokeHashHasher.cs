@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -21,8 +22,8 @@ namespace POGOLib.Official.Util.Hash
     ///     to buy an API key, go to this url.
     ///     https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer
     /// 
-    ///     Android version: 0.51.0
-    ///     IOS version: 1.21.0
+    ///     Android version: 0.57.4
+    ///     IOS version: 1.27.1
     /// </summary>
     public class PokeHashHasher : IHasher
     {
@@ -218,9 +219,12 @@ namespace POGOLib.Official.Util.Hash
                     int rateRequestsRemaining;
                     int ratePeriodEndSeconds;
 
-                    if (response.Headers.TryGetValues("X-MaxRequestCount", out IEnumerable<string> maxRequestsValue) &&
-                        response.Headers.TryGetValues("X-RateRequestsRemaining", out IEnumerable<string> requestsRemainingValue) &&
-                        response.Headers.TryGetValues("X-RatePeriodEnd", out IEnumerable<string> ratePeriodEndValue))
+                    IEnumerable<string> maxRequestsValue;
+                    IEnumerable<string> requestsRemainingValue;
+                    IEnumerable<string> ratePeriodEndValue;
+                    if (response.Headers.TryGetValues("X-MaxRequestCount", out  maxRequestsValue) &&
+                        response.Headers.TryGetValues("X-RateRequestsRemaining", out  requestsRemainingValue) &&
+                        response.Headers.TryGetValues("X-RatePeriodEnd", out  ratePeriodEndValue))
                     {
                         if (!int.TryParse(maxRequestsValue.First(), out maxRequestCount) ||
                             !int.TryParse(requestsRemainingValue.First(), out rateRequestsRemaining) ||

@@ -114,6 +114,7 @@ namespace POGOLib.Official.Net
         {
             // Send GetPlayer to check if we're connected and authenticated
             GetPlayerResponse playerResponse;
+            var tries = 5;
             do
             {
                 var response = await SendRemoteProcedureCallAsync(new[]
@@ -136,11 +137,12 @@ namespace POGOLib.Official.Net
                 {
                     await Task.Delay(TimeSpan.FromMilliseconds(1000));
                 }
-            } while (!playerResponse.Success);
+                tries --;
+            } while (!playerResponse.Success && tries > 0);
 
             _session.Player.Data = playerResponse.PlayerData;
 
-            return true;
+            return (tries>0);
         }
 
         // TODO: Reimplement

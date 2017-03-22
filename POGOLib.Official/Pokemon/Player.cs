@@ -31,6 +31,7 @@ namespace POGOLib.Official.Pokemon
         /// </summary>
         public double Longitude => Coordinate.Longitude;
 
+        public double Altitude => Coordinate.Altitude;
         /// <summary>
         ///     Gets the <see cref="Inventory" /> of the <see cref="Player" />
         /// </summary>
