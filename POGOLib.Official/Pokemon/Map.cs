@@ -39,7 +39,7 @@ namespace POGOLib.Official.Pokemon
             internal set
             {
                 _cells = value;
-                Update?.Invoke(this, EventArgs.Empty);
+                Update?.Invoke(_session, EventArgs.Empty);
             }
         }
 
