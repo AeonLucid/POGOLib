@@ -147,7 +147,7 @@ namespace POGOLib.Official.Net
 
             var pogoVersion = new Version(pogoVersionRaw);
             var result = Configuration.Hasher.PokemonVersion.CompareTo(pogoVersion);
-            if (result != 0)
+            if (result < 0)
             {
                 throw new HashVersionMismatchException($"The version of the {nameof(Configuration.Hasher)} ({Configuration.Hasher.PokemonVersion}) does not match the minimal API version of PokemonGo ({pogoVersion}). Set 'Configuration.IgnoreHashVersion' to true if you want to disable the version check.");
             }
