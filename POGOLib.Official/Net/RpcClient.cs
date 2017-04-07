@@ -368,8 +368,7 @@ namespace POGOLib.Official.Net
                     }.ToByteString()
                 });
             }
-
-
+            
             //If Incense is active we add this:
             //request.Add(new Request
             //{
@@ -509,6 +508,22 @@ namespace POGOLib.Official.Net
         {
             try
             {
+                switch (_session.State)
+                {
+                    case SessionState.Stopped:
+                        Logger.Error("We tried to send a request while the session was stopped.");
+                        return null;
+
+                    case SessionState.Paused:
+                        var requests = requestEnvelope.Requests.Select(x => x.RequestType).ToList();
+                        if (requests.Count != 1 || requests[0] != RequestType.VerifyChallenge) 
+                        {
+                            Logger.Error("We tried to send a request while the session was paused. The only request allowed is VerifyChallenge.");
+                            return null;
+                        }
+                        break;
+                }
+
                 using (var requestData = new ByteArrayContent(requestEnvelope.ToByteArray()))
                 {
                     Logger.Debug($"Sending RPC Request: '{string.Join(", ", requestEnvelope.Requests.Select(x => x.RequestType))}'");

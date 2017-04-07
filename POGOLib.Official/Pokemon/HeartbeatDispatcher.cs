@@ -89,17 +89,20 @@ namespace POGOLib.Official.Pokemon
                 // cancelled
                 catch (OperationCanceledException)
                 {
-                    return;
+                    break;
                 }
             }
+
+            Logger.Debug("Heartbeat got cancelled");
         }
 
-        internal async Task StartDispatcher()
+        internal async Task StartDispatcherAsync()
         {
             if (_heartbeatTask != null)
             {
                 throw new Exception("Heartbeat task already running");
             }
+
             var firstRefreshCompleted = new TaskCompletionSource<bool>();
             _heartbeatCancellation = new CancellationTokenSource();
             _heartbeatTask = CheckDispatch(firstRefreshCompleted);

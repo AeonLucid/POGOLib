@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using GeoCoordinatePortable;
+using POGOLib.Official.Exceptions;
 using POGOLib.Official.Logging;
 using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net.Authentication.Data;
@@ -22,7 +22,8 @@ namespace POGOLib.Official.Net
     /// </summary>
     public class Session : IDisposable
     {
-        
+        private SessionState _state;
+
         /// <summary>
         /// This is the <see cref="HeartbeatDispatcher" /> which is responsible for retrieving events and updating gps location.
         /// </summary>
@@ -49,13 +50,15 @@ namespace POGOLib.Official.Net
                 throw new ArgumentException($"LoginProvider ID must be one of the following: {string.Join(", ", ValidLoginProviders)}");
             }
 
+            State = SessionState.Stopped;
+
             HttpClient = new HttpClient(new HttpClientHandler
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             });
             HttpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("Niantic App");
             HttpClient.DefaultRequestHeaders.ExpectContinue = false;
-            
+
             DeviceInfo = deviceInfo ?? DeviceInfoUtil.GetRandomDevice(this);
             AccessToken = accessToken;
             LoginProvider = loginProvider;
@@ -63,6 +66,20 @@ namespace POGOLib.Official.Net
             Map = new Map(this);
             RpcClient = new RpcClient(this);
             _heartbeat = new HeartbeatDispatcher(this);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="SessionState"/> of the <see cref="Session"/>.
+        /// </summary>
+        public SessionState State
+        {
+            get { return _state; }
+            private set
+            {
+                _state = value;
+
+                Logger.Debug($"Sesion state was set to {_state}.");
+            }
         }
 
         /// <summary>
@@ -114,23 +131,62 @@ namespace POGOLib.Official.Net
 
         public async Task<bool> StartupAsync()
         {
+            if (State != SessionState.Stopped)
+            {
+                throw new SessionStateException("The session has already been started.");
+            }
+
             if (!Configuration.IgnoreHashVersion)
             {
                 await CheckHasherVersion();
             }
 
-            if (!await RpcClient.StartupAsync().ConfigureAwait(false))
+            State = SessionState.Started;
+
+            if (!await RpcClient.StartupAsync())
             {
                 return false;
             }
 
-            await _heartbeat.StartDispatcher().ConfigureAwait(false);
+            await _heartbeat.StartDispatcherAsync();
 
             return true;
         }
 
+        public void Pause()
+        {
+            if (State != SessionState.Started &&
+                State != SessionState.Resumed)
+            {
+                throw new SessionStateException("The session is not running.");
+            }
+            
+            State = SessionState.Paused;
+
+            _heartbeat.StopDispatcher();
+        }
+
+        public async Task ResumeAsync()
+        {
+            if (State != SessionState.Paused)
+            {
+                throw new SessionStateException("The session is not paused.");
+            }
+            
+            State = SessionState.Resumed;
+
+            await _heartbeat.StartDispatcherAsync();
+        }
+
         public void Shutdown()
         {
+            if (State == SessionState.Stopped)
+            {
+                throw new SessionStateException("The session has already been stopped.");
+            }
+
+            State = SessionState.Stopped;
+            
             _heartbeat.StopDispatcher();
         }
 
