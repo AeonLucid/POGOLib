@@ -1,5 +1,13 @@
 # POGOLib Changelog
 
+## 1.4.0
+- Added `Pause()` and `ResumeAsync()` methods to `Session`.
+- Updated PokeHash to 0.59.1 [#79](https://github.com/AeonLucid/POGOLib/pull/79).
+- Updated Encryption / Decryption to TwoFish [#79](https://github.com/AeonLucid/POGOLib/pull/79).
+- Fixed [#80](https://github.com/AeonLucid/POGOLib/issues/80).
+- Fixed [#63](https://github.com/AeonLucid/POGOLib/issues/63).
+- **Moved all events to `Session`**.
+
 ## 1.3.1
 - Updated PokeHash to 0.57.4.
 
