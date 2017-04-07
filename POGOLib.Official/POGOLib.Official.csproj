@@ -8,11 +8,13 @@
     <AssemblyName>POGOLib.Official</AssemblyName>
     <PackageId>POGOLib.Official</PackageId>
     <PackageTags>Pokemon;POGOLib;netstandard</PackageTags>
-    <PackageIconUrl>http://i.imgur.com/7vJxPxu.png</PackageIconUrl>
+    <PackageIconUrl>http://i.imgur.com/sIso99f.jpg</PackageIconUrl>
     <PackageProjectUrl>https://github.com/AeonLucid/POGOLib</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/AeonLucid/POGOLib</RepositoryUrl>
-    <Version>1.3.1</Version>
+    <Version>1.4.0</Version>
+    <AssemblyVersion>1.4.0.0</AssemblyVersion>
+    <FileVersion>1.4.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

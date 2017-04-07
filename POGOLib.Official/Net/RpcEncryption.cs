@@ -17,7 +17,6 @@ namespace POGOLib.Official.Net
 {
     internal class RpcEncryption
     {
-
         /// <summary>
         /// The authenticated <see cref="Session"/>.
         /// </summary>
@@ -51,8 +50,7 @@ namespace POGOLib.Official.Net
         }
 
         private long TimestampSinceStartMs => _stopwatch.ElapsedMilliseconds;
-
-
+        
         /// <summary>
         /// Generates a few random <see cref="LocationFix"/>es to act like a real GPS sensor.
         /// </summary>
@@ -78,7 +76,7 @@ namespace POGOLib.Official.Net
             //      Not so relevant when starting up.
             var totalMilliseconds = providerCount * millisecondsPerFix;
             var baseTimestampSnapshot = Math.Max(timestampSinceStart - totalMilliseconds, 0);
-            var playAroundWindow = baseTimestampSnapshot - _lastTimestampSinceStart;
+            var playAroundWindow = Math.Max(0, baseTimestampSnapshot - _lastTimestampSinceStart);
 
             if (playAroundWindow == 0 && providerCount == 1 && millisecondsPerFix >= timestampSinceStart)
             {
@@ -95,7 +93,7 @@ namespace POGOLib.Official.Net
             var playAroundWindowPart = playAroundWindow != 0
                 ? playAroundWindow / providerCount
                 : 1;
-
+            
             for (var i = 0; i < providerCount; i++)
             {
                 var timestampSnapshot = baseTimestampSnapshot;
@@ -103,7 +101,7 @@ namespace POGOLib.Official.Net
                 timestampSnapshot += i * millisecondsPerFix;
                 // Apply an offset.
                 timestampSnapshot += _session.Random.Next(0, (int) ((i + 1) * playAroundWindowPart));
-
+                
                 locationFixes.Add(new LocationFix
                 {
                     TimestampSnapshot = (ulong) timestampSnapshot,
@@ -209,6 +207,5 @@ namespace POGOLib.Official.Net
             
             return encryptedSignature;
         }
-
     }
 }
