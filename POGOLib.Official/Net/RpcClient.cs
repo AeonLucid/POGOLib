@@ -466,14 +466,14 @@ namespace POGOLib.Official.Net
             });
         }
 
-        public async Task<ByteString> SendRemoteProcedureCallAsync(Request request)
+        public async Task<ByteString> SendRemoteProcedureCallAsync(Request request, bool addDefaultRequests = true)
         {
-            return await SendRemoteProcedureCall(await GetRequestEnvelopeAsync(new[] {request}, true));
+            return await SendRemoteProcedureCall(await GetRequestEnvelopeAsync(new[] {request}, addDefaultRequests));
         }
 
-        public async Task<ByteString> SendRemoteProcedureCallAsync(Request[] request)
+        public async Task<ByteString> SendRemoteProcedureCallAsync(Request[] request, bool addDefaultRequests = false)
         {
-            return await SendRemoteProcedureCall(await GetRequestEnvelopeAsync(request, false));
+            return await SendRemoteProcedureCall(await GetRequestEnvelopeAsync(request, addDefaultRequests));
         }
 
         private Task<ByteString> SendRemoteProcedureCall(RequestEnvelope requestEnvelope)
@@ -727,7 +727,7 @@ namespace POGOLib.Official.Net
 
                 switch (responseIndex.Value)
                 {
-                    case RequestType.GetHatchedEggs: // Get_Hatched_Eggs
+                    case RequestType.GetHatchedEggs:
                         var hatchedEggs = GetHatchedEggsResponse.Parser.ParseFrom(bytes);
                         if (hatchedEggs.Success)
                         {
@@ -735,7 +735,7 @@ namespace POGOLib.Official.Net
                         }
                         break;
 
-                    case RequestType.GetInventory: // Get_Inventory
+                    case RequestType.GetInventory:
                         var inventory = GetInventoryResponse.Parser.ParseFrom(bytes);
                         if (inventory.Success)
                         {
@@ -753,7 +753,7 @@ namespace POGOLib.Official.Net
                         }
                         break;
 
-                    case RequestType.CheckAwardedBadges: // Check_Awarded_Badges
+                    case RequestType.CheckAwardedBadges:
                         var awardedBadges = CheckAwardedBadgesResponse.Parser.ParseFrom(bytes);
                         if (awardedBadges.Success)
                         {
@@ -761,7 +761,7 @@ namespace POGOLib.Official.Net
                         }
                         break;
 
-                    case RequestType.DownloadSettings: // Download_Settings
+                    case RequestType.DownloadSettings:
                         var downloadSettings = DownloadSettingsResponse.Parser.ParseFrom(bytes);
                         if (string.IsNullOrEmpty(downloadSettings.Error))
                         {
@@ -784,16 +784,13 @@ namespace POGOLib.Official.Net
                             Logger.Debug($"DownloadSettingsResponse.Error: '{downloadSettings.Error}'");
                         }
                         break;
-
-                    // TODO: Let the developer know about this somehow.
+                        
                     case RequestType.CheckChallenge:
                         var checkChallenge = CheckChallengeResponse.Parser.ParseFrom(bytes);
                         if (checkChallenge.ShowChallenge)
                         {
                             _session.Pause();
-                            
-                            Logger.Warn($"Received Captcha on {_session.AccessToken.Username}");
-                            Logger.Warn(JsonConvert.SerializeObject(checkChallenge, Formatting.Indented));
+                            _session.OnCaptchaReceived(checkChallenge.ChallengeUrl);
                         }
                         break;
                 }

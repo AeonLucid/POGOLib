@@ -79,7 +79,7 @@ namespace POGOLib.Official.Net
             {
                 _state = value;
 
-                Logger.Debug($"Sesion state was set to {_state}.");
+                Logger.Debug($"Session state was set to {_state}.");
             }
         }
 
@@ -262,11 +262,18 @@ namespace POGOLib.Official.Net
             MapUpdate?.Invoke(this, EventArgs.Empty);
         }
 
+        internal void OnCaptchaReceived(string url)
+        {
+            CaptchaReceived?.Invoke(this, new CaptchaEventArgs(url));
+        }
+
         public event EventHandler<EventArgs> AccessTokenUpdated;
 
         public event EventHandler<EventArgs> InventoryUpdate;
 
         public event EventHandler<EventArgs> MapUpdate;
+
+        public event EventHandler<CaptchaEventArgs> CaptchaReceived;
         #endregion
 
         public void Dispose()
