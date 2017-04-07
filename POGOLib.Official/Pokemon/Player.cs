@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using GeoCoordinatePortable;
+using POGOLib.Official.Net;
 using POGOProtos.Data;
 using POGOProtos.Data.Player;
 
@@ -8,11 +9,11 @@ namespace POGOLib.Official.Pokemon
 {
     public class Player
     {
-        internal Player(GeoCoordinate coordinate)
+        internal Player(Session session, GeoCoordinate coordinate)
         {
             Coordinate = coordinate;
-            Inventory = new Inventory();
-            Inventory.Update += InventoryOnUpdate;
+            Inventory = new Inventory(session);
+            session.InventoryUpdate += InventoryOnUpdate;
         }
 
         /// <summary>

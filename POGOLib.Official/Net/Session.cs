@@ -9,6 +9,7 @@ using POGOLib.Official.Exceptions;
 using POGOLib.Official.Logging;
 using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net.Authentication.Data;
+using POGOLib.Official.Net.Captcha;
 using POGOLib.Official.Pokemon;
 using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
@@ -62,7 +63,7 @@ namespace POGOLib.Official.Net
             DeviceInfo = deviceInfo ?? DeviceInfoUtil.GetRandomDevice(this);
             AccessToken = accessToken;
             LoginProvider = loginProvider;
-            Player = new Player(geoCoordinate);
+            Player = new Player(this, geoCoordinate);
             Map = new Map(this);
             RpcClient = new RpcClient(this);
             _heartbeat = new HeartbeatDispatcher(this);
@@ -245,13 +246,29 @@ namespace POGOLib.Official.Net
             ReauthenticateMutex.Release();
         }
 
+        #region Events
         private void OnAccessTokenUpdated()
         {
             AccessTokenUpdated?.Invoke(this, EventArgs.Empty);
         }
 
+        internal void OnInventoryUpdate()
+        {
+            InventoryUpdate?.Invoke(this, EventArgs.Empty);
+        }
+
+        internal void OnMapUpdate()
+        {
+            MapUpdate?.Invoke(this, EventArgs.Empty);
+        }
+
         public event EventHandler<EventArgs> AccessTokenUpdated;
-        
+
+        public event EventHandler<EventArgs> InventoryUpdate;
+
+        public event EventHandler<EventArgs> MapUpdate;
+        #endregion
+
         public void Dispose()
         {
             Dispose(true);

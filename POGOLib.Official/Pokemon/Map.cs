@@ -39,7 +39,7 @@ namespace POGOLib.Official.Pokemon
             internal set
             {
                 _cells = value;
-                Update?.Invoke(this, EventArgs.Empty);
+                _session.OnMapUpdate();
             }
         }
 
@@ -64,7 +64,5 @@ namespace POGOLib.Official.Pokemon
 
             return sorted;
         }
-
-        public event EventHandler<EventArgs> Update;
     }
 }

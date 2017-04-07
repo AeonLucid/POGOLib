@@ -258,30 +258,38 @@ namespace POGOLib.Official.Net
                 }.ToByteString()
             });
 
-            var mapObjects = GetMapObjectsResponse.Parser.ParseFrom(response);
-            if (mapObjects.Status == MapObjectsStatus.Success)
+            if (response != null)
             {
-                // TODO: Cleaner?
-                var pokemonCatchable = mapObjects.MapCells.SelectMany(c => c.CatchablePokemons).Count();
-                var pokemonWild = mapObjects.MapCells.SelectMany(c => c.WildPokemons).Count();
-                var pokemonNearby = mapObjects.MapCells.SelectMany(c => c.NearbyPokemons).Count();
-                var pokemonCount = pokemonCatchable + pokemonWild + pokemonNearby;
-
-                Logger.Debug($"Received '{mapObjects.MapCells.Count}' map cells.");
-                Logger.Debug($"Received '{pokemonCount}' pokemons. Catchable({pokemonCatchable}) Wild({pokemonWild}) Nearby({pokemonNearby})");
-                Logger.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.Forts).Count()}' forts.");
-
-                if (mapObjects.MapCells.Count == 0)
+                var mapObjects = GetMapObjectsResponse.Parser.ParseFrom(response);
+                if (mapObjects.Status == MapObjectsStatus.Success)
                 {
-                    Logger.Error("We received 0 map cells, are your GPS coordinates correct?");
-                    return;
+                    // TODO: Cleaner?
+                    var pokemonCatchable = mapObjects.MapCells.SelectMany(c => c.CatchablePokemons).Count();
+                    var pokemonWild = mapObjects.MapCells.SelectMany(c => c.WildPokemons).Count();
+                    var pokemonNearby = mapObjects.MapCells.SelectMany(c => c.NearbyPokemons).Count();
+                    var pokemonCount = pokemonCatchable + pokemonWild + pokemonNearby;
+
+                    Logger.Debug($"Received '{mapObjects.MapCells.Count}' map cells.");
+                    Logger.Debug($"Received '{pokemonCount}' pokemons. Catchable({pokemonCatchable}) Wild({pokemonWild}) Nearby({pokemonNearby})");
+                    Logger.Debug($"Received '{mapObjects.MapCells.SelectMany(c => c.Forts).Count()}' forts.");
+
+                    if (mapObjects.MapCells.Count == 0)
+                    {
+                        Logger.Error("We received 0 map cells, are your GPS coordinates correct?");
+                        return;
+                    }
+
+                    _session.Map.Cells = mapObjects.MapCells;
                 }
-                
-                _session.Map.Cells = mapObjects.MapCells;
+                else
+                {
+                    Logger.Error($"GetMapObjects status is: '{mapObjects.Status}'.");
+                }
             }
-            else
+            else if (_session.State != SessionState.Paused)
             {
-                Logger.Error($"GetMapObjects status is: '{mapObjects.Status}'.");
+                // POGOLib didn't expect this.
+                throw new NullReferenceException(nameof(response));
             }
         }
 
@@ -783,6 +791,8 @@ namespace POGOLib.Official.Net
                         var checkChallenge = CheckChallengeResponse.Parser.ParseFrom(bytes);
                         if (checkChallenge.ShowChallenge)
                         {
+                            _session.Pause();
+                            
                             Logger.Warn($"Received Captcha on {_session.AccessToken.Username}");
                             Logger.Warn(JsonConvert.SerializeObject(checkChallenge, Formatting.Indented));
                         }
