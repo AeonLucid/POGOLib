@@ -31,7 +31,7 @@ namespace POGOLib.Official.Pokemon
         /// </summary>
         private async Task CheckDispatch(TaskCompletionSource<bool> firstRefreshCompleted)
         {
-            while (!_heartbeatCancellation.IsCancellationRequested)
+            while (!_heartbeatCancellation.IsCancellationRequested && (_session.State == SessionState.Started || _session.State == SessionState.Resumed))
             {
                 var canRefresh = false;
                 if (_session.GlobalSettings != null)
