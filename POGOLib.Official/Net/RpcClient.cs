@@ -25,7 +25,6 @@ namespace POGOLib.Official.Net
 {
     public class RpcClient : IDisposable
     {
-
         /// <summary>
         ///     The authenticated <see cref="Session" />.
         /// </summary>
@@ -804,15 +803,13 @@ namespace POGOLib.Official.Net
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        internal void Dispose(bool disposing)
         {
-            if (disposing)
-            {
+            if (!disposing) return;
 
-            }
+            RpcQueueMutex?.Dispose();
         }
     }
 }
