@@ -60,7 +60,7 @@ namespace POGOLib.Official.Net
 
         private readonly ConcurrentDictionary<RequestEnvelope, ByteString> _rpcResponses = new ConcurrentDictionary<RequestEnvelope, ByteString>();
 
-        private static readonly Semaphore RpcQueueMutex = new Semaphore(1, 1);
+        private readonly Semaphore _rpcQueueMutex = new Semaphore(1, 1);
 
         internal RpcClient(Session session)
         {
@@ -484,7 +484,7 @@ namespace POGOLib.Official.Net
 
                 try
                 {
-                    RpcQueueMutex.WaitOne();
+                    _rpcQueueMutex.WaitOne();
 
                     RequestEnvelope processRequestEnvelope;
                     while (_rpcQueue.TryDequeue(out processRequestEnvelope))
@@ -506,7 +506,7 @@ namespace POGOLib.Official.Net
                 }
                 finally
                 {
-                    RpcQueueMutex.Release();
+                    _rpcQueueMutex.Release();
                 }
             });
         }
@@ -806,7 +806,7 @@ namespace POGOLib.Official.Net
         {
             if (!disposing) return;
 
-            RpcQueueMutex?.Dispose();
+            _rpcQueueMutex?.Dispose();
         }
     }
 }

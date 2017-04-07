@@ -109,8 +109,8 @@ namespace POGOLib.Official.Demo.ConsoleApp.Multiple
                         SaveAccessToken(session.AccessToken);
 
                         session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
-                        session.Player.Inventory.Update += InventoryOnUpdate;
-                        session.Map.Update += MapOnUpdate;
+                        session.InventoryUpdate += InventoryOnUpdate;
+                        session.MapUpdate += MapOnUpdate;
 
                         // Send initial requests and start HeartbeatDispatcher.
                         // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
