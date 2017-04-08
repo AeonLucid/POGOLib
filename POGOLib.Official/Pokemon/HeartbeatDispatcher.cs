@@ -84,7 +84,7 @@ namespace POGOLib.Official.Pokemon
 
                 try
                 {
-                    await Task.Delay(TimeSpan.FromMilliseconds(1000), _heartbeatCancellation.Token);
+                    await Task.Delay(1000, _heartbeatCancellation.Token);
                 }
                 // cancelled
                 catch (OperationCanceledException)

@@ -20,7 +20,6 @@ using POGOProtos.Enums;
 using POGOProtos.Networking.Platform;
 using POGOProtos.Networking.Platform.Requests;
 using POGOProtos.Networking.Platform.Responses;
-
 namespace POGOLib.Official.Net
 {
     public class RpcClient : IDisposable
@@ -113,6 +112,7 @@ namespace POGOLib.Official.Net
         {
             // Send GetPlayer to check if we're connected and authenticated
             GetPlayerResponse playerResponse;
+            var tries = 5;
             do
             {
                 var response = await SendRemoteProcedureCallAsync(new[]
@@ -133,13 +133,20 @@ namespace POGOLib.Official.Net
                 playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
                 if (!playerResponse.Success)
                 {
-                    await Task.Delay(TimeSpan.FromMilliseconds(1000));
+                    await Task.Delay(1000);
                 }
-            } while (!playerResponse.Success);
+                tries --;
+            } while (!playerResponse.Success && tries > 0);
+            
+            if ( playerResponse.Banned)
+                Logger.Error("Error: This account seems be banned");
+            
+            if ( playerResponse.Warn)
+                Logger.Warn("Warning: This account seems be flagged");
 
             _session.Player.Data = playerResponse.PlayerData;
 
-            return true;
+            return (tries>0);
         }
 
         // TODO: Reimplement
@@ -235,10 +242,12 @@ namespace POGOLib.Official.Net
             foreach (var cellId in cellIds)
             {
                 var cell = _session.Map.Cells.FirstOrDefault(x => x.S2CellId == cellId);
-
-                sinceTimeMs.Add(cell?.CurrentTimestampMs ?? 0);
+                if (cell!=null)
+                    sinceTimeMs.Add(cell.CurrentTimestampMs);
+                else
+                    sinceTimeMs.Add(0);
             }
-
+            
             var response = await SendRemoteProcedureCallAsync(new Request
             {
                 RequestType = RequestType.GetMapObjects,
@@ -256,7 +265,6 @@ namespace POGOLib.Official.Net
                     Longitude = _session.Player.Coordinate.Longitude
                 }.ToByteString()
             });
-
             if (response != null)
             {
                 var mapObjects = GetMapObjectsResponse.Parser.ParseFrom(response);
@@ -421,6 +429,7 @@ namespace POGOLib.Official.Net
             {
                 if (_session.AccessToken.IsExpired)
                 {
+                    Logger.Debug("Reauthenticating");
                     await _session.Reauthenticate();
                 }
 
@@ -468,6 +477,8 @@ namespace POGOLib.Official.Net
 
         public async Task<ByteString> SendRemoteProcedureCallAsync(Request request, bool addDefaultRequests = true)
         {
+            if (request==null)
+                return null;
             return await SendRemoteProcedureCall(await GetRequestEnvelopeAsync(new[] {request}, addDefaultRequests));
         }
 
@@ -480,6 +491,8 @@ namespace POGOLib.Official.Net
         {
             return Task.Run(async () =>
             {
+                if (requestEnvelope==null)
+                    return null;
                 _rpcQueue.Enqueue(requestEnvelope);
 
                 try
@@ -493,7 +506,11 @@ namespace POGOLib.Official.Net
                         if (diff < Configuration.ThrottleDifference)
                         {
                             var delay = Configuration.ThrottleDifference - diff + (int)(_session.Random.NextDouble() * 0);
-
+                            if (delay < 100)
+                                delay = _session.Random.Next(100,200);
+                            if (delay > 100000)
+                                delay = _session.Random.Next(100000,102000);
+                            Logger.Debug("SendRemoteProcedureCall Delay: " + delay);
                             await Task.Delay(delay);
                         }
 
@@ -533,8 +550,10 @@ namespace POGOLib.Official.Net
 
                 using (var requestData = new ByteArrayContent(requestEnvelope.ToByteArray()))
                 {
-                    Logger.Debug($"Sending RPC Request: '{string.Join(", ", requestEnvelope.Requests.Select(x => x.RequestType))}'");
-                    Logger.Debug($"=> Platform Request: '{string.Join(", ", requestEnvelope.PlatformRequests.Select(x => x.Type))}'");
+                    var requestTypes = string.Join(", ",requestEnvelope.Requests.Select(x => x.RequestType));
+                    Logger.Debug($"Sending RPC Request: '{requestTypes}'");
+                    var types = string.Join(", ", requestEnvelope.PlatformRequests.Select(x => x.Type));
+                    Logger.Debug($"=> Platform Request: '{types}'");
 
                     using (var response = await _session.HttpClient.PostAsync(_requestUrl ?? Constants.ApiUrl, requestData))
                     {
@@ -547,7 +566,7 @@ namespace POGOLib.Official.Net
 
                         var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
                         var responseEnvelope = ResponseEnvelope.Parser.ParseFrom(responseBytes);
-
+                        Logger.Debug($"<= Response Status Code: '{responseEnvelope.StatusCode}'");
                         switch (responseEnvelope.StatusCode)
                         {
                             // Valid response.
@@ -560,6 +579,7 @@ namespace POGOLib.Official.Net
                                 if (Regex.IsMatch(responseEnvelope.ApiUrl, "pgorelease\\.nianticlabs\\.com\\/plfe\\/\\d+"))
                                 {
                                     _requestUrl = $"https://{responseEnvelope.ApiUrl}/rpc";
+                                    Logger.Debug($"<= New Request Url: '{_requestUrl}'");
                                 }
                                 else
                                 {
@@ -572,7 +592,7 @@ namespace POGOLib.Official.Net
                                 if (Regex.IsMatch(responseEnvelope.ApiUrl, "pgorelease\\.nianticlabs\\.com\\/plfe\\/\\d+"))
                                 {
                                     _requestUrl = $"https://{responseEnvelope.ApiUrl}/rpc";
-
+                                    Logger.Debug($"<= New Request Url: '{_requestUrl}'");
                                     return await PerformRemoteProcedureCallAsync(requestEnvelope);
                                 }
                                 throw new Exception($"Received an incorrect API url: '{responseEnvelope.ApiUrl}', status code was: '{responseEnvelope.StatusCode}'.");
@@ -580,6 +600,7 @@ namespace POGOLib.Official.Net
                             // The login token is invalid.
                             // TODO: Make cleaner to reduce duplicate code with the GetRequestEnvelopeAsync method.
                             case ResponseEnvelope.Types.StatusCode.InvalidAuthToken:
+                            //case ResponseEnvelope.Types.StatusCode.SessionInvalidated:
                                 Logger.Debug("Received StatusCode 102, reauthenticating.");
 
                                 _session.AccessToken.Expire();

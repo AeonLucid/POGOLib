@@ -14,7 +14,6 @@ using POGOLib.Official.Pokemon;
 using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
 using POGOProtos.Settings;
-using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 namespace POGOLib.Official.Net
 {
@@ -44,11 +43,12 @@ namespace POGOLib.Official.Net
         // public IDataCache DataCache { get; set; } = new MemoryDataCache();
         // public Templates Templates { get; private set; }
 
-        internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate, DeviceInfo deviceInfo = null)
+        internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate, POGOProtos.Networking.Envelopes.Signature.Types.DeviceInfo deviceInfo = null)
         {
             if (!ValidLoginProviders.Contains(loginProvider.ProviderId))
             {
-                throw new ArgumentException($"LoginProvider ID must be one of the following: {string.Join(", ", ValidLoginProviders)}");
+                var str = string.Join(", ", ValidLoginProviders);
+                throw new ArgumentException($"LoginProvider ID must be one of the following: {str}");
             }
 
             State = SessionState.Stopped;
@@ -96,7 +96,7 @@ namespace POGOLib.Official.Net
         /// <summary>
         /// Gets the <see cref="DeviceInfo"/> used by <see cref="RpcEncryption"/>.
         /// </summary>
-        public DeviceInfo DeviceInfo { get; private set; }
+        public POGOProtos.Networking.Envelopes.Signature.Types.DeviceInfo DeviceInfo { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="ILoginProvider"/> used to obtain an <see cref="AccessToken"/>.
@@ -139,17 +139,16 @@ namespace POGOLib.Official.Net
 
             if (!Configuration.IgnoreHashVersion)
             {
-                await CheckHasherVersion();
+                CheckHasherVersion();
             }
 
             State = SessionState.Started;
-
-            if (!await RpcClient.StartupAsync())
+            if (!await RpcClient.StartupAsync().ConfigureAwait(false))
             {
                 return false;
             }
 
-            await _heartbeat.StartDispatcherAsync();
+            await _heartbeat.StartDispatcherAsync().ConfigureAwait(false);
 
             return true;
         }
@@ -196,17 +195,24 @@ namespace POGOLib.Official.Net
         /// Throws an exception if there is a version mismatch.
         /// </summary>
         /// <returns></returns>
-        public async Task CheckHasherVersion()
+        public void CheckHasherVersion()
         {
-            var pogoVersionRaw = await HttpClient.GetStringAsync(Constants.VersionUrl);
+            var pogoVersionRaw ="0.59.0";
+            try {
+                pogoVersionRaw = HttpClient.GetStringAsync(Constants.VersionUrl).Result;
+            } catch (Exception ex1) {
+                Logger.Debug(ex1.ToString());
+            }
+                
             pogoVersionRaw = pogoVersionRaw.Replace("\n", "");
             pogoVersionRaw = pogoVersionRaw.Replace("\u0006", "");
 
-            var pogoVersion = new Version(pogoVersionRaw);
-            var result = Configuration.Hasher.PokemonVersion.CompareTo(pogoVersion);
-            if (result < 0)
+            if (Configuration.Hasher.PokemonVersion <  new Version(pogoVersionRaw))
             {
-                throw new HashVersionMismatchException($"The version of the {nameof(Configuration.Hasher)} ({Configuration.Hasher.PokemonVersion}) does not match the minimal API version of PokemonGo ({pogoVersion}). Set 'Configuration.IgnoreHashVersion' to true if you want to disable the version check.");
+                var str1 = $"The version of the {nameof(Configuration.Hasher)} ({Configuration.Hasher.PokemonVersion})";
+                var str = $"{str1} does not match the minimal API version of PokemonGo ({pogoVersionRaw}). ";
+                var str2 = "Set 'Configuration.IgnoreHashVersion' to true if you want to disable the version check.";
+                throw new HashVersionMismatchException(str + str2);
             }
         }
 

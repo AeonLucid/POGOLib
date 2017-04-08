@@ -11,9 +11,9 @@ namespace POGOLib.Official.Util.Hash
         /// The PokémonVersion this <see cref="IHasher"/> is made for.
         /// Please use API versioning of PokemonGo only (https://pgorelease.nianticlabs.com/plfe/version).
         /// </summary>
-        Version PokemonVersion { get; }
+        Version PokemonVersion { get; set; }
 
-        long Unknown25 { get; }
+        long Unknown25 { get; set; }
 
         Task<HashData> GetHashDataAsync(RequestEnvelope requestEnvelope, Signature signature, byte[] locationBytes, byte[][] requestsBytes, byte[] serializedTicket);
 

@@ -4,6 +4,7 @@ using GeoCoordinatePortable;
 using POGOLib.Official.Logging;
 using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net.Authentication.Data;
+using POGOProtos.Networking.Envelopes;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 namespace POGOLib.Official.Net.Authentication
@@ -42,7 +43,9 @@ namespace POGOLib.Official.Net.Authentication
         /// <returns></returns>
         public static async Task<Session> GetSession(ILoginProvider loginProvider, double initialLatitude, double initialLongitude, DeviceInfo deviceInfo = null)
         {
-            return new Session(loginProvider, await loginProvider.GetAccessToken(), new GeoCoordinate(initialLatitude, initialLongitude), deviceInfo);
+            var token = await loginProvider.GetAccessToken();
+            Logger.Debug("token: " +token);
+            return new Session(loginProvider, token, new GeoCoordinate(initialLatitude, initialLongitude), deviceInfo);
         }
 
         /// <summary>

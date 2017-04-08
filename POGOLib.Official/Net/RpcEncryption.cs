@@ -99,8 +99,11 @@ namespace POGOLib.Official.Net
                 // Apply current location fix position.
                 timestampSnapshot += i * millisecondsPerFix;
                 // Apply an offset.
-                timestampSnapshot += _session.Random.Next(0, (int) ((i + 1) * playAroundWindowPart));
-                
+                var maxValue = (int) ((i + 1) * playAroundWindowPart);
+                if (maxValue< 0) 
+                    maxValue = 1;
+                timestampSnapshot += _session.Random.Next(0, maxValue);
+
                 locationFixes.Add(new LocationFix
                 {
                     TimestampSnapshot = (ulong) timestampSnapshot,
