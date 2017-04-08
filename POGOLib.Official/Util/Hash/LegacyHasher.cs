@@ -14,9 +14,9 @@ namespace POGOLib.Official.Util.Hash
     /// </summary>
     internal class LegacyHasher : IHasher
     {
-        public Version PokemonVersion { get; } = new Version("0.45.0");
+        public Version PokemonVersion { get; set; } = new Version("0.45.0");
 
-        public long Unknown25 { get; } = -1553869577012279119;
+        public long Unknown25 { get; set; } = -1553869577012279119;
 
         public async Task<HashData> GetHashDataAsync(RequestEnvelope requestEnvelope, Signature signature, byte[] locationBytes, byte[][] requestsBytes, byte[] serializedTicket)
         {

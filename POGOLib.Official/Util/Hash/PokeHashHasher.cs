@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -26,9 +26,26 @@ namespace POGOLib.Official.Util.Hash
     /// </summary>
     public class PokeHashHasher : IHasher
     {
-        private const string PokeHashUrl = "https://pokehash.buddyauth.com/";
+        public static string PokeHashUrl = "https://pokehash.buddyauth.com/";
 
-        private const string PokeHashEndpoint = "api/v131_0/hash";
+        /* Obsoleted APIs */
+        public static Tuple <string,string,long>  v57_4  = new Tuple<string, string, long>(
+            "api/v127_4/hash","0.57.4", -816976800928766045
+           );
+        /* *** */
+
+        public static Tuple <string,string,long>  v59_1   = new Tuple<string, string, long>(
+            "api/v129_1/hash","0.59.1", -3226782243204485589
+           );
+        public static Tuple <string,string,long>  v61_0   = new Tuple<string, string, long>(
+            "api/v131_0/hash","0.61.0", 0x11fdf018c941ef22
+           );
+
+        public static string PokeHashEndpoint = v61_0.Item1;
+
+        public Version PokemonVersion { get; set;} = new Version (v61_0.Item2);
+
+        public long Unknown25 { get; set;} = v61_0.Item3;
 
         private readonly List<PokeHashAuthKey> _authKeys;
 
@@ -79,9 +96,6 @@ namespace POGOLib.Official.Util.Hash
             _keySelection = new Semaphore(1, 1);
         }
 
-        public Version PokemonVersion { get; } = new Version("0.61.0");
-
-        public long Unknown25 { get; } = 1296456256998993698;
 
         public async Task<HashData> GetHashDataAsync(RequestEnvelope requestEnvelope, Signature signature, byte[] locationBytes, byte[][] requestsBytes, byte[] serializedTicket)
         {
@@ -167,8 +181,7 @@ namespace POGOLib.Official.Util.Hash
 
                         // If the auth key has not been initialize yet, we need to have control a bit longer
                         // to configure it properly.
-                        if (!authKey.IsInitialized)
-                            extendedSelection = true;
+                        extendedSelection |= !authKey.IsInitialized;
                     }
                     else
                     {
@@ -180,9 +193,18 @@ namespace POGOLib.Official.Util.Hash
 
                         var sleepTime = (int) Math.Ceiling(authKey.RatePeriodEnd.Subtract(DateTime.UtcNow).TotalMilliseconds);
 
-//                        Logger.Warn($"Key selection is sleeping for {sleepTime}ms.");
+                        if (sleepTime < 0) 
+                            sleepTime = 1000;
+                        if (sleepTime > 60000) 
+                            sleepTime = 60000;
 
-                        await Task.Delay(sleepTime);
+                        Logger.Debug("sleepTime: "+sleepTime );
+                         try {
+                            await Task.Delay(sleepTime);
+                        } catch (Exception ex1) {
+                            Logger.Debug(ex1.ToString());
+                            await Task.Delay(60000);
+                        }
 
                         // Rate limit is over, so reset requests.
                         authKey.Requests = 0;
@@ -218,9 +240,12 @@ namespace POGOLib.Official.Util.Hash
                     int rateRequestsRemaining;
                     int ratePeriodEndSeconds;
 
-                    if (response.Headers.TryGetValues("X-MaxRequestCount", out IEnumerable<string> maxRequestsValue) &&
-                        response.Headers.TryGetValues("X-RateRequestsRemaining", out IEnumerable<string> requestsRemainingValue) &&
-                        response.Headers.TryGetValues("X-RatePeriodEnd", out IEnumerable<string> ratePeriodEndValue))
+                    IEnumerable<string> maxRequestsValue;
+                    IEnumerable<string> requestsRemainingValue;
+                    IEnumerable<string> ratePeriodEndValue;
+                    if (response.Headers.TryGetValues("X-MaxRequestCount", out  maxRequestsValue) &&
+                        response.Headers.TryGetValues("X-RateRequestsRemaining", out  requestsRemainingValue) &&
+                        response.Headers.TryGetValues("X-RatePeriodEnd", out  ratePeriodEndValue))
                     {
                         if (!int.TryParse(maxRequestsValue.First(), out maxRequestCount) ||
                             !int.TryParse(requestsRemainingValue.First(), out rateRequestsRemaining) ||

@@ -1,26 +1,26 @@
 using System;
+using System.Collections.Generic;
 
-namespace POGOLib.Official.Util.Encryption.PokeHash
+namespace PokemonGo.RocketAPI.Encryption
 {
     public static class TwoFish
     {
         public static int BLOCK_SIZE = 16;
-        private static int ROUNDS = 16;
+        private const int ROUNDS = 16;
 
-        private static int INPUT_WHITEN = 0;
+        private const int INPUT_WHITEN = 0;
         private static int OUTPUT_WHITEN = INPUT_WHITEN + BLOCK_SIZE / 4;
         private static int ROUND_SUBKEYS = OUTPUT_WHITEN + BLOCK_SIZE / 4;
 
-        private static int SK_STEP = 0x02020202;
-        private static int SK_BUMP = 0x01010101;
-        private static int SK_ROTL = 9;
+        private const int SK_STEP = 0x02020202;
+        private const int SK_BUMP = 0x01010101;
+        private const int SK_ROTL = 9;
 
         /**
          * Fixed 8x8 permutation S-boxes
          */
-        private static byte[][] P = new byte[2][]
-		{
-            new byte[256]{
+        private static byte[][] P = {
+            new byte[]{
                     (byte) 0xA9, (byte) 0x67, (byte) 0xB3, (byte) 0xE8,
                     (byte) 0x04, (byte) 0xFD, (byte) 0xA3, (byte) 0x76,
                     (byte) 0x9A, (byte) 0x92, (byte) 0x80, (byte) 0x78,
@@ -86,7 +86,7 @@ namespace POGOLib.Official.Util.Encryption.PokeHash
                     (byte) 0x6F, (byte) 0x9D, (byte) 0x36, (byte) 0x42,
                     (byte) 0x4A, (byte) 0x5E, (byte) 0xC1, (byte) 0xE0
             },
-            new byte[256] {
+           new byte[]{
                     (byte) 0x75, (byte) 0xF3, (byte) 0xC6, (byte) 0xF4,
                     (byte) 0xDB, (byte) 0x7B, (byte) 0xFB, (byte) 0xC8,
                     (byte) 0x4A, (byte) 0xD3, (byte) 0xE6, (byte) 0x6B,
@@ -152,55 +152,55 @@ namespace POGOLib.Official.Util.Encryption.PokeHash
                     (byte) 0x16, (byte) 0x25, (byte) 0x86, (byte) 0x56,
                     (byte) 0x55, (byte) 0x09, (byte) 0xBE, (byte) 0x91
             }
-		};
+    };
 
         /**
          * Define the fixed p0/p1 permutations used in keyed S-box lookup.
          * By changing the following constant definitions, the S-boxes will
          * automatically get changed in the Twofish engine.
          */
-        private static int P_00 = 1;
-        private static int P_01 = 0;
-        private static int P_02 = 0;
-        private static int P_03 = P_01 ^ 1;
-        private static int P_04 = 1;
+        private const int P_00 = 1;
+        private const int P_01 = 0;
+        private const int P_02 = 0;
+        private const int P_03 = P_01 ^ 1;
+        private const int P_04 = 1;
 
-        private static int P_10 = 0;
-        private static int P_11 = 0;
-        private static int P_12 = 1;
-        private static int P_13 = P_11 ^ 1;
-        private static int P_14 = 0;
+        private const int P_10 = 0;
+        private const int P_11 = 0;
+        private const int P_12 = 1;
+        private const int P_13 = P_11 ^ 1;
+        private const int P_14 = 0;
 
-        private static int P_20 = 1;
-        private static int P_21 = 1;
-        private static int P_22 = 0;
-        private static int P_23 = P_21 ^ 1;
-        private static int P_24 = 0;
+        private const int P_20 = 1;
+        private const int P_21 = 1;
+        private const int P_22 = 0;
+        private const int P_23 = P_21 ^ 1;
+        private const int P_24 = 0;
 
-        private static int P_30 = 0;
-        private static int P_31 = 1;
-        private static int P_32 = 1;
-        private static int P_33 = P_31 ^ 1;
-        private static int P_34 = 1;
+        private const int P_30 = 0;
+        private const int P_31 = 1;
+        private const int P_32 = 1;
+        private const int P_33 = P_31 ^ 1;
+        private const int P_34 = 1;
 
         /**
          * Primitive polynomial for GF(256)
          */
-        private static int GF256_FDBK_2 = 0x169 / 2;
-        private static int GF256_FDBK_4 = 0x169 / 4;
+        private const int GF256_FDBK_2 = 0x169 / 2;
+        private const int GF256_FDBK_4 = 0x169 / 4;
 
         /**
          * MDS matrix
          */
         private static int[][] MDS = new int[4][];
 
-        private static int RS_GF_FDBK = 0x14D;
+        private const int RS_GF_FDBK = 0x14D;
 
         static TwoFish()
         {
-            int[] m1 = new int[2];
-            int[] mxArray = new int[2];
-            int[] myArray = new int[2];
+            var m1 = new int[2];
+            var mxArray = new int[2];
+            var myArray = new int[2];
             int first;
             int second = 0;
 
@@ -275,11 +275,11 @@ namespace POGOLib.Official.Util.Encryption.PokeHash
             if (!(length == 8 || length == 16 || length == 24 || length == 32))
                 throw new Exception("Incorrect key length");
 
-            int k64Cnt = length / 8;
-            int subkeyCnt = ROUND_SUBKEYS + 2 * ROUNDS;
-            int[] k32e = new int[4];
-            int[] k32o = new int[4];
-            int[] sBoxKey = new int[4];
+            var k64Cnt = length / 8;
+            var subkeyCnt = ROUND_SUBKEYS + 2 * ROUNDS;
+            var k32e = new int[4];
+            var k32o = new int[4];
+            var sBoxKey = new int[4];
             int i, j, offset = 0;
             for (i = 0, j = k64Cnt - 1; i < 4 && offset < length; i++, j--)
             {
@@ -294,7 +294,7 @@ namespace POGOLib.Official.Util.Encryption.PokeHash
                 sBoxKey[j] = rsMdsEncode(k32e[i], k32o[i]);
             }
             int q, A, B;
-            int[] subKeys = new int[subkeyCnt];
+            var subKeys = new int[subkeyCnt];
             for (i = q = 0; i < subkeyCnt / 2; i++, q += SK_STEP)
             {
                 A = f32(k64Cnt, q, k32e);
@@ -310,7 +310,7 @@ namespace POGOLib.Official.Util.Encryption.PokeHash
             int k2 = sBoxKey[2];
             int k3 = sBoxKey[3];
             int b0, b1, b2, b3;
-            int[] sBox = new int[4 * 256];
+            var sBox = new int[4 * 256];
             for (i = 0; i < 256; i++)
             {
                 b0 = b1 = b2 = b3 = i;
@@ -387,9 +387,9 @@ namespace POGOLib.Official.Util.Encryption.PokeHash
          */
         public static byte[] blockEncrypt(byte[] bArray, int inOffset, Object sessionKey)
         {
-            Object[] sk = (Object[])sessionKey;
-            int[] sBox = (int[])sk[0];
-            int[] sKey = (int[])sk[1];
+            var sk = (Object[])sessionKey;
+            var sBox = (int[])sk[0];
+            var sKey = (int[])sk[1];
 
             int x0 = (bArray[inOffset++] & 0xFF)
                     | (bArray[inOffset++] & 0xFF) << 8
@@ -477,14 +477,14 @@ namespace POGOLib.Official.Util.Encryption.PokeHash
 
         private static int rsRem(int x)
         {
-            int b = RightUShift(x, 24) & 0xFF;
-            int g2 = ((b << 1) ^ ((b & 0x80) != 0 ? RS_GF_FDBK : 0)) & 0xFF;
-            int g3 = RightUShift(b, 1) ^ ((b & 0x01) != 0 ? RightUShift(RS_GF_FDBK, 1) : 0) ^ g2;
-            int result = (x << 8) ^ (g3 << 24) ^ (g2 << 16) ^ (g3 << 8) ^ b;
+            int b1 = RightUShift(x, 24) & 0xFF;
+            int g2 = ((b1 << 1) ^ ((b1 & 0x80) != 0 ? RS_GF_FDBK : 0)) & 0xFF;
+            int g3 = RightUShift(b1, 1) ^ ((b1 & 0x01) != 0 ? RightUShift(RS_GF_FDBK, 1) : 0) ^ g2;
+            int result = (x << 8) ^ (g3 << 24) ^ (g2 << 16) ^ (g3 << 8) ^ b1;
             return result;
         }
 
-        private static int f32(int k64Cnt, int x, int[] k32)
+        private static int f32(int k64Cnt, int x, IList<int> k32)
         {
             int b0 = _b0(x);
             int b1 = _b1(x);
@@ -571,7 +571,7 @@ namespace POGOLib.Official.Util.Encryption.PokeHash
             return result;
         }
 
-        private static int fe32(int[] sBox, int x, int r)
+        private static int fe32(IList<int> sBox, int x, int r)
         {
             return sBox[2 * b(x, r)]
                     ^ sBox[2 * b(x, r + 1) + 1]

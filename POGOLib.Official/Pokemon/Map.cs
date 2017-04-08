@@ -43,6 +43,12 @@ namespace POGOLib.Official.Pokemon
             }
         }
 
+        public void ResetAllSinceTimestampMs()
+        {
+            foreach (var element in Cells)
+                element.CurrentTimestampMs = 0L;
+        }
+
         public List<FortData> GetFortsSortedByDistance(Func<FortData, bool> filter = null)
         {
             var forts = Cells.SelectMany(f => f.Forts);
