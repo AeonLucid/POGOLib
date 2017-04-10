@@ -13,6 +13,7 @@ using POGOLib.Official.Net.Captcha;
 using POGOLib.Official.Pokemon;
 using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
+using POGOProtos.Data;
 using POGOProtos.Settings;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 
@@ -198,11 +199,10 @@ namespace POGOLib.Official.Net
         /// <returns></returns>
         public async Task CheckHasherVersion()
         {
-            var pogoVersionRaw = await HttpClient.GetStringAsync(Constants.VersionUrl);
-            pogoVersionRaw = pogoVersionRaw.Replace("\n", "");
-            pogoVersionRaw = pogoVersionRaw.Replace("\u0006", "");
+            var clientVersionRaw = await HttpClient.GetByteArrayAsync(Constants.VersionUrl);
+            var clientVersion = ClientVersion.Parser.ParseFrom(clientVersionRaw);
 
-            var pogoVersion = new Version(pogoVersionRaw);
+            var pogoVersion = new Version(clientVersion.MinVersion);
             var result = Configuration.Hasher.PokemonVersion.CompareTo(pogoVersion);
             if (result < 0)
             {
