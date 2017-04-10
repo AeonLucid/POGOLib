@@ -230,14 +230,7 @@ namespace POGOLib.Official.Net
         public async Task RefreshMapObjectsAsync()
         {
             var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
-            var sinceTimeMs = new List<long>(cellIds.Length);
-
-            foreach (var cellId in cellIds)
-            {
-                var cell = _session.Map.Cells.FirstOrDefault(x => x.S2CellId == cellId);
-
-                sinceTimeMs.Add(cell?.CurrentTimestampMs ?? 0);
-            }
+            var sinceTimeMs = cellIds.Select(x => (long) 0).ToArray();
 
             var response = await SendRemoteProcedureCallAsync(new Request
             {
@@ -250,7 +243,7 @@ namespace POGOLib.Official.Net
                     },
                     SinceTimestampMs =
                     {
-                        sinceTimeMs.ToArray()
+                        sinceTimeMs
                     },
                     Latitude = _session.Player.Coordinate.Latitude,
                     Longitude = _session.Player.Coordinate.Longitude
