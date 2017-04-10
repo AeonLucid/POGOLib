@@ -1,11 +1,13 @@
-﻿using POGOLib.Official.Extensions;
-using POGOLib.Official.Net;
+﻿using System;
+using POGOLib.Official.Extensions;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 namespace POGOLib.Official.Util.Device
 {
     public class DeviceInfoUtil
     {
+        private static readonly Random Random = new Random();
+
         private static readonly string[][] Devices =
         {
             new[] {"iPad3,1", "iPad", "J1AP"},
@@ -41,27 +43,69 @@ namespace POGOLib.Official.Util.Device
         };
 
         private static readonly string[] OsVersions = {
-            "8.1.1", "8.1.2", "8.1.3", "8.2", "8.3",
-            "8.4", "8.4.1", "9.0", "9.0.1", "9.0.2",
-            "9.1", "9.2", "9.2.1", "9.3", "9.3.1",
-            "9.3.2", "9.3.3", "9.3.4"
+            "8.1.1",
+            "8.1.2",
+            "8.1.3",
+            "8.2",
+            "8.3",
+            "8.4",
+            "8.4.1",
+            "9.0",
+            "9.0.1",
+            "9.0.2",
+            "9.1",
+            "9.2",
+            "9.2.1",
+            "9.3",
+//            "9.3.1",
+            "9.3.2",
+//            "9.3.3",
+//            "9.3.4"
         };
 
-        public static DeviceInfo GetRandomDevice(Session session)
-        {
-            var device = Devices[session.Random.Next(Devices.Length)];
-            var firmwareType = OsVersions[session.Random.Next(OsVersions.Length)];
+        private static readonly string[] OsUserAgentParts = {
+            "CFNetwork/711.1.16 Darwin/14.0.0", // 8.1.1
+            "CFNetwork/711.1.16 Darwin/14.0.0", // 8.1.2
+            "CFNetwork/711.1.16	Darwin/14.0.0", // 8.1.3
+            "CFNetwork/711.2.23 Darwin/14.0.0", // 8.2
+            "CFNetwork/711.3.18 Darwin/14.0.0", // 8.3
+            "CFNetwork/711.4.6 Darwin/14.4.0",  // 8.4
+            "CFNetwork/711.4.6 Darwin/14.4.0",  // 8.4.1
+            "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0
+            "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0.1
+            "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0.2
+            "CFNetwork/758.1.6 Darwin/15.0.0",  // 9.1
+            "CFNetwork/758.2.8 Darwin/15.0.0",  // 9.2
+            "CFNetwork/758.2.8 Darwin/15.0.0",  // 9.2.1
+            "CFNetwork/758.3.15 Darwin/15.4.0", // 9.3
+//            "9.3.1", // 9.3.1
+            "CFNetwork/758.4.3 Darwin/15.5.0", // 9.3.2
+//            "9.3.3", // 9.3.3
+//            "9.3.4"  // 9.3.4
+        };
 
-            return new DeviceInfo
+        public static DeviceWrapper GetRandomDevice()
+        {
+            var device = Devices[Random.Next(Devices.Length)];
+
+            var osId = Random.Next(OsVersions.Length);
+            var firmwareType = OsVersions[osId];
+            var firmwareUserAgentPart = OsUserAgentParts[osId];
+
+            return new DeviceWrapper
             {
-                DeviceId = session.Random.NextHexNumber(32).ToLower(),
-                DeviceBrand = "Apple",
-                DeviceModelBoot = device[0],
-                DeviceModel = device[1],
-                HardwareModel = device[2],
-                HardwareManufacturer = "Apple",
-                FirmwareBrand = "iPhone OS",
-                FirmwareType = firmwareType,
+                UserAgent = $"pokemongo/1 {firmwareUserAgentPart}",
+                DeviceInfo = new DeviceInfo
+                {
+                    DeviceId = Random.NextHexNumber(32).ToLower(),
+                    DeviceBrand = "Apple",
+                    DeviceModelBoot = device[0],
+                    DeviceModel = device[1],
+                    HardwareModel = device[2],
+                    HardwareManufacturer = "Apple",
+                    FirmwareBrand = "iPhone OS",
+                    FirmwareType = firmwareType,
+                }
             };
         }
     }

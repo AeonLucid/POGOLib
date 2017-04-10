@@ -15,7 +15,6 @@ using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
 using POGOProtos.Data;
 using POGOProtos.Settings;
-using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 namespace POGOLib.Official.Net
 {
@@ -45,7 +44,7 @@ namespace POGOLib.Official.Net
         // public IDataCache DataCache { get; set; } = new MemoryDataCache();
         // public Templates Templates { get; private set; }
 
-        internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate, DeviceInfo deviceInfo = null)
+        internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate, DeviceWrapper deviceWrapper = null)
         {
             if (!ValidLoginProviders.Contains(loginProvider.ProviderId))
             {
@@ -53,15 +52,15 @@ namespace POGOLib.Official.Net
             }
 
             State = SessionState.Stopped;
+            Device = deviceWrapper ?? DeviceInfoUtil.GetRandomDevice();
 
             HttpClient = new HttpClient(new HttpClientHandler
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             });
-            HttpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("Niantic App");
+            HttpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.ApiUserAgent);
             HttpClient.DefaultRequestHeaders.ExpectContinue = false;
 
-            DeviceInfo = deviceInfo ?? DeviceInfoUtil.GetRandomDevice(this);
             AccessToken = accessToken;
             LoginProvider = loginProvider;
             Player = new Player(this, geoCoordinate);
@@ -90,14 +89,14 @@ namespace POGOLib.Official.Net
         internal Random Random { get; private set; } = new Random();
 
         /// <summary>
+        /// Gets the <see cref="DeviceWrapper"/> used by <see cref="RpcEncryption"/>.
+        /// </summary>
+        public DeviceWrapper Device { get; private set; }
+
+        /// <summary>
         /// Gets the <see cref="HttpClient"/> of the <see cref="Session"/>.
         /// </summary>
         internal HttpClient HttpClient { get; }
-
-        /// <summary>
-        /// Gets the <see cref="DeviceInfo"/> used by <see cref="RpcEncryption"/>.
-        /// </summary>
-        public DeviceInfo DeviceInfo { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="ILoginProvider"/> used to obtain an <see cref="AccessToken"/>.
@@ -199,14 +198,19 @@ namespace POGOLib.Official.Net
         /// <returns></returns>
         public async Task CheckHasherVersion()
         {
-            var clientVersionRaw = await HttpClient.GetByteArrayAsync(Constants.VersionUrl);
-            var clientVersion = ClientVersion.Parser.ParseFrom(clientVersionRaw);
-
-            var pogoVersion = new Version(clientVersion.MinVersion);
-            var result = Configuration.Hasher.PokemonVersion.CompareTo(pogoVersion);
-            if (result < 0)
+            using (var checkHttpClient = new HttpClient())
             {
-                throw new HashVersionMismatchException($"The version of the {nameof(Configuration.Hasher)} ({Configuration.Hasher.PokemonVersion}) does not match the minimal API version of PokemonGo ({pogoVersion}). Set 'Configuration.IgnoreHashVersion' to true if you want to disable the version check.");
+                checkHttpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Device.UserAgent);
+
+                var clientVersionRaw = await checkHttpClient.GetByteArrayAsync(Constants.VersionUrl);
+                var clientVersion = ClientVersion.Parser.ParseFrom(clientVersionRaw);
+
+                var pogoVersion = new Version(clientVersion.MinVersion);
+                var result = Configuration.Hasher.PokemonVersion.CompareTo(pogoVersion);
+                if (result < 0)
+                {
+                    throw new HashVersionMismatchException($"The version of the {nameof(Configuration.Hasher)} ({Configuration.Hasher.PokemonVersion}) does not match the minimal API version of PokemonGo ({pogoVersion}). Set 'Configuration.IgnoreHashVersion' to true if you want to disable the version check.");
+                }
             }
         }
 

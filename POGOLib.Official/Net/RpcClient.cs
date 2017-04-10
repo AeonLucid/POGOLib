@@ -77,7 +77,7 @@ namespace POGOLib.Official.Net
         
         internal Platform GetPlatform()
         {
-            return _session.DeviceInfo.DeviceBrand == "Apple" ? Platform.Ios : Platform.Android;
+            return _session.Device.DeviceInfo.DeviceBrand == "Apple" ? Platform.Ios : Platform.Android;
         }
 
         private long PositiveRandom()

@@ -170,7 +170,7 @@ namespace POGOLib.Official.Net
                         Status = 3
                     }
                 },
-                DeviceInfo = _session.DeviceInfo,
+                DeviceInfo = _session.Device.DeviceInfo,
                 LocationFix = { locationFixes },
                 ActivityStatus = new ActivityStatus
                 {
