@@ -1,5 +1,11 @@
 # POGOLib Changelog
 
+## 1.4.2
+- Updated dependencies.
+- Updated POGOProtos to v2.9.2.
+- Updated TwoFish Encryption.
+- Fixed bug where HeartbeatDispatcher didn't cancel [#84](https://github.com/AeonLucid/POGOLib/pull/84).
+
 ## 1.4.1
 - Updated PokeHash to 0.61.0 [#82](https://github.com/AeonLucid/POGOLib/pull/82).
 - Updated POGOProtos to v2.9.1.
