@@ -71,43 +71,50 @@ namespace POGOLib.Official.Util.Encryption.PokeHash
 
         public static byte[] Encrypt(byte[] uncryptedSignature, uint msSinceStart)
         {
-            var rnd = new Rand(msSinceStart);
-
-            object[] key = TwoFish.MakeKey(KEY);
-
-            var xor_byte = new byte[TwoFish.BLOCK_SIZE];
-
-            for (int i = 0; i < TwoFish.BLOCK_SIZE; ++i)
-                xor_byte[i] = (byte)rnd.Next();
-
-            int block_count = (uncryptedSignature.Length + 256) / 256;
-            int output_size = 4 + (block_count * 256) + 1;
-            var output = new byte[output_size];
-            output[0] = (byte)(msSinceStart >> 24);
-            output[1] = (byte)(msSinceStart >> 16);
-            output[2] = (byte)(msSinceStart >> 8);
-            output[3] = (byte)msSinceStart;
-
-
-            Array.Copy(uncryptedSignature, 0, output, 4, uncryptedSignature.Length);
-
-            output[output_size - 2] = (byte)(256 - uncryptedSignature.Length % 256);
-
-
-            for (int offset = 0; offset < block_count * 256; offset += TwoFish.BLOCK_SIZE)
+            try
             {
-                for (int i = 0; i < TwoFish.BLOCK_SIZE; i++)
-                    output[4 + offset + i] ^= xor_byte[i];
+                Rand rand = new Rand(msSinceStart);
 
-                byte[] block = TwoFish.BlockEncrypt(output, offset + 4, key);
-                Array.Copy(block, 0, output, offset + 4, block.Length);
-                Array.Copy(output, 4 + offset, xor_byte, 0, TwoFish.BLOCK_SIZE);
+                object[] key = TwoFish.MakeKey(KEY);
 
+                var xor_byte = new byte[TwoFish.BLOCK_SIZE];
+
+                for (int i = 0; i < TwoFish.BLOCK_SIZE; ++i)
+                    xor_byte[i] = (byte)rand.Next();
+
+                int block_count = (uncryptedSignature.Length + 256) / 256;
+                int output_size = 4 + (block_count * 256) + 1;
+                var output = new byte[output_size];
+                output[0] = (byte)(msSinceStart >> 24);
+                output[1] = (byte)(msSinceStart >> 16);
+                output[2] = (byte)(msSinceStart >> 8);
+                output[3] = (byte)msSinceStart;
+
+
+                Array.Copy(uncryptedSignature, 0, output, 4, uncryptedSignature.Length);
+
+                output[output_size - 2] = (byte)(256 - uncryptedSignature.Length % 256);
+
+                for (int offset = 0; offset < block_count * 256; offset += TwoFish.BLOCK_SIZE)
+                {
+                    for (int i = 0; i < TwoFish.BLOCK_SIZE; i++)
+                        output[4 + offset + i] ^= xor_byte[i];
+
+                    byte[] block = TwoFish.BlockEncrypt(output, offset + 4, key);
+                    Array.Copy(block, 0, output, offset + 4, block.Length);
+                    Array.Copy(output, 4 + offset, xor_byte, 0, TwoFish.BLOCK_SIZE);
+
+                }
+                output[output_size - 1] = 0x23;
+                encrypt_cipher(output, output_size);
+
+                return output;
             }
-            output[output_size - 1] = 0x23;
-            encrypt_cipher(output, output_size);
 
-            return output;
+            catch (Exception)
+ 			{
+ 				return null;
+ 			}
         }
 
 		public class Rand
