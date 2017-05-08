@@ -17,7 +17,7 @@ namespace POGOLib.Official.Util.Encryption.PokeHash
             0x3B,  0x51,  0x2E,  0xA9,  0x47,  0x38,  0xC4,  0x14
         };
 
-        private byte[] xbox = {
+        private static byte[] xbox = {
             0x01,
             0x00,
             0x83, 0x57, 0x47, 0x28, 0x1c, 0x84, 0x5c, 0xf0, 0x25, 0xcc, 0x14, 0xd1, 0xe4, 0xe0, 0x4b, 0x4c,
@@ -38,7 +38,7 @@ namespace POGOLib.Official.Util.Encryption.PokeHash
             0xef, 0x9d, 0xa1, 0x9e, 0xb6, 0xea, 0xc6, 0xf1, 0x80, 0x1d, 0x05, 0x73, 0xd6, 0xb3, 0x36, 0x85
         };
 
-        private void encrypt_cipher(byte[] src, int size)
+        private static void encrypt_cipher(byte[] src, int size)
         {
             var newxbox = new byte[xbox.Length];
             xbox.CopyTo(newxbox, 0);
@@ -69,7 +69,7 @@ namespace POGOLib.Official.Util.Encryption.PokeHash
 			* @return encrypted signature
 			*/
 
-        public byte[] Encrypt(byte[] uncryptedSignature, uint msSinceStart)
+        public static byte[] Encrypt(byte[] uncryptedSignature, uint msSinceStart)
         {
             var rnd = new Rand(msSinceStart);
 
