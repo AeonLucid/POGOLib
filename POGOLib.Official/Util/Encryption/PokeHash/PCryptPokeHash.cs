@@ -5,8 +5,8 @@ namespace POGOLib.Official.Util.Encryption.PokeHash
     /// <summary>
     ///     This is the PCrypt used by POGOLib. It should always match the used PokeHash version.
     /// 
-    ///     Android version: 0.59.1
-    ///     IOS version: 1.29.1
+    ///     Android version: 0.61.0
+    ///     IOS version: 1.31.0
     /// </summary>
     internal static class PCryptPokeHash
     {
