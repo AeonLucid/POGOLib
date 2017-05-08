@@ -100,7 +100,7 @@ namespace POGOLib.Official.Util.Encryption.PokeHash
                     for (int i = 0; i < TwoFish.BLOCK_SIZE; i++)
                         output[4 + offset + i] ^= xor_byte[i];
 
-                    byte[] block = TwoFish.BlockEncrypt(output, offset + 4, key);
+                    byte[] block = TwoFish.blockEncrypt(output, offset + 4, key);
                     Array.Copy(block, 0, output, offset + 4, block.Length);
                     Array.Copy(output, 4 + offset, xor_byte, 0, TwoFish.BLOCK_SIZE);
 
