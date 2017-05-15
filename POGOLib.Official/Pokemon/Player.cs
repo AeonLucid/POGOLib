@@ -25,13 +25,26 @@ namespace POGOLib.Official.Pokemon
         /// <summary>
         ///     Gets the <see cref="Player" /> his current latitude.
         /// </summary>
-        public double Latitude => Coordinate.Latitude;
+        public double Latitude {
+            get { return Coordinate.Latitude; }
+            set { Coordinate.Latitude = value; } 
+        }
 
         /// <summary>
         ///     Gets the <see cref="Player" /> his current longitude.
         /// </summary>
-        public double Longitude => Coordinate.Longitude;
-
+        public double Longitude {
+            get { return Coordinate.Longitude; }
+            set { Coordinate.Longitude = value; } 
+        }
+        
+        /// <summary>
+        ///     Gets the <see cref="Player" /> his current Altitude.
+        /// </summary>
+        public double Altitude {
+            get { return Coordinate.Altitude; }
+            set { Coordinate.Altitude = value; } 
+        }
         /// <summary>
         ///     Gets the <see cref="Inventory" /> of the <see cref="Player" />
         /// </summary>
