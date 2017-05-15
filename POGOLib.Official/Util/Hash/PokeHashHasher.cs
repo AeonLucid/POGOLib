@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -21,14 +22,16 @@ namespace POGOLib.Official.Util.Hash
     ///     to buy an API key, go to this url.
     ///     https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer
     /// 
-    ///     Android version: 0.61.0
-    ///     IOS version: 1.31.0
+    ///     Android version: 0.63.0
+    ///     IOS version: 1.33.0
     /// </summary>
     public class PokeHashHasher : IHasher
     {
         private const string PokeHashUrl = "https://pokehash.buddyauth.com/";
 
-        private const string PokeHashEndpoint = "api/v131_0/hash";
+        private const string PokeHashEndpoint = "api/v133_1/hash";
+        public Version PokemonVersion { get; } = new Version("0.63.1");
+        public long Unknown25 { get; } = 0x4A3889A251CCAD52;
 
         private readonly List<PokeHashAuthKey> _authKeys;
 
@@ -78,10 +81,6 @@ namespace POGOLib.Official.Util.Hash
 
             _keySelection = new Semaphore(1, 1);
         }
-
-        public Version PokemonVersion { get; } = new Version("0.61.0");
-
-        public long Unknown25 { get; } = 1296456256998993698;
 
         public async Task<HashData> GetHashDataAsync(RequestEnvelope requestEnvelope, Signature signature, byte[] locationBytes, byte[][] requestsBytes, byte[] serializedTicket)
         {
@@ -217,10 +216,13 @@ namespace POGOLib.Official.Util.Hash
                     int maxRequestCount;
                     int rateRequestsRemaining;
                     int ratePeriodEndSeconds;
+                    IEnumerable<string> maxRequestsValue;
+                    IEnumerable<string> requestsRemainingValue;
+                    IEnumerable<string> ratePeriodEndValue;
 
-                    if (response.Headers.TryGetValues("X-MaxRequestCount", out IEnumerable<string> maxRequestsValue) &&
-                        response.Headers.TryGetValues("X-RateRequestsRemaining", out IEnumerable<string> requestsRemainingValue) &&
-                        response.Headers.TryGetValues("X-RatePeriodEnd", out IEnumerable<string> ratePeriodEndValue))
+                    if (response.Headers.TryGetValues("X-MaxRequestCount", out maxRequestsValue) &&
+                        response.Headers.TryGetValues("X-RateRequestsRemaining", out requestsRemainingValue) &&
+                        response.Headers.TryGetValues("X-RatePeriodEnd", out  ratePeriodEndValue))
                     {
                         if (!int.TryParse(maxRequestsValue.First(), out maxRequestCount) ||
                             !int.TryParse(requestsRemainingValue.First(), out rateRequestsRemaining) ||
