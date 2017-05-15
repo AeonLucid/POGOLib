@@ -186,9 +186,10 @@ namespace POGOLib.Official.Net
                 throw new SessionStateException("The session has already been stopped.");
             }
 
-            State = SessionState.Stopped;
-            
             _heartbeat.StopDispatcher();
+
+            State = SessionState.Stopped;
+
         }
 
         /// <summary>
