@@ -1,5 +1,8 @@
 # POGOLib Changelog
 
+## 1.4.3
+- Updated PokeHash to 0.63.1 [#88](https://github.com/AeonLucid/POGOLib/pull/88).
+
 ## 1.4.2
 - Updated dependencies.
 - Updated POGOProtos to v2.9.2.
