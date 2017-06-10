@@ -79,7 +79,7 @@ namespace POGOLib.Official.Util.Hash
             _keySelection = new Semaphore(1, 1);
         }
 
-        public Version PokemonVersion { get; } = new Version("0.63.1");
+        public Version PokemonVersion { get; } = new Version("0.63.4");
 
         public long Unknown25 { get; } = 5348175887752539474;
 
