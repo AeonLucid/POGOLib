@@ -447,6 +447,13 @@ namespace POGOLib.Official.Net
                     }.ToByteString()
                 });
             }
+            
+            if (requestEnvelope.Requests.Count > 0 && requestEnvelope.Requests[0].RequestType == RequestType.GetMapObjects) {
+                requestEnvelope.Requests.Add(new Request {
+                    RequestType = RequestType.GetInbox,
+                    RequestMessage = new GetInboxMessage {}.ToByteString() // Honestly I have no idea what goes here
+                });
+            }
 
             return requestEnvelope;
         }
