@@ -1,7 +1,11 @@
 # POGOLib Changelog
 
+## 1.5.0
+- Updated POGOProtos to v2.11.0-beta.
+- Updated PokeHash to 0.67.1 [#91](https://github.com/AeonLucid/POGOLib/pull/91).
+
 ## 1.4.4
-- Updated POGOPRotos to v2.10.3.
+- Updated POGOProtos to v2.10.3.
 
 ## 1.4.3
 - Updated PokeHash to 0.63.1 [#88](https://github.com/AeonLucid/POGOLib/pull/88).
