@@ -432,6 +432,16 @@ namespace POGOLib.Official.Net
                 requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
             }
 
+            if (requestEnvelope.Requests.Count > 0 &&
+                requestEnvelope.Requests[0].RequestType == RequestType.GetMapObjects)
+            {
+                requestEnvelope.Requests.Add(new Request
+                {
+                    RequestType = RequestType.GetInbox,
+                    RequestMessage = ByteString.Empty
+                });
+            }
+
             requestEnvelope.PlatformRequests.Add(await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
 
             if (requestEnvelope.Requests.Count > 0 && (
@@ -445,13 +455,6 @@ namespace POGOLib.Official.Net
                     {
                         Message = _mapKey
                     }.ToByteString()
-                });
-            }
-            
-            if (requestEnvelope.Requests.Count > 0 && requestEnvelope.Requests[0].RequestType == RequestType.GetMapObjects) {
-                requestEnvelope.Requests.Add(new Request {
-                    RequestType = RequestType.GetInbox,
-                    RequestMessage = new GetInboxMessage {}.ToByteString() // Honestly I have no idea what goes here
                 });
             }
 
