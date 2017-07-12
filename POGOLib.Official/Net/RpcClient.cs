@@ -432,8 +432,7 @@ namespace POGOLib.Official.Net
                 requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
             }
 
-            if (requestEnvelope.Requests.Count > 0 &&
-                requestEnvelope.Requests[0].RequestType == RequestType.GetMapObjects)
+            if (requestEnvelope.Requests.Count > 0)
             {
                 requestEnvelope.Requests.Add(new Request
                 {
