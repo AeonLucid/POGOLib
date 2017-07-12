@@ -53,7 +53,8 @@ namespace POGOLib.Official.Net
             RequestType.GetHatchedEggs,
             RequestType.GetInventory,
             RequestType.CheckAwardedBadges,
-            RequestType.DownloadSettings
+            RequestType.DownloadSettings,
+            RequestType.GetInbox
         };
 
         private readonly ConcurrentQueue<RequestEnvelope> _rpcQueue = new ConcurrentQueue<RequestEnvelope>();
@@ -334,7 +335,8 @@ namespace POGOLib.Official.Net
                 },
                 new Request
                 {
-                    RequestType = RequestType.GetHatchedEggs
+                    RequestType = RequestType.GetHatchedEggs,
+                    RequestMessage = new GetHatchedEggsMessage().ToByteString()
                 },
                 new Request
                 {
@@ -346,7 +348,8 @@ namespace POGOLib.Official.Net
                 },
                 new Request
                 {
-                    RequestType = RequestType.CheckAwardedBadges
+                    RequestType = RequestType.CheckAwardedBadges,
+                    RequestMessage = new CheckAwardedBadgesMessage().ToByteString()
                 }
             };
 
@@ -368,6 +371,12 @@ namespace POGOLib.Official.Net
                     }.ToByteString()
                 });
             }
+
+            request.Add(new Request
+            {
+                RequestType = RequestType.GetInbox,
+                RequestMessage = ByteString.Empty    // TODO: Figure out parameters for "GetInboxMessage".
+            });
             
             //If Incense is active we add this:
             //request.Add(new Request
@@ -430,16 +439,6 @@ namespace POGOLib.Official.Net
             else
             {
                 requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
-            }
-
-            if (requestEnvelope.Requests.Count > 0 &&
-                requestEnvelope.Requests[0].RequestType == RequestType.GetMapObjects)
-            {
-                requestEnvelope.Requests.Add(new Request
-                {
-                    RequestType = RequestType.GetInbox,
-                    RequestMessage = ByteString.Empty
-                });
             }
 
             requestEnvelope.PlatformRequests.Add(await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
