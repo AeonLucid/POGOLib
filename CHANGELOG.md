@@ -1,5 +1,8 @@
 # POGOLib Changelog
 
+## 1.5.2
+- Updated POGOProtos to v2.12.0.
+
 ## 1.5.1
 - Updated POGOProtos to v2.11.0.
 - Added GetInbox to all requests [#92](https://github.com/AeonLucid/POGOLib/pull/92).
