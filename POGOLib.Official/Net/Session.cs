@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using GeoCoordinatePortable;
+using POGOLib.Official;
 using POGOLib.Official.Exceptions;
 using POGOLib.Official.Logging;
 using POGOLib.Official.LoginProviders;
@@ -53,11 +54,15 @@ namespace POGOLib.Official.Net
 
             State = SessionState.Stopped;
             Device = deviceWrapper ?? DeviceInfoUtil.GetRandomDevice();
-
-            HttpClient = new HttpClient(new HttpClientHandler
+            
+            HttpClientHandler handler = new HttpClientHandler
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-            });
+            };
+            if (Configuration.ProxyAddress != string.Empty) {
+                handler.Proxy = new WebProxy(Configuration.ProxyAddress, true);
+            }
+            HttpClient = new HttpClient(handler);
             HttpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.ApiUserAgent);
             HttpClient.DefaultRequestHeaders.ExpectContinue = false;
 

@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using POGOLib.Official;
 using POGOLib.Official.Logging;
 using POGOLib.Official.Net.Authentication.Data;
 
@@ -35,7 +36,12 @@ namespace POGOLib.Official.LoginProviders
         /// The unique identifier of the user trying to authenticate using the <see cref="PtcLoginProvider"/>.
         /// </summary>
         public string UserId => _username;
-
+        
+        /// <summary>
+        /// Proxy to use when logging in to PTC.
+        /// </summary>
+        public string Proxy => Configuration.ProxyAddress;
+        
         /// <summary>
         /// Retrieves an <see cref="AccessToken"/> by logging into the Pokemon Trainer Club website.
         /// </summary>
@@ -45,6 +51,9 @@ namespace POGOLib.Official.LoginProviders
             using (var httpClientHandler = new HttpClientHandler())
             {
                 httpClientHandler.AllowAutoRedirect = false;
+                if (Proxy != string.Empty) {
+                    httpClientHandler.Proxy = new WebProxy(Proxy, true);
+                }
                 using (var httpClient = new HttpClient(httpClientHandler))
                 {
                     httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.LoginUserAgent);
