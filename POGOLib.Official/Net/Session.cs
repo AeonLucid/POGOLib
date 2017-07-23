@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -161,10 +161,10 @@ namespace POGOLib.Official.Net
             {
                 throw new SessionStateException("The session is not running.");
             }
-            
-            State = SessionState.Paused;
 
             _heartbeat.StopDispatcher();
+            
+            State = SessionState.Paused;
         }
 
         public async Task ResumeAsync()
