@@ -55,7 +55,8 @@ namespace POGOLib.Official.Net
             RequestType.GetHatchedEggs,
             RequestType.GetInventory,
             RequestType.CheckAwardedBadges,
-            RequestType.DownloadSettings
+            RequestType.DownloadSettings,
+            RequestType.GetInbox
         };
 
         private readonly ConcurrentQueue<RequestEnvelope> _rpcQueue = new ConcurrentQueue<RequestEnvelope>();
