@@ -393,12 +393,13 @@ namespace POGOLib.Official.Net
                     }.ToByteString()
                 });
             }
-                request.Add(new Request
-                {
-                    RequestType = RequestType.GetInbox,
-                    RequestMessage = ByteString.Empty    // TODO: Figure out parameters for "GetInboxMessage".		
-                });
-            
+
+            request.Add(new Request
+            {
+                RequestType = RequestType.GetInbox,
+                RequestMessage = ByteString.Empty    // TODO: Figure out parameters for "GetInboxMessage".		
+            });
+
             //If Incense is active we add this:
             //request.Add(new Request
             //{
