@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,6 +15,7 @@ using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
 using POGOProtos.Data;
 using POGOProtos.Settings;
+using System.Diagnostics;
 
 namespace POGOLib.Official.Net
 {
@@ -161,10 +162,10 @@ namespace POGOLib.Official.Net
             {
                 throw new SessionStateException("The session is not running.");
             }
-
-            _heartbeat.StopDispatcher();
             
             State = SessionState.Paused;
+
+            _heartbeat.StopDispatcher();
         }
 
         public async Task ResumeAsync()

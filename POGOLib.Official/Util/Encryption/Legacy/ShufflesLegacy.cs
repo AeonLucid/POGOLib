@@ -1,4 +1,4 @@
-using POGOLib.Official.Util.Hash;
+﻿using POGOLib.Official.Util.Hash;
 
 namespace POGOLib.Official.Util.Encryption.Legacy
 {
