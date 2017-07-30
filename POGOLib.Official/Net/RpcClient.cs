@@ -139,7 +139,7 @@ namespace POGOLib.Official.Net
                         RequestType = RequestType.CheckChallenge,
                         RequestMessage = new CheckChallengeMessage
                         {
-
+                            DebugRequest = false
                         }.ToByteString()
                     }
                 });
@@ -357,7 +357,8 @@ namespace POGOLib.Official.Net
                 },
                 new Request
                 {
-                    RequestType = RequestType.GetHatchedEggs
+                    RequestType = RequestType.GetHatchedEggs,
+                    RequestMessage = new GetHatchedEggsMessage().ToByteString()
                 },
                 new Request
                 {
@@ -369,7 +370,8 @@ namespace POGOLib.Official.Net
                 },
                 new Request
                 {
-                    RequestType = RequestType.CheckAwardedBadges
+                    RequestType = RequestType.CheckAwardedBadges,
+                    RequestMessage = new CheckAwardedBadgesMessage().ToByteString()
                 }
             };
 
@@ -389,6 +391,12 @@ namespace POGOLib.Official.Net
                     {
                         Hash = _session.GlobalSettingsHash
                     }.ToByteString()
+                });
+
+                request.Add(new Request
+                {
+                    RequestType = RequestType.GetInbox,
+                    RequestMessage = ByteString.Empty    // TODO: Figure out parameters for "GetInboxMessage".		
                 });
             }
             

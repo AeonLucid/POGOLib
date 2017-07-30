@@ -22,7 +22,7 @@ namespace POGOLib.Official.Util.Hash
     ///     https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer
     /// 
     ///     Android version: 0.69.0
-    ///     IOS version: 1.39.0
+    ///     IOS version: 1.39
     /// </summary>
     public class PokeHashHasher : IHasher
     {
