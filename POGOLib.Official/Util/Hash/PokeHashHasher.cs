@@ -21,8 +21,8 @@ namespace POGOLib.Official.Util.Hash
     ///     to buy an API key, go to this url.
     ///     https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer
     /// 
-    ///     Android version: 0.61.0
-    ///     IOS version: 1.31.0
+    ///     Android version: 0.69.0
+    ///     IOS version: 1.39.0
     /// </summary>
     public class PokeHashHasher : IHasher
     {
