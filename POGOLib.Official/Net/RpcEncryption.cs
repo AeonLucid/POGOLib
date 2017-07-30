@@ -190,8 +190,11 @@ namespace POGOLib.Official.Net
             var requestsBytes = requestEnvelope.Requests.Select(x => x.ToByteArray()).ToArray();
             var hashData = await Configuration.Hasher.GetHashDataAsync(requestEnvelope, signature, locationBytes, requestsBytes, serializedTicket);
 
-            signature.LocationHash1 = (int) hashData.LocationAuthHash;
-            signature.LocationHash2 = (int) hashData.LocationHash;
+            if (hashData == null)
+                return null;
+
+            signature.LocationHash1 = (int)hashData.LocationAuthHash;
+            signature.LocationHash2 = (int)hashData.LocationHash;
 
             signature.RequestHash.AddRange(hashData.RequestHashes);
 
@@ -203,7 +206,7 @@ namespace POGOLib.Official.Net
                     EncryptedSignature = ByteString.CopyFrom(Configuration.Hasher.GetEncryptedSignature(signature.ToByteArray(), (uint)timestampSinceStart))
                 }.ToByteString()
             };
-            
+
             return encryptedSignature;
         }
     }

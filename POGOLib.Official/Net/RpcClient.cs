@@ -20,6 +20,8 @@ using POGOProtos.Enums;
 using POGOProtos.Networking.Platform;
 using POGOProtos.Networking.Platform.Requests;
 using POGOProtos.Networking.Platform.Responses;
+using System.Diagnostics;
+using static POGOProtos.Networking.Envelopes.RequestEnvelope.Types;
 
 namespace POGOLib.Official.Net
 {
@@ -53,8 +55,7 @@ namespace POGOLib.Official.Net
             RequestType.GetHatchedEggs,
             RequestType.GetInventory,
             RequestType.CheckAwardedBadges,
-            RequestType.DownloadSettings,
-            RequestType.GetInbox
+            RequestType.DownloadSettings
         };
 
         private readonly ConcurrentQueue<RequestEnvelope> _rpcQueue = new ConcurrentQueue<RequestEnvelope>();
@@ -62,6 +63,9 @@ namespace POGOLib.Official.Net
         private readonly ConcurrentDictionary<RequestEnvelope, ByteString> _rpcResponses = new ConcurrentDictionary<RequestEnvelope, ByteString>();
 
         private readonly Semaphore _rpcQueueMutex = new Semaphore(1, 1);
+
+        public event EventHandler<GetHatchedEggsResponse> HatchedEggsReceived;
+        public event EventHandler<CheckAwardedBadgesResponse> CheckAwardedBadgesReceived;
 
         internal RpcClient(Session session)
         {
@@ -114,20 +118,27 @@ namespace POGOLib.Official.Net
         {
             // Send GetPlayer to check if we're connected and authenticated
             GetPlayerResponse playerResponse;
+
+            int loop = 0;
+
             do
             {
                 var response = await SendRemoteProcedureCallAsync(new[]
                 {
                     new Request
                     {
-                        RequestType = RequestType.GetPlayer
+                        RequestType = RequestType.GetPlayer,
+                        RequestMessage = new GetPlayerMessage
+                        {
+
+                        }.ToByteString()
                     },
                     new Request
                     {
                         RequestType = RequestType.CheckChallenge,
                         RequestMessage = new CheckChallengeMessage
                         {
-                            DebugRequest = false
+
                         }.ToByteString()
                     }
                 });
@@ -136,7 +147,8 @@ namespace POGOLib.Official.Net
                 {
                     await Task.Delay(TimeSpan.FromMilliseconds(1000));
                 }
-            } while (!playerResponse.Success);
+                loop++;
+            } while (!playerResponse.Success && loop < 10);
 
             _session.Player.Data = playerResponse.PlayerData;
 
@@ -231,7 +243,16 @@ namespace POGOLib.Official.Net
         public async Task RefreshMapObjectsAsync()
         {
             var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
-            var sinceTimeMs = cellIds.Select(x => (long) 0).ToArray();
+            var sinceTimeMs = new List<long>(cellIds.Length);
+
+            foreach (var cellId in cellIds)
+            {
+                var cell = _session.Map.Cells.FirstOrDefault(x => x.S2CellId == cellId);
+
+                // TODO: Using the cells' currenttimestamp gives a delta, which is probably better, but we need to merge the result with the existing ones
+                //sinceTimeMs.Add(cell?.CurrentTimestampMs ?? 0);
+                sinceTimeMs.Add(0);
+            }
 
             var response = await SendRemoteProcedureCallAsync(new Request
             {
@@ -244,7 +265,7 @@ namespace POGOLib.Official.Net
                     },
                     SinceTimestampMs =
                     {
-                        sinceTimeMs
+                        sinceTimeMs.ToArray()
                     },
                     Latitude = _session.Player.Coordinate.Latitude,
                     Longitude = _session.Player.Coordinate.Longitude
@@ -335,8 +356,7 @@ namespace POGOLib.Official.Net
                 },
                 new Request
                 {
-                    RequestType = RequestType.GetHatchedEggs,
-                    RequestMessage = new GetHatchedEggsMessage().ToByteString()
+                    RequestType = RequestType.GetHatchedEggs
                 },
                 new Request
                 {
@@ -348,8 +368,7 @@ namespace POGOLib.Official.Net
                 },
                 new Request
                 {
-                    RequestType = RequestType.CheckAwardedBadges,
-                    RequestMessage = new CheckAwardedBadgesMessage().ToByteString()
+                    RequestType = RequestType.CheckAwardedBadges
                 }
             };
 
@@ -371,12 +390,6 @@ namespace POGOLib.Official.Net
                     }.ToByteString()
                 });
             }
-
-            request.Add(new Request
-            {
-                RequestType = RequestType.GetInbox,
-                RequestMessage = ByteString.Empty    // TODO: Figure out parameters for "GetInboxMessage".
-            });
             
             //If Incense is active we add this:
             //request.Add(new Request
@@ -441,7 +454,11 @@ namespace POGOLib.Official.Net
                 requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
             }
 
-            requestEnvelope.PlatformRequests.Add(await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
+            PlatformRequest platformRequest = await _rpcEncryption.GenerateSignatureAsync(requestEnvelope);
+            if (platformRequest != null)
+            {
+                requestEnvelope.PlatformRequests.Add(platformRequest);
+            }
 
             if (requestEnvelope.Requests.Count > 0 && (
                     requestEnvelope.Requests[0].RequestType == RequestType.GetMapObjects ||
@@ -605,7 +622,11 @@ namespace POGOLib.Official.Net
                                     requestEnvelope.PlatformRequests.Remove(signature);
                                 }
 
-                                requestEnvelope.PlatformRequests.Insert(0, await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
+                                PlatformRequest platformRequest = await _rpcEncryption.GenerateSignatureAsync(requestEnvelope);
+                                if (platformRequest != null)
+                                {
+                                    requestEnvelope.PlatformRequests.Insert(0, platformRequest);
+                                }
 
                                 // Re-send envelope.
                                 return await PerformRemoteProcedureCallAsync(requestEnvelope);
@@ -729,15 +750,15 @@ namespace POGOLib.Official.Net
 
                 switch (responseIndex.Value)
                 {
-                    case RequestType.GetHatchedEggs:
+                    case RequestType.GetHatchedEggs: // Get_Hatched_Eggs
                         var hatchedEggs = GetHatchedEggsResponse.Parser.ParseFrom(bytes);
-                        if (hatchedEggs.Success)
+                        if (hatchedEggs.Success && hatchedEggs.PokemonId.Count > 0)
                         {
-                            // TODO: Throw event, wrap in an object.
+                            HatchedEggsReceived?.Invoke(this, hatchedEggs);
                         }
                         break;
 
-                    case RequestType.GetInventory:
+                    case RequestType.GetInventory: // Get_Inventory
                         var inventory = GetInventoryResponse.Parser.ParseFrom(bytes);
                         if (inventory.Success)
                         {
@@ -755,16 +776,24 @@ namespace POGOLib.Official.Net
                         }
                         break;
 
-                    case RequestType.CheckAwardedBadges:
+                    case RequestType.CheckAwardedBadges: // Check_Awarded_Badges
                         var awardedBadges = CheckAwardedBadgesResponse.Parser.ParseFrom(bytes);
-                        if (awardedBadges.Success)
+                        if (awardedBadges.Success && awardedBadges.AwardedBadges.Count > 0)
                         {
-                            // TODO: Throw event, wrap in an object.
+                            CheckAwardedBadgesReceived?.Invoke(this, awardedBadges);
                         }
                         break;
 
-                    case RequestType.DownloadSettings:
-                        var downloadSettings = DownloadSettingsResponse.Parser.ParseFrom(bytes);
+                    case RequestType.DownloadSettings: // Download_Settings
+                        DownloadSettingsResponse downloadSettings = null;
+                        try
+                        {
+                            downloadSettings = DownloadSettingsResponse.Parser.ParseFrom(bytes);
+                        }
+                        catch (Exception)
+                        {
+                            downloadSettings = new DownloadSettingsResponse() { Error = "Could not parse downloadSettings" };
+                        }
                         if (string.IsNullOrEmpty(downloadSettings.Error))
                         {
                             if (downloadSettings.Settings == null)
