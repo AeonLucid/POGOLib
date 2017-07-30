@@ -392,13 +392,12 @@ namespace POGOLib.Official.Net
                         Hash = _session.GlobalSettingsHash
                     }.ToByteString()
                 });
-
+            }
                 request.Add(new Request
                 {
                     RequestType = RequestType.GetInbox,
                     RequestMessage = ByteString.Empty    // TODO: Figure out parameters for "GetInboxMessage".		
                 });
-            }
             
             //If Incense is active we add this:
             //request.Add(new Request
