@@ -244,16 +244,7 @@ namespace POGOLib.Official.Net
         public async Task RefreshMapObjectsAsync()
         {
             var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
-            var sinceTimeMs = new List<long>(cellIds.Length);
-
-            foreach (var cellId in cellIds)
-            {
-                var cell = _session.Map.Cells.FirstOrDefault(x => x.S2CellId == cellId);
-
-                // TODO: Using the cells' currenttimestamp gives a delta, which is probably better, but we need to merge the result with the existing ones
-                //sinceTimeMs.Add(cell?.CurrentTimestampMs ?? 0);
-                sinceTimeMs.Add(0);
-            }
+            var sinceTimeMs = cellIds.Select(x => (long)0).ToArray();
 
             var response = await SendRemoteProcedureCallAsync(new Request
             {
