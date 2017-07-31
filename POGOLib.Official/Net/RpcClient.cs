@@ -388,7 +388,10 @@ namespace POGOLib.Official.Net
             request.Add(new Request
             {
                 RequestType = RequestType.GetInbox,
-                RequestMessage = ByteString.Empty    // TODO: Figure out parameters for "GetInboxMessage".
+                RequestMessage = new GetInboxMessage
+                {
+                    IsHistory = true
+                }.ToByteString() 
             });
 
             //If Incense is active we add this:
