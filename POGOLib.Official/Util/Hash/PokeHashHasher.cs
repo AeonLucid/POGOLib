@@ -230,13 +230,9 @@ namespace POGOLib.Official.Util.Hash
                     int rateRequestsRemaining;
                     int ratePeriodEndSeconds;
 
-                    IEnumerable<string> maxRequestsValue;
-                    IEnumerable<string> requestsRemainingValue;
-                    IEnumerable<string> ratePeriodEndValue;
-
-                    if (response.Headers.TryGetValues("X-MaxRequestCount", out maxRequestsValue) &&
-                        response.Headers.TryGetValues("X-RateRequestsRemaining", out requestsRemainingValue) &&
-                        response.Headers.TryGetValues("X-RatePeriodEnd", out ratePeriodEndValue))
+                    if (response.Headers.TryGetValues("X-MaxRequestCount", out IEnumerable<string> maxRequestsValue) &&
+                        response.Headers.TryGetValues("X-RateRequestsRemaining", out IEnumerable<string> requestsRemainingValue) &&
+                        response.Headers.TryGetValues("X-RatePeriodEnd", out IEnumerable<string> ratePeriodEndValue))
                     {
                         if (!int.TryParse(maxRequestsValue.First(), out maxRequestCount) ||
                             !int.TryParse(requestsRemainingValue.First(), out rateRequestsRemaining) ||
@@ -251,6 +247,7 @@ namespace POGOLib.Official.Util.Hash
                     }
 
                     // Use parsed headers
+
                     if (!authKey.IsInitialized)
                     {
                         authKey.MaxRequestCount = maxRequestCount;

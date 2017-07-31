@@ -11,6 +11,7 @@ using POGOProtos.Networking.Platform;
 using POGOProtos.Networking.Platform.Requests;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 using static POGOProtos.Networking.Envelopes.RequestEnvelope.Types;
+using POGOLib.Official.Util.Hash.PokeHash;
 
 namespace POGOLib.Official.Net
 {
@@ -191,7 +192,7 @@ namespace POGOLib.Official.Net
             var hashData = await Configuration.Hasher.GetHashDataAsync(requestEnvelope, signature, locationBytes, requestsBytes, serializedTicket);
 
             if (hashData == null)
-                return null;
+                throw new PokeHashException("Missed Hash Data");
 
             signature.LocationHash1 = (int)hashData.LocationAuthHash;
             signature.LocationHash2 = (int)hashData.LocationHash;
