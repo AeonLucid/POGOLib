@@ -463,11 +463,7 @@ namespace POGOLib.Official.Net
                 requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
             }
 
-            PlatformRequest platformRequest = await _rpcEncryption.GenerateSignatureAsync(requestEnvelope);
-            if (platformRequest != null)
-            {
-                requestEnvelope.PlatformRequests.Add(platformRequest);
-            }
+             requestEnvelope.PlatformRequests.Add(await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
 
             if (requestEnvelope.Requests.Count > 0 && (
                     requestEnvelope.Requests[0].RequestType == RequestType.GetMapObjects ||
@@ -631,11 +627,7 @@ namespace POGOLib.Official.Net
                                     requestEnvelope.PlatformRequests.Remove(signature);
                                 }
 
-                                PlatformRequest platformRequest = await _rpcEncryption.GenerateSignatureAsync(requestEnvelope);
-                                if (platformRequest != null)
-                                {
-                                    requestEnvelope.PlatformRequests.Insert(0, platformRequest);
-                                }
+                                requestEnvelope.PlatformRequests.Insert(0, await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
 
                                 // Re-send envelope.
                                 return await PerformRemoteProcedureCallAsync(requestEnvelope);
