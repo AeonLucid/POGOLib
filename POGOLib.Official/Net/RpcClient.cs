@@ -388,7 +388,7 @@ namespace POGOLib.Official.Net
             request.Add(new Request
             {
                 RequestType = RequestType.GetInbox,
-                RequestMessage = ByteString.Empty    // TODO: Figure out parameters for "GetInboxMessage".		
+                RequestMessage = ByteString.Empty    // TODO: Figure out parameters for "GetInboxMessage".
             });
 
             //If Incense is active we add this:
@@ -454,7 +454,7 @@ namespace POGOLib.Official.Net
                 requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
             }
 
-             requestEnvelope.PlatformRequests.Add(await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
+            requestEnvelope.PlatformRequests.Add(await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
 
             if (requestEnvelope.Requests.Count > 0 && (
                     requestEnvelope.Requests[0].RequestType == RequestType.GetMapObjects ||
