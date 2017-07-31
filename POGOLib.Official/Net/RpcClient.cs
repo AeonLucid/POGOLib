@@ -257,7 +257,7 @@ namespace POGOLib.Official.Net
                     },
                     SinceTimestampMs =
                     {
-                        sinceTimeMs.ToArray()
+                        sinceTimeMs
                     },
                     Latitude = _session.Player.Coordinate.Latitude,
                     Longitude = _session.Player.Coordinate.Longitude
