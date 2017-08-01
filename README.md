@@ -211,3 +211,4 @@ foreach (var fortData in session.Map.GetFortsSortedByDistance(f => f.Type == For
     }
 }
 ```
+
