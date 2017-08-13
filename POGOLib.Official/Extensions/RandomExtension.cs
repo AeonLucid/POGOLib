@@ -24,4 +24,23 @@ namespace POGOLib.Official.Extensions
         }
 
     }
+
+    public class RequestIdGenerator
+    {
+        private static long MULTIPLIER = 16807;
+        private static long MODULUS = 0x7FFFFFFF;
+
+        private long rpcIdHigh = 1;
+        private long rpcId = 2;
+
+        /**
+         * Generates next request id and increments count
+         * @return the next request id
+         */
+        public long Next()
+        {
+            rpcIdHigh = MULTIPLIER * rpcIdHigh % MODULUS;
+            return rpcId++ | (rpcIdHigh << 32);
+        }
+    }
 }

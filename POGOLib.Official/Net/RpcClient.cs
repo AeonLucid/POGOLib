@@ -22,6 +22,7 @@ using POGOProtos.Networking.Platform.Requests;
 using POGOProtos.Networking.Platform.Responses;
 using System.Diagnostics;
 using static POGOProtos.Networking.Envelopes.RequestEnvelope.Types;
+using POGOLib.Official.Extensions;
 
 namespace POGOLib.Official.Net
 {
@@ -48,6 +49,8 @@ namespace POGOLib.Official.Net
         private string _requestUrl;
 
         private string _mapKey;
+
+        private readonly RequestIdGenerator idGenerator = new RequestIdGenerator();
 
         private readonly List<RequestType> _defaultRequests = new List<RequestType>
         {
@@ -303,8 +306,10 @@ namespace POGOLib.Official.Net
         ///     Gets the next request id for the <see cref="RequestEnvelope" />.
         /// </summary>
         /// <returns></returns>
-        private ulong GetNextRequestId()
+        private long GetNextRequestId()
         {
+            //Change to random requestId https://github.com/pogodevorg/pgoapi/pull/217
+            /*
             if (_requestCount == 1)
             {
                 IncrementRequestCount();
@@ -326,7 +331,9 @@ namespace POGOLib.Official.Net
             // So we'll just use the same for iOS since it doesn't hurt, and means less code required.
             ulong r = (((ulong)PositiveRandom() | ((_requestCount + 1) >> 31)) << 32) | (_requestCount + 1);
             IncrementRequestCount();
-            return r;
+            return r;*/
+
+            return idGenerator.Next();
         }
 
         /// <summary>
@@ -419,7 +426,7 @@ namespace POGOLib.Official.Net
             var requestEnvelope = new RequestEnvelope
             {
                 StatusCode = 2,
-                RequestId = GetNextRequestId(),
+                RequestId = (ulong)GetNextRequestId(),
                 Latitude = _session.Player.Coordinate.Latitude,
                 Longitude = _session.Player.Coordinate.Longitude
             };
