@@ -50,7 +50,7 @@ namespace POGOLib.Official.Net
 
         private string _mapKey;
 
-        private readonly RequestIdGenerator idGenerator = new RequestIdGenerator();
+        private readonly RandomIdGenerator idGenerator = new RandomIdGenerator();
 
         private readonly List<RequestType> _defaultRequests = new List<RequestType>
         {
@@ -306,7 +306,7 @@ namespace POGOLib.Official.Net
         ///     Gets the next request id for the <see cref="RequestEnvelope" />.
         /// </summary>
         /// <returns></returns>
-        private long GetNextRequestId()
+        private ulong GetNextRequestId()
         {
             //Change to random requestId https://github.com/pogodevorg/pgoapi/pull/217
             /*
@@ -426,7 +426,7 @@ namespace POGOLib.Official.Net
             var requestEnvelope = new RequestEnvelope
             {
                 StatusCode = 2,
-                RequestId = (ulong)GetNextRequestId(),
+                RequestId = GetNextRequestId(),
                 Latitude = _session.Player.Coordinate.Latitude,
                 Longitude = _session.Player.Coordinate.Longitude
             };

@@ -37,6 +37,8 @@ namespace POGOLib.Official.Net
         /// </summary>
         private long _lastTimestampSinceStart;
 
+        private readonly Uk27IdGenerator uk27IdGenerator = new Uk27IdGenerator();
+
         internal RpcEncryption(Session session)
         {
             _session = session;
@@ -182,6 +184,7 @@ namespace POGOLib.Official.Net
             // Hashing
             signature.SessionHash = _sessionHash;
             signature.Unknown25 = Configuration.Hasher.Unknown25;
+            signature.Unknown27 = uk27IdGenerator.Next();
 
             var serializedTicket = requestEnvelope.AuthTicket != null ? requestEnvelope.AuthTicket.ToByteArray() : requestEnvelope.AuthInfo.ToByteArray();
             var locationBytes = BitConverter.GetBytes(_session.Player.Coordinate.Latitude).Reverse()
