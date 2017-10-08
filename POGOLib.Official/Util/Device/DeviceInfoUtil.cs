@@ -40,6 +40,7 @@ namespace POGOLib.Official.Util.Device
             new[] {"iPhone7,1", "iPhone", "N56AP"},
             new[] {"iPhone7,2", "iPhone", "N61AP"},
             new[] {"iPhone8,1", "iPhone", "N71AP"}
+            new[] {"iPhone9,3", "iPhone", "MN9T2"}
         };
 
         private static readonly string[] OsVersions = {
@@ -61,6 +62,7 @@ namespace POGOLib.Official.Util.Device
             "9.3.2",
 //            "9.3.3",
 //            "9.3.4"
+            "11.1.0"
         };
 
         private static readonly string[] OsUserAgentParts = {
@@ -82,6 +84,7 @@ namespace POGOLib.Official.Util.Device
             "CFNetwork/758.4.3 Darwin/15.5.0", // 9.3.2
 //            "9.3.3", // 9.3.3
 //            "9.3.4"  // 9.3.4
+            "CFNetwork/889.3 Darwin/17.2.0", // 11.1.0
         };
 
         public static DeviceWrapper GetRandomDevice()
