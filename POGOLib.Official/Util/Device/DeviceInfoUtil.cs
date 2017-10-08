@@ -39,7 +39,7 @@ namespace POGOLib.Official.Util.Device
             new[] {"iPhone6,2", "iPhone", "N53AP"},
             new[] {"iPhone7,1", "iPhone", "N56AP"},
             new[] {"iPhone7,2", "iPhone", "N61AP"},
-            new[] {"iPhone8,1", "iPhone", "N71AP"}
+            new[] {"iPhone8,1", "iPhone", "N71AP"},
             new[] {"iPhone9,3", "iPhone", "MN9T2"}
         };
 
