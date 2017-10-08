@@ -84,9 +84,9 @@ namespace POGOLib.Official.Util.Device
             "CFNetwork/758.3.15 Darwin/15.4.0", // 9.3
 //            "9.3.1", // 9.3.1
             "CFNetwork/758.4.3 Darwin/15.5.0", // 9.3.2
-            "CFNetwork/807.2.14 Darwin/16.3.0", // 10.3.3
 //            "9.3.3", // 9.3.3
 //            "9.3.4"  // 9.3.4
+            "CFNetwork/807.2.14 Darwin/16.3.0", // 10.3.3
             "CFNetwork/889.3 Darwin/17.2.0", // 11.1.0
         };
 
