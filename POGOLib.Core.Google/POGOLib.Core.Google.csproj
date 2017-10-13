@@ -3,16 +3,17 @@
   <PropertyGroup>
     <Description>A community driven PokemonGo API Library written in C#. This project only contains a GoogleLoginProvider for 'POGOLib.Core'.</Description>
     <AssemblyTitle>POGOLib.Core.Google</AssemblyTitle>
-    <Authors>AeonLucid</Authors>
+    <Authors>AeonLucid  - --=FurtiF™=--</Authors>
     <TargetFramework>netstandard1.1</TargetFramework>
     <DebugType>portable</DebugType>
     <AssemblyName>POGOLib.Core.Google</AssemblyName>
     <PackageId>POGOLib.Core.Google</PackageId>
     <PackageTags>Pokemon;POGOLib;GoogleLoginProvider;netstandard</PackageTags>
-    <PackageIconUrl>http://i.imgur.com/7vJxPxu.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/AeonLucid/POGOLib</PackageProjectUrl>
+    <PackageIconUrl>https://secure.gravatar.com/avatar/d6dddda25a178dc2dd93edae79821fe3?s=512&amp;r=g&amp;d=retro</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/Furtif/POGOLib/tree/core</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/AeonLucid/POGOLib</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Furtif/POGOLib/tree/core</RepositoryUrl>
+    <Version>1.5.6</Version>
   </PropertyGroup>
 
   <ItemGroup>

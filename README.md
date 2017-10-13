@@ -1,4 +1,4 @@
-POGOLib [![AppVeyor](https://img.shields.io/appveyor/ci/AeonLucid/pogolib/master.svg?maxAge=60)](https://ci.appveyor.com/project/AeonLucid/pogolib) [![NuGet](https://img.shields.io/nuget/v/POGOLib.Official.svg?maxAge=60)](https://www.nuget.org/packages/POGOLib.Official)
+POGOLib [![Build status](https://ci.appveyor.com/api/projects/status/6vktt4ad4v5wkiqq/branch/master?svg=true)](https://ci.appveyor.com/project/RocketBot/pogolib/branch/master) [![NuGet](https://img.shields.io/nuget/v/POGOLib.Core.svg?maxAge=60)](https://www.nuget.org/packages/POGOLib.Core)
 ===================
 
 POGOLib is written in C# and aims to be a community-driven PokémonGo API. Feel free to submit pull requests.
@@ -18,10 +18,10 @@ The library is a bit low-level now but the goal is to provide a high-level libra
 ## NuGet
 
 ### Console
-Run `Install-Package POGOLib.Official`  in `Tools > NuGet Package Manager > Package Manager Console` .
+Run `Install-Package POGOLib.Core`  in `Tools > NuGet Package Manager > Package Manager Console` .
 
 ### Package Browser
-Right click your project in Visual Studio, click `Manage NuGet Packages..`, make sure `Browse` is pressed. Search for `POGOLib.Official` and press `Install`.
+Right click your project in Visual Studio, click `Manage NuGet Packages..`, make sure `Browse` is pressed. Search for `POGOLib.Core` and press `Install`.
 
 # Features
 
@@ -31,7 +31,7 @@ POGOLib supports **Pokemon Trainer Club** and **Google**.
 
 We also allow you to store the `session.AccessToken` to a file using `JsonConvert.SerializeObject(accessToken, Formatting.Indented)` , using this you can cache your authenticated sessions and load them later by using `JsonConvert.DeserializeObject<AccessToken>("json here")`.
 
-You can view an example of how I implemented this in the [demo](https://github.com/AeonLucid/POGOLib/blob/master/POGOLib.Official.Demo.ConsoleApp/Program.cs).
+You can view an example of how I implemented this in the [demo](https://github.com/AeonLucid/POGOLib/blob/master/POGOLib.Core.Demo.ConsoleApp/Program.cs).
 
 ## Re-authentication
 
