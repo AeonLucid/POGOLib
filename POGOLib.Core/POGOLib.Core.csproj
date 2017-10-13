@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>A community-driven PokemonGo API Library written in C#. You can read the changelog here https://github.com/Furtif/POGOLib/tree/core/blob/master/README.md.</Description>
+    <Description>A community-driven PokemonGo API Library written in C#. You can read the changelog here https://github.com/Furtif/POGOLib/blob/core/README.md.</Description>
     <AssemblyTitle>POGOLib.Core</AssemblyTitle>
     <Authors>AeonLucid  - --=FurtiF™=--</Authors>
     <TargetFramework>netstandard1.1</TargetFramework>
