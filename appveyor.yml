@@ -20,13 +20,13 @@ init:
 
 build_script:
   - ps: dotnet restore --no-cache
-  - ps: dotnet build .\POGOLib.Official\POGOLib.Official.csproj -c Release
-  - ps: dotnet build .\POGOLib.Official.Google\POGOLib.Official.Google.csproj -c Release
-  - ps: dotnet build .\POGOLib.Official.Demo.ConsoleApp\POGOLib.Official.Demo.ConsoleApp.csproj -c Release
+  - ps: dotnet build .\POGOLib.Core\POGOLib.Core.csproj -c Release
+  - ps: dotnet build .\POGOLib.Core.Google\POGOLib.Core.Google.csproj -c Release
+  - ps: dotnet build .\POGOLib.Core.Demo.ConsoleApp\POGOLib.Core.Demo.ConsoleApp.csproj -c Release
   
 after_build:
-  - ps: dotnet pack .\POGOLib.Official\POGOLib.Official.csproj -c Release --no-build -o artifacts
-  - ps: dotnet pack .\POGOLib.Official.Google\POGOLib.Official.Google.csproj -c Release --no-build -o artifacts
+  - ps: dotnet pack .\POGOLib.Core\POGOLib.Core.csproj -c Release --no-build -o artifacts
+  - ps: dotnet pack .\POGOLib.Core.Google\POGOLib.Core.Google.csproj -c Release --no-build -o artifacts
   
 artifacts:
   - path: .\**\artifacts\*.nupkg

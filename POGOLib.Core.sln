@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POGOLib.Official", "POGOLib.Official\POGOLib.Official.csproj", "{15F93027-D3A4-4966-8D60-3574FDC5A5FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POGOLib.Core", "POGOLib.Core\POGOLib.Core.csproj", "{15F93027-D3A4-4966-8D60-3574FDC5A5FA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POGOLib.Official.Google", "POGOLib.Official.Google\POGOLib.Official.Google.csproj", "{2110664C-7AD1-4197-A790-477641FDAB88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POGOLib.Core.Google", "POGOLib.Core.Google\POGOLib.Core.Google.csproj", "{2110664C-7AD1-4197-A790-477641FDAB88}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{088C01ED-0D35-40FD-96F5-A0A15B79B4CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POGOLib.Official.Demo.ConsoleApp", "POGOLib.Official.Demo.ConsoleApp\POGOLib.Official.Demo.ConsoleApp.csproj", "{6E399D28-712C-4690-87A1-907CB4C04F1E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POGOLib.Core.Demo.ConsoleApp", "POGOLib.Core.Demo.ConsoleApp\POGOLib.Core.Demo.ConsoleApp.csproj", "{6E399D28-712C-4690-87A1-907CB4C04F1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POGOLib.Official.Demo.ConsoleApp.Multiple", "POGOLib.Official.Demo.ConsoleApp.Multiple\POGOLib.Official.Demo.ConsoleApp.Multiple.csproj", "{9CFFC679-3D72-444B-916A-CBFE3ED9545D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POGOLib.Core.Demo.ConsoleApp.Multiple", "POGOLib.Core.Demo.ConsoleApp.Multiple\POGOLib.Core.Demo.ConsoleApp.Multiple.csproj", "{9CFFC679-3D72-444B-916A-CBFE3ED9545D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

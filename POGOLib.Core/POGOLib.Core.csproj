@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <Description>A community-driven PokemonGo API Library written in C#. You can read the changelog here https://github.com/AeonLucid/POGOLib/blob/master/README.md.</Description>
-    <AssemblyTitle>POGOLib.Official</AssemblyTitle>
+    <AssemblyTitle>POGOLib.Core</AssemblyTitle>
     <Authors>AeonLucid</Authors>
     <TargetFramework>netstandard1.1</TargetFramework>
-    <AssemblyName>POGOLib.Official</AssemblyName>
-    <PackageId>POGOLib.Official</PackageId>
+    <AssemblyName>POGOLib.Core</AssemblyName>
+    <PackageId>POGOLib.Core</PackageId>
     <PackageTags>Pokemon;POGOLib;netstandard</PackageTags>
     <PackageIconUrl>http://i.imgur.com/sIso99f.jpg</PackageIconUrl>
     <PackageProjectUrl>https://github.com/AeonLucid/POGOLib</PackageProjectUrl>
