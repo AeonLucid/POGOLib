@@ -2,6 +2,7 @@ branches:
   only:
   - master
   - develop
+  - core
 
 assembly_info:
   patch: false
