@@ -81,7 +81,7 @@ namespace POGOLib.Official.Util.Hash
 
         public Version PokemonVersion { get; } = new Version("0.77.1");
 
-        public long Unknown25 { get; } = unchecked((long)0xA50D4ECF47B25C0DD);
+        public long Unknown25 { get; } = unchecked((long)0xA50D4ECF47B25C0D);
 
         public async Task<HashData> GetHashDataAsync(RequestEnvelope requestEnvelope, Signature signature, byte[] locationBytes, byte[][] requestsBytes, byte[] serializedTicket)
         {
