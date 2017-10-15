@@ -13,7 +13,7 @@
     <PackageProjectUrl>https://github.com/Furtif/POGOLib/tree/core</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Furtif/POGOLib/tree/core</RepositoryUrl>
-    <Version>1.5.7</Version>
+    <Version>1.5.8</Version>
   </PropertyGroup>
 
   <ItemGroup>
