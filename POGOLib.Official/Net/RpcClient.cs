@@ -56,7 +56,7 @@ namespace POGOLib.Official.Net
         {
             RequestType.CheckChallenge,
             RequestType.GetHatchedEggs,
-            RequestType.GetInventory,
+            RequestType.GetHoloInventory,
             RequestType.CheckAwardedBadges,
             RequestType.DownloadSettings,
             RequestType.GetInbox
@@ -360,8 +360,8 @@ namespace POGOLib.Official.Net
                 },
                 new Request
                 {
-                    RequestType = RequestType.GetInventory,
-                    RequestMessage = new GetInventoryMessage
+                    RequestType = RequestType.GetHoloInventory,
+                    RequestMessage = new GetHoloInventoryMessage
                     {
                         LastTimestampMs = _session.Player.Inventory.LastInventoryTimestampMs
                     }.ToByteString()
@@ -760,8 +760,8 @@ namespace POGOLib.Official.Net
                         }
                         break;
 
-                    case RequestType.GetInventory: // Get_Inventory
-                        var inventory = GetInventoryResponse.Parser.ParseFrom(bytes);
+                    case RequestType.GetHoloInventory: // Get_Inventory
+                        var inventory = GetHoloInventoryResponse.Parser.ParseFrom(bytes);
                         if (inventory.Success)
                         {
                             if (inventory.InventoryDelta.NewTimestampMs >=
