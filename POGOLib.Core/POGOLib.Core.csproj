@@ -12,8 +12,8 @@
     <PackageProjectUrl>https://github.com/Furtif/POGOLib/tree/core</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Furtif/POGOLib/tree/core</RepositoryUrl>
-    <Version>1.6.1</Version>
-    <AssemblyVersion>1.6.1.0</AssemblyVersion>
+    <Version>1.6.2</Version>
+    <AssemblyVersion>1.6.2.0</AssemblyVersion>
     <FileVersion>1.6.1.0</FileVersion>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <Company>AeonLucid</Company>
@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="GeoCoordinate.NetStandard1" Version="1.0.1" />
-    <PackageReference Include="POGOProtos.Core" Version="2.18.1" />
+    <PackageReference Include="POGOProtos.Core" Version="2.19.0" />
     <PackageReference Include="Google.Protobuf" Version="3.4.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="S2Geometry" Version="1.0.3" />
