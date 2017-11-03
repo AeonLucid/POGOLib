@@ -1,4 +1,4 @@
-POGOLib [![Build status](https://ci.appveyor.com/api/projects/status/6vktt4ad4v5wkiqq/branch/core?svg=true)](https://ci.appveyor.com/project/RocketBot/pogolib/branch/core) [![NuGet](https://img.shields.io/nuget/v/POGOLib.Core.svg?maxAge=60)](https://www.nuget.org/packages/POGOLib.Core)
+POGOLib [![Build status](https://ci.appveyor.com/api/projects/status/6vktt4ad4v5wkiqq/branch/core?svg=true)](https://ci.appveyor.com/project/RocketBot/pogolib/branch/core) [![NuGet](https://img.shields.io/nuget/v/POGOLib.Core.svg?maxAge=60)](https://www.nuget.org/packages/POGOLib.Core) [![Waffle.io - Columns and their card count](https://badge.waffle.io/Furtif/POGOLib.svg?columns=all)](https://waffle.io/Furtif/POGOLib)
 ===================
 
 POGOLib is written in C# and aims to be a community-driven PokémonGo API. Feel free to submit pull requests.
