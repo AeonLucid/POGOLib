@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using POGOLib.Official.Logging;
 using POGOLib.Official.Net.Authentication.Data;
+using System.Net;
 
 namespace POGOLib.Official.LoginProviders
 {
@@ -101,7 +102,7 @@ namespace POGOLib.Official.LoginProviders
             var loginResponseData = JObject.Parse(loginResponseDataRaw);
             var loginResponseErrors = (JArray)loginResponseData["errors"];
 
-            throw new PtcLoginException($"Pokemon Trainer Club gave error(s): '{string.Join(",", loginResponseErrors)}'");
+            throw new PtcLoginException($"Pokemon Trainer Club gave error(s): '{WebUtility.HtmlDecode(string.Join(",", loginResponseErrors))}'");
         }
 
         /// <summary>

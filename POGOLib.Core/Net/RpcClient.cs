@@ -247,7 +247,16 @@ namespace POGOLib.Official.Net
         public async Task RefreshMapObjectsAsync()
         {
             var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
-            var sinceTimeMs = cellIds.Select(x => (long)0).ToArray();
+            var sinceTimeMs = new List<long>(cellIds.Length);
+
+            foreach (var cellId in cellIds)
+            {
+                var cell = _session.Map.Cells.FirstOrDefault(x => x.S2CellId == cellId);
+
+                // TODO: Using the cells' currenttimestamp gives a delta, which is probably better, but we need to merge the result with the existing ones
+                //sinceTimeMs.Add(cell?.CurrentTimestampMs ?? 0);
+                sinceTimeMs.Add(0);
+            }
 
             var response = await SendRemoteProcedureCallAsync(new Request
             {
@@ -260,7 +269,7 @@ namespace POGOLib.Official.Net
                     },
                     SinceTimestampMs =
                     {
-                        sinceTimeMs
+                        sinceTimeMs.ToArray()
                     },
                     Latitude = _session.Player.Coordinate.Latitude,
                     Longitude = _session.Player.Coordinate.Longitude
@@ -462,6 +471,16 @@ namespace POGOLib.Official.Net
             else
             {
                 requestEnvelope.AuthTicket = _session.AccessToken.AuthTicket;
+            }
+
+            if (requestEnvelope.Requests.Count > 0 &&
+                requestEnvelope.Requests[0].RequestType == RequestType.GetMapObjects)
+            {
+                requestEnvelope.Requests.Add(new Request
+                {
+                    RequestType = RequestType.GetInbox,
+                    RequestMessage = ByteString.Empty
+                });
             }
 
             requestEnvelope.PlatformRequests.Add(await _rpcEncryption.GenerateSignatureAsync(requestEnvelope));
