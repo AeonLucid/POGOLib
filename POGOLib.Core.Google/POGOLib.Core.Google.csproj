@@ -13,7 +13,7 @@
     <PackageProjectUrl>https://github.com/Furtif/POGOLib/tree/core</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Furtif/POGOLib/tree/core</RepositoryUrl>
-    <Version>1.6.4</Version>
+    <Version>1.6.5</Version>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <Company>AeonLucid</Company>
   </PropertyGroup>
