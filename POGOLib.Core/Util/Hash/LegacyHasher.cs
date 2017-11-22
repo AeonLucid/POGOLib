@@ -20,6 +20,7 @@ namespace POGOLib.Official.Util.Hash
 
         public async Task<HashData> GetHashDataAsync(RequestEnvelope requestEnvelope, Signature signature, byte[] locationBytes, byte[][] requestsBytes, byte[] serializedTicket)
         {
+            await Task.Delay(0);
             return new HashData
             {
                 LocationAuthHash = NiaHashLegacy.Hash32Salt(locationBytes, NiaHashLegacy.Hash32(serializedTicket)),

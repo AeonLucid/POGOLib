@@ -10,7 +10,8 @@ namespace POGOLib.Official.Util.Device
 
         private static readonly string[][] Devices =
         {
-            new[] {"iPad3,1", "iPad", "J1AP"},
+            // maybe not support 
+            /*new[] {"iPad3,1", "iPad", "J1AP"},
             new[] {"iPad3,2", "iPad", "J2AP"},
             new[] {"iPad3,3", "iPad", "J2AAP"},
             new[] {"iPad3,4", "iPad", "P101AP"},
@@ -24,7 +25,7 @@ namespace POGOLib.Official.Util.Device
             new[] {"iPad4,6", "iPad", "J87AP"},
             new[] {"iPad4,7", "iPad", "J85mAP"},
             new[] {"iPad4,8", "iPad", "J86mAP"},
-            new[] {"iPad4,9", "iPad", "J87mAP"},
+            new[] {"iPad4,9", "iPad", "J87mAP"},*/
             new[] {"iPad5,1", "iPad", "J96AP"},
             new[] {"iPad5,2", "iPad", "J97AP"},
             new[] {"iPad5,3", "iPad", "J81AP"},
@@ -45,13 +46,15 @@ namespace POGOLib.Official.Util.Device
         };
 
         private static readonly string[] OsVersions = {
+            /*
+             * not more supported
             "8.1.1",
             "8.1.2",
             "8.1.3",
             "8.2",
             "8.3",
             "8.4",
-            "8.4.1",
+            "8.4.1",*/
             "9.0",
             "9.0.1",
             "9.0.2",
@@ -64,17 +67,20 @@ namespace POGOLib.Official.Util.Device
 //            "9.3.3",
 //            "9.3.4"
             "10.3.3",
-            "11.1.0"
+            "11.1.0",
+            "11.2.0"
         };
 
         private static readonly string[] OsUserAgentParts = {
+            /*
+             * not more supportd
             "CFNetwork/711.1.16 Darwin/14.0.0", // 8.1.1
             "CFNetwork/711.1.16 Darwin/14.0.0", // 8.1.2
             "CFNetwork/711.1.16	Darwin/14.0.0", // 8.1.3
             "CFNetwork/711.2.23 Darwin/14.0.0", // 8.2
             "CFNetwork/711.3.18 Darwin/14.0.0", // 8.3
             "CFNetwork/711.4.6 Darwin/14.4.0",  // 8.4
-            "CFNetwork/711.4.6 Darwin/14.4.0",  // 8.4.1
+            "CFNetwork/711.4.6 Darwin/14.4.0",  // 8.4.1*/
             "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0
             "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0.1
             "CFNetwork/758.0.2 Darwin/15.0.0",  // 9.0.2
@@ -88,6 +94,7 @@ namespace POGOLib.Official.Util.Device
 //            "9.3.4"  // 9.3.4
             "CFNetwork/807.2.14 Darwin/16.3.0", // 10.3.3
             "CFNetwork/889.3 Darwin/17.2.0", // 11.1.0
+            "CFNetwork/893.10 Darwin/17.3.0", // 11.2.0
         };
 
         public static DeviceWrapper GetRandomDevice()
