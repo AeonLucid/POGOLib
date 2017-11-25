@@ -515,7 +515,7 @@ namespace POGOLib.Official.Net
                     while (_rpcQueue.TryDequeue(out processRequestEnvelope))
                     {
 //                        var diff = Math.Max(0, DateTime.Now.Millisecond - LastRpcRequest.Millisecond);
-                        var diff = Math.Min((int)(DateTime.UtcNow - LastRpcRequest.ToUniversalTime()).TotalMilliseconds, Configuration.ThrottleDifference);
+                        var diff = (int)Math.Min((DateTime.UtcNow - LastRpcRequest.ToUniversalTime()).TotalMilliseconds, Configuration.ThrottleDifference);
                         if (diff < Configuration.ThrottleDifference)
                         {
                             var delay = Configuration.ThrottleDifference - diff + (int)(_session.Random.NextDouble() * 0);
