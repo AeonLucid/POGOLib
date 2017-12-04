@@ -48,7 +48,14 @@ namespace POGOLib.Official.LoginProviders
                 httpClientHandler.AllowAutoRedirect = false;
                 using (var httpClient = new HttpClient(httpClientHandler))
                 {
+                    httpClient.DefaultRequestHeaders.Accept.TryParseAdd(Constants.Accept);
+                    httpClient.DefaultRequestHeaders.Host = Constants.LoginHostValue;
+                    httpClient.DefaultRequestHeaders.Connection.TryParseAdd(Constants.Connection);
                     httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.LoginUserAgent);
+                    httpClient.DefaultRequestHeaders.AcceptLanguage.TryParseAdd(Constants.AcceptLanguage);
+                    httpClient.DefaultRequestHeaders.AcceptEncoding.TryParseAdd(Constants.AcceptEncoding);
+                    httpClient.DefaultRequestHeaders.TryAddWithoutValidation(Constants.LoginManufactor, Constants.LoginManufactorVersion);
+                    httpClient.Timeout.Add(Constants.TimeOut);
                     var loginData = await GetLoginData(httpClient);
                     var ticket = await PostLogin(httpClient, _username, _password, loginData);
                     var accessToken = await PostLoginOauth(httpClient, ticket);

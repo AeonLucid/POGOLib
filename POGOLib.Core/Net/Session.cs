@@ -127,7 +127,7 @@ namespace POGOLib.Official.Net
         /// <summary>
         /// Gets the hash of the <see cref="GlobalSettings"/>.
         /// </summary>
-        public string GlobalSettingsHash { get; set; } = string.Empty;
+        internal string GlobalSettingsHash { get; set; } = string.Empty;
 
         private Semaphore ReauthenticateMutex { get; } = new Semaphore(1, 1);
 
