@@ -19,6 +19,5 @@ namespace POGOLib.Official
         /// Gets or sets the <see cref="IHasher"/> used in <see cref="POGOLib.Official.Net.RpcEncryption"/>.
         /// </summary>
         public static IHasher Hasher { get; set; } = new LegacyHasher();
-
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace POGOLib.Official
+﻿using System;
+
+namespace POGOLib.Official
 {
     public static class Constants
     {
@@ -18,5 +20,14 @@
         public const string GoogleAuthService = "audience:server:client_id:848232511240-7so421jotr2609rmqakceuu1luuq0ptb.apps.googleusercontent.com";
         public const string GoogleAuthApp = "com.nianticlabs.pokemongo";
         public const string GoogleAuthClientSig = "321187995bc7cdc2b5fc91b11a96e2baa8602c62";
+        public const string Accept = "*/*";
+        public const string LoginHostValue = "sso.pokemon.com";
+        public const string Connection = "keep-alive";
+        public const string AcceptLanguage = "en-US";
+        public const string AcceptEncoding = "gzip-deflate";
+        public const string LoginManufactor = "X-Unity-Version";
+        public const string LoginManufactorVersion = "2017.1.2f1"; //"5.5.1f1";//"5.6.1f1";
+        public static TimeSpan TimeOut = new TimeSpan(0, 10, 0);
+
     }
 }
