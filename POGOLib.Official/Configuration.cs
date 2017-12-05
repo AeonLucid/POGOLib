@@ -1,4 +1,5 @@
-﻿using POGOLib.Official.Util.Hash;
+﻿using POGOLib.Official.Util;
+using POGOLib.Official.Util.Hash;
 
 namespace POGOLib.Official
 {
@@ -19,5 +20,10 @@ namespace POGOLib.Official
         /// Gets or sets the <see cref="IHasher"/> used in <see cref="POGOLib.Official.Net.RpcEncryption"/>.
         /// </summary>
         public static IHasher Hasher { get; set; } = new LegacyHasher();
+
+        /// <summary>
+        /// Gets or sets the <see cref="ILocaleInfo"/> for GetPlayer PlayerLocale information.
+        /// </summary>
+        public static ILocaleInfo LocaleInfo { get; set; } = new ILocaleInfo();
     }
 }
