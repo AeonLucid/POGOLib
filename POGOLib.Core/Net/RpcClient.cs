@@ -134,7 +134,8 @@ namespace POGOLib.Official.Net
                         RequestType = RequestType.GetPlayer,
                         RequestMessage = new GetPlayerMessage
                         {
-
+                            // Get Player locale information
+                            PlayerLocale = Configuration.LocaleInfo.PlayerLocale()
                         }.ToByteString()
                     },
                     new Request
