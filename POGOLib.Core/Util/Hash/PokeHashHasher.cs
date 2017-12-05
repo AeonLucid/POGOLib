@@ -26,10 +26,6 @@ namespace POGOLib.Official.Util.Hash
     /// </summary>
     public class PokeHashHasher : IHasher
     {
-        private const string PokeHashUrl = "https://pokehash.buddyauth.com/";
-
-        private const string PokeHashEndpoint = "api/v153_2/hash";
-
         private readonly List<PokeHashAuthKey> _authKeys;
 
         private readonly HttpClient _httpClient;
@@ -73,7 +69,7 @@ namespace POGOLib.Official.Util.Hash
             // Initialize HttpClient.
             _httpClient = new HttpClient
             {
-                BaseAddress = new Uri(PokeHashUrl)
+                BaseAddress = Configuration.HasherUrl
             };
 
             _httpClient.DefaultRequestHeaders.Clear();
@@ -210,7 +206,7 @@ namespace POGOLib.Official.Util.Hash
                 HttpResponseMessage response = null;
                 try
                 {
-                    response = await _httpClient.PostAsync(PokeHashEndpoint, requestContent);
+                    response = await _httpClient.PostAsync(Configuration.HashEndpoint, requestContent);
                 }
                 catch (Exception ex)
                 {
