@@ -1,5 +1,6 @@
 ﻿using POGOLib.Official.Util;
 using POGOLib.Official.Util.Hash;
+using System;
 
 namespace POGOLib.Official
 {
@@ -20,6 +21,16 @@ namespace POGOLib.Official
         /// Gets or sets the <see cref="IHasher"/> used in <see cref="POGOLib.Official.Net.RpcEncryption"/>.
         /// </summary>
         public static IHasher Hasher { get; set; } = new LegacyHasher();
+
+        /// <summary>
+        /// Gets or sets the <see cref="HasherUrl"/> used in <see cref="POGOLib.Official.Util.Hash.PokeHashHasher"/>.
+        /// </summary>
+        public static Uri HasherUrl { get; set; } = new Uri("https://pokehash.buddyauth.com/");
+
+        /// <summary>
+        /// Gets or sets the <see cref="HashEndpoint"/> used in <see cref="POGOLib.Official.Util.Hash.PokeHashHasher"/>.
+        /// </summary>
+        public static string HashEndpoint { get; set; } = "api/v153_2/hash";
 
         /// <summary>
         /// Gets or sets the <see cref="ILocaleInfo"/> for GetPlayer PlayerLocale information.
