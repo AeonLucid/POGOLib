@@ -32,7 +32,7 @@ namespace POGOLib.Official.Util.Hash
 
         private readonly Semaphore _keySelection;
 
-		public Version PokemonVersion { get; } = new Version("0.83.2");
+		public Version PokemonVersion { get; } = new Version("0.85.1");
 
         public long Unknown25 { get; } = unchecked((long)0x2AC22400401779DE);
     
