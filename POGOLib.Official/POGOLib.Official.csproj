@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="GeoCoordinate.NetStandard1" Version="1.0.1" />
-    <PackageReference Include="POGOProtos.Core" Version="2.19.2" />
+    <PackageReference Include="POGOProtos.Core" Version="2.20.0" />
     <PackageReference Include="Google.Protobuf" Version="3.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="S2Geometry" Version="1.0.3" />
