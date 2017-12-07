@@ -54,7 +54,7 @@ namespace POGOLib.Official.Net
 
         private readonly List<RequestType> _defaultRequests = new List<RequestType>
         {
-            //RequestType.CheckChallenge,
+            RequestType.CheckChallenge,
             RequestType.GetHatchedEggs,
             RequestType.GetHoloInventory,
             RequestType.CheckAwardedBadges,
@@ -138,7 +138,6 @@ namespace POGOLib.Official.Net
                             PlayerLocale = Configuration.LocaleInfo.PlayerLocale()
                         }.ToByteString()
                     },
-                    /*
                     new Request
                     {
                         RequestType = RequestType.CheckChallenge,
@@ -147,7 +146,6 @@ namespace POGOLib.Official.Net
                             DebugRequest = false
                         }.ToByteString()
                     }
-                    */
                 });
                 playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
                 if (!playerResponse.Success)
@@ -348,7 +346,6 @@ namespace POGOLib.Official.Net
         {
             var request = new List<Request>
             {
-                /*
                 new Request
                 {
                     RequestType = RequestType.CheckChallenge,
@@ -357,7 +354,6 @@ namespace POGOLib.Official.Net
                         DebugRequest = false
                     }.ToByteString()
                 },
-                */
                 new Request
                 {
                     RequestType = RequestType.GetHatchedEggs,
@@ -822,7 +818,6 @@ namespace POGOLib.Official.Net
                         }
                         break;
                         
-                    /*
                     case RequestType.CheckChallenge:
                         var checkChallenge = CheckChallengeResponse.Parser.ParseFrom(bytes);
                         if (checkChallenge.ShowChallenge)
@@ -831,7 +826,6 @@ namespace POGOLib.Official.Net
                             _session.OnCaptchaReceived(checkChallenge.ChallengeUrl);
                         }
                         break;
-                    */
                 }
             }
         }

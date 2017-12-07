@@ -112,7 +112,7 @@ namespace POGOLib.Official.Demo.ConsoleApp
             session.AccessTokenUpdated += SessionOnAccessTokenUpdated;
             session.InventoryUpdate += InventoryOnUpdate;
             session.MapUpdate += MapOnUpdate;
-            //session.CaptchaReceived += SessionOnCaptchaReceived;
+            session.CaptchaReceived += SessionOnCaptchaReceived;
 
             // Send initial requests and start HeartbeatDispatcher.
             // This makes sure that the initial heartbeat request finishes and the "session.Map.Cells" contains stuff.
@@ -156,7 +156,7 @@ namespace POGOLib.Official.Demo.ConsoleApp
             HandleCommands();
         }
 
-      /*private static void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
+        private static void SessionOnCaptchaReceived(object sender, CaptchaEventArgs e)
         {
             var session = (Session)sender;
 
@@ -176,7 +176,6 @@ namespace POGOLib.Official.Demo.ConsoleApp
 //            
 //            Console.WriteLine(JsonConvert.SerializeObject(verifyChallenge, Formatting.Indented));
         }
-        */
 
         private static void SessionOnAccessTokenUpdated(object sender, EventArgs e)
         {

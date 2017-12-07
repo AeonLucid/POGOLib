@@ -267,12 +267,10 @@ namespace POGOLib.Official.Net
             MapUpdate?.Invoke(this, EventArgs.Empty);
         }
 
-        /*
         internal void OnCaptchaReceived(string url)
         {
             CaptchaReceived?.Invoke(this, new CaptchaEventArgs(url));
         }
-        */
 
         public event EventHandler<EventArgs> AccessTokenUpdated;
 
@@ -284,7 +282,7 @@ namespace POGOLib.Official.Net
         /// If you have successfully solved the captcha using VerifyChallegenge, 
         /// you can resume POGOLib by using <see cref="ResumeAsync"/>.
         /// </summary>
-        //public event EventHandler<CaptchaEventArgs> CaptchaReceived;
+        public event EventHandler<CaptchaEventArgs> CaptchaReceived;
         #endregion
 
         public void Dispose()
