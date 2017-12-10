@@ -28,7 +28,7 @@ namespace POGOLib.Official.Util.Hash
     {
         private readonly List<PokeHashAuthKey> _authKeys;
 
-        private readonly HttpClient _httpClient;
+        private HttpClient _httpClient;
 
         private readonly Semaphore _keySelection;
 
@@ -40,41 +40,49 @@ namespace POGOLib.Official.Util.Hash
         ///     Initializes the <see cref="PokeHashHasher"/>.
         /// </summary>
         /// <param name="authKey">The PokeHash authkey obtained from https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer. </param>
-        public PokeHashHasher(string authKey) : this(new []{ authKey })
+        public PokeHashHasher(string authKey) : this(new List<string> { authKey })
         {
 
+        }
+
+        /// <summary>
+        ///     Get Hash server of current key the <see cref="PokeHashHasher"/>.
+        /// </summary>
+        /// <param name="key">The PokeHash authkeys obtained from Hash Server. </param>
+        private Uri GetPokeHashHasherUrl(string key)
+        {
+            try
+            {
+                if (key.Substring(0, 2) == "PH")
+                    return new Uri("http://hash.goman.io/");
+                else
+                    return Configuration.HasherUrl;
+            }
+            catch
+            {
+                return Configuration.HasherUrl;
+            }
         }
 
         /// <summary>
         ///     Initializes the <see cref="PokeHashHasher"/>.
         /// </summary>
         /// <param name="authKeys">The PokeHash authkeys obtained from https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer. </param>
-        public PokeHashHasher(string[] authKeys)
+        public PokeHashHasher(List<string> authKeys)
         {
-            if (authKeys.Length == 0)
+            if (authKeys.Count < 1)
                 throw new ArgumentException($"{nameof(authKeys)} may not be empty.");
 
             _authKeys = new List<PokeHashAuthKey>();
-            
+
             // We don't want any duplicate keys.
             foreach (var authKey in authKeys)
             {
-                var pokeHashAuthKey = new PokeHashAuthKey(authKey);
+                var pokeHashAuthKey = new PokeHashAuthKey(authKey, GetPokeHashHasherUrl(authKey));
                 if (_authKeys.Contains(pokeHashAuthKey))
                     throw new Exception($"The auth key '{authKey}' is a duplicate.");
-
                 _authKeys.Add(pokeHashAuthKey);
             }
-
-            // Initialize HttpClient.
-            _httpClient = new HttpClient
-            {
-                BaseAddress = Configuration.HasherUrl
-            };
-
-            _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("POGOLib (https://github.com/AeonLucid/POGOLib)");
 
             _keySelection = new Semaphore(1, 1);
         }
@@ -206,6 +214,16 @@ namespace POGOLib.Official.Util.Hash
                 HttpResponseMessage response = null;
                 try
                 {
+                    // Initialize HttpClient.
+                    _httpClient = new HttpClient
+                    {
+                        BaseAddress = authKey.HashUrl
+                    };
+
+                    _httpClient.DefaultRequestHeaders.Clear();
+                    _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("POGOLib.Core (https://github.com/Furtif/POGOLib)");
+
                     response = await _httpClient.PostAsync(Configuration.HashEndpoint, requestContent);
                 }
                 catch (Exception ex)

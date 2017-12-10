@@ -4,10 +4,13 @@ namespace POGOLib.Official.Util.Hash.PokeHash
 {
     internal class PokeHashAuthKey : IEquatable<PokeHashAuthKey>
     {
-        public PokeHashAuthKey(string authKey)
+        public PokeHashAuthKey(string authKey, Uri hashurl)
         {
             AuthKey = authKey;
+            HashUrl = hashurl;
         }
+
+        public Uri HashUrl { get; set; }
 
         public string AuthKey { get; }
 
