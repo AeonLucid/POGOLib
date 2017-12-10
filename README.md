@@ -7,10 +7,6 @@ POGOLib is written in C# and aims to be a community-driven PokémonGo API. Feel 
 
 The library is a bit low-level now but the goal is to provide a high-level library while also allowing low-level request crafting.
 
-# Changelog
-
-[Click here to read the changelog of POGOLib.](CHANGELOG.md)
-
 # Installation
 
 ## Supported Platforms
@@ -33,7 +29,7 @@ POGOLib supports **Pokemon Trainer Club** and **Google**.
 
 We also allow you to store the `session.AccessToken` to a file using `JsonConvert.SerializeObject(accessToken, Formatting.Indented)` , using this you can cache your authenticated sessions and load them later by using `JsonConvert.DeserializeObject<AccessToken>("json here")`.
 
-You can view an example of how I implemented this in the [demo](https://github.com/AeonLucid/POGOLib/blob/master/POGOLib.Core.Demo.ConsoleApp/Program.cs).
+You can view an example of how I implemented this in the [demo](https://github.com/Furtif/POGOLib/blob/master/POGOLib.Core.Demo.ConsoleApp/Program.cs).
 
 ## Re-authentication
 
@@ -54,8 +50,8 @@ The map, inventory and player are automatically updated by the heartbeat.
 
 The heartbeat checks every second if:
 
- - the seconds since the last heartbeat is greater than or equal to the [maximum allowed refresh seconds](https://github.com/AeonLucid/POGOProtos/blob/master/src/POGOProtos/Settings/MapSettings.proto#L9) of the game settings;
- - the distance moved is greater than or equal to the [minimum allowed distance](https://github.com/AeonLucid/POGOProtos/blob/master/src/POGOProtos/Settings/MapSettings.proto#L10) of the game settings;
+ - the seconds since the last heartbeat is greater than or equal to the [maximum allowed refresh seconds](https://github.com/Furtif/POGOProtos/blob/master/src/POGOProtos/Settings/MapSettings.proto#L9) of the game settings;
+ - the distance moved is greater than or equal to the [minimum allowed distance](https://github.com/Furtif/POGOProtos/blob/master/src/POGOProtos/Settings/MapSettings.proto#L10) of the game settings;
 
 If one of these is true, a heartbeat will be sent. This automatically fetches the map data surrounding your current position, your inventory data and the game settings.
 
