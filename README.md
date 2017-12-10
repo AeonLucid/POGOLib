@@ -29,7 +29,7 @@ POGOLib supports **Pokemon Trainer Club** and **Google**.
 
 We also allow you to store the `session.AccessToken` to a file using `JsonConvert.SerializeObject(accessToken, Formatting.Indented)` , using this you can cache your authenticated sessions and load them later by using `JsonConvert.DeserializeObject<AccessToken>("json here")`.
 
-You can view an example of how I implemented this in the [demo](https://github.com/Furtif/POGOLib/blob/master/POGOLib.Core.Demo.ConsoleApp/Program.cs).
+You can view an example of how I implemented this in the [demo](https://github.com/Furtif/POGOLib/blob/core/POGOLib.Core.Demo.ConsoleApp/Program.cs).
 
 ## Re-authentication
 
@@ -95,10 +95,10 @@ Read more: [https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer](htt
 
 *This is for now almost the only way to receive data. It's easy though!*
 
-If you want to know what requests are available, click [here](https://github.com/AeonLucid/POGOProtos/tree/master/src/POGOProtos/Networking/Requests/Messages).
-If you want to know what responses belong to the requests, click [here](https://github.com/AeonLucid/POGOProtos/tree/master/src/POGOProtos/Networking/Responses).
+If you want to know what requests are available, click [here](https://github.com/Furtif/POGOProtos/tree/master/src/POGOProtos/Networking/Requests/Messages).
+If you want to know what responses belong to the requests, click [here](https://github.com/Furtif/POGOProtos/tree/master/src/POGOProtos/Networking/Responses).
 
-If you want to know what kind of data is available, [have a look through all POGOProtos files](https://github.com/AeonLucid/POGOProtos/tree/master/src/POGOProtos).
+If you want to know what kind of data is available, [have a look through all POGOProtos files](https://github.com/Furtif/POGOProtos/tree/master/src/POGOProtos).
 
 You can send a request and parse the response like this.
 
