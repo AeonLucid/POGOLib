@@ -27,6 +27,8 @@ namespace POGOLib.Official.Util.Hash
     public class PokeHashHasher : IHasher
     {
         private readonly List<PokeHashAuthKey> _authKeys;
+        private readonly List<PokeHashAuthHasher> _authHashers 
+            = new List<PokeHashAuthHasher>{new PokeHashAuthHasher("PH", new Uri("http://hash.goman.io/"))};
 
         private HttpClient _httpClient;
 
@@ -40,7 +42,7 @@ namespace POGOLib.Official.Util.Hash
         ///     Initializes the <see cref="PokeHashHasher"/>.
         /// </summary>
         /// <param name="authKey">The PokeHash authkey obtained from https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer. </param>
-        public PokeHashHasher(string authKey) : this(new List<string> { authKey })
+        public PokeHashHasher(string authKey) : this(new []{ authKey })
         {
 
         }
@@ -49,28 +51,22 @@ namespace POGOLib.Official.Util.Hash
         ///     Get Hash server of current key the <see cref="PokeHashHasher"/>.
         /// </summary>
         /// <param name="key">The PokeHash authkeys obtained from Hash Server. </param>
-        private Uri GetPokeHashHasherUrl(string key)
+        private Uri GetHashUri(string key)
         {
-            try
-            {
-                if (key.Substring(0, 2) == "PH")
-                    return new Uri("http://hash.goman.io/");
-                else
-                    return Configuration.HasherUrl;
+            foreach (var hasher in _authHashers) {
+                if (key.StartsWith(hasher.pattern, StringComparison.Ordinal))
+                    return hasher.uri;
             }
-            catch
-            {
-                return Configuration.HasherUrl;
-            }
+            return Configuration.HasherUrl;;
         }
 
         /// <summary>
         ///     Initializes the <see cref="PokeHashHasher"/>.
         /// </summary>
         /// <param name="authKeys">The PokeHash authkeys obtained from https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer. </param>
-        public PokeHashHasher(List<string> authKeys)
+        public PokeHashHasher(string[] authKeys)
         {
-            if (authKeys.Count < 1)
+            if (authKeys.Length < 1)
                 throw new ArgumentException($"{nameof(authKeys)} may not be empty.");
 
             _authKeys = new List<PokeHashAuthKey>();
@@ -78,7 +74,7 @@ namespace POGOLib.Official.Util.Hash
             // We don't want any duplicate keys.
             foreach (var authKey in authKeys)
             {
-                var pokeHashAuthKey = new PokeHashAuthKey(authKey, GetPokeHashHasherUrl(authKey));
+                var pokeHashAuthKey = new PokeHashAuthKey(authKey);
                 if (_authKeys.Contains(pokeHashAuthKey))
                     throw new Exception($"The auth key '{authKey}' is a duplicate.");
                 _authKeys.Add(pokeHashAuthKey);
@@ -159,7 +155,7 @@ namespace POGOLib.Official.Util.Hash
             }
             return null;
         }
-        
+
         private Task<HttpResponseMessage> PerformRequest(HttpContent requestContent)
         {
             return Task.Run(async () =>
@@ -217,7 +213,7 @@ namespace POGOLib.Official.Util.Hash
                     // Initialize HttpClient.
                     _httpClient = new HttpClient
                     {
-                        BaseAddress = authKey.HashUrl
+                        BaseAddress = GetHashUri (authKey.AuthKey)
                     };
 
                     _httpClient.DefaultRequestHeaders.Clear();
@@ -244,9 +240,12 @@ namespace POGOLib.Official.Util.Hash
                     int rateRequestsRemaining;
                     int ratePeriodEndSeconds;
 
-                    if (response.Headers.TryGetValues("X-MaxRequestCount", out IEnumerable<string> maxRequestsValue) &&
-                        response.Headers.TryGetValues("X-RateRequestsRemaining", out IEnumerable<string> requestsRemainingValue) &&
-                        response.Headers.TryGetValues("X-RatePeriodEnd", out IEnumerable<string> ratePeriodEndValue))
+                    IEnumerable<string> maxRequestsValue;
+                    IEnumerable<string> requestsRemainingValue;
+                    IEnumerable<string> ratePeriodEndValue;
+                    if (response.Headers.TryGetValues("X-MaxRequestCount", out maxRequestsValue) &&
+                        response.Headers.TryGetValues("X-RateRequestsRemaining", out requestsRemainingValue) &&
+                        response.Headers.TryGetValues("X-RatePeriodEnd", out ratePeriodEndValue))
                     {
                         if (!int.TryParse(maxRequestsValue.First(), out maxRequestCount) ||
                             !int.TryParse(requestsRemainingValue.First(), out rateRequestsRemaining) ||
