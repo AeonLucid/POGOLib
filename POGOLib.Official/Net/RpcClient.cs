@@ -512,7 +512,8 @@ namespace POGOLib.Official.Net
                 {
                     _rpcQueueMutex.WaitOne();
 
-                    while (_rpcQueue.TryDequeue(out RequestEnvelope processRequestEnvelope))
+                    RequestEnvelope processRequestEnvelope;
+                    while (_rpcQueue.TryDequeue(out processRequestEnvelope))
                     {
                         //                        var diff = Math.Max(0, DateTime.Now.Millisecond - LastRpcRequest.Millisecond);
                         var diff = (int)Math.Min((DateTime.UtcNow - LastRpcRequest.ToUniversalTime()).TotalMilliseconds, Configuration.ThrottleDifference);
@@ -525,8 +526,8 @@ namespace POGOLib.Official.Net
 
                         _rpcResponses.GetOrAdd(processRequestEnvelope, await PerformRemoteProcedureCallAsync(processRequestEnvelope));
                     }
-
-                    _rpcResponses.TryRemove(requestEnvelope, out ByteString ret);
+                     ByteString ret;
+                    _rpcResponses.TryRemove(requestEnvelope, out ret);
                     return ret;
                 }
                 finally
