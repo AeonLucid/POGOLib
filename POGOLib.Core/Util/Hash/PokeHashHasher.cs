@@ -30,8 +30,6 @@ namespace POGOLib.Official.Util.Hash
         private readonly List<PokeHashAuthHasher> _authHashers 
             = new List<PokeHashAuthHasher>{new PokeHashAuthHasher("PH", new Uri("http://hash.goman.io/"))};
 
-        private HttpClient _httpClient;
-
         private readonly Semaphore _keySelection;
 
 		public Version PokemonVersion { get; } = new Version("0.85.1");
@@ -185,7 +183,7 @@ namespace POGOLib.Official.Util.Hash
                             .OrderBy(x => x.RatePeriodEnd)
                             .First();
 
-                        var sleepTime = (int) Math.Ceiling(authKey.RatePeriodEnd.Subtract(DateTime.UtcNow).TotalMilliseconds);
+                        var sleepTime = (int)Math.Ceiling(authKey.RatePeriodEnd.Subtract(DateTime.UtcNow).TotalMilliseconds);
 
                         PokehashSleeping?.Invoke(this, sleepTime);
 
@@ -204,23 +202,24 @@ namespace POGOLib.Official.Util.Hash
                         _keySelection.Release();
                     }
                 }
-                
+
                 requestContent.Headers.Add("X-AuthToken", authKey.AuthKey);
 
                 HttpResponseMessage response = null;
                 try
                 {
                     // Initialize HttpClient.
-                    _httpClient = new HttpClient
+                    using (var _httpClient = new HttpClient
                     {
-                        BaseAddress = GetHashUri (authKey.AuthKey)
+                        BaseAddress = GetHashUri(authKey.AuthKey)
+                    })
+                    {
+                        _httpClient.DefaultRequestHeaders.Clear();
+                        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("POGOLib.Core (https://github.com/Furtif/POGOLib)");
+                        response = await _httpClient.PostAsync(Configuration.HashEndpoint, requestContent);
+                        _httpClient.Dispose();
                     };
-
-                    _httpClient.DefaultRequestHeaders.Clear();
-                    _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    _httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("POGOLib.Core (https://github.com/Furtif/POGOLib)");
-
-                    response = await _httpClient.PostAsync(Configuration.HashEndpoint, requestContent);
                 }
                 catch (Exception ex)
                 {
@@ -267,7 +266,7 @@ namespace POGOLib.Official.Util.Hash
                         authKey.Requests = authKey.MaxRequestCount - rateRequestsRemaining;
                         authKey.IsInitialized = true;
                     }
-                    
+
                     var ratePeriodEnd = TimeUtil.GetDateTimeFromSeconds(ratePeriodEndSeconds);
                     if (ratePeriodEnd > authKey.RatePeriodEnd)
                     {
