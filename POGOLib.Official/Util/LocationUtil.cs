@@ -1,4 +1,5 @@
-﻿using System;
+﻿using POGOProtos.Networking.Requests.Messages;
+using System;
 
 namespace POGOLib.Official.Util
 {
@@ -12,6 +13,5 @@ namespace POGOLib.Official.Util
 
             return (float)(lat + dl * 180 / Math.PI);
         }
-
     }
 }

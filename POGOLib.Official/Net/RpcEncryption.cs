@@ -11,6 +11,7 @@ using POGOProtos.Networking.Platform;
 using POGOProtos.Networking.Platform.Requests;
 using static POGOProtos.Networking.Envelopes.Signature.Types;
 using static POGOProtos.Networking.Envelopes.RequestEnvelope.Types;
+using POGOLib.Official.Util.Hash.PokeHash;
 
 namespace POGOLib.Official.Net
 {
@@ -35,6 +36,8 @@ namespace POGOLib.Official.Net
         /// Holds the value that was used in the previous <see cref="BuildLocationFixes"/> iteration.
         /// </summary>
         private long _lastTimestampSinceStart;
+
+        private readonly Uk27IdGenerator uk27IdGenerator = new Uk27IdGenerator();
 
         internal RpcEncryption(Session session)
         {
@@ -181,6 +184,7 @@ namespace POGOLib.Official.Net
             // Hashing
             signature.SessionHash = _sessionHash;
             signature.Unknown25 = Configuration.Hasher.Unknown25;
+            signature.Unknown27 = uk27IdGenerator.Next();
 
             var serializedTicket = requestEnvelope.AuthTicket != null ? requestEnvelope.AuthTicket.ToByteArray() : requestEnvelope.AuthInfo.ToByteArray();
             var locationBytes = BitConverter.GetBytes(_session.Player.Coordinate.Latitude).Reverse()
@@ -190,8 +194,11 @@ namespace POGOLib.Official.Net
             var requestsBytes = requestEnvelope.Requests.Select(x => x.ToByteArray()).ToArray();
             var hashData = await Configuration.Hasher.GetHashDataAsync(requestEnvelope, signature, locationBytes, requestsBytes, serializedTicket);
 
-            signature.LocationHash1 = (int) hashData.LocationAuthHash;
-            signature.LocationHash2 = (int) hashData.LocationHash;
+            if (hashData == null)
+                throw new PokeHashException("Missed Hash Data");
+
+            signature.LocationHash1 = (int)hashData.LocationAuthHash;
+            signature.LocationHash2 = (int)hashData.LocationHash;
 
             signature.RequestHash.AddRange(hashData.RequestHashes);
 
@@ -203,7 +210,7 @@ namespace POGOLib.Official.Net
                     EncryptedSignature = ByteString.CopyFrom(Configuration.Hasher.GetEncryptedSignature(signature.ToByteArray(), (uint)timestampSinceStart))
                 }.ToByteString()
             };
-            
+
             return encryptedSignature;
         }
     }

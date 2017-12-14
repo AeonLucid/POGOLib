@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using POGOLib.Official.Logging;
 using POGOLib.Official.Net.Authentication.Data;
+using System.Net;
 
 namespace POGOLib.Official.LoginProviders
 {
@@ -47,7 +48,14 @@ namespace POGOLib.Official.LoginProviders
                 httpClientHandler.AllowAutoRedirect = false;
                 using (var httpClient = new HttpClient(httpClientHandler))
                 {
+                    httpClient.DefaultRequestHeaders.Accept.TryParseAdd(Constants.Accept);
+                    httpClient.DefaultRequestHeaders.Host = Constants.LoginHostValue;
+                    httpClient.DefaultRequestHeaders.Connection.TryParseAdd(Constants.Connection);
                     httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.LoginUserAgent);
+                    httpClient.DefaultRequestHeaders.AcceptLanguage.TryParseAdd(Constants.AcceptLanguage);
+                    httpClient.DefaultRequestHeaders.AcceptEncoding.TryParseAdd(Constants.AcceptEncoding);
+                    httpClient.DefaultRequestHeaders.TryAddWithoutValidation(Constants.LoginManufactor, Constants.LoginManufactorVersion);
+                    httpClient.Timeout.Add(Constants.TimeOut);
                     var loginData = await GetLoginData(httpClient);
                     var ticket = await PostLogin(httpClient, _username, _password, loginData);
                     var accessToken = await PostLoginOauth(httpClient, ticket);
@@ -101,7 +109,7 @@ namespace POGOLib.Official.LoginProviders
             var loginResponseData = JObject.Parse(loginResponseDataRaw);
             var loginResponseErrors = (JArray)loginResponseData["errors"];
 
-            throw new PtcLoginException($"Pokemon Trainer Club gave error(s): '{string.Join(",", loginResponseErrors)}'");
+            throw new PtcLoginException($"Pokemon Trainer Club gave error(s): '{WebUtility.HtmlDecode(string.Join(",", loginResponseErrors))}'");
         }
 
         /// <summary>

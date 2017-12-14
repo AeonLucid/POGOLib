@@ -5,6 +5,7 @@ using POGOLib.Official.Logging;
 using POGOLib.Official.LoginProviders;
 using POGOLib.Official.Net.Authentication.Data;
 using POGOLib.Official.Util.Device;
+using POGOProtos.Networking.Requests.Messages;
 
 namespace POGOLib.Official.Net.Authentication
 {
@@ -22,14 +23,14 @@ namespace POGOLib.Official.Net.Authentication
         /// <param name="initialLongitude">The initial longitude you will spawn at after logging into PokémonGo.</param>
         /// <param name="deviceWrapper">The <see cref="DeviceWrapper"/> used by the <see cref="Session"/>, keep null if you want a randomly generated <see cref="DeviceWrapper"/>.</param>
         /// <returns></returns>
-        public static Session GetSession(ILoginProvider loginProvider, AccessToken accessToken, double initialLatitude, double initialLongitude, DeviceWrapper deviceWrapper = null)
+        public static Session GetSession(ILoginProvider loginProvider, AccessToken accessToken, double initialLatitude, double initialLongitude, DeviceWrapper deviceWrapper = null, GetPlayerMessage.Types.PlayerLocale playerLocale = null)
         {
             if (accessToken.IsExpired)
                 throw new Exception("AccessToken is expired.");
 
             Logger.Debug("Authenticated from cache.");
 
-            return new Session(loginProvider, accessToken, new GeoCoordinate(initialLatitude, initialLongitude), deviceWrapper);
+            return new Session(loginProvider, accessToken, new GeoCoordinate(initialLatitude, initialLongitude), deviceWrapper, playerLocale);
         }
 
         /// <summary>
@@ -40,9 +41,9 @@ namespace POGOLib.Official.Net.Authentication
         /// <param name="initialLongitude">The initial longitude you will spawn at after logging into PokémonGo.</param>
         /// <param name="deviceWrapper">The <see cref="DeviceWrapper"/> used by the <see cref="Session"/>, keep null if you want a randomly generated <see cref="DeviceWrapper"/>.</param>
         /// <returns></returns>
-        public static async Task<Session> GetSession(ILoginProvider loginProvider, double initialLatitude, double initialLongitude, DeviceWrapper deviceWrapper = null)
+        public static async Task<Session> GetSession(ILoginProvider loginProvider, double initialLatitude, double initialLongitude, DeviceWrapper deviceWrapper = null, GetPlayerMessage.Types.PlayerLocale playerLocale = null)
         {
-            return new Session(loginProvider, await loginProvider.GetAccessToken(), new GeoCoordinate(initialLatitude, initialLongitude), deviceWrapper);
+            return new Session(loginProvider, await loginProvider.GetAccessToken(), new GeoCoordinate(initialLatitude, initialLongitude), deviceWrapper, playerLocale);
         }
 
         /// <summary>
@@ -53,7 +54,7 @@ namespace POGOLib.Official.Net.Authentication
         /// <param name="coordinate">The initial coordinate you will spawn at after logging into PokémonGo.</param>
         /// <param name="deviceWrapper">The <see cref="DeviceWrapper"/> used by the <see cref="Session"/>, keep null if you want a randomly generated <see cref="DeviceWrapper"/>.</param>
         /// <returns></returns>
-        public static Session GetSession(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate coordinate, DeviceWrapper deviceWrapper = null)
+        public static Session GetSession(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate coordinate, DeviceWrapper deviceWrapper = null, GetPlayerMessage.Types.PlayerLocale playerLocale = null)
         {
             if (accessToken.IsExpired)
             {
@@ -61,7 +62,7 @@ namespace POGOLib.Official.Net.Authentication
             }
 
             Logger.Debug("Authenticated from cache.");
-            return new Session(loginProvider, accessToken, coordinate, deviceWrapper);
+            return new Session(loginProvider, accessToken, coordinate, deviceWrapper, playerLocale);
         }
 
         /// <summary>
@@ -71,9 +72,9 @@ namespace POGOLib.Official.Net.Authentication
         /// <param name="coordinate">The initial coordinate you will spawn at after logging into PokémonGo.</param>
         /// <param name="deviceWrapper">The <see cref="DeviceWrapper"/> used by the <see cref="Session"/>, keep null if you want a randomly generated <see cref="DeviceWrapper"/>.</param>
         /// <returns></returns>
-        public static async Task<Session> GetSession(ILoginProvider loginProvider, GeoCoordinate coordinate, DeviceWrapper deviceWrapper = null)
+        public static async Task<Session> GetSession(ILoginProvider loginProvider, GeoCoordinate coordinate, DeviceWrapper deviceWrapper = null, GetPlayerMessage.Types.PlayerLocale playerLocale = null)
         {
-            return new Session(loginProvider, await loginProvider.GetAccessToken(), coordinate, deviceWrapper);
+            return new Session(loginProvider, await loginProvider.GetAccessToken(), coordinate, deviceWrapper, playerLocale);
         }
     }
 }

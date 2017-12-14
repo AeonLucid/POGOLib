@@ -20,6 +20,9 @@ using POGOProtos.Enums;
 using POGOProtos.Networking.Platform;
 using POGOProtos.Networking.Platform.Requests;
 using POGOProtos.Networking.Platform.Responses;
+using System.Diagnostics;
+using static POGOProtos.Networking.Envelopes.RequestEnvelope.Types;
+using POGOLib.Official.Extensions;
 
 namespace POGOLib.Official.Net
 {
@@ -47,11 +50,13 @@ namespace POGOLib.Official.Net
 
         private string _mapKey;
 
+        private readonly RandomIdGenerator idGenerator = new RandomIdGenerator();
+
         private readonly List<RequestType> _defaultRequests = new List<RequestType>
         {
             RequestType.CheckChallenge,
             RequestType.GetHatchedEggs,
-            RequestType.GetInventory,
+            RequestType.GetHoloInventory,
             RequestType.CheckAwardedBadges,
             RequestType.DownloadSettings,
             RequestType.GetInbox
@@ -62,6 +67,9 @@ namespace POGOLib.Official.Net
         private readonly ConcurrentDictionary<RequestEnvelope, ByteString> _rpcResponses = new ConcurrentDictionary<RequestEnvelope, ByteString>();
 
         private readonly Semaphore _rpcQueueMutex = new Semaphore(1, 1);
+
+        public event EventHandler<GetHatchedEggsResponse> HatchedEggsReceived;
+        public event EventHandler<CheckAwardedBadgesResponse> CheckAwardedBadgesReceived;
 
         internal RpcClient(Session session)
         {
@@ -114,13 +122,21 @@ namespace POGOLib.Official.Net
         {
             // Send GetPlayer to check if we're connected and authenticated
             GetPlayerResponse playerResponse;
+
+            int loop = 0;
+
             do
             {
                 var response = await SendRemoteProcedureCallAsync(new[]
                 {
                     new Request
                     {
-                        RequestType = RequestType.GetPlayer
+                        RequestType = RequestType.GetPlayer,
+                        RequestMessage = new GetPlayerMessage
+                        {
+                            // Get Player locale information
+                            PlayerLocale = _session.Player.PlayerLocale
+                        }.ToByteString()
                     },
                     new Request
                     {
@@ -136,8 +152,11 @@ namespace POGOLib.Official.Net
                 {
                     await Task.Delay(TimeSpan.FromMilliseconds(1000));
                 }
-            } while (!playerResponse.Success);
+                loop++;
+            } while (!playerResponse.Success && loop < 10);
 
+            _session.Player.Banned = playerResponse.Banned;
+            _session.Player.Warn = playerResponse.Warn;
             _session.Player.Data = playerResponse.PlayerData;
 
             return true;
@@ -231,7 +250,7 @@ namespace POGOLib.Official.Net
         public async Task RefreshMapObjectsAsync()
         {
             var cellIds = MapUtil.GetCellIdsForLatLong(_session.Player.Coordinate.Latitude, _session.Player.Coordinate.Longitude);
-            var sinceTimeMs = cellIds.Select(x => (long) 0).ToArray();
+            var sinceTimeMs = cellIds.Select(x => (long)0).ToArray();
 
             var response = await SendRemoteProcedureCallAsync(new Request
             {
@@ -292,6 +311,8 @@ namespace POGOLib.Official.Net
         /// <returns></returns>
         private ulong GetNextRequestId()
         {
+            //Change to random requestId https://github.com/pogodevorg/pgoapi/pull/217
+            /*
             if (_requestCount == 1)
             {
                 IncrementRequestCount();
@@ -313,7 +334,9 @@ namespace POGOLib.Official.Net
             // So we'll just use the same for iOS since it doesn't hurt, and means less code required.
             ulong r = (((ulong)PositiveRandom() | ((_requestCount + 1) >> 31)) << 32) | (_requestCount + 1);
             IncrementRequestCount();
-            return r;
+            return r;*/
+
+            return idGenerator.Next();
         }
 
         /// <summary>
@@ -340,8 +363,8 @@ namespace POGOLib.Official.Net
                 },
                 new Request
                 {
-                    RequestType = RequestType.GetInventory,
-                    RequestMessage = new GetInventoryMessage
+                    RequestType = RequestType.GetHoloInventory,
+                    RequestMessage = new GetHoloInventoryMessage
                     {
                         LastTimestampMs = _session.Player.Inventory.LastInventoryTimestampMs
                     }.ToByteString()
@@ -375,9 +398,12 @@ namespace POGOLib.Official.Net
             request.Add(new Request
             {
                 RequestType = RequestType.GetInbox,
-                RequestMessage = ByteString.Empty    // TODO: Figure out parameters for "GetInboxMessage".
+                RequestMessage = new GetInboxMessage
+                {
+                    IsHistory = true
+                }.ToByteString() 
             });
-            
+
             //If Incense is active we add this:
             //request.Add(new Request
             //{
@@ -405,7 +431,7 @@ namespace POGOLib.Official.Net
                 StatusCode = 2,
                 RequestId = GetNextRequestId(),
                 Latitude = _session.Player.Coordinate.Latitude,
-                Longitude = _session.Player.Coordinate.Longitude
+                Longitude = _session.Player.Coordinate.Longitude                
             };
 
             requestEnvelope.Requests.AddRange(request);
@@ -491,7 +517,8 @@ namespace POGOLib.Official.Net
                     RequestEnvelope processRequestEnvelope;
                     while (_rpcQueue.TryDequeue(out processRequestEnvelope))
                     {
-                        var diff = Math.Max(0, DateTime.Now.Millisecond - LastRpcRequest.Millisecond);
+                        //var diff = Math.Max(0, DateTime.Now.Millisecond - LastRpcRequest.Millisecond);
+                        var diff = (int)Math.Min((DateTime.UtcNow - LastRpcRequest.ToUniversalTime()).TotalMilliseconds, Configuration.ThrottleDifference);
                         if (diff < Configuration.ThrottleDifference)
                         {
                             var delay = Configuration.ThrottleDifference - diff + (int)(_session.Random.NextDouble() * 0);
@@ -501,8 +528,7 @@ namespace POGOLib.Official.Net
 
                         _rpcResponses.GetOrAdd(processRequestEnvelope, await PerformRemoteProcedureCallAsync(processRequestEnvelope));
                     }
-
-                    ByteString ret;
+                     ByteString ret;
                     _rpcResponses.TryRemove(requestEnvelope, out ret);
                     return ret;
                 }
@@ -729,16 +755,16 @@ namespace POGOLib.Official.Net
 
                 switch (responseIndex.Value)
                 {
-                    case RequestType.GetHatchedEggs:
+                    case RequestType.GetHatchedEggs: // Get_Hatched_Eggs
                         var hatchedEggs = GetHatchedEggsResponse.Parser.ParseFrom(bytes);
-                        if (hatchedEggs.Success)
+                        if (hatchedEggs.Success && hatchedEggs.PokemonId.Count > 0)
                         {
-                            // TODO: Throw event, wrap in an object.
+                            HatchedEggsReceived?.Invoke(this, hatchedEggs);
                         }
                         break;
 
-                    case RequestType.GetInventory:
-                        var inventory = GetInventoryResponse.Parser.ParseFrom(bytes);
+                    case RequestType.GetHoloInventory: // Get_Inventory
+                        var inventory = GetHoloInventoryResponse.Parser.ParseFrom(bytes);
                         if (inventory.Success)
                         {
                             if (inventory.InventoryDelta.NewTimestampMs >=
@@ -755,16 +781,24 @@ namespace POGOLib.Official.Net
                         }
                         break;
 
-                    case RequestType.CheckAwardedBadges:
+                    case RequestType.CheckAwardedBadges: // Check_Awarded_Badges
                         var awardedBadges = CheckAwardedBadgesResponse.Parser.ParseFrom(bytes);
-                        if (awardedBadges.Success)
+                        if (awardedBadges.Success && awardedBadges.AwardedBadges.Count > 0)
                         {
-                            // TODO: Throw event, wrap in an object.
+                            CheckAwardedBadgesReceived?.Invoke(this, awardedBadges);
                         }
                         break;
 
-                    case RequestType.DownloadSettings:
-                        var downloadSettings = DownloadSettingsResponse.Parser.ParseFrom(bytes);
+                    case RequestType.DownloadSettings: // Download_Settings
+                        DownloadSettingsResponse downloadSettings = null;
+                        try
+                        {
+                            downloadSettings = DownloadSettingsResponse.Parser.ParseFrom(bytes);
+                        }
+                        catch (Exception)
+                        {
+                            downloadSettings = new DownloadSettingsResponse() { Error = "Could not parse downloadSettings" };
+                        }
                         if (string.IsNullOrEmpty(downloadSettings.Error))
                         {
                             if (downloadSettings.Settings == null)

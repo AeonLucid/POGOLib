@@ -4,14 +4,16 @@ using GeoCoordinatePortable;
 using POGOLib.Official.Net;
 using POGOProtos.Data;
 using POGOProtos.Data.Player;
+using POGOProtos.Networking.Requests.Messages;
 
 namespace POGOLib.Official.Pokemon
 {
     public class Player
     {
-        internal Player(Session session, GeoCoordinate coordinate)
+        internal Player(Session session, GeoCoordinate coordinate, GetPlayerMessage.Types.PlayerLocale playerLocale)
         {
             Coordinate = coordinate;
+            PlayerLocale = playerLocale ?? new GetPlayerMessage.Types.PlayerLocale { Country = "US", Language = "en", Timezone = "America/New_York" } ;
             Inventory = new Inventory(session);
             session.InventoryUpdate += InventoryOnUpdate;
         }
@@ -41,8 +43,23 @@ namespace POGOLib.Official.Pokemon
         ///     Gets the <see cref="Stats" /> of the beautiful <see cref="Inventory" /> object by PokémonGo.
         /// </summary>
         public PlayerStats Stats { get; private set; }
-		
-		public PlayerData Data { get; set; }
+
+        /// <summary>
+        ///     Gets the <see cref="PlayerLocale" /> of the <see cref="Player" />
+        /// </summary>
+        public GetPlayerMessage.Types.PlayerLocale PlayerLocale { get; private set; }
+ 
+        /// <summary>
+        ///     Gets the <see cref="Banned" /> of the <see cref="Player" />
+        /// </summary>
+        public bool Banned { get; set; }
+
+        /// <summary>
+        ///     Gets the <see cref="Warn" /> of the <see cref="Player" />
+        /// </summary>
+        public bool Warn { get; set; }
+
+        public PlayerData Data { get; set; }
 
         /// <summary>
         ///     Sets the <see cref="GeoCoordinate" /> of the <see cref="Player" />.

@@ -24,4 +24,16 @@ namespace POGOLib.Official.Util.Hash.PokeHash
             return AuthKey.Equals(other.AuthKey);
         }
     }
+
+    internal class PokeHashAuthHasher
+    {
+        public string pattern;
+        public Uri uri;
+        public PokeHashAuthHasher(string pattern, Uri uri)
+        {
+            this.pattern = pattern;
+            this.uri = uri;
+        }
+    }
+    
 }

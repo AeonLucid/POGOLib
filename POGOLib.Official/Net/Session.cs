@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,6 +15,9 @@ using POGOLib.Official.Util.Device;
 using POGOLib.Official.Util.Hash;
 using POGOProtos.Data;
 using POGOProtos.Settings;
+using System.Diagnostics;
+using POGOProtos.Networking.Requests.Messages;
+using POGOProtos.Networking.Responses;
 
 namespace POGOLib.Official.Net
 {
@@ -44,7 +47,7 @@ namespace POGOLib.Official.Net
         // public IDataCache DataCache { get; set; } = new MemoryDataCache();
         // public Templates Templates { get; private set; }
 
-        internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate, DeviceWrapper deviceWrapper = null)
+        internal Session(ILoginProvider loginProvider, AccessToken accessToken, GeoCoordinate geoCoordinate, DeviceWrapper deviceWrapper = null, GetPlayerMessage.Types.PlayerLocale playerLocale = null)
         {
             if (!ValidLoginProviders.Contains(loginProvider.ProviderId))
             {
@@ -63,7 +66,7 @@ namespace POGOLib.Official.Net
 
             AccessToken = accessToken;
             LoginProvider = loginProvider;
-            Player = new Player(this, geoCoordinate);
+            Player = new Player(this, geoCoordinate, playerLocale);
             Map = new Map(this);
             RpcClient = new RpcClient(this);
             _heartbeat = new HeartbeatDispatcher(this);
@@ -161,10 +164,10 @@ namespace POGOLib.Official.Net
             {
                 throw new SessionStateException("The session is not running.");
             }
-
-            _heartbeat.StopDispatcher();
             
             State = SessionState.Paused;
+
+            _heartbeat.StopDispatcher();
         }
 
         public async Task ResumeAsync()

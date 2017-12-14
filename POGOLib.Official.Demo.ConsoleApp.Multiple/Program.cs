@@ -125,21 +125,21 @@ namespace POGOLib.Official.Demo.ConsoleApp.Multiple
                         {
                             for (var i = 0; i < 50; i++)
                             {
-                                Task.Run(async () =>
-                                {
-                                    var request = new Request
-                                    {
-                                        RequestType = RequestType.FortDetails,
-                                        RequestMessage = new FortDetailsMessage
-                                        {
-                                            FortId = closestFort.Id,
-                                            Latitude = closestFort.Latitude,
-                                            Longitude = closestFort.Longitude
-                                        }.ToByteString()
-                                    };
+                                await Task.Run(async () =>
+                                 {
+                                     var request = new Request
+                                     {
+                                         RequestType = RequestType.FortDetails,
+                                         RequestMessage = new FortDetailsMessage
+                                         {
+                                             FortId = closestFort.Id,
+                                             Latitude = closestFort.Latitude,
+                                             Longitude = closestFort.Longitude
+                                         }.ToByteString()
+                                     };
 
-                                    await session.RpcClient.GetRequestEnvelopeAsync(new[] { request }, true);
-                                });
+                                     await session.RpcClient.GetRequestEnvelopeAsync(new[] { request }, true);
+                                 });
                             }
                         }
                         else
