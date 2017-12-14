@@ -135,7 +135,7 @@ namespace POGOLib.Official.Net
                         RequestMessage = new GetPlayerMessage
                         {
                             // Get Player locale information
-                            PlayerLocale = Configuration.LocaleInfo.PlayerLocale()
+                            PlayerLocale = _session.Player.PlayerLocale
                         }.ToByteString()
                     },
                     new Request
@@ -155,6 +155,8 @@ namespace POGOLib.Official.Net
                 loop++;
             } while (!playerResponse.Success && loop < 10);
 
+            _session.Player.Banned = playerResponse.Banned;
+            _session.Player.Warn = playerResponse.Warn;
             _session.Player.Data = playerResponse.PlayerData;
 
             return true;
@@ -429,7 +431,7 @@ namespace POGOLib.Official.Net
                 StatusCode = 2,
                 RequestId = GetNextRequestId(),
                 Latitude = _session.Player.Coordinate.Latitude,
-                Longitude = _session.Player.Coordinate.Longitude
+                Longitude = _session.Player.Coordinate.Longitude                
             };
 
             requestEnvelope.Requests.AddRange(request);
@@ -515,7 +517,7 @@ namespace POGOLib.Official.Net
                     RequestEnvelope processRequestEnvelope;
                     while (_rpcQueue.TryDequeue(out processRequestEnvelope))
                     {
-                        //                        var diff = Math.Max(0, DateTime.Now.Millisecond - LastRpcRequest.Millisecond);
+                        //var diff = Math.Max(0, DateTime.Now.Millisecond - LastRpcRequest.Millisecond);
                         var diff = (int)Math.Min((DateTime.UtcNow - LastRpcRequest.ToUniversalTime()).TotalMilliseconds, Configuration.ThrottleDifference);
                         if (diff < Configuration.ThrottleDifference)
                         {

@@ -31,10 +31,5 @@ namespace POGOLib.Official
         /// Gets or sets the <see cref="HashEndpoint"/> used in <see cref="POGOLib.Official.Util.Hash.PokeHashHasher"/>.
         /// </summary>
         public static string HashEndpoint { get; set; } = "api/v153_2/hash";
-
-        /// <summary>
-        /// Gets or sets the <see cref="ILocaleInfo"/> for GetPlayer PlayerLocale information.
-        /// </summary>
-        public static ILocaleInfo LocaleInfo { get; set; } = new ILocaleInfo();
     }
 }

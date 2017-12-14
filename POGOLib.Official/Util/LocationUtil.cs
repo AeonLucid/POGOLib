@@ -13,34 +13,5 @@ namespace POGOLib.Official.Util
 
             return (float)(lat + dl * 180 / Math.PI);
         }
-
-    }
-
-    /// <summary>
-    /// Description of LocaleInfo.
-    /// </summary>
-    public class ILocaleInfo
-    {
-        public string Country = "US";
-        public string Language = "en";
-        public string TimeZone = "America/New_York";
-
-        public void SetValues(string country = "US", string language = "en", string timezone = "America/New_York")
-        {
-            Country = country;
-            Language = language;
-            TimeZone = timezone;
-        }
-
-        public GetPlayerMessage.Types.PlayerLocale PlayerLocale()
-        {
-            var locale = new GetPlayerMessage.Types.PlayerLocale
-            {
-                Country = Country,
-                Language = Language,
-                Timezone = TimeZone
-            };
-            return locale;
-        }
     }
 }
