@@ -18,6 +18,7 @@ using POGOProtos.Settings;
 using System.Diagnostics;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
+using POGOLib.Official.Extensions;
 
 namespace POGOLib.Official.Net
 {

@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using POGOLib.Official.Logging;
 using POGOLib.Official.Net.Authentication.Data;
 using System.Net;
+using POGOLib.Official.Extensions;
 
 namespace POGOLib.Official.LoginProviders
 {
