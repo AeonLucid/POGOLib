@@ -114,7 +114,7 @@ namespace POGOLib.Official.Net
                     break;
             }
         }
-        
+
         /// <summary>
         /// Sends all requests which the (ios-)client sends on startup
         /// </summary>
@@ -126,21 +126,20 @@ namespace POGOLib.Official.Net
             // currently we does it calling to getplayer, that this call will 
             // be repeared at receive the "OkRpcUrlInResponse"
 
-            
+
             // Send GetPlayer to check if we're connected and authenticated
             GetPlayerResponse playerResponse;
             do
             {
-                var request = new Request {
-                        RequestType = RequestType.GetPlayer
+                var request = new Request
+                {
+                    RequestType = RequestType.GetPlayer
                 };
 
-                if (_session.Player.PlayerLocale != null && !string.IsNullOrEmpty(_session.Player.PlayerLocale.Country))
+                request.RequestMessage = new GetPlayerMessage
                 {
-                    request.RequestMessage = new GetPlayerMessage {
-                        PlayerLocale = _session.Player.PlayerLocale
-                    }.ToByteString();
-                }
+                    PlayerLocale = _session.Player.PlayerLocale
+                }.ToByteString();
 
                 var response = await SendRemoteProcedureCallAsync(new[]
                 {
@@ -154,19 +153,20 @@ namespace POGOLib.Official.Net
                 }
             } while (!playerResponse.Success);
 
-            _session.Player.Data = playerResponse.PlayerData;
 
             if (playerResponse.Warn)
             {
-                _session.Player.Warn = true;
                 Logger.Warn("This account is flagged.");
             }
             if (playerResponse.Banned)
             {
-                _session.Player.Banned = true;
                 Logger.Error("This account is banned.");
             }
-            
+
+            _session.Player.Data = playerResponse.PlayerData;
+            _session.Player.Banned = playerResponse.Banned;
+            _session.Player.Warn = playerResponse.Warn;
+
             await DownloadRemoteConfig();
             //await GetAssetDigest();
             //await DownloadItemTemplates();
@@ -175,7 +175,7 @@ namespace POGOLib.Official.Net
             return true;
         }
         // NOTE: This was the login before of 0.45 API, continue working but it is not that the real app does now.
-        internal async Task<bool> StartupAsyncOld()
+        internal async Task<bool> StartupAsync_0_45_API()
         {
             // Send GetPlayer to check if we're connected and authenticated
             GetPlayerResponse playerResponse;
