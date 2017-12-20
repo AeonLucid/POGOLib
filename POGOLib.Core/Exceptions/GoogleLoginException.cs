@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace POGOLib.Official.LoginProviders
+namespace POGOLib.Official.Exceptions
 {
     public class GoogleLoginException : Exception
     {
