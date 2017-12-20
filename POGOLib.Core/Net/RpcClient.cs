@@ -135,7 +135,7 @@ namespace POGOLib.Official.Net
                         RequestType = RequestType.GetPlayer
                 };
 
-                if (_session.Player.PlayerLocale!=null && !string.IsNullOrEmpty(_session.Player.PlayerLocale.Country))
+                if (_session.Player.PlayerLocale != null && !string.IsNullOrEmpty(_session.Player.PlayerLocale.Country))
                 {
                     request.RequestMessage = new GetPlayerMessage {
                         PlayerLocale = _session.Player.PlayerLocale
@@ -146,6 +146,7 @@ namespace POGOLib.Official.Net
                 {
                     request
                 });
+
                 playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
                 if (!playerResponse.Success)
                 {
@@ -156,9 +157,15 @@ namespace POGOLib.Official.Net
             _session.Player.Data = playerResponse.PlayerData;
 
             if (playerResponse.Warn)
-                    Logger.Warn("This account is flagged.");
+            {
+                _session.Player.Warn = true;
+                Logger.Warn("This account is flagged.");
+            }
             if (playerResponse.Banned)
-                    Logger.Error("This account is banned.");
+            {
+                _session.Player.Banned = true;
+                Logger.Error("This account is banned.");
+            }
             
             await DownloadRemoteConfig();
             //await GetAssetDigest();
