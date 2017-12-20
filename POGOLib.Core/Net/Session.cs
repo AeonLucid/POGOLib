@@ -63,7 +63,7 @@ namespace POGOLib.Official.Net
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             };
             if (!string.IsNullOrEmpty(Device.ProxyAddress)) {
-                var prxy =new System.Net.WebProxy();
+                var prxy =new POGOLib.Official.Extensions.WebProxy();
                 prxy.Address = new Uri(Device.ProxyAddress);
                 prxy.BypassProxyOnLocal = true;
                 handler.Proxy = prxy;

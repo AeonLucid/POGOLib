@@ -5,25 +5,29 @@ namespace POGOLib.Official.Extensions
 {
     internal class WebProxy : IWebProxy
     {
-        private string _proxyAddress;
-        private bool v;
+        public Uri Address;
+        public bool BypassProxyOnLocal;
+
+        public WebProxy()
+        {
+        }
 
         public WebProxy(string proxyAddress, bool v)
         {
-            _proxyAddress = proxyAddress;
-            this.v = v;
+            Address =  new Uri(proxyAddress);
+            BypassProxyOnLocal= v;
         }
 
-        public ICredentials Credentials { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+       public ICredentials Credentials { get; set; }
 
         public Uri GetProxy(Uri destination)
         {
-            throw new NotImplementedException();
+             return Address;
         }
 
         public bool IsBypassed(Uri host)
         {
-            throw new NotImplementedException();
+            return false;
         }
     }
 }
