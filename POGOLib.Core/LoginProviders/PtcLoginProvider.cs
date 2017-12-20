@@ -51,10 +51,7 @@ namespace POGOLib.Official.LoginProviders
             {
                 httpClientHandler.AllowAutoRedirect = false;
                 if (!string.IsNullOrEmpty(_proxyAddress)) {
-                    var prxy =new System.Net.WebProxy();
-                    prxy.Address = new Uri(_proxyAddress);
-                    prxy.BypassProxyOnLocal = true;
-                    httpClientHandler.Proxy = prxy;
+                    httpClientHandler.Proxy = new WebProxy(_proxyAddress, true);
                 } 
                 using (var httpClient = new HttpClient(httpClientHandler))
                 {
