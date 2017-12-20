@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\POGOLib.Core.Google\POGOLib.Core.Google.csproj" />
     <ProjectReference Include="..\POGOLib.Core\POGOLib.Core.csproj" />
   </ItemGroup>
 
