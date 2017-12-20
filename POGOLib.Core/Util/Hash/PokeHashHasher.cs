@@ -21,8 +21,8 @@ namespace POGOLib.Official.Util.Hash
     ///     to buy an API key, go to this url.
     ///     https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer
     /// 
-    ///     Android version: 0.83.2
-    ///     IOS version: 1.53.2
+    ///     Android version: 0.87.5
+    ///     IOS version: 1.57.5
     /// </summary>
     public class PokeHashHasher : IHasher
     {
@@ -32,12 +32,12 @@ namespace POGOLib.Official.Util.Hash
 
         private readonly Semaphore _keySelection;
 
-		public Version PokemonVersion { get; } = new Version("0.85.1");
+		public Version PokemonVersion { get; } = new Version("0.87.5");
         
 		// NOTE: Warning: Sotmetimes, this value is not the same that API version, so we need know it for each new API version.
-        public uint AppVersion { get; } = 8500;
+        public uint AppVersion { get; } = 8700;
 
-        public long Unknown25 { get; } = unchecked((long)0x2AC22400401779DE);
+        public long Unknown25 { get; } = unchecked((long)0x3E75FB078C4573FA);
     
         /// <summary>
         ///     Initializes the <see cref="PokeHashHasher"/>.
