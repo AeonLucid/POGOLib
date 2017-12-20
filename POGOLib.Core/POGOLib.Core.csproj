@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>A community-driven PokemonGo API Library written in C#. You can read the changelog here https://github.com/Furtif/POGOLib/blob/core/README.md.</Description>
+    <AssemblyTitle>POGOLib.Core</AssemblyTitle>
+    <Authors>AeonLucid  - --=FurtiF™=--</Authors>
+    <TargetFramework>netstandard1.1</TargetFramework>
+    <AssemblyName>POGOLib.Core</AssemblyName>
+    <PackageId>POGOLib.Core</PackageId>
+    <PackageTags>Pokemon;POGOLib;netstandard</PackageTags>
+    <PackageIconUrl>https://secure.gravatar.com/avatar/d6dddda25a178dc2dd93edae79821fe3?s=512&amp;r=g&amp;d=retro</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/Furtif/POGOLib/tree/core</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Furtif/POGOLib/tree/core</RepositoryUrl>
+    <Version>1.7.6</Version>
+    <AssemblyVersion>1.7.6.0</AssemblyVersion>
+    <FileVersion>1.7.6.0</FileVersion>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <Company>AeonLucid</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GeoCoordinate.NetStandard1" Version="1.0.1" />
+	<PackageReference Include="GPSOAuthSharp.Core" Version="1.0.2" />
+    <PackageReference Include="POGOProtos.Core" Version="2.21.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.5.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="S2Geometry" Version="1.0.3" />
+    <PackageReference Include="System.Net.Primitives" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

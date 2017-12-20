@@ -1,13 +1,11 @@
-POGOLib [![AppVeyor](https://img.shields.io/appveyor/ci/AeonLucid/pogolib/master.svg?maxAge=60)](https://ci.appveyor.com/project/AeonLucid/pogolib) [![NuGet](https://img.shields.io/nuget/v/POGOLib.Official.svg?maxAge=60)](https://www.nuget.org/packages/POGOLib.Official)
+[![Build status](https://ci.appveyor.com/api/projects/status/6vktt4ad4v5wkiqq/branch/core?svg=true)](https://ci.appveyor.com/project/RocketBot/pogolib/branch/core) [![Waffle.io - Columns and their card count](https://badge.waffle.io/Furtif/POGOLib.svg?columns=all)](https://waffle.io/Furtif/POGOLib)
+
+POGOLib [![NuGet](https://img.shields.io/nuget/v/POGOLib.Core.svg?maxAge=60)](https://www.nuget.org/packages/POGOLib.Core) POGOProtos [![NuGet](https://img.shields.io/nuget/vpre/POGOProtos.Core.svg?maxAge=60)](https://www.nuget.org/packages/POGOProtos.Core)
 ===================
 
 POGOLib is written in C# and aims to be a community-driven PokémonGo API. Feel free to submit pull requests.
 
 The library is a bit low-level now but the goal is to provide a high-level library while also allowing low-level request crafting.
-
-# Changelog
-
-[Click here to read the changelog of POGOLib.](CHANGELOG.md)
 
 # Installation
 
@@ -18,10 +16,10 @@ The library is a bit low-level now but the goal is to provide a high-level libra
 ## NuGet
 
 ### Console
-Run `Install-Package POGOLib.Official`  in `Tools > NuGet Package Manager > Package Manager Console` .
+Run `Install-Package POGOLib.Core`  in `Tools > NuGet Package Manager > Package Manager Console` .
 
 ### Package Browser
-Right click your project in Visual Studio, click `Manage NuGet Packages..`, make sure `Browse` is pressed. Search for `POGOLib.Official` and press `Install`.
+Right click your project in Visual Studio, click `Manage NuGet Packages..`, make sure `Browse` is pressed. Search for `POGOLib.Core` and press `Install`.
 
 # Features
 
@@ -31,7 +29,7 @@ POGOLib supports **Pokemon Trainer Club** and **Google**.
 
 We also allow you to store the `session.AccessToken` to a file using `JsonConvert.SerializeObject(accessToken, Formatting.Indented)` , using this you can cache your authenticated sessions and load them later by using `JsonConvert.DeserializeObject<AccessToken>("json here")`.
 
-You can view an example of how I implemented this in the [demo](https://github.com/AeonLucid/POGOLib/blob/master/POGOLib.Official.Demo.ConsoleApp/Program.cs).
+You can view an example of how I implemented this in the [demo](https://github.com/Furtif/POGOLib/blob/core/POGOLib.Core.Demo.ConsoleApp/Program.cs).
 
 ## Re-authentication
 
@@ -52,8 +50,8 @@ The map, inventory and player are automatically updated by the heartbeat.
 
 The heartbeat checks every second if:
 
- - the seconds since the last heartbeat is greater than or equal to the [maximum allowed refresh seconds](https://github.com/AeonLucid/POGOProtos/blob/master/src/POGOProtos/Settings/MapSettings.proto#L9) of the game settings;
- - the distance moved is greater than or equal to the [minimum allowed distance](https://github.com/AeonLucid/POGOProtos/blob/master/src/POGOProtos/Settings/MapSettings.proto#L10) of the game settings;
+ - the seconds since the last heartbeat is greater than or equal to the [maximum allowed refresh seconds](https://github.com/Furtif/POGOProtos/blob/master/src/POGOProtos/Settings/MapSettings.proto#L9) of the game settings;
+ - the distance moved is greater than or equal to the [minimum allowed distance](https://github.com/Furtif/POGOProtos/blob/master/src/POGOProtos/Settings/MapSettings.proto#L10) of the game settings;
 
 If one of these is true, a heartbeat will be sent. This automatically fetches the map data surrounding your current position, your inventory data and the game settings.
 
@@ -97,10 +95,10 @@ Read more: [https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer](htt
 
 *This is for now almost the only way to receive data. It's easy though!*
 
-If you want to know what requests are available, click [here](https://github.com/AeonLucid/POGOProtos/tree/master/src/POGOProtos/Networking/Requests/Messages).
-If you want to know what responses belong to the requests, click [here](https://github.com/AeonLucid/POGOProtos/tree/master/src/POGOProtos/Networking/Responses).
+If you want to know what requests are available, click [here](https://github.com/Furtif/POGOProtos/tree/master/src/POGOProtos/Networking/Requests/Messages).
+If you want to know what responses belong to the requests, click [here](https://github.com/Furtif/POGOProtos/tree/master/src/POGOProtos/Networking/Responses).
 
-If you want to know what kind of data is available, [have a look through all POGOProtos files](https://github.com/AeonLucid/POGOProtos/tree/master/src/POGOProtos).
+If you want to know what kind of data is available, [have a look through all POGOProtos files](https://github.com/Furtif/POGOProtos/tree/master/src/POGOProtos).
 
 You can send a request and parse the response like this.
 
@@ -211,3 +209,4 @@ foreach (var fortData in session.Map.GetFortsSortedByDistance(f => f.Type == For
     }
 }
 ```
+
