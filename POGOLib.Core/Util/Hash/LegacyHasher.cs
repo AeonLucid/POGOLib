@@ -15,6 +15,7 @@ namespace POGOLib.Official.Util.Hash
     internal class LegacyHasher : IHasher
     {
         public Version PokemonVersion { get; } = new Version("0.45.0");
+        public uint AppVersion { get; } = 4500;
 
         public long Unknown25 { get; } = -1553869577012279119;
 

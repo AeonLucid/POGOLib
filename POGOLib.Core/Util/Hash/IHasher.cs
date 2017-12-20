@@ -14,6 +14,7 @@ namespace POGOLib.Official.Util.Hash
         Version PokemonVersion { get; }
 
         long Unknown25 { get; }
+        uint AppVersion {get; }
 
         Task<HashData> GetHashDataAsync(RequestEnvelope requestEnvelope, Signature signature, byte[] locationBytes, byte[][] requestsBytes, byte[] serializedTicket);
 

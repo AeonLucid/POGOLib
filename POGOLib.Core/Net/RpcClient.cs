@@ -118,7 +118,57 @@ namespace POGOLib.Official.Net
         /// <summary>
         /// Sends all requests which the (ios-)client sends on startup
         /// </summary>
+        // NOTE: this is the new login process in the real app, after of 0.45 API
         internal async Task<bool> StartupAsync()
+        {
+            //await EmptyRequest(); // TODO: review this call, is failing
+            // and the real app does it to receive the "OkRpcUrlInResponse"
+            // currently we does it calling to getplayer, that this call will 
+            // be repeared at receive the "OkRpcUrlInResponse"
+
+            
+            // Send GetPlayer to check if we're connected and authenticated
+            GetPlayerResponse playerResponse;
+            do
+            {
+                var request = new Request {
+                        RequestType = RequestType.GetPlayer
+                };
+
+                if (_session.Player.PlayerLocale!=null && !string.IsNullOrEmpty(_session.Player.PlayerLocale.Country))
+                {
+                    request.RequestMessage = new GetPlayerMessage {
+                        PlayerLocale = _session.Player.PlayerLocale
+                    }.ToByteString();
+                }
+
+                var response = await SendRemoteProcedureCallAsync(new[]
+                {
+                    request
+                });
+                playerResponse = GetPlayerResponse.Parser.ParseFrom(response);
+                if (!playerResponse.Success)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(1000));
+                }
+            } while (!playerResponse.Success);
+
+            _session.Player.Data = playerResponse.PlayerData;
+
+            if (playerResponse.Warn)
+                    Logger.Warn("This account is flagged.");
+            if (playerResponse.Banned)
+                    Logger.Error("This account is banned.");
+            
+            await DownloadRemoteConfig();
+            //await GetAssetDigest();
+            //await DownloadItemTemplates();
+            //await GetDownloadUrls();
+
+            return true;
+        }
+        // NOTE: This was the login before of 0.45 API, continue working but it is not that the real app does now.
+        internal async Task<bool> StartupAsyncOld()
         {
             // Send GetPlayer to check if we're connected and authenticated
             GetPlayerResponse playerResponse;
@@ -843,6 +893,62 @@ namespace POGOLib.Official.Net
             if (!disposing) return;
 
             _rpcQueueMutex?.Dispose();
+        }
+
+        // TODO: review this call, is failing in line 124 .
+        private async Task EmptyRequest()
+        {
+            var response = await SendRemoteProcedureCallAsync(new[]{ new Request ()});
+            Logger.Debug("EmptyRequest response:" + response.ToString());
+        }
+
+        public async Task DownloadRemoteConfig()
+        {
+            ByteString response = null;
+            var msg = new DownloadRemoteConfigVersionMessage();
+            msg.Platform = GetPlatform();
+            msg.DeviceManufacturer = _session.Device.DeviceInfo.HardwareManufacturer;
+            msg.DeviceModel = _session.Device.DeviceInfo.DeviceModel;
+            msg.Locale = "";
+            msg.AppVersion =  Configuration.Hasher.AppVersion;
+            var requests = new Request[6]; // [6]
+            requests[0] = new Request {
+                RequestType = RequestType.DownloadRemoteConfigVersion,
+                RequestMessage = msg.ToByteString()};
+            requests[1] = new Request
+                {
+                    RequestType = RequestType.CheckChallenge,
+                    RequestMessage = new CheckChallengeMessage().ToByteString()
+                };
+            requests[2] = new Request
+                {
+                    RequestType = RequestType.GetHatchedEggs,
+                    RequestMessage = new GetHatchedEggsMessage().ToByteString()
+                };
+            requests[3] = new Request
+            {
+                RequestType = RequestType.GetHoloInventory,
+                RequestMessage =  new GetHoloInventoryMessage
+            {
+                LastTimestampMs = _session.Player.Inventory.LastInventoryTimestampMs
+            }.ToByteString()
+            };
+            requests[4] =  new Request
+                {
+                    RequestType = RequestType.CheckAwardedBadges,
+                    RequestMessage = new CheckAwardedBadgesMessage().ToByteString()
+                };
+            requests[5] = new Request
+            {
+                RequestType = RequestType.DownloadSettings,
+                RequestMessage =  new DownloadSettingsMessage
+            {
+                Hash = _session.GlobalSettingsHash
+            }.ToByteString()
+            };
+            
+            response = await SendRemoteProcedureCallAsync(requests).ConfigureAwait(false);
+            //return DownloadRemoteConfigVersionMessage.Parser.ParseFrom(response);
         }
     }
 }

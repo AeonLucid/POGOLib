@@ -33,6 +33,9 @@ namespace POGOLib.Official.Util.Hash
         private readonly Semaphore _keySelection;
 
 		public Version PokemonVersion { get; } = new Version("0.85.1");
+        
+		// NOTE: Warning: Sotmetimes, this value is not the same that API version, so we need know it for each new API version.
+        public uint AppVersion { get; } = 8500;
 
         public long Unknown25 { get; } = unchecked((long)0x2AC22400401779DE);
     
