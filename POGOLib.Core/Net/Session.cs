@@ -52,7 +52,7 @@ namespace POGOLib.Official.Net
         {
             if (!ValidLoginProviders.Contains(loginProvider.ProviderId))
             {
-                throw new ArgumentException("LoginProvider ID must be one of the following: "+ string.Join(", ", ValidLoginProviders));
+                throw new ArgumentException($"LoginProvider ID must be one of the following: {string.Join(", ", ValidLoginProviders)}");
             }
 
             State = SessionState.Stopped;
