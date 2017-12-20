@@ -96,7 +96,6 @@
     <Compile Include="Pokemon\Map.cs" />
     <Compile Include="Pokemon\Player.cs" />
     <Compile Include="Pokemon\Templates.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\Data\IDataCache.cs" />
     <Compile Include="Util\Data\MemoryDataCache.cs" />
     <Compile Include="Util\Device\DeviceInfoUtil.cs" />
