@@ -8,8 +8,9 @@
     <OutputType>Library</OutputType>
     <RootNamespace>POGOLib.Core</RootNamespace>
     <AssemblyName>POGOLib.Core_sharpdev</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -77,6 +78,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Exceptions\SessionStateException.cs" />
     <Compile Include="Extensions\RandomExtension.cs" />
+    <Compile Include="Extensions\WebProxy.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="LoginProviders\ILoginProvider.cs" />

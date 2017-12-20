@@ -52,7 +52,7 @@ namespace POGOLib.Official.Net
         {
             if (!ValidLoginProviders.Contains(loginProvider.ProviderId))
             {
-                throw new ArgumentException($"LoginProvider ID must be one of the following: {string.Join(", ", ValidLoginProviders)}");
+                throw new ArgumentException("LoginProvider ID must be one of the following: "+ string.Join(", ", ValidLoginProviders));
             }
 
             State = SessionState.Stopped;
@@ -63,7 +63,10 @@ namespace POGOLib.Official.Net
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             };
             if (!string.IsNullOrEmpty(Device.ProxyAddress)) {
-                handler.Proxy = new WebProxy(Device.ProxyAddress, true);
+                var prxy =new System.Net.WebProxy();
+                prxy.Address = new Uri(Device.ProxyAddress);
+                prxy.BypassProxyOnLocal = true;
+                handler.Proxy = prxy;
             }
             HttpClient = new HttpClient(handler);
             
