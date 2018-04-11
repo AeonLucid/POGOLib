@@ -1,4 +1,6 @@
-POGOLib [![AppVeyor](https://img.shields.io/appveyor/ci/AeonLucid/pogolib/master.svg?maxAge=60)](https://ci.appveyor.com/project/AeonLucid/pogolib) [![NuGet](https://img.shields.io/nuget/v/POGOLib.Official.svg?maxAge=60)](https://www.nuget.org/packages/POGOLib.Official)
+# This library is no longer maintained. Please use https://github.com/Furtif/POGOLib instead, which is a fork of this project.
+
+~POGOLib~
 ===================
 
 POGOLib is written in C# and aims to be a community-driven PokémonGo API. Feel free to submit pull requests.
@@ -38,7 +40,7 @@ You can view an example of how I implemented this in the [demo](https://github.c
 When PokémonGo tells POGOLib that the authentication token is no longer valid, we try to re-authenticate. This happens on intervals of 5, 10, 15, 20, 30... 60 (max) seconds. It keeps trying to re-authenticate. All other remote procedure calls that tried to request data will be stopped and continue when the session has re-authenticated. It will be like nothing happened.
 
 When the session has successful re-authenticated, we fire an event. You can subscribe to the event to receive a notification.
-
+a 
 ```csharp
 session.AccessTokenUpdated += (sender, eventArgs) =>
 {
